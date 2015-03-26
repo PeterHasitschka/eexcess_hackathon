@@ -24,14 +24,21 @@ nav {
 .content_sidebar {
     margin-left:auto; margin-right:auto;
     height: 300px;
-	border-top: 1px solid #dbdbdb;
+    border-top: 1px solid #dbdbdb;
     overflow-y: auto;
-    height:82%;
+    height:53%;
+}
+
+#eexcess_webgl_container {
+
+    height:29%;
+    background:yellow;
+
 }
 
 .footer_sidebar {
-	border-top: 1px solid #dbdbdb;
-	padding: 0.8em;
+    border-top: 1px solid #dbdbdb;
+    padding: 0.8em;
 }
 
 #search_hover {
