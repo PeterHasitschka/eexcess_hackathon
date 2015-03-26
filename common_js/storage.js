@@ -518,6 +518,7 @@ EEXCESS.storage = (function() {
         getRatings: _getRatings,
         setRating: _setRating,
         closedRecommendation: _closedRecommendation,
-        loadQueryCrumbsData: _loadQueryCrumbsData
+        loadQueryCrumbsData: _loadQueryCrumbsData,
+        getDb: _getDB
     };
 })();
