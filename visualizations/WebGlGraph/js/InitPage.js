@@ -2,15 +2,18 @@
 var webgl_scene;
 jQuery(document).ready(function () {
 
+    GLGR.Debug.debugTime("start");
 
 
     var db_handler = GLGR.DbHandler.getSingleton();
     db_handler.getAllQueries(function (q_data) {
+        GLGR.Debug.debugTime("Got all Queries from DB");
         db_handler.getAllRecommendations(function (r_data) {
-
+            GLGR.Debug.debugTime("Got all Recs from DB");
             var query_data = prepareData(q_data, r_data);
-
+            GLGR.Debug.debugTime("Prepared Data");
             createGraph(query_data);
+            GLGR.Debug.debugTime("Created Graph");
         });
     });
 
@@ -23,7 +26,7 @@ jQuery(document).ready(function () {
 
 
 function createGraph(query_data) {
-
+    GLGR.Debug.debugTime("CREATE GRAPH: START");
     var container = jQuery('#webgl_canvas_container')[0];
 
     var last_query = null;
@@ -31,21 +34,27 @@ function createGraph(query_data) {
 
     /** @type {GLGR.Scene} **/
     webgl_scene = new GLGR.Scene(container);
-    
+
     var last_query = null;
     for (var query_count = 0; query_count < query_data.length; query_count++)
     {
         var tmp_query_data = query_data[query_count];
-        
-        
+
+
         /** @type {GLGR.Graph} **/
         var tmp_query = new GLGR.Graph(tmp_query_data.query_str);
 
+        var query_active = false;
+        if (query_count + 1 === query_data.length)
+            query_active = true;
+
+        tmp_query.setIsActive(query_active);
+
         for (var rec_count = 0; rec_count < tmp_query_data.recs.length; rec_count++)
         {
-            var  tmp_rec_data = tmp_query_data.recs[rec_count];
-            
-            
+            var tmp_rec_data = tmp_query_data.recs[rec_count];
+
+
             var rec_data = tmp_rec_data;
 
             /** @type {GLGR.Recommendation} **/
@@ -64,11 +73,12 @@ function createGraph(query_data) {
 
 
     webgl_scene.zoom(0.5);
-    webgl_scene.buildScene();
+    
 
+    GLGR.Debug.debugTime("CREATE GRAPH: END");
     animate();
 
-
+    GLGR.Debug.debugTime("CREATE GRAPH: AFTER ANIMATE");
 }
 
 
@@ -119,7 +129,7 @@ function prepareData(raw_query_data, raw_rec_data)
             {
                 //console.log("FOUND MATCHING REC!");
                 tmp_raw_rec.result.db_id = tmp_raw_rec.recommendation_id;
-                
+
                 tmp_query.recs.push(tmp_raw_rec.result);
                 //Remove r from array
                 raw_rec_data.splice(r_count, 1);

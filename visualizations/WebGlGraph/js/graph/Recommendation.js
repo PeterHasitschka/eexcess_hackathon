@@ -46,6 +46,7 @@ GLGR.Recommendation = function (rec_id, rec_data) {
 
     this.is_minimized_ = false;
 
+    this.transparency_from_graph_ = null;
 
     //Static object holding several parameters for visualization
     GLGR.Recommendation.vis_params =
@@ -96,7 +97,8 @@ GLGR.Recommendation.prototype.createSphereMesh_ = function () {
     var sphereMaterial =
             new THREE.MeshBasicMaterial(
                     {
-                        color: GLGR.Recommendation.vis_params.node_color
+                        color: GLGR.Recommendation.vis_params.node_color,
+                        transparent: true
                     });
 
     var sphere_rad = GLGR.Recommendation.vis_params.node_radius;
@@ -135,11 +137,14 @@ GLGR.Recommendation.prototype.initWegGlObjects = function () {
 
 
 
+
+
     //LINE
 
     var line_material = new THREE.LineBasicMaterial({
         color: GLGR.Recommendation.vis_params.line.color,
-        linewidth: GLGR.Recommendation.vis_params.line.width
+        linewidth: GLGR.Recommendation.vis_params.line.width,
+        transparent: true
     });
 
     var line_geometry = new THREE.Geometry();
@@ -198,21 +203,53 @@ GLGR.Recommendation.prototype.update = function () {
 
     //Recalculate Line-Positions
 
-    this.webGlObjects_.line.geometry.vertices[0] =
-            new THREE.Vector3(
-                    this.graph_center_.x,
-                    this.graph_center_.y,
-                    GLGR.Recommendation.vis_params.line_z
-                    );
+    var l_v1 = new THREE.Vector3(
+            this.graph_center_.x,
+            this.graph_center_.y,
+            GLGR.Recommendation.vis_params.line_z
+            );
 
-    this.webGlObjects_.line.geometry.vertices[1] =
-            new THREE.Vector3(
-                    rec_pos.x,
-                    rec_pos.y,
-                    GLGR.Recommendation.vis_params.line_z
-                    );
+    var l_v2 = new THREE.Vector3(
+            rec_pos.x,
+            rec_pos.y,
+            GLGR.Recommendation.vis_params.line_z
+            );
 
-    this.webGlObjects_.line.geometry.verticesNeedUpdate = true;
+    var line_needs_update = false;
+    if (l_v1 !== this.webGlObjects_.line.geometry.vertices[0] ||
+            l_v2 !== this.webGlObjects_.line.geometry.vertices[1])
+        line_needs_update = true;
+
+    this.webGlObjects_.line.geometry.vertices[0] = l_v1;
+    this.webGlObjects_.line.geometry.vertices[1] = l_v2;
+
+    //Only update if changed
+    if (line_needs_update)
+        this.webGlObjects_.line.geometry.verticesNeedUpdate = true;
+
+
+    //Bounding sphere necessary for camera movement
+    //Compute if never done before, or on change
+    if (line_needs_update ||
+            this.webGlObjects_.line.geometry.bounding_comp_once === undefined)
+    {
+        this.webGlObjects_.line.geometry.computeBoundingSphere();
+        this.webGlObjects_.line.geometry.bounding_comp_once = true;
+    }
+
+
+
+
+    for (var gl_obj_key in this.webGlObjects_)
+    {
+        if (this.webGlObjects_[gl_obj_key] === null)
+            continue;
+
+        this.webGlObjects_[gl_obj_key].material.opacity = this.transparency_from_graph_;
+    }
+
+
+
 };
 
 
@@ -447,4 +484,13 @@ GLGR.Recommendation.prototype.toggleStateMinimized = function ()
         this.is_minimized_ = true;
     }
 
+};
+
+
+/**
+ * Setting a factor for transparency that comes from the graph
+ * @param {float} transparency_factor
+ */
+GLGR.Recommendation.prototype.setTransparencyFromGraph = function (transparency_factor) {
+    this.transparency_from_graph_ = transparency_factor;
 };

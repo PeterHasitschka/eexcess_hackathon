@@ -80,7 +80,7 @@ GLGR.Scene = function (canvas_element) {
     this.three_renderer_ = new THREE.WebGLRenderer({antialias: true});
     this.three_renderer_.setSize(this.scene_width_, this.scene_height_);
     this.three_renderer_.setPixelRatio(window.devicePixelRatio);
-    this.three_renderer_.setClearColor(0xF7FAFF);
+    this.three_renderer_.setClearColor(0xFBFFFD);
 
 
     // attach the render-supplied DOM element
@@ -93,6 +93,8 @@ GLGR.Scene = function (canvas_element) {
         curr_time: null,
         delta: null
     };
+
+    this.has_to_recalculate_graph_positions_ = false;
 };
 
 /**
@@ -102,6 +104,9 @@ GLGR.Scene = function (canvas_element) {
  */
 GLGR.Scene.prototype.addGraph = function (graph_to_add) {
     this.graphs_.push(graph_to_add);
+    graph_to_add.initWegGlObjects();
+    graph_to_add.update();
+    this.has_to_recalculate_graph_positions_ = true;
 };
 
 /**
@@ -169,25 +174,31 @@ GLGR.Scene.getSingleton = function () {
  * Calculates all (relative) positions of graphs and nodes
  */
 GLGR.Scene.prototype.calculate2DPositionsOfGraphs = function () {
-
-
+    
     //Paint the graphs from left to right
-
+    
 
     currX = 0 - this.graph_distance_ * (this.graphs_.length - 1);
 
     for (var i = 0; i < this.graphs_.length; i++)
     {
         this.graphs_[i].setPosition(currX, null);
+        this.graphs_[i].force_update_while_inactive = true;
+         this.graphs_[i].update();
         currX += this.graph_distance_ + this.horizontal_offset_;
+        
     }
 
-
+    this.has_to_recalculate_graph_positions_ = false;
 };
 
 
 GLGR.Scene.prototype.render = function () {
 
+    if (this.has_to_recalculate_graph_positions_)
+        this.calculate2DPositionsOfGraphs();
+
+    //GLGR.Debug.debugTime("RENDER: START");
     this.time_.curr_time = this.time_.curr_time || Date.now();
     var now = Date.now();
     this.time_.delta = now - this.time_.curr_time;
@@ -202,6 +213,8 @@ GLGR.Scene.prototype.render = function () {
     }
 
     this.three_renderer_.render(this.three_scene_, this.three_camera_);
+
+    //GLGR.Debug.debugTime("RENDER: START");
 };
 
 
@@ -236,23 +249,24 @@ GLGR.Scene.prototype.getCanvas = function () {
 /**
  * Draw the scene to canvas
  */
-GLGR.Scene.prototype.buildScene = function () {
-
-    if (this.three_scene_ === null) {
-        throw ("ERROR: Scene not initialized.");
-    }
-
-    this.calculate2DPositionsOfGraphs();
-
-    for (var i = 0; i < this.graphs_.length; i++)
-    {
-        this.graphs_[i].initWegGlObjects();
-    }
-
-
-
-};
-
+/*
+ GLGR.Scene.prototype.buildScene = function () {
+ 
+ GLGR.Debug.debugTime("BUILD SCENE: START");
+ if (this.three_scene_ === null) {
+ throw ("ERROR: Scene not initialized.");
+ }
+ 
+ this.calculate2DPositionsOfGraphs();
+ 
+ for (var i = 0; i < this.graphs_.length; i++)
+ {
+ this.graphs_[i].initWegGlObjects();
+ }
+ 
+ GLGR.Debug.debugTime("BUILD SCENE: END");
+ };
+ */
 
 
 /**

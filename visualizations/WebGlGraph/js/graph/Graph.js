@@ -15,6 +15,10 @@ GLGR.Graph = function (name_)
     this.id_ = null;
     this.parent_id_ = null;
 
+    this.is_active_ = true;
+
+    //Flag that can be set to force an update also if graph inactive
+    this.force_update_while_inactive = false;
 
     this.graph_name_ = name_;
 
@@ -36,22 +40,25 @@ GLGR.Graph = function (name_)
      */
     GLGR.Graph.vis_params = GLGR.Graph.vis_params ||
             {
+                transparency: {
+                    inactive: 0.5
+                },
                 sphere: {
                     radius: 10.0,
                     segments: 4,
                     rings: 8,
                     z_value: -20,
-                    color: 0xFF5555
+                    color: 0x1d904e
                 },
                 label: {
                     y_offset: 200,
                     font: "helvetiker",
-                    font_size: 8,
+                    font_size: 15,
                     color: 0x555555
                 },
                 rec: {
                     init_distance: 150,
-                    collapse_distance : 15
+                    collapse_distance: 15
                 }
             };
 
@@ -62,6 +69,8 @@ GLGR.Graph = function (name_)
      */
     this.recommendations_ = [];
 
+    this.is_graph_initialized_ = false;
+    this.are_recs_initialized_ = false;
 
     /** Static array holding the list of all graphs**/
     GLGR.Graph.graphlist_ = GLGR.Graph.graphlist_ || [];
@@ -138,16 +147,46 @@ GLGR.Graph.prototype.setMeshPositions_ = function () {
  */
 GLGR.Graph.prototype.update = function () {
 
+    //Only update if active or inactive and force flag active
+     if (!this.is_active_ && !this.force_update_while_inactive)
+     return;
 
 
-    //Demo (Lets move the graph)
-    if (GLGR.animation_demo_flag === true)
-        this.position_.x += 0.7 * GLGR.Scene.getSingleton().getTimeDelta() / 10;
+    //DO THE FOLLOWING EVEN IF INACTIVE BUT FORCE-FLAG IS SET!
+
+    //Setting transparency caused by inactivity
+    var transparency_val = 1;
+    if (!this.is_active_)
+    {
+        transparency_val = GLGR.Graph.vis_params.transparency.inactive;
+    }
+    this.updateTransparency(transparency_val);
 
 
+    this.force_update_while_inactive = false;
 
 
     this.setMeshPositions_();
+    
+    
+     if (!this.is_active_)
+     return;
+
+
+    //DO THE FOLLOWING ONLY IF ACTIVE!
+
+
+    //If graph was inactive from the beginning, recs may not be created
+    if (!this.are_recs_initialized_)
+    {
+        //console.log("Recs of graph " + this.getId() + " need to be init now!");
+        this.initRecommendationObjs_();
+    }
+
+
+
+
+
 
     var recs = this.getRecommendations();
 
@@ -158,7 +197,7 @@ GLGR.Graph.prototype.update = function () {
         var old_degr_ = curr_recommendation.getPositionData().degree;
 
         curr_recommendation.setGraphCenter(this.position_.x, this.position_.y);
-
+        curr_recommendation.setTransparencyFromGraph(transparency_val);
 
         //Demo (Let's rotate the graph)
         if (GLGR.animation_demo_flag === true)
@@ -166,22 +205,43 @@ GLGR.Graph.prototype.update = function () {
                     old_degr_ + 0.005 * GLGR.Scene.getSingleton().getTimeDelta() / 10,
                     null);
 
-
         curr_recommendation.update();
     }
+
 };
 
+
+/**
+ * Updating the transparency may changed by inactivity flag
+ */
+GLGR.Graph.prototype.updateTransparency = function (transparency_val) {
+
+
+    //Iterate through gl-objects
+    for (var webGlObjKey in this.webGlObjects_)
+    {
+        var curr_gl_obj = this.webGlObjects_[webGlObjKey];
+
+        if (curr_gl_obj === null)
+            continue;
+        if (curr_gl_obj.material.opacity !== transparency_val)
+            curr_gl_obj.material.opacity = transparency_val;
+    }
+};
 
 /**
  * Init webGl Meshes and save them. Adding them to the 3-Scene
  */
 GLGR.Graph.prototype.initWegGlObjects = function () {
 
+    if (this.is_graph_initialized_)
+        return;
     // create the sphere's material
     var sphereMaterial =
             new THREE.MeshBasicMaterial(
                     {
-                        color: GLGR.Graph.vis_params.sphere.color
+                        color: GLGR.Graph.vis_params.sphere.color,
+                        transparent: true
                     });
 
     var sphere = new THREE.Mesh(
@@ -217,7 +277,13 @@ GLGR.Graph.prototype.initWegGlObjects = function () {
             }
     );
 
-    var labelMaterial = new THREE.MeshBasicMaterial({color: GLGR.Graph.vis_params.label.color, overdraw: true});
+    var labelMaterial = new THREE.MeshBasicMaterial(
+            {
+                color: GLGR.Graph.vis_params.label.color,
+                overdraw: true,
+                transparent: true
+            }
+    );
     var label = new THREE.Mesh(labelGeometry, labelMaterial);
 
     labelGeometry.computeBoundingBox();
@@ -234,10 +300,19 @@ GLGR.Graph.prototype.initWegGlObjects = function () {
 
     this.setMeshPositions_();
 
+    //Only init recs if active, else do on update
+    if (this.is_active_)
+    {
+        //Recommendations
+        this.initRecommendationObjs_();
+
+    }
+
+    this.is_graph_initialized_ = true;
+};
 
 
-    //Recommendations
-
+GLGR.Graph.prototype.initRecommendationObjs_ = function () {
     //Calculate the degree of the recommendation
     var rec_dist = GLGR.Graph.vis_params.rec.init_distance
     var rec_degree_step = (Math.PI * 2) / this.getRecommendations().length;
@@ -253,8 +328,9 @@ GLGR.Graph.prototype.initWegGlObjects = function () {
 
         rec_degree += rec_degree_step;
     }
-};
 
+    this.are_recs_initialized_ = true;
+};
 
 /**
  * Setting the graph's 2D-Position
@@ -283,6 +359,17 @@ GLGR.Graph.prototype.handleGraphClick = function () {
 
     /** @var {GLGR.Graph} **/
     var that = this.graphref;
+    
+    
+    //Activate on click
+    if (!that.is_active_)
+    {
+        that.setIsActive(true);
+        return;
+    }
+    
+    
+    
     if (that.is_graph_collapsed_ === false)
         that.collapseGraph();
     else
@@ -292,7 +379,7 @@ GLGR.Graph.prototype.handleGraphClick = function () {
 
     //Demo
     var infoblock = jQuery('#information-container-graph-info');
-        if (!infoblock.length)
+    if (!infoblock.length)
         throw ("ERROR: DEMO GRAPH INFO BLOCK NOT EXISTING! CLEAN UP YOUR CODE!");
     jQuery('#information-container-graph-info-id').html(that.getId());
     jQuery('#information-container-graph-info-title').html(that.graph_name_);
@@ -331,4 +418,10 @@ GLGR.Graph.prototype.expandGraph = function () {
     }
 
     this.is_graph_collapsed_ = false;
+};
+
+
+GLGR.Graph.prototype.setIsActive = function (is_active) {
+    this.is_active_ = is_active;
+    this.force_update_while_inactive = true;
 };

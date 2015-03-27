@@ -22,7 +22,6 @@ GLGR.InteractionHandler = function (scene) {
     var that = this;
     jQuery(document).ready(function () {
 
-        console.log(that.scene_.canvas_);
         jQuery(that.scene_.getCanvas()).click(function (event) {
 
 
