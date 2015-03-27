@@ -21,7 +21,7 @@ GLGR.InteractionHandler = function (scene) {
 
     var that = this;
     jQuery(document).ready(function () {
-        
+
         console.log(that.scene_.canvas_);
         jQuery(that.scene_.getCanvas()).click(function (event) {
 
@@ -33,11 +33,39 @@ GLGR.InteractionHandler = function (scene) {
             that.handleInteraction_(event, "mouseclick");
         });
 
+
+
+
+        var is_mouse_down_in_canvas = false;
+        var mouse_x_prev = null;
+        jQuery(that.scene_.getCanvas()).mousedown(function (event) {
+            is_mouse_down_in_canvas = true;
+            mouse_x_prev = event.clientX;
+        });
+
+        jQuery(that.scene_.getCanvas()).mouseup(function (event) {
+            is_mouse_down_in_canvas = false;
+        });
+
+        jQuery(that.scene_.getCanvas()).mouseleave(function (event) {
+            is_mouse_down_in_canvas = false;
+        });
+
+
         jQuery(that.scene_.getCanvas()).mousemove(function (event) {
 
-            //Not useful without a mouse-leave solution
-            //that.handleInteraction_(event, "mouseover");
+            if (!is_mouse_down_in_canvas)
+                return;
+
+            curr_mouse_x_diff =  0-(event.clientX-mouse_x_prev);
+            
+            that.scene_.moveCamera(curr_mouse_x_diff);
+            mouse_x_prev = event.clientX;
+            
         });
+
+
+
 
     });
 };

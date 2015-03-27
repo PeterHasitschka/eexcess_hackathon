@@ -13,14 +13,14 @@ var GLGR = GLGR || {};
 GLGR.Scene = function (canvas_element) {
 
     this.VIEWINGCONSTS = {
-        VIEW_ANGLE: 45,
+        //VIEW_ANGLE: 45,
         NEAR: 0.1,
         FAR: 10000,
         Z_POS: 300
     };
 
     this.horizontal_offset_ = 0;
-    
+
     this.graph_distance_ = 400;
 
     //Setting the singleton
@@ -174,7 +174,7 @@ GLGR.Scene.prototype.calculate2DPositionsOfGraphs = function () {
     //Paint the graphs from left to right
 
 
-    currX = 0 - this.graph_distance_ * (this.graphs_.length-1);
+    currX = 0 - this.graph_distance_ * (this.graphs_.length - 1);
 
     for (var i = 0; i < this.graphs_.length; i++)
     {
@@ -202,9 +202,8 @@ GLGR.Scene.prototype.render = function () {
     }
 
     this.three_renderer_.render(this.three_scene_, this.three_camera_);
-
-
 };
+
 
 /**
  * 
@@ -253,6 +252,37 @@ GLGR.Scene.prototype.buildScene = function () {
 
 
 };
+
+
+
+/**
+ * Move the scene's camera
+ * @param {float | null} x
+ * @param {type | null} y
+ */
+GLGR.Scene.prototype.moveCamera = function (x, y) {
+
+    if (x === null || x === undefined)
+        x = 0;
+    if (y === null || y === undefined)
+        y = 0;
+
+    this.three_camera_.position.x += x;
+    this.three_camera_.position.y += y;
+
+
+};
+
+/**
+ * Perform zoom
+ * @param {float} zoom_factor
+ */
+GLGR.Scene.prototype.zoom = function (zoom_factor) {
+
+    this.three_camera_.zoom = zoom_factor;
+    this.three_camera_.updateProjectionMatrix();
+};
+
 
 /**
  * Logging-function of the scene

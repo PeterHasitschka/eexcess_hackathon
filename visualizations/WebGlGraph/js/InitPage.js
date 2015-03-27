@@ -63,7 +63,7 @@ function createGraph(query_data) {
     }
 
 
-
+    webgl_scene.zoom(0.5);
     webgl_scene.buildScene();
 
     animate();
