@@ -40,14 +40,14 @@ GLGR.Graph = function (name_)
                     radius: 10.0,
                     segments: 4,
                     rings: 8,
-                    z_value: -40,
+                    z_value: -20,
                     color: 0xFF5555
                 },
                 label: {
-                    y_offset: 230,
+                    y_offset: 200,
                     font: "helvetiker",
-                    font_size: 15,
-                    color: 0x999999
+                    font_size: 8,
+                    color: 0x555555
                 },
                 rec: {
                     init_distance: 150,
@@ -125,10 +125,10 @@ GLGR.Graph.prototype.setMeshPositions_ = function () {
 
 
 
-    this.webGlObjects_.label.position = new THREE.Vector3(
+    this.webGlObjects_.label.position.set(
             this.position_.x - text_w / 2,
             this.position_.y + GLGR.Graph.vis_params.label.y_offset,
-            0
+            -10
             );
 };
 
@@ -223,7 +223,7 @@ GLGR.Graph.prototype.initWegGlObjects = function () {
     labelGeometry.computeBoundingBox();
     var text_w = labelGeometry.boundingBox.max.x - labelGeometry.boundingBox.min.x;
 
-    label.applyMatrix(new THREE.Matrix4().makeScale(1, 1, -1));
+    label.applyMatrix(new THREE.Matrix4().makeScale(1, -1, -1));
 
     this.webGlObjects_.label = label;
 

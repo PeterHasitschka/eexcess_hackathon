@@ -30,19 +30,16 @@ GLGR.DbHandler.getSingleton = function () {
  * @param {function} successFct
  */
 GLGR.DbHandler.prototype.getDb_ = function (successFct) {
-
-    console.log(this);
-
     //DB already loaded. Just call callback
     if (this.db_ !== null)
     {
-        console.log("DB already loaded. Callback");
+        //console.log("DB already loaded. Callback");
         successFct(this.db_);
         return;
     }
 
     //Db not loaded yet
-    console.log("Loading IndexedDb once");
+    //console.log("Loading IndexedDb once");
     EEXCESS.storage.getDb(successFct, this.loadDbError_);
 };
 
@@ -74,7 +71,7 @@ GLGR.DbHandler.prototype.getAllRecommendations = function (cb_query_loaded) {
  */
 GLGR.DbHandler.prototype.getStorageData_ = function (cb_data_loaded, storage_name, fields) {
 
-    console.log("GETTING DATA FROM STORAGE " + storage_name);
+    //console.log("GETTING DATA FROM STORAGE " + storage_name);
 
     var that = GLGR.DbHandler.getSingleton();
     

@@ -21,16 +21,14 @@ GLGR.InteractionHandler = function (scene) {
 
     var that = this;
     jQuery(document).ready(function () {
-
+        
+        console.log(that.scene_.canvas_);
         jQuery(that.scene_.getCanvas()).click(function (event) {
 
 
             //Demo
-            jQuery('#information-container-graph-info').hide();
-            jQuery('#information-container-rec-info').hide();
-
-
-
+            //jQuery('#information-container-graph-info').hide();
+            //jQuery('#information-container-rec-info').hide();
 
             that.handleInteraction_(event, "mouseclick");
         });
@@ -65,7 +63,6 @@ GLGR.InteractionHandler.prototype.handleInteraction_ = function (event, interact
     {
         var curr_intersect_obj = intersected[i_count].object;
 
-        //console.log(curr_intersect_obj);
         if (curr_intersect_obj.interaction_handlers instanceof Object)
         {
 

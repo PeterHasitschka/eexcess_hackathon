@@ -11,7 +11,7 @@ branches
 * **test_deployment** version of the EEXCESS extension deployed in the Chrome Webstore
 * **overlay_fix1** experimental branch, which displays search results as an overlay instead of a sidebar
 * **query_extensions** experimental branch, which detects paragraphs in a webpage, surrounds them with a dashed line and displays DBpedia entities found in this paragraph
-
+* **webglgraph** WebGL-based visualization of the graph and recommendations.
 The remainder of this readme is a description of the master branch.
 
 

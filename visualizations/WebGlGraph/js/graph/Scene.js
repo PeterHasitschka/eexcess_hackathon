@@ -20,6 +20,8 @@ GLGR.Scene = function (canvas_element) {
     };
 
     this.horizontal_offset_ = 0;
+    
+    this.graph_distance_ = 400;
 
     //Setting the singleton
     if (GLGR.Scene.singleton_ !== undefined)
@@ -55,13 +57,14 @@ GLGR.Scene = function (canvas_element) {
 
 
 
-    this.interaction_handler_ = new GLGR.InteractionHandler(this);
-
     if (!canvas_element) {
         this.log("ERROR: Canvas element not found");
         return false;
     }
     this.canvas_ = canvas_element;
+
+
+    this.interaction_handler_ = new GLGR.InteractionHandler(this);
 
     this.three_scene_ = new THREE.Scene();
 
@@ -76,12 +79,12 @@ GLGR.Scene = function (canvas_element) {
     // and a scene
     this.three_renderer_ = new THREE.WebGLRenderer({antialias: true});
     this.three_renderer_.setSize(this.scene_width_, this.scene_height_);
-    this.three_renderer_.setPixelRatio( window.devicePixelRatio );
-    this.three_renderer_.setClearColor( 0xF7FAFF );
+    this.three_renderer_.setPixelRatio(window.devicePixelRatio);
+    this.three_renderer_.setClearColor(0xF7FAFF);
 
 
     // attach the render-supplied DOM element
-    jQuery(canvas_element).append(this.three_renderer_.domElement);
+    jQuery(canvas_element).html(this.three_renderer_.domElement);
 
 
     GLGR.animation_demo_flag = false;
@@ -170,14 +173,13 @@ GLGR.Scene.prototype.calculate2DPositionsOfGraphs = function () {
 
     //Paint the graphs from left to right
 
-    var step = 600;
 
-    currX = 0;
+    currX = 0 - this.graph_distance_ * (this.graphs_.length-1);
 
     for (var i = 0; i < this.graphs_.length; i++)
     {
         this.graphs_[i].setPosition(currX, null);
-        currX += step + this.horizontal_offset_;
+        currX += this.graph_distance_ + this.horizontal_offset_;
     }
 
 

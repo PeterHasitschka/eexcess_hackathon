@@ -18,7 +18,7 @@
 
 
                     //var num_recs = Math.floor(Math.random() * 100);
-                    var num_recs = 1000;
+                    var num_recs = 100;
                     for (var rec_count = 0; rec_count < num_recs; rec_count++)
                     {
 
