@@ -84,9 +84,15 @@ GLGR.Graph = function (name_)
 /**
  * 
  * @param {GLGR.Recommendation} rec_to_add
+ * @parem {boolean | null | undefined} recalculate_positions Flag if positions have to be resetted.
  */
-GLGR.Graph.prototype.addRecommendation = function (rec_to_add) {
+GLGR.Graph.prototype.addRecommendation = function (rec_to_add, recalculate_positions) {
+
+    
     this.recommendations_.push(rec_to_add);
+    
+    if (recalculate_positions === true)
+        this.initRecommendationObjs_();
 };
 
 
@@ -148,8 +154,8 @@ GLGR.Graph.prototype.setMeshPositions_ = function () {
 GLGR.Graph.prototype.update = function () {
 
     //Only update if active or inactive and force flag active
-     if (!this.is_active_ && !this.force_update_while_inactive)
-     return;
+    if (!this.is_active_ && !this.force_update_while_inactive)
+        return;
 
 
     //DO THE FOLLOWING EVEN IF INACTIVE BUT FORCE-FLAG IS SET!
@@ -167,10 +173,10 @@ GLGR.Graph.prototype.update = function () {
 
 
     this.setMeshPositions_();
-    
-    
-     if (!this.is_active_)
-     return;
+
+
+    if (!this.is_active_)
+        return;
 
 
     //DO THE FOLLOWING ONLY IF ACTIVE!
@@ -359,17 +365,17 @@ GLGR.Graph.prototype.handleGraphClick = function () {
 
     /** @var {GLGR.Graph} **/
     var that = this.graphref;
-    
-    
+
+
     //Activate on click
     if (!that.is_active_)
     {
         that.setIsActive(true);
         return;
     }
-    
-    
-    
+
+
+
     if (that.is_graph_collapsed_ === false)
         that.collapseGraph();
     else

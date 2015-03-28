@@ -83,6 +83,7 @@ GLGR.Recommendation = function (rec_id, rec_data) {
     if (typeof rec_data === "object")
         this.rec_data_ = rec_data;
 
+    this.is_initialized_ = false;
 };
 
 
@@ -117,8 +118,9 @@ GLGR.Recommendation.prototype.createSphereMesh_ = function () {
 
 GLGR.Recommendation.prototype.initWegGlObjects = function () {
 
-
-
+    if (this.is_initialized_)
+        return;
+    
     this.webGlObjects_.node = this.createSphereMesh_();
 
     this.webGlObjects_.node.interaction_handlers = {
@@ -162,6 +164,8 @@ GLGR.Recommendation.prototype.initWegGlObjects = function () {
 
     this.webGlObjects_.line = new THREE.Line(line_geometry, line_material);
     GLGR.Scene.getSingleton().getThreeScene().add(this.webGlObjects_.line);
+    
+    this.is_initialized_ = true;
 };
 
 

@@ -25,7 +25,7 @@ jQuery(document).ready(function () {
         tmp_query.setIsActive(query_active);
 
         //var num_recs = Math.floor(Math.random() * 100);
-        var num_recs = 100;
+        var num_recs = 3;
         for (var rec_count = 0; rec_count < num_recs; rec_count++)
         {
 
@@ -79,6 +79,9 @@ jQuery(document).ready(function () {
         GLGR.Scene.getSingleton().getGraphs()[0].setIsActive(!is_act);
         console.log("Changed active to " + !is_act);
     });
+
+
+
     jQuery("#add_graph").click(function () {
 
 
@@ -105,13 +108,27 @@ jQuery(document).ready(function () {
 
 
         var graphs = myScene.getGraphs();
-        
+
         tmp_query.setParent(graphs[graphs.length - 1]);
 
         myScene.addGraph(tmp_query);
         myScene.calculate2DPositionsOfGraphs();
-        tmp_query.initWegGlObjects();
     });
+
+
+    jQuery("#add_rec").click(function () {
+
+        var graphs = myScene.getGraphs();
+
+        /** @type {GLGR.Graph} **/
+        var lastgraph = graphs[graphs.length - 1];
+
+        var tmp_rec = new GLGR.Recommendation("rec-NEW", {});
+        lastgraph.addRecommendation(tmp_rec, true);
+        tmp_rec.initWegGlObjects();
+    });
+
+
 });
 
 
