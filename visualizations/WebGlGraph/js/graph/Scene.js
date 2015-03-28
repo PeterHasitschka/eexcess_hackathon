@@ -19,9 +19,8 @@ GLGR.Scene = function (canvas_element) {
         Z_POS: 300
     };
 
-    this.horizontal_offset_ = 0;
 
-    this.graph_distance_ = 400;
+
 
     //Setting the singleton
     if (GLGR.Scene.singleton_ !== undefined)
@@ -94,7 +93,11 @@ GLGR.Scene = function (canvas_element) {
         delta: null
     };
 
-    this.has_to_recalculate_graph_positions_ = false;
+    /** @type {GLGR.GraphRelationHandler} **/
+    this.graph_pos_handler_ = new GLGR.GraphRelationHandler(this);
+    this.graph_pos_handler_.setMode(GLGR.GraphRelationHandler.modes.MODE_HORIZONTAL);
+    this.navigation_handler_ = new GLGR.NavigationHandler(this);
+
 };
 
 /**
@@ -106,7 +109,7 @@ GLGR.Scene.prototype.addGraph = function (graph_to_add) {
     this.graphs_.push(graph_to_add);
     graph_to_add.initWegGlObjects();
     graph_to_add.update();
-    this.has_to_recalculate_graph_positions_ = true;
+    this.graph_pos_handler_.setUpdateNeeded(true);
 };
 
 /**
@@ -170,33 +173,11 @@ GLGR.Scene.getSingleton = function () {
 };
 
 
-/**
- * Calculates all (relative) positions of graphs and nodes
- */
-GLGR.Scene.prototype.calculate2DPositionsOfGraphs = function () {
-    
-    //Paint the graphs from left to right
-    
-
-    currX = 0 - this.graph_distance_ * (this.graphs_.length - 1);
-
-    for (var i = 0; i < this.graphs_.length; i++)
-    {
-        this.graphs_[i].setPosition(currX, null);
-        this.graphs_[i].force_update_while_inactive = true;
-         this.graphs_[i].update();
-        currX += this.graph_distance_ + this.horizontal_offset_;
-        
-    }
-
-    this.has_to_recalculate_graph_positions_ = false;
-};
 
 
 GLGR.Scene.prototype.render = function () {
 
-    if (this.has_to_recalculate_graph_positions_)
-        this.calculate2DPositionsOfGraphs();
+    this.graph_pos_handler_.setGraphPositions();
 
     //GLGR.Debug.debugTime("RENDER: START");
     this.time_.curr_time = this.time_.curr_time || Date.now();
@@ -227,7 +208,6 @@ GLGR.Scene.prototype.getTimeDelta = function () {
     //return 10;
 };
 
-
 GLGR.Scene.prototype.getThreeScene = function () {
     return this.three_scene_;
 };
@@ -245,57 +225,11 @@ GLGR.Scene.prototype.getCanvas = function () {
     return this.canvas_;
 };
 
-
-/**
- * Draw the scene to canvas
- */
-/*
- GLGR.Scene.prototype.buildScene = function () {
- 
- GLGR.Debug.debugTime("BUILD SCENE: START");
- if (this.three_scene_ === null) {
- throw ("ERROR: Scene not initialized.");
- }
- 
- this.calculate2DPositionsOfGraphs();
- 
- for (var i = 0; i < this.graphs_.length; i++)
- {
- this.graphs_[i].initWegGlObjects();
- }
- 
- GLGR.Debug.debugTime("BUILD SCENE: END");
- };
- */
-
-
-/**
- * Move the scene's camera
- * @param {float | null} x
- * @param {type | null} y
- */
-GLGR.Scene.prototype.moveCamera = function (x, y) {
-
-    if (x === null || x === undefined)
-        x = 0;
-    if (y === null || y === undefined)
-        y = 0;
-
-    this.three_camera_.position.x += x;
-    this.three_camera_.position.y += y;
-
-
+GLGR.Scene.prototype.getNavigationHandler = function () {
+    return this.navigation_handler_;
 };
 
-/**
- * Perform zoom
- * @param {float} zoom_factor
- */
-GLGR.Scene.prototype.zoom = function (zoom_factor) {
 
-    this.three_camera_.zoom = zoom_factor;
-    this.three_camera_.updateProjectionMatrix();
-};
 
 
 /**

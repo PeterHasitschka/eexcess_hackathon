@@ -58,7 +58,7 @@ GLGR.InteractionHandler = function (scene) {
 
             curr_mouse_x_diff =  0-(event.clientX-mouse_x_prev);
             
-            that.scene_.moveCamera(curr_mouse_x_diff);
+            that.scene_.getNavigationHandler().moveCamera(curr_mouse_x_diff);
             mouse_x_prev = event.clientX;
             
         });

@@ -7,55 +7,63 @@ jQuery(document).ready(function () {
 
 
 
+    /** @type {GLGR.Graph} **/
+    var q1 = new GLGR.Graph("1");
+    var q2 = new GLGR.Graph("2");
+    var q3a = new GLGR.Graph("3a");
+    var q3b = new GLGR.Graph("3b");
+    var q4 = new GLGR.Graph("4");
+    var q5 = new GLGR.Graph("5");
 
-    var last_query = null;
+    q1.setIsActive(0);
+    q2.setIsActive(0);
+    q3a.setIsActive(0);
+    q3b.setIsActive(0);
+    q4.setIsActive(1);
+    q5.setIsActive(1);
 
+    addSomeRandomRecs(q1);
+    addSomeRandomRecs(q2);
+    addSomeRandomRecs(q3a);
+    addSomeRandomRecs(q3b);
+    addSomeRandomRecs(q4);
+    addSomeRandomRecs(q5);
 
-    var q_create = 2;
+    q2.setParent(q1);
+    q3a.setParent(q2);
+    q3b.setParent(q2);
+    q4.setParent(q3a);
+    q5.setParent(q4);
 
-    for (var query_count = 0; query_count < q_create; query_count++)
-    {
-        /** @type {GLGR.Graph} **/
-        var tmp_query = new GLGR.Graph("Query #" + (query_count + 1));
-
-        var query_active = false;
-        if (query_count + 1 === q_create)
-            query_active = true;
-
-        tmp_query.setIsActive(query_active);
-
-        //var num_recs = Math.floor(Math.random() * 100);
-        var num_recs = 3;
-        for (var rec_count = 0; rec_count < num_recs; rec_count++)
-        {
-
-            var rec_data = {
-                title: "something" + Math.random() * 100,
-                url: "http://www.tugraz.at/dummy" + Math.random() * 100 + ".html"
-            };
-
-            /** @type {GLGR.Recommendation} **/
-            var tmp_rec = new GLGR.Recommendation("rec-" + rec_count, rec_data);
-
-            tmp_query.addRecommendation(tmp_rec);
-        }
-
-
-
-
-        tmp_query.setParent(last_query);
-        last_query = tmp_query;
-
-        myScene.addGraph(tmp_query);
-    }
-
-
-
-    //myScene.buildScene();
+    myScene.addGraph(q3a);
+    myScene.addGraph(q1);
+    myScene.addGraph(q4);
+    myScene.addGraph(q3b);
+    myScene.addGraph(q5);
+    myScene.addGraph(q2);
 
     animate();
 });
 
+
+
+function addSomeRandomRecs(graph)
+{
+    var num_recs = 10;
+    for (var rec_count = 0; rec_count < num_recs; rec_count++)
+    {
+
+        var rec_data = {
+            title: "something" + Math.random() * 100,
+            url: "http://www.tugraz.at/dummy" + Math.random() * 100 + ".html"
+        };
+
+        /** @type {GLGR.Recommendation} **/
+        var tmp_rec = new GLGR.Recommendation("rec-" + rec_count, rec_data);
+
+        graph.addRecommendation(tmp_rec);
+    }
+}
 
 function animate() {
 
@@ -110,9 +118,7 @@ jQuery(document).ready(function () {
         var graphs = myScene.getGraphs();
 
         tmp_query.setParent(graphs[graphs.length - 1]);
-
         myScene.addGraph(tmp_query);
-        myScene.calculate2DPositionsOfGraphs();
     });
 
 
