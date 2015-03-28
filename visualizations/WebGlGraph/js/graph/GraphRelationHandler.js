@@ -19,7 +19,8 @@ GLGR.GraphRelationHandler = function (scene) {
 };
 
 GLGR.GraphRelationHandler.modes = {
-    MODE_HORIZONTAL: 0x0001
+    MODE_HORIZONTAL_ADDING_ORDER: 0x0001,
+    MODE_HORIZONTAL_HIERACHICAL: 0x0002
 };
 
 GLGR.GraphRelationHandler.prototype.setUpdateNeeded = function (update_needed) {
@@ -48,7 +49,7 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
 
 
 
-        case GLGR.GraphRelationHandler.modes.MODE_HORIZONTAL:
+        case GLGR.GraphRelationHandler.modes.MODE_HORIZONTAL_ADDING_ORDER:
             currX = 0 - this.graph_distance_ * (graphs.length - 1);
 
             for (var i = 0; i < graphs.length; i++)
@@ -60,6 +61,18 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
             }
             break;
 
+        case GLGR.GraphRelationHandler.modes.MODE_HORIZONTAL_HIERACHICAL:
+            console.log("WARNING! MODE NOT WORKING YET! SWITCH TO 'MODE_HORIZONTAL_ADDING_ORDER' INSTEAD FOR VISIBLE RESULT");
+            
+            
+            console.log("Getting hierachy..");
+            var hierachy = this.getGraphHierachy();
+            console.log(hierachy);
+          
+            
+            break;
+
+
 
 
         default :
@@ -68,6 +81,34 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
 
     this.setUpdateNeeded(false);
 };
+
+
+
+/**
+ * Returning the hierachy
+ */
+GLGR.GraphRelationHandler.prototype.getGraphHierachy = function () {
+
+    var graphs = this.scene_.getGraphs();
+
+    var hierachy = {};
+    
+    
+    
+    for (var i = 0; i < graphs.length; i++)
+    {
+        /** @type{GLGR.Graph} **/
+        var graph = graphs[i];
+        var parent_id = graph.getParentId();
+        hierachy[graph.getId()] = parent_id;
+    }
+
+    return hierachy;
+};
+
+
+
+
 
 
 /**

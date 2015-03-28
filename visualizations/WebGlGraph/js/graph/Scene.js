@@ -95,7 +95,9 @@ GLGR.Scene = function (canvas_element) {
 
     /** @type {GLGR.GraphRelationHandler} **/
     this.graph_pos_handler_ = new GLGR.GraphRelationHandler(this);
-    this.graph_pos_handler_.setMode(GLGR.GraphRelationHandler.modes.MODE_HORIZONTAL);
+    this.graph_pos_handler_.setMode(
+            GLGR.GraphRelationHandler.modes.MODE_HORIZONTAL_HIERACHICAL
+            );
     this.navigation_handler_ = new GLGR.NavigationHandler(this);
 
 };

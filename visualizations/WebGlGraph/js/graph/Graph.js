@@ -88,9 +88,9 @@ GLGR.Graph = function (name_)
  */
 GLGR.Graph.prototype.addRecommendation = function (rec_to_add, recalculate_positions) {
 
-    
+
     this.recommendations_.push(rec_to_add);
-    
+
     if (recalculate_positions === true)
         this.initRecommendationObjs_();
 };
@@ -114,6 +114,14 @@ GLGR.Graph.prototype.setParent = function (parent_graph) {
 
     if (parent_graph !== null && parent_graph !== undefined)
         this.parent_id_ = parent_graph.getId();
+};
+
+/**
+ * Returning the ID of the parent's graph
+ * @returns {GLGR.Graph.id_ | null}
+ */
+GLGR.Graph.prototype.getParentId = function () {
+    return this.parent_id_;
 };
 
 
