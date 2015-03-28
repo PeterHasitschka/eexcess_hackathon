@@ -10,6 +10,22 @@ GLGR.NavigationHandler = function (scene) {
 };
 
 
+/**
+ * Set the scene's camera position
+ * @param {float | null} x
+ * @param {type | null} y
+ */
+GLGR.NavigationHandler.prototype.setCamera = function (x, y) {
+
+    if (x === null || x === undefined)
+        x = 0;
+    if (y === null || y === undefined)
+        y = 0;
+
+    this.scene_.getThreeCamera().position.x = x;
+    this.scene_.getThreeCamera().position.y = y;
+};
+
 
 /**
  * Move the scene's camera

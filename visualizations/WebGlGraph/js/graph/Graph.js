@@ -15,6 +15,9 @@ GLGR.Graph = function (name_)
     this.id_ = null;
     this.parent_id_ = null;
 
+    //Number to distinguish the silblings in the hierachical branch
+    this.parents_childnum_ = null;
+
     this.is_active_ = true;
 
     //Flag that can be set to force an update also if graph inactive
@@ -30,7 +33,8 @@ GLGR.Graph = function (name_)
 
     this.position_ = {
         x: 0.0,
-        y: 0.0
+        y: 0.0,
+        individual_label_y_offset : 0.0
     };
 
 
@@ -150,7 +154,7 @@ GLGR.Graph.prototype.setMeshPositions_ = function () {
 
     this.webGlObjects_.label.position.set(
             this.position_.x - text_w / 2,
-            this.position_.y + GLGR.Graph.vis_params.label.y_offset,
+            this.position_.y + GLGR.Graph.vis_params.label.y_offset + this.position_.individual_label_y_offset,
             -10
             );
 };
@@ -359,6 +363,9 @@ GLGR.Graph.prototype.setPosition = function (x, y) {
         this.position_.y = y;
 };
 
+GLGR.Graph.prototype.setLabelIndividualYOffset = function(val) {
+    this.position_.individual_label_y_offset = val;
+};
 
 /**
  * Returns an object containing the x and y position of the graph
@@ -438,4 +445,25 @@ GLGR.Graph.prototype.expandGraph = function () {
 GLGR.Graph.prototype.setIsActive = function (is_active) {
     this.is_active_ = is_active;
     this.force_update_while_inactive = true;
+};
+
+
+
+
+/**
+ * Setting the id of the parent's child.
+ * Necessary for correct displaying the hierachy
+ * @param {integer} child_number
+ */
+GLGR.Graph.prototype.setParentsChildnum = function (child_number) {
+    this.parents_childnum_ = child_number;
+};
+
+/**
+ * Getting the id of the parent's child.
+ * Necessary for correct displaying the hierachy
+ * @return {integer} child_number
+ */
+GLGR.Graph.prototype.getParentsChildnum = function () {
+    return this.parents_childnum_;
 };
