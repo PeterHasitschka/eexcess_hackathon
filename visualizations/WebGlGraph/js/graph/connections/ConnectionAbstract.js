@@ -72,7 +72,6 @@ GLGR.ConnectionAbstract.prototype.update = function () {
 };
 
 GLGR.ConnectionAbstract.prototype.createMesh_ = function () {
-    console.log("TODO CREATE LINE MESH!");
 
     var line_material = new THREE.LineBasicMaterial({
         color: this.vis_data.color,

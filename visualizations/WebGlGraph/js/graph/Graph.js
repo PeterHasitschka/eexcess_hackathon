@@ -27,8 +27,8 @@ GLGR.Graph = function (name_)
 
     //Meshes
     this.webGlObjects_ = {
-        node: null,
-        label: null
+        node: null
+        //label: null
     };
 
     this.position_ = {
@@ -153,16 +153,17 @@ GLGR.Graph.prototype.setMeshPositions_ = function () {
             GLGR.Graph.vis_params.sphere.z_value
             );
 
+    /*
     var text_w = this.webGlObjects_.label.geometry.boundingBox.max.x -
             this.webGlObjects_.label.geometry.boundingBox.min.x;
 
 
-
-    this.webGlObjects_.label.position.set(
-            this.position_.x - text_w / 2,
-            this.position_.y + GLGR.Graph.vis_params.label.y_offset + this.position_.individual_label_y_offset,
-            -10
-            );
+     this.webGlObjects_.label.position.set(
+     this.position_.x - text_w / 2,
+     this.position_.y + GLGR.Graph.vis_params.label.y_offset + this.position_.individual_label_y_offset,
+     -10
+     );
+     */
 };
 
 
@@ -170,7 +171,7 @@ GLGR.Graph.prototype.setMeshPositions_ = function () {
  * Call from Scene-Renderer to update positions etc.
  */
 GLGR.Graph.prototype.update = function () {
-    
+
     //Only update if active or inactive and force flag active
     if (!this.is_active_ && !this.force_update_while_inactive)
         return;
@@ -292,46 +293,46 @@ GLGR.Graph.prototype.initWegGlObjects = function () {
 
 
     //Label
-
-    var labelText;
-
-    if (!this.graph_name_)
-        labelText = "Graph #" + this.getId();
-    else
-        labelText = this.graph_name_;
-
-
-    labelText = labelText.substring(
-            0,
-            GLGR.Graph.vis_params.label.max_label_length
-            );
-
-
-    var labelGeometry = new THREE.TextGeometry(labelText,
-            {
-                font: GLGR.Graph.vis_params.label.font,
-                size: GLGR.Graph.vis_params.label.font_size
-            }
-    );
-
-    var labelMaterial = new THREE.MeshBasicMaterial(
-            {
-                color: GLGR.Graph.vis_params.label.color,
-                overdraw: true,
-                transparent: true
-            }
-    );
-    var label = new THREE.Mesh(labelGeometry, labelMaterial);
-
-    labelGeometry.computeBoundingBox();
-    var text_w = labelGeometry.boundingBox.max.x - labelGeometry.boundingBox.min.x;
-
-    label.applyMatrix(new THREE.Matrix4().makeScale(1, -1, -1));
-
-    this.webGlObjects_.label = label;
-
-    GLGR.Scene.getSingleton().getThreeScene().add(this.webGlObjects_.label);
-
+    /*
+     var labelText;
+     
+     if (!this.graph_name_)
+     labelText = "Graph #" + this.getId();
+     else
+     labelText = this.graph_name_;
+     
+     
+     labelText = labelText.substring(
+     0,
+     GLGR.Graph.vis_params.label.max_label_length
+     );
+     
+     
+     var labelGeometry = new THREE.TextGeometry(labelText,
+     {
+     font: GLGR.Graph.vis_params.label.font,
+     size: GLGR.Graph.vis_params.label.font_size
+     }
+     );
+     
+     var labelMaterial = new THREE.MeshBasicMaterial(
+     {
+     color: GLGR.Graph.vis_params.label.color,
+     overdraw: true,
+     transparent: true
+     }
+     );
+     var label = new THREE.Mesh(labelGeometry, labelMaterial);
+     
+     labelGeometry.computeBoundingBox();
+     var text_w = labelGeometry.boundingBox.max.x - labelGeometry.boundingBox.min.x;
+     
+     label.applyMatrix(new THREE.Matrix4().makeScale(1, -1, -1));
+     
+     this.webGlObjects_.label = label;
+     
+     GLGR.Scene.getSingleton().getThreeScene().add(this.webGlObjects_.label);
+     */
 
 
 
