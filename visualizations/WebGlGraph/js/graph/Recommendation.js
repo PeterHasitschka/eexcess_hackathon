@@ -24,8 +24,7 @@ GLGR.Recommendation = function (rec_id, rec_data) {
     //Meshes
     this.webGlObjects_ = {
         node: null,
-        label: null,
-        line: null
+        label: null
     };
 
     this.graph_center_ = {
@@ -52,7 +51,6 @@ GLGR.Recommendation = function (rec_id, rec_data) {
     GLGR.Recommendation.vis_params =
             GLGR.Recommendation.vis_params ||
             {
-                line_z: -100,
                 node_z: -30,
                 node_radius: 5,
                 node_min_radius: 0.5,
@@ -60,10 +58,6 @@ GLGR.Recommendation = function (rec_id, rec_data) {
                 sphere: {
                     segments: 8,
                     rings: 8
-                },
-                line: {
-                    color: 0x999999,
-                    width: 1
                 },
                 weight: {
                     exp: 3,
@@ -120,7 +114,7 @@ GLGR.Recommendation.prototype.initWegGlObjects = function () {
 
     if (this.is_initialized_)
         return;
-    
+
     this.webGlObjects_.node = this.createSphereMesh_();
 
     this.webGlObjects_.node.interaction_handlers = {
@@ -139,32 +133,6 @@ GLGR.Recommendation.prototype.initWegGlObjects = function () {
 
 
 
-
-
-    //LINE
-
-    var line_material = new THREE.LineBasicMaterial({
-        color: GLGR.Recommendation.vis_params.line.color,
-        linewidth: GLGR.Recommendation.vis_params.line.width,
-        transparent: true
-    });
-
-    var line_geometry = new THREE.Geometry();
-    line_geometry.vertices.push(new THREE.Vector3(
-            this.graph_center_.x,
-            this.graph_center_.y,
-            GLGR.Recommendation.vis_params.line_z)
-            );
-
-    line_geometry.vertices.push(new THREE.Vector3(
-            rec_pos.x,
-            rec_pos.y,
-            GLGR.Recommendation.vis_params.line_z))
-            ;
-
-    this.webGlObjects_.line = new THREE.Line(line_geometry, line_material);
-    GLGR.Scene.getSingleton().getThreeScene().add(this.webGlObjects_.line);
-    
     this.is_initialized_ = true;
 };
 
@@ -202,45 +170,6 @@ GLGR.Recommendation.prototype.update = function () {
     var curr_scale = curr_val / old_val;
 
     this.webGlObjects_.node.scale.set(curr_scale, curr_scale, curr_scale);
-
-
-
-    //Recalculate Line-Positions
-
-    var l_v1 = new THREE.Vector3(
-            this.graph_center_.x,
-            this.graph_center_.y,
-            GLGR.Recommendation.vis_params.line_z
-            );
-
-    var l_v2 = new THREE.Vector3(
-            rec_pos.x,
-            rec_pos.y,
-            GLGR.Recommendation.vis_params.line_z
-            );
-
-    var line_needs_update = false;
-    if (l_v1 !== this.webGlObjects_.line.geometry.vertices[0] ||
-            l_v2 !== this.webGlObjects_.line.geometry.vertices[1])
-        line_needs_update = true;
-
-    this.webGlObjects_.line.geometry.vertices[0] = l_v1;
-    this.webGlObjects_.line.geometry.vertices[1] = l_v2;
-
-    //Only update if changed
-    if (line_needs_update)
-        this.webGlObjects_.line.geometry.verticesNeedUpdate = true;
-
-
-    //Bounding sphere necessary for camera movement
-    //Compute if never done before, or on change
-    if (line_needs_update ||
-            this.webGlObjects_.line.geometry.bounding_comp_once === undefined)
-    {
-        this.webGlObjects_.line.geometry.computeBoundingSphere();
-        this.webGlObjects_.line.geometry.bounding_comp_once = true;
-    }
-
 
 
 
@@ -370,6 +299,18 @@ GLGR.Recommendation.prototype.setWeight = function (weight_factor) {
 GLGR.Recommendation.prototype.getPositionData = function () {
     return this.position_data_;
 };
+
+
+/**
+ * Return the current position of the three-mesh-node
+ * @returns {} array holding x and y of the node position
+ */
+GLGR.Recommendation.prototype.getNodePosition = function () {
+    if (this.webGlObjects_.node)
+        return this.webGlObjects_.node.position;
+    return null;
+};
+
 
 
 /**

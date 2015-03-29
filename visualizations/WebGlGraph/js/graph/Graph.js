@@ -74,6 +74,11 @@ GLGR.Graph = function (name_)
      */
     this.recommendations_ = [];
 
+    /**
+     * @type Array holding GLGR.ConnectionGraphRec objects
+     */
+    this.rec_connections_ = [];
+
     this.is_graph_initialized_ = false;
     this.are_recs_initialized_ = false;
 
@@ -165,7 +170,7 @@ GLGR.Graph.prototype.setMeshPositions_ = function () {
  * Call from Scene-Renderer to update positions etc.
  */
 GLGR.Graph.prototype.update = function () {
-
+    
     //Only update if active or inactive and force flag active
     if (!this.is_active_ && !this.force_update_while_inactive)
         return;
@@ -227,6 +232,12 @@ GLGR.Graph.prototype.update = function () {
         curr_recommendation.update();
     }
 
+    for (var i = 0; i < this.rec_connections_.length; i++)
+    {
+        /** @type {GLGR.ConnectionGraphRec} **/
+        var curr_rec_connection = this.rec_connections_[i];
+        curr_rec_connection.update();
+    }
 };
 
 
@@ -353,6 +364,12 @@ GLGR.Graph.prototype.initRecommendationObjs_ = function () {
         recs[i].initWegGlObjects();
 
         rec_degree += rec_degree_step;
+
+        //add connection
+        var rec_connection = new GLGR.ConnectionGraphRec(this, recs[i]);
+        this.rec_connections_.push(
+                rec_connection
+                );
     }
 
     this.are_recs_initialized_ = true;
@@ -381,6 +398,16 @@ GLGR.Graph.prototype.setLabelIndividualYOffset = function (val) {
  */
 GLGR.Graph.prototype.getPosition = function () {
     return this.position_;
+};
+
+/**
+ * Return the current position of the three-mesh-node
+ * @returns {} array holding x and y of the node position
+ */
+GLGR.Graph.prototype.getNodePosition = function () {
+    if (this.webGlObjects_.node)
+        return this.webGlObjects_.node.position;
+    return null;
 };
 
 

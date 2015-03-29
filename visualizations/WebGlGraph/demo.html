@@ -13,6 +13,8 @@
         <script src="js/graph/InteractionHandler.js" type="text/javascript"></script>
         <script src="js/graph/GraphRelationHandler.js" type="text/javascript"></script>
         <script src="js/graph/NavigationHandler.js" type="text/javascript"></script>
+        <script src="js/graph/connections/ConnectionAbstract.js" type="text/javascript"></script>
+        <script src="js/graph/connections/ConnectionGraphRec.js" type="text/javascript"></script>
         <script src="js/graph/Scene.js" type="text/javascript"></script>
         <script src="js/graph/Graph.js" type="text/javascript"></script>
         <script src="js/graph/Recommendation.js" type="text/javascript"></script>
@@ -33,12 +35,13 @@
             <a style="margin:10px; float: left;" href="#" id="toggle_isactive">Toggle activity</a>
             <a style="margin:10px; float: left;" href="#" id="add_graph">Add graph</a>
             <a style="margin:10px; float: left;" href="#" id="add_rec">Add rec</a>
+            <a style="margin:10px; float: left;" href="#" id="addconnection">Add connection</a>
         </div>
         <div id="canvas_container" style="float:left; width:1420px; height:500px; background-color: #F7FAFF ">
 
 
         </div>
-        <div style="background:#fdcece; font-size: 11px; float:right; width:300px; height:500px" id="information-container">
+        <div style="background:#fdcece; font-size: 11px; float:right; width:232px; height:500px" id="information-container">
 
             <div id="information-container-graph-info" style="background:#edfdff; margin: 10px; display:none">
                 <h2>Graph-Info</h2>

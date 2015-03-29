@@ -1,6 +1,10 @@
 
 var myScene;
 
+
+
+
+
 jQuery(document).ready(function () {
     /** @type {GLGR.Scene} **/
     myScene = new GLGR.Scene(jQuery('#canvas_container')[0]);
@@ -29,6 +33,11 @@ jQuery(document).ready(function () {
     addSomeRandomRecs(q4);
     addSomeRandomRecs(q5);
 
+
+
+
+
+
     q2.setParent(q1);
     q3a.setParent(q2);
     q3b.setParent(q2);
@@ -42,7 +51,13 @@ jQuery(document).ready(function () {
     myScene.addGraph(q5);
     myScene.addGraph(q2);
 
+
+
+
+
     animate();
+
+
 });
 
 
@@ -134,6 +149,20 @@ jQuery(document).ready(function () {
         tmp_rec.initWegGlObjects();
     });
 
+
+    jQuery("#addconnection").click(function () {
+
+        var graphs = myScene.getGraphs();
+
+        /** @type {GLGR.Graph} **/
+        var lastgraph = graphs[graphs.length - 2];
+
+        var newgraph = new GLGR.Graph("x");
+        newgraph.setParent(lastgraph);
+        addSomeRandomRecs(newgraph);
+        myScene.addGraph(newgraph);
+
+    });
 
 });
 
