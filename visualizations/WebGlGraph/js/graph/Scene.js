@@ -100,6 +100,9 @@ GLGR.Scene = function (canvas_element) {
             );
     this.navigation_handler_ = new GLGR.NavigationHandler(this);
 
+    //managed by Graph Relation Handler
+    this.graph_connections_ = [];
+
 };
 
 /**
@@ -111,6 +114,8 @@ GLGR.Scene.prototype.addGraph = function (graph_to_add) {
     this.graphs_.push(graph_to_add);
     graph_to_add.initWegGlObjects();
     graph_to_add.update();
+
+    //Line between graphs
     this.graph_pos_handler_.setUpdateNeeded(true);
 };
 
@@ -195,6 +200,14 @@ GLGR.Scene.prototype.render = function () {
         curr_graph.update();
     }
 
+    for (var i = 0; i < this.graph_connections_.length; i++)
+    {
+
+        /** @type {GLGR.ConnectionGraphGraph} **/
+        var connection = this.graph_connections_[i];
+        connection.update();
+    }
+
     this.three_renderer_.render(this.three_scene_, this.three_camera_);
 
     //GLGR.Debug.debugTime("RENDER: START");
@@ -232,7 +245,14 @@ GLGR.Scene.prototype.getNavigationHandler = function () {
 };
 
 
+GLGR.Scene.prototype.addGraphConnection = function (connection) {
+    this.graph_connections_.push(connection);
+};
 
+
+GLGR.Scene.prototype.clearGraphConnection = function () {
+    this.graph_connections_ = [];
+};
 
 /**
  * Logging-function of the scene

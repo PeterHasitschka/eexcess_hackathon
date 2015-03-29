@@ -28,13 +28,11 @@ GLGR.Graph = function (name_)
     //Meshes
     this.webGlObjects_ = {
         node: null
-        //label: null
     };
 
     this.position_ = {
         x: 0.0,
-        y: 0.0,
-        individual_label_y_offset: 0.0
+        y: 0.0
     };
 
 
@@ -53,13 +51,6 @@ GLGR.Graph = function (name_)
                     rings: 8,
                     z_value: -20,
                     color: 0x1d904e
-                },
-                label: {
-                    y_offset: 200,
-                    font: "helvetiker",
-                    font_size: 15,
-                    color: 0x555555,
-                    max_label_length: 40
                 },
                 rec: {
                     init_distance: 150,
@@ -134,6 +125,24 @@ GLGR.Graph.prototype.getParentId = function () {
     return this.parent_id_;
 };
 
+/**
+ * Returning the parent's graph
+ * @returns {GLGR.Graph.id_ | null}
+ */
+GLGR.Graph.prototype.getParent = function () {
+    var parent_id = this.getParentId();
+
+    var all_graphs = GLGR.Scene.getSingleton().getGraphs();
+    for (var i = 0; i < all_graphs.length; i++)
+    {    
+        if (all_graphs[i].getId() === parent_id)
+        {
+            return all_graphs[i];
+        }
+    }
+    
+};
+
 
 /**
  * Returns the graph's id
@@ -152,18 +161,6 @@ GLGR.Graph.prototype.setMeshPositions_ = function () {
             this.position_.y,
             GLGR.Graph.vis_params.sphere.z_value
             );
-
-    /*
-    var text_w = this.webGlObjects_.label.geometry.boundingBox.max.x -
-            this.webGlObjects_.label.geometry.boundingBox.min.x;
-
-
-     this.webGlObjects_.label.position.set(
-     this.position_.x - text_w / 2,
-     this.position_.y + GLGR.Graph.vis_params.label.y_offset + this.position_.individual_label_y_offset,
-     -10
-     );
-     */
 };
 
 
@@ -292,49 +289,6 @@ GLGR.Graph.prototype.initWegGlObjects = function () {
 
 
 
-    //Label
-    /*
-     var labelText;
-     
-     if (!this.graph_name_)
-     labelText = "Graph #" + this.getId();
-     else
-     labelText = this.graph_name_;
-     
-     
-     labelText = labelText.substring(
-     0,
-     GLGR.Graph.vis_params.label.max_label_length
-     );
-     
-     
-     var labelGeometry = new THREE.TextGeometry(labelText,
-     {
-     font: GLGR.Graph.vis_params.label.font,
-     size: GLGR.Graph.vis_params.label.font_size
-     }
-     );
-     
-     var labelMaterial = new THREE.MeshBasicMaterial(
-     {
-     color: GLGR.Graph.vis_params.label.color,
-     overdraw: true,
-     transparent: true
-     }
-     );
-     var label = new THREE.Mesh(labelGeometry, labelMaterial);
-     
-     labelGeometry.computeBoundingBox();
-     var text_w = labelGeometry.boundingBox.max.x - labelGeometry.boundingBox.min.x;
-     
-     label.applyMatrix(new THREE.Matrix4().makeScale(1, -1, -1));
-     
-     this.webGlObjects_.label = label;
-     
-     GLGR.Scene.getSingleton().getThreeScene().add(this.webGlObjects_.label);
-     */
-
-
 
     this.setMeshPositions_();
 
@@ -371,6 +325,7 @@ GLGR.Graph.prototype.initRecommendationObjs_ = function () {
         this.rec_connections_.push(
                 rec_connection
                 );
+
     }
 
     this.are_recs_initialized_ = true;
@@ -387,10 +342,6 @@ GLGR.Graph.prototype.setPosition = function (x, y) {
         this.position_.x = x;
     if (y !== null)
         this.position_.y = y;
-};
-
-GLGR.Graph.prototype.setLabelIndividualYOffset = function (val) {
-    this.position_.individual_label_y_offset = val;
 };
 
 /**

@@ -18,7 +18,7 @@ GLGR.ConnectionAbstract = function () {
     this.vis_data = {
         width: null,
         color: null,
-        z:null
+        z: null
     };
 
     this.line_mesh_ = null;
@@ -33,6 +33,7 @@ GLGR.ConnectionAbstract.prototype.update = function () {
     pos.src = this.getPosSrc();
     pos.dst = this.getPosDst();
 
+  
     //At least on position not available -> return
     if (!(pos.src && pos.dst))
         return;
@@ -54,14 +55,13 @@ GLGR.ConnectionAbstract.prototype.update = function () {
     //
 
 
-
     //Only update if changed
     if (line_needs_update)
     {
         this.line_mesh_.geometry.vertices[0].set(pos.src.x, pos.src.y, this.vis_data.z);
         this.line_mesh_.geometry.vertices[1].set(pos.dst.x, pos.dst.y, this.vis_data.z);
         this.line_mesh_.geometry.verticesNeedUpdate = true;
-        
+
         //Necessary for camera movement
         this.line_mesh_.geometry.computeBoundingSphere();
 

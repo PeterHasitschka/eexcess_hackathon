@@ -101,6 +101,18 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
 
             this.scene_.getNavigationHandler().setCamera(this.max_depth_of_graphs_ * this.visualization_constants.graph_distance);
 
+            for (var i = 0; i < this.scene_.getGraphs().length; i++)
+            {
+                var curr_graph = this.scene_.getGraphs()[i];
+                var graph_connection = new GLGR.ConnectionGraphGraph(
+                        curr_graph,
+                        curr_graph.getParent()
+                        );
+
+                this.scene_.addGraphConnection(graph_connection);
+            }
+
+
             break;
 
 

@@ -27,6 +27,7 @@ GLGR.ConnectionGraphRec.prototype.getPosSrc = function () {
 };
 
 GLGR.ConnectionGraphRec.prototype.getPosDst = function () {
+
     var pos = this.rec_.getNodePosition();
     return {x: pos.x, y: pos.y};
 };

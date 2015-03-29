@@ -9,7 +9,7 @@ jQuery(document).ready(function () {
     /** @type {GLGR.Scene} **/
     myScene = new GLGR.Scene(jQuery('#canvas_container')[0]);
 
-    var add_random = true;
+    var add_random = false;
 
 
     if (!add_random)
@@ -87,7 +87,6 @@ jQuery(document).ready(function () {
 
 
     animate();
-
 
 });
 

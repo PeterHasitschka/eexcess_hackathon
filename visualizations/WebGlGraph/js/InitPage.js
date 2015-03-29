@@ -45,8 +45,8 @@ function createGraph(query_data) {
         var tmp_query = new GLGR.Graph(tmp_query_data.query_str);
 
         var query_active = false;
-        if (query_count + 1 === query_data.length)
-            query_active = true;
+        //if (query_count + 1 === query_data.length)
+        query_active = true;
 
         tmp_query.setIsActive(query_active);
 
@@ -73,7 +73,7 @@ function createGraph(query_data) {
 
 
     webgl_scene.getNavigationHandler().zoom(0.5);
-    
+
 
     GLGR.Debug.debugTime("CREATE GRAPH: END");
     animate();
