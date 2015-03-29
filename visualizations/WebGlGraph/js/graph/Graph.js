@@ -58,7 +58,8 @@ GLGR.Graph = function (name_)
                     y_offset: 200,
                     font: "helvetiker",
                     font_size: 15,
-                    color: 0x555555
+                    color: 0x555555,
+                    max_label_length : 40
                 },
                 rec: {
                     init_distance: 150,
@@ -287,6 +288,9 @@ GLGR.Graph.prototype.initWegGlObjects = function () {
         labelText = "Graph #" + this.getId();
     else
         labelText = this.graph_name_;
+    
+    labelText = labelText.substring(0, GLGR.Graph.vis_params.label.max_label_length);
+    console.log(labelText);
 
     var labelGeometry = new THREE.TextGeometry(labelText,
             {
