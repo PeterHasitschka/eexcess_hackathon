@@ -34,7 +34,7 @@ GLGR.Graph = function (name_)
     this.position_ = {
         x: 0.0,
         y: 0.0,
-        individual_label_y_offset : 0.0
+        individual_label_y_offset: 0.0
     };
 
 
@@ -59,7 +59,7 @@ GLGR.Graph = function (name_)
                     font: "helvetiker",
                     font_size: 15,
                     color: 0x555555,
-                    max_label_length : 40
+                    max_label_length: 40
                 },
                 rec: {
                     init_distance: 150,
@@ -288,9 +288,13 @@ GLGR.Graph.prototype.initWegGlObjects = function () {
         labelText = "Graph #" + this.getId();
     else
         labelText = this.graph_name_;
-    
-    labelText = labelText.substring(0, GLGR.Graph.vis_params.label.max_label_length);
-    console.log(labelText);
+
+
+    labelText = labelText.substring(
+            0,
+            GLGR.Graph.vis_params.label.max_label_length
+            );
+
 
     var labelGeometry = new THREE.TextGeometry(labelText,
             {
@@ -367,7 +371,7 @@ GLGR.Graph.prototype.setPosition = function (x, y) {
         this.position_.y = y;
 };
 
-GLGR.Graph.prototype.setLabelIndividualYOffset = function(val) {
+GLGR.Graph.prototype.setLabelIndividualYOffset = function (val) {
     this.position_.individual_label_y_offset = val;
 };
 
