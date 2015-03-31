@@ -57,3 +57,19 @@ nav {
     border: 0 !important;
     overflow:hidden;
 }
+
+#eexcess_webgl_toolbar {
+    height: 21px;
+    background: #008746;
+    border: solid 1px white;
+    color: white;
+}
+
+#eexcess_webgl_toolbar .toolbar-button {
+    color: #008746;
+    margin: 2px;
+    float: left;
+    background: white;
+    padding: 2px;
+    font-weight: 600;
+}
