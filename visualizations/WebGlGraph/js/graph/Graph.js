@@ -9,7 +9,7 @@ var GLGR = GLGR || {};
  * Constructor of the graph-object
  * @param {string} name_ Name of the node (optional)
  */
-GLGR.Graph = function (name_)
+GLGR.Graph = function (graph_name, data)
 {
     /** @type Integer **/
     this.id_ = null;
@@ -23,8 +23,8 @@ GLGR.Graph = function (name_)
     //Flag that can be set to force an update also if graph inactive
     this.force_update_while_inactive = false;
 
-    this.graph_name_ = name_;
-
+    this.graph_name_ = graph_name;
+    this.graph_data_ = data;
     //Meshes
     this.webGlObjects_ = {
         node: null
@@ -134,13 +134,13 @@ GLGR.Graph.prototype.getParent = function () {
 
     var all_graphs = GLGR.Scene.getSingleton().getGraphs();
     for (var i = 0; i < all_graphs.length; i++)
-    {    
+    {
         if (all_graphs[i].getId() === parent_id)
         {
             return all_graphs[i];
         }
     }
-    
+
 };
 
 
@@ -453,4 +453,16 @@ GLGR.Graph.prototype.setParentsChildnum = function (child_number) {
  */
 GLGR.Graph.prototype.getParentsChildnum = function () {
     return this.parents_childnum_;
+};
+
+
+/**
+ * Returning the name and timestamp of the graph to identify it
+ * @returns {}
+ */
+GLGR.Graph.prototype.getUniqueData = function () {
+    return {
+        name: this.graph_name_,
+        timestamp: this.graph_data_.timestamp
+    };
 };

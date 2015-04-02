@@ -214,6 +214,26 @@ GLGR.Scene.prototype.render = function () {
 };
 
 
+
+GLGR.Scene.prototype.getExistingGraph = function (name, timestamp) {
+
+    var graphs = this.getGraphs();
+
+    for (var i = 0; i < graphs.length; i++)
+    {
+        var graph_uniques = graphs[i].getUniqueData();
+
+        if (
+                name === graph_uniques.name &&
+                timestamp === graph_uniques.timestamp
+                )
+            return graphs[i];
+    }
+
+    return false;
+};
+
+
 /**
  * 
  * @returns {float} Time Delta for calculating animation steps

@@ -19,14 +19,14 @@ var EEXCESS = EEXCESS || {};
  * @param {Jquery div elmeent} divContainer
  * @param {Object} options
  */
-EEXCESS.searchResultList = function(divContainer, options) {
+EEXCESS.searchResultList = function (divContainer, options) {
 
     /**
      * Event handler on the pagination buttons
      * 
      */
 
-    $(document).on('click', '.page', function() {
+    $(document).on('click', '.page', function () {
         $('.page.active').removeClass('active');
         $(this).addClass('active');
         var page = parseInt($(this).html()) - 1;
@@ -40,11 +40,11 @@ EEXCESS.searchResultList = function(divContainer, options) {
         pathToMedia: '../media/',
         pathToLibs: '../libs/',
         itemsShown: null,
-        previewHandler: function(url) {
+        previewHandler: function (url) {
             window.open(url, '_blank');
             EEXCESS.messaging.callBG({method: {parent: 'model', func: 'resultOpened'}, data: url});
         },
-        ratingHandler: function(uri, score, pos) {
+        ratingHandler: function (uri, score, pos) {
             EEXCESS.messaging.callBG({
                 method: {parent: 'model', func: 'rating'},
                 data: {
@@ -60,21 +60,21 @@ EEXCESS.searchResultList = function(divContainer, options) {
     var _dialog = $('<div style="display:none"><div>').append('<p></p>');
     var _error = $('<p style="display:none">sorry, something went wrong...</p>');
 
-    var _link = function(url, img, title) {
+    var _link = function (url, img, title) {
         var link = $('<a href="' + url + '">' + title + '</a>');
-        link.click(function(evt) {
+        link.click(function (evt) {
             evt.preventDefault();
             settings.previewHandler(url);
         });
         _thumbnail(link, img);
         return link;
     };
-    var _thumbnail = function(link, img) {
+    var _thumbnail = function (link, img) {
         // thumbnail on hover
         var xOffset = 10;
         var yOffset = 30;
         link.hover(
-                function(e) {
+                function (e) {
                     $('#eexcess_thumb_img').attr('src', img);
                     $('#eexcess_thumb')
                             .css('position', 'absolute')
@@ -83,16 +83,16 @@ EEXCESS.searchResultList = function(divContainer, options) {
                             .css('z-index', 9999)
                             .show();
                 },
-                function() {
+                function () {
                     $('#eexcess_thumb').hide();
                 });
-        link.mousemove(function(e) {
+        link.mousemove(function (e) {
             $('#eexcess_thumb')
                     .css('top', (e.pageY - xOffset) + 'px')
                     .css('left', (e.pageX + yOffset) + 'px');
         });
     };
-    var _rating = function(element, uri, score) {
+    var _rating = function (element, uri, score) {
         element.raty({
             score: score,
             path: settings.pathToLibs + 'rating/img',
@@ -104,7 +104,7 @@ EEXCESS.searchResultList = function(divContainer, options) {
             ],
             hints: ['bad', 'good'],
             single: true,
-            click: function(score, evt) {
+            click: function (score, evt) {
                 settings.ratingHandler(this.uri, score, this.element.data('pos'));
             }.bind({uri: uri, element: element})
         });
@@ -118,13 +118,13 @@ EEXCESS.searchResultList = function(divContainer, options) {
     divContainer.append(_error);
 
     // obtain current results
-    EEXCESS.messaging.callBG({method: {parent: 'model', func: 'getResults'}, data: null}, function(reqResult) {
+    EEXCESS.messaging.callBG({method: {parent: 'model', func: 'getResults'}, data: null}, function (reqResult) {
         showResults(reqResult);
     });
 
     // listen for updates
     EEXCESS.messaging.listener(
-            function(request, sender, sendResponse) {
+            function (request, sender, sendResponse) {
                 if (request.method.parent === 'results') {
                     if (request.method.func === 'rating') {
                         _rating($('.eexcess_raty[data-uri="' + request.data.uri + '"]'), request.data.uri, request.data.score);
@@ -140,7 +140,7 @@ EEXCESS.searchResultList = function(divContainer, options) {
             }
     );
 
-    var showResults = function(data) {
+    var showResults = function (data) {
         _error.hide();
         _loader.hide();
         data = data.results || null;
@@ -152,30 +152,37 @@ EEXCESS.searchResultList = function(divContainer, options) {
         }
         _list.attr('data-total', data.totalResults);
         moreResults(data.results);
-        
+
         var height = (window.innerHeight || document.body.clientHeight) - 250;
         settings.itemsShown = Math.floor(height / 50);
 
 
         var _pagination = $('<div class="pagination"></div>');
         var pages = (Math.ceil(data.results.length / settings.itemsShown) > 10) ? 10 : Math.ceil(data.results.length / settings.itemsShown);
-        if(pages > 1) {
+        if (pages > 1) {
             for (var i = 1; i <= pages; i++) {
-            var _btn = $('<a href="#" class="page gradient">' + i + '</a>');
-            if (i == 1) {
-                _btn.addClass('active');
-            }
-            _pagination.append(_btn);
+                var _btn = $('<a href="#" class="page gradient">' + i + '</a>');
+                if (i == 1) {
+                    _btn.addClass('active');
+                }
+                _pagination.append(_btn);
             }
 
             if (divContainer.find('.pagination').length != 0) {
                 divContainer.find('.pagination').remove();
             }
 
-            divContainer.append(_pagination)  
+            divContainer.append(_pagination)
         }
+
+        //Notify webGL Graph
+        if (GLGR !== undefined && GLGR.WidgetHelper !== undefined) {
+            var webgl_widgethelper = GLGR.WidgetHelper;
+            webgl_widgethelper.finishedSearchResult();
+        }
+
     };
-    var moreResults = function(items) {
+    var moreResults = function (items) {
 //            $('#eexcess_content').unbind('scroll'); TODO: check scrolling...
         var offset = _list.children('li').length;
         for (var i = 0, len = items.length; i < len; i++) {
@@ -221,7 +228,7 @@ EEXCESS.searchResultList = function(divContainer, options) {
 
             // show link
             var linkCopy = $('<a href="" title="show URL of the resource"><img src="' + settings.pathToMedia + 'icons/link.png" /></a>');
-            linkCopy.click(function(evt) {
+            linkCopy.click(function (evt) {
                 evt.preventDefault();
                 _dialog.children('p').text(this);
                 var at = 'center top+' + evt.pageY;
@@ -260,7 +267,7 @@ EEXCESS.searchResultList = function(divContainer, options) {
 //                });
 //            }
     };
-    var shortenDescription = function(description) {
+    var shortenDescription = function (description) {
 
         var firstPart = description.substring(0, 100);
         var remainder = description.substring(100, description.length);
@@ -272,11 +279,11 @@ EEXCESS.searchResultList = function(divContainer, options) {
         return firstPart;
     };
 
-    var _showError = function(errorData) {
+    var _showError = function (errorData) {
         divContainer.find('.pagination').remove();
         _list.empty();
         _loader.hide();
-        if(errorData.msg === 'timeout') {
+        if (errorData.msg === 'timeout') {
             _error.text('Sorry, the server takes too long to respond. Please try again later');
         } else {
             _error.text('Sorry, something went wrong');
@@ -285,7 +292,7 @@ EEXCESS.searchResultList = function(divContainer, options) {
         $('#eexcess_thumb').hide();
     };
 
-    var _loading = function() {
+    var _loading = function () {
         $('#eexcess_thumb').hide();
         divContainer.find('.pagination').remove();
         _error.hide();
