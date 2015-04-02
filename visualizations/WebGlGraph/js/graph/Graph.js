@@ -383,7 +383,8 @@ GLGR.Graph.prototype.handleGraphClick = function () {
     else
         that.expandGraph();
 
-
+        
+    console.log("GRAPH CLICKED :", that);
 
     //Demo
     var infoblock = jQuery('#information-container-graph-info');

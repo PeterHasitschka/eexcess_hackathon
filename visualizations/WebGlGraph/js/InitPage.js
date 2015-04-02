@@ -90,12 +90,17 @@ function prepareData(raw_query_data, raw_rec_data)
         {
             //console.log("Going through recs ("+r_count+"/"+raw_rec_data.length+")");
             var tmp_raw_rec = raw_rec_data[r_count];
+            /*
+            if (tmp_query.query_str == tmp_raw_rec.context.query)
+                console.log(tmp_raw_rec.context.query, tmp_raw_rec.timestamp,tmp_query.timestamp);
+                */
             //console.log(tmp_raw_rec.timestamp);
             if (
                     tmp_raw_rec.timestamp === tmp_query.timestamp
                     //&& tmp_raw_rec.context.query === tmp_query.query_str
                     )
             {
+                //console.log("REC CHECK FOR " +tmp_raw_rec.context.query);
                 //console.log("FOUND MATCHING REC!");
                 tmp_raw_rec.result.db_id = tmp_raw_rec.recommendation_id;
 

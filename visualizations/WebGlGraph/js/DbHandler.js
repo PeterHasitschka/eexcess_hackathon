@@ -177,6 +177,7 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
 
         for (var rec_count = 0; rec_count < tmp_query_data.recs.length; rec_count++)
         {
+            //console.log("Adding a recommendation to " + tmp_query_data.query_str + "(" + tmp_query.getId() + ")");
             var tmp_rec_data = tmp_query_data.recs[rec_count];
 
 
@@ -190,9 +191,6 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
 
 
         tmp_query.setParent(last_query);
-
-        console.log(tmp_query_data);
-        console.log(tmp_query);
 
 
         last_query = tmp_query;
@@ -230,14 +228,17 @@ GLGR.DbHandler.prototype.dbUpdatedCb = function () {
                 webgl_scene.addGraph(graphs[i]);
             }
 
+            if (graphs.length > 0)
+            {
+                webgl_scene.getNavigationHandler().setCamera(
+                        graphs[graphs.length-1].getPosition().x,
+                        graphs[graphs.length-1].getPosition().y
+                        );
+            }
 
             GLGR.Debug.debugTime("Created Graph");
         });
     });
-
-
-
-
 
 };
 
