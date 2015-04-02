@@ -99,7 +99,10 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
             }
 
 
-            this.scene_.getNavigationHandler().setCamera(this.max_depth_of_graphs_ * this.visualization_constants.graph_distance);
+            this.scene_.getNavigationHandler().setCamera(
+                    (this.max_depth_of_graphs_ + 1) *
+                    this.visualization_constants.graph_distance
+                    );
 
             for (var i = 0; i < this.scene_.getGraphs().length; i++)
             {
@@ -176,14 +179,14 @@ GLGR.GraphRelationHandler.prototype.applyHierachicalDataToSingleGraph = function
     if (!current_graph)
         throw("ERROR: Could not find graph with id " + graph_id);
 
-    
+
     var parent_y_add = 0;
     var parent = current_graph.getParent();
-    if (parent){
+    if (parent) {
         parent_y_add = parent.getPosition().y;
     }
-    
-    
+
+
     var y_pos_level = ((this.max_depth_of_graphs_ / level) *
             this.visualization_constants.graph_y_level_static_fact +
             this.visualization_constants.graph_y_level_static_add) *

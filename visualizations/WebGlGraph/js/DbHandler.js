@@ -226,15 +226,19 @@ GLGR.DbHandler.prototype.dbUpdatedCb = function () {
             for (var i = 0; i < graphs.length; i++)
             {
                 webgl_scene.addGraph(graphs[i]);
+                //console.log(graphs[i].getPosition());
             }
-
+            
+            /*
             if (graphs.length > 0)
             {
+                //console.log("set:",graphs[graphs.length-1].getPosition());
                 webgl_scene.getNavigationHandler().setCamera(
                         graphs[graphs.length-1].getPosition().x,
                         graphs[graphs.length-1].getPosition().y
                         );
             }
+            */
 
             GLGR.Debug.debugTime("Created Graph");
         });
