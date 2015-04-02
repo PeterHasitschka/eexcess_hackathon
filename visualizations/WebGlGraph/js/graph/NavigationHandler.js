@@ -60,6 +60,10 @@ GLGR.NavigationHandler.prototype.zoom = function (zoom_factor) {
 
 };
 
+GLGR.NavigationHandler.prototype.getZoomFactor = function() {
+    return this.scene_.getThreeCamera().zoom;
+};
+
 /**
  * Perform zoom relative
  * @param {float} delta_zoom_factor

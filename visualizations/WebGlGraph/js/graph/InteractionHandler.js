@@ -47,8 +47,9 @@ GLGR.InteractionHandler = function (scene) {
         jQuery(that.scene_.getCanvas()).mousemove(function (event) {
             if (!is_mouse_down_in_canvas)
                 return;
-
-            curr_mouse_x_diff = 0 - (event.clientX - mouse_x_prev);
+            
+            var zoom_factor = 1 / that.scene_.getNavigationHandler().getZoomFactor();
+            curr_mouse_x_diff = 0 - (event.clientX - mouse_x_prev) * zoom_factor;
 
             that.scene_.getNavigationHandler().moveCamera(curr_mouse_x_diff);
             mouse_x_prev = event.clientX;
