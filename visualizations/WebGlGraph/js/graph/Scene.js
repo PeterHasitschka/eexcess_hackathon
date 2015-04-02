@@ -102,6 +102,8 @@ GLGR.Scene = function (canvas_element) {
 
     //managed by Graph Relation Handler
     this.graph_connections_ = [];
+    
+    this.active_graph = null;
 
 };
 
@@ -214,20 +216,43 @@ GLGR.Scene.prototype.render = function () {
 };
 
 
-
+/**
+ * Get (first) existing graph by one or two conditions
+ * If one param is empty, only the other one counts.
+ * @param {string | null} name
+ * @param {string | null} timestamp
+ * @returns {Boolean|Array|GLGR.Scene.prototype.getExistingGraph.graphs}
+ */
 GLGR.Scene.prototype.getExistingGraph = function (name, timestamp) {
 
     var graphs = this.getGraphs();
+
+    if (name === null && timestamp === null)
+        throw("ERROR: At least one param has to be given!");
 
     for (var i = 0; i < graphs.length; i++)
     {
         var graph_uniques = graphs[i].getUniqueData();
 
-        if (
-                name === graph_uniques.name &&
-                timestamp === graph_uniques.timestamp
-                )
+        var match_n = true;
+        var match_t = true;
+
+        if (name !== null)
+            if (name === graph_uniques.name)
+                match_n = true;
+            else
+                match_n = false;
+
+        if (timestamp !== null)
+            if (timestamp === graph_uniques.timestamp)
+                match_t = true;
+            else
+                match_t = false;
+
+        if (match_n && match_t)
+        {
             return graphs[i];
+        }
     }
 
     return false;
@@ -264,6 +289,9 @@ GLGR.Scene.prototype.getNavigationHandler = function () {
     return this.navigation_handler_;
 };
 
+GLGR.Scene.prototype.getGraphRelationHandler = function () {
+    return this.graph_pos_handler_;
+};
 
 GLGR.Scene.prototype.addGraphConnection = function (connection) {
     this.graph_connections_.push(connection);

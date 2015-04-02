@@ -17,7 +17,7 @@ GLGR.DbHandler = function () {
 
 
     if (parent.GLGR.WidgetHelper !== undefined) {
-        parent.GLGR.WidgetHelper.db_update_cb = this.dbUpdatedCb;
+        parent.GLGR.WidgetHelper.db_update_cb = this.getAndDrawNewGraphsFromDb;
 
     }
     else
@@ -150,11 +150,13 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
 
         //Check if graph already exists
         var existing = GLGR.Scene.getSingleton().getExistingGraph(
-                tmp_query_data.query_str,
-                tmp_query_data.timestamp);
+                tmp_query_data.query_str
+                , tmp_query_data.timestamp
+                );
 
         if (existing)
             continue;
+
 
 
         /** @type {GLGR.Graph} **/
@@ -167,13 +169,9 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
         query_active = true;
 
         tmp_query.setIsActive(query_active);
-        
-        if (tmp_query_data.recs.length === 0)
-        {
-            console.log("Empty result for query '"+tmp_query_data.query_str +
-                    "' --> Maybe already existing? TODO: Move to existing query!");
-        }
-        
+
+
+
         for (var rec_count = 0; rec_count < tmp_query_data.recs.length; rec_count++)
         {
             var tmp_rec_data = tmp_query_data.recs[rec_count];
@@ -186,6 +184,15 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
             tmp_query.addRecommendation(tmp_rec);
         }
 
+        /*
+         if (tmp_query_data.recs.length === 0)
+         {
+         console.log("Empty result for query '" + tmp_query_data.query_str +
+         "' --> Maybe already existing? TODO: Move to existing query!");
+         }
+         */
+
+
         tmp_query.setParent(last_query);
 
         last_query = tmp_query;
@@ -193,11 +200,11 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
         graphs.push(tmp_query);
     }
     this.last_created_graph_ = last_query;
-    return graphs;
+    return {graphs: graphs};
 };
 
 
-GLGR.DbHandler.prototype.dbUpdatedCb = function () {
+GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
     console.log("DB-HANDLER: UPDATED DB CB CALLED --> GRAPH REDRAW NEEDED!");
 
     var that = GLGR.DbHandler.getSingleton();
@@ -215,14 +222,69 @@ GLGR.DbHandler.prototype.dbUpdatedCb = function () {
             var webgl_scene = GLGR.Scene.getSingleton();
 
 
-            var graphs = that.getNewGraphsFromQueryData(
+            var newgr_res = that.getNewGraphsFromQueryData(
                     query_data
                     );
 
+            var graphs = newgr_res.graphs;
+
+
+            //If last graph to add is empty -> move to this one!
+            var last_graph_with_existing_querystr = null;
+
             for (var i = 0; i < graphs.length; i++)
             {
-                webgl_scene.addGraph(graphs[i]);
+                //Prevent adding if:
+                // * No recs
+                // * Query exists!
+
+                var skip_adding = false;
+                if (!graphs[i].getRecommendations().length)
+                {
+
+                    //Check if query exists
+                    for (var j = 0; j < webgl_scene.getGraphs().length; j++)
+                    {
+                        var graph_to_check = webgl_scene.getGraphs()[j];
+                        var query_str_to_check = graph_to_check.getUniqueData().name;
+
+                        var current_query_str = graphs[i].getUniqueData().name;
+
+                        if (query_str_to_check === current_query_str)
+                        {
+                            skip_adding = true;
+                            last_graph_with_existing_querystr = graph_to_check;
+                            break;
+                        }
+                    }
+                }
+
+                var is_last = false;
+                if (i === graphs.length - 1)
+                    is_last = true;
+
+
+                if (!skip_adding)
+                {
+                    console.log("Adding a graph...");
+                    webgl_scene.addGraph(graphs[i]);
+
+                    if (is_last)
+                        webgl_scene.active_graph = graphs[i];
+                }
+                //If last to add, and gets skipped, move to the already searched
+                else if (is_last)
+                {
+                    webgl_scene.active_graph = last_graph_with_existing_querystr;
+                    webgl_scene.getGraphRelationHandler().setUpdateNeeded(true);
+                    console.log("Skipping an empty graph but moving to it... ");
+                }
+                else
+                {
+                    console.log("Skipping an empty graph... ");
+                }
             }
+
 
             GLGR.Debug.debugTime("Created Graph");
         });

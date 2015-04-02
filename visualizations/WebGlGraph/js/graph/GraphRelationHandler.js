@@ -98,14 +98,27 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
                 this.setHierachicalPosition(null, hierachy_data, 0, 0);
             }
 
-
-            this.scene_.getNavigationHandler().setCamera(
-                    (this.max_depth_of_graphs_ + 1) *
-                    this.visualization_constants.graph_distance
-                    );
+            //Move camera to active graph or to farest one
+            if (this.scene_.active_graph)
+            {
+                console.log("moving camera to active", this.scene_.active_graph);
+                this.scene_.getNavigationHandler().setCamera(
+                        this.scene_.active_graph.getPosition().x,
+                        this.scene_.active_graph.getPosition().y
+                        );
+            }
+            else
+            {
+                console.log("moving camera to farest right");
+                this.scene_.getNavigationHandler().setCamera(
+                        (this.max_depth_of_graphs_ + 1) *
+                        this.visualization_constants.graph_distance
+                        );
+            }
 
             for (var i = 0; i < this.scene_.getGraphs().length; i++)
             {
+                
                 var curr_graph = this.scene_.getGraphs()[i];
                 var graph_connection = new GLGR.ConnectionGraphGraph(
                         curr_graph,

@@ -28,17 +28,36 @@ function createScene(query_data) {
     /** @type {GLGR.Scene} **/
     webgl_scene = new GLGR.Scene(container);
 
-    var graphs = GLGR.DbHandler.getSingleton().getNewGraphsFromQueryData(
-            query_data
-            );
-
-    for (var i = 0; i < graphs.length; i++)
+    
+    
+    //@TODO: Switch to second method!
+    if (true)
     {
-        webgl_scene.addGraph(graphs[i]);
+        //@TODO : Deactivate that reduntant stuff!
+        
+        var graphs = GLGR.DbHandler.getSingleton().getNewGraphsFromQueryData(
+                query_data
+                ).graphs;
+
+        for (var i = 0; i < graphs.length; i++)
+        {
+            webgl_scene.addGraph(graphs[i]);
+
+
+            var is_last = false;
+            if (i === graphs.length - 1)
+                is_last = true;
+
+            if (is_last)
+                webgl_scene.active_graph = graphs[i];
+        }
+
     }
-
-
-
+    else    
+    {
+        //@TODO: Fix Problems with parents, then activate!
+        GLGR.DbHandler.getSingleton().getAndDrawNewGraphsFromDb();
+    }
 
 
     webgl_scene.getNavigationHandler().zoom(0.5);
