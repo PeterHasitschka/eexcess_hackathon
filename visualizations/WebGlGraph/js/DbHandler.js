@@ -153,14 +153,8 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
                 tmp_query_data.query_str,
                 tmp_query_data.timestamp);
 
-        //console.log(tmp_query_data, tmp_query_data.query_str, tmp_query_data.timestamp, existing);
         if (existing)
             continue;
-
-
-
-
-
 
 
         /** @type {GLGR.Graph} **/
@@ -170,14 +164,18 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
         );
 
         var query_active = false;
-        //if (query_count + 1 === query_data.length)
         query_active = true;
 
         tmp_query.setIsActive(query_active);
-
+        
+        if (tmp_query_data.recs.length === 0)
+        {
+            console.log("Empty result for query '"+tmp_query_data.query_str +
+                    "' --> Maybe already existing? TODO: Move to existing query!");
+        }
+        
         for (var rec_count = 0; rec_count < tmp_query_data.recs.length; rec_count++)
         {
-            //console.log("Adding a recommendation to " + tmp_query_data.query_str + "(" + tmp_query.getId() + ")");
             var tmp_rec_data = tmp_query_data.recs[rec_count];
 
 
@@ -188,10 +186,7 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
             tmp_query.addRecommendation(tmp_rec);
         }
 
-
-
         tmp_query.setParent(last_query);
-
 
         last_query = tmp_query;
 
@@ -205,13 +200,14 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
 GLGR.DbHandler.prototype.dbUpdatedCb = function () {
     console.log("DB-HANDLER: UPDATED DB CB CALLED --> GRAPH REDRAW NEEDED!");
 
-    GLGR.DbHandler.getSingleton().getAllQueries(function (q_data) {
+    var that = GLGR.DbHandler.getSingleton();
+    that.getAllQueries(function (q_data) {
 
         GLGR.Debug.debugTime("Got all Queries from DB");
-        GLGR.DbHandler.getSingleton().getAllRecommendations(function (r_data) {
+        that.getAllRecommendations(function (r_data) {
 
             GLGR.Debug.debugTime("Got all Recs from DB");
-            var query_data = prepareData(q_data, r_data);
+            var query_data = that.prepareQueryRecStructure(q_data, r_data);
             GLGR.Debug.debugTime("Prepared Data");
 
 
@@ -219,32 +215,70 @@ GLGR.DbHandler.prototype.dbUpdatedCb = function () {
             var webgl_scene = GLGR.Scene.getSingleton();
 
 
-            var graphs = GLGR.DbHandler.getSingleton().getNewGraphsFromQueryData(
+            var graphs = that.getNewGraphsFromQueryData(
                     query_data
                     );
 
             for (var i = 0; i < graphs.length; i++)
             {
                 webgl_scene.addGraph(graphs[i]);
-                //console.log(graphs[i].getPosition());
             }
-            
-            /*
-            if (graphs.length > 0)
-            {
-                //console.log("set:",graphs[graphs.length-1].getPosition());
-                webgl_scene.getNavigationHandler().setCamera(
-                        graphs[graphs.length-1].getPosition().x,
-                        graphs[graphs.length-1].getPosition().y
-                        );
-            }
-            */
 
             GLGR.Debug.debugTime("Created Graph");
         });
     });
 
 };
+
+/**
+ * Combine query- and recommendation data
+ * @param {array} raw_query_data From IndexedDb
+ * @param {array} raw_rec_data From IndexedDb
+ * @returns {undefined}
+ */
+GLGR.DbHandler.prototype.prepareQueryRecStructure = function (raw_query_data, raw_rec_data)
+{
+    //console.log(raw_query_data);
+    //console.log(raw_rec_data);
+
+    var queries = [];
+
+    for (var q_count = 0; q_count < raw_query_data.length; q_count++)
+    {
+        var tmp_query = {};
+
+        tmp_query.id = raw_query_data[q_count].id;
+
+        var q_str = [];
+        for (var q_str_count = 0; q_str_count < raw_query_data[q_count].query.length; q_str_count++)
+        {
+            q_str.push(raw_query_data[q_count].query[q_str_count].text);
+        }
+
+        tmp_query.query_str = q_str.join(" ");
+        tmp_query.timestamp = raw_query_data[q_count].timestamp;
+        tmp_query.recs = [];
+
+
+        for (var r_count = 0; r_count < raw_rec_data.length; r_count++)
+        {
+            var tmp_raw_rec = raw_rec_data[r_count];
+
+            if (
+                    tmp_raw_rec.timestamp === tmp_query.timestamp
+                    )
+            {
+                tmp_raw_rec.result.db_id = tmp_raw_rec.recommendation_id;
+                tmp_query.recs.push(tmp_raw_rec.result);
+            }
+        }
+
+        queries.push(tmp_query);
+    }
+
+
+    return queries;
+}
 
 
 GLGR.DbHandler.prototype.loadDbError_ = function () {

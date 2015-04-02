@@ -393,7 +393,7 @@ GLGR.Recommendation.prototype.handleRecClick = function () {
     var that = this.recref;
 
 
-
+    console.log("REC clicked :" ,that);
     //Demo
     var infoblock = jQuery('#information-container-rec-info');
 
