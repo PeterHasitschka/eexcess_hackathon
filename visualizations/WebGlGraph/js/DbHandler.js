@@ -141,7 +141,7 @@ GLGR.DbHandler.prototype.getStorageData_ = function (cb_data_loaded, storage_nam
  */
 GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
 
-    var last_query = this.last_created_graph_;
+    //var last_query = this.last_created_graph_;
 
     var graphs = [];
     for (var query_count = 0; query_count < query_data.length; query_count++)
@@ -192,14 +192,14 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
          }
          */
 
+        // Not prove that parent gets drawn --> set it later when adding to scene
+        //tmp_query.setParent(last_query);
 
-        tmp_query.setParent(last_query);
-
-        last_query = tmp_query;
+        //last_query = tmp_query;
 
         graphs.push(tmp_query);
     }
-    this.last_created_graph_ = last_query;
+    //this.last_created_graph_ = last_query;
     return {graphs: graphs};
 };
 
@@ -231,12 +231,25 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
 
             //If last graph to add is empty -> move to this one!
             var last_graph_with_existing_querystr = null;
-
+            
+            //Use as parent
+            var last_added = null;
+            
             for (var i = 0; i < graphs.length; i++)
             {
                 //Prevent adding if:
                 // * No recs
                 // * Query exists!
+                
+                
+                
+                //Get last added as parent
+                if (webgl_scene.getGraphs().length)
+                {
+                    var length_already_added_graphs =webgl_scene.getGraphs().length;
+                    last_added = webgl_scene.getGraphs()[length_already_added_graphs - 1];
+                }
+                
 
                 var skip_adding = false;
                 if (!graphs[i].getRecommendations().length)
@@ -266,8 +279,18 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
 
                 if (!skip_adding)
                 {
-                    console.log("Adding a graph...");
+                    
+                    var parent_id = null;
+                    if (last_added)
+                        parent_id = last_added.getId();
+                    
+                    //console.log("Adding graph " + graphs[i].getId() +
+                    //        " with parent " + parent_id);
+
+                    
+                    graphs[i].setParent(last_added);
                     webgl_scene.addGraph(graphs[i]);
+                    
 
                     if (is_last)
                         webgl_scene.active_graph = graphs[i];

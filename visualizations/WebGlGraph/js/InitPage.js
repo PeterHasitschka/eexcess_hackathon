@@ -31,7 +31,7 @@ function createScene(query_data) {
     
     
     //@TODO: Switch to second method!
-    if (true)
+    if (false)
     {
         //@TODO : Deactivate that reduntant stuff!
         
