@@ -20,3 +20,21 @@ html, body {
 #webgl_canvas_container p img {
     margin-top: 18px;
 }
+
+
+#webgl_status_bar {
+    position: absolute;
+    width: 100%;
+    text-align: right;
+    font-size: 9px;
+    float: left;
+    background: black;
+    height: 20px;
+}
+
+#webgl_status_bar_content {
+    color: white;
+    margin: 4px 3px;
+    float: right;
+    font-size: 11px;    
+}

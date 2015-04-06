@@ -387,12 +387,20 @@ GLGR.Graph.prototype.handleGraphClick = function () {
     console.log("GRAPH CLICKED :", that);
 
     //Demo
+    /*
     var infoblock = jQuery('#information-container-graph-info');
     if (!infoblock.length)
         throw ("ERROR: DEMO GRAPH INFO BLOCK NOT EXISTING! CLEAN UP YOUR CODE!");
     jQuery('#information-container-graph-info-id').html(that.getId());
     jQuery('#information-container-graph-info-title').html(that.graph_name_);
     infoblock.show();
+    
+    */
+   
+   var status_text = that.graph_name_ + " (ID: " + that.getId() + ")";
+   
+   jQuery('#webgl_status_bar_content').html(status_text);
+   
 };
 
 
