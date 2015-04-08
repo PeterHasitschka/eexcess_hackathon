@@ -22,7 +22,8 @@ GLGR.ConnectionAbstract = function () {
     };
 
     this.line_mesh_ = null;
-
+    
+    this.is_visible_ = null;
 };
 
 
@@ -33,7 +34,7 @@ GLGR.ConnectionAbstract.prototype.update = function () {
     pos.src = this.getPosSrc();
     pos.dst = this.getPosDst();
 
-  
+
     //At least on position not available -> return
     if (!(pos.src && pos.dst))
         return;
@@ -100,6 +101,27 @@ GLGR.ConnectionAbstract.prototype.createMesh_ = function () {
     this.line_mesh_ = new THREE.Line(line_geometry, line_material);
     GLGR.Scene.getSingleton().getThreeScene().add(this.line_mesh_);
 };
+
+
+/**
+ * Hides the connection (Not visible at all)
+ */
+GLGR.ConnectionAbstract.prototype.hide = function () {
+    this.setMeshesVisible_(false);
+};
+
+/**
+ * Shows (unhides) the connection
+ */
+GLGR.ConnectionAbstract.prototype.show = function () {
+    this.setMeshesVisible_(true);
+};
+
+GLGR.ConnectionAbstract.prototype.setMeshesVisible_ = function (status) {
+    this.is_visible_ = status;
+    this.line_mesh_.visible = status;
+};
+
 
 
 

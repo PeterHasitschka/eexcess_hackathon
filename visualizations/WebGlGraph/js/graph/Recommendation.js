@@ -44,7 +44,8 @@ GLGR.Recommendation = function (rec_id, rec_data) {
     };
 
     this.is_minimized_ = false;
-
+    this.is_visible_ = true;
+    
     this.transparency_from_graph_ = null;
 
     //Static object holding several parameters for visualization
@@ -429,6 +430,28 @@ GLGR.Recommendation.prototype.toggleStateMinimized = function ()
         this.is_minimized_ = true;
     }
 
+};
+
+/**
+ * Hides the rec (Not visible at all)
+ */
+GLGR.Recommendation.prototype.hide = function() {
+    this.is_visible_ = false;
+    this.setMeshesVisible_(false);
+};
+
+/**
+ * Shows (unhides) the rec
+ */
+GLGR.Recommendation.prototype.show = function() {
+    //this.setIsActive(true);
+    this.is_visible_ = true;
+    this.setMeshesVisible_(true);
+};
+
+GLGR.Recommendation.prototype.setMeshesVisible_ = function(status){
+    this.webGlObjects_.node.visible = status;
+    
 };
 
 

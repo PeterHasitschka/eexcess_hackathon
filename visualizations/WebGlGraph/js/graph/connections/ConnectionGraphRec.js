@@ -15,6 +15,7 @@ GLGR.ConnectionGraphRec = function (graph, recommendation) {
         z: -50
     };
     
+    this.is_visible_ = true;
 };
 
 GLGR.ConnectionGraphRec.prototype = new GLGR.ConnectionAbstract();

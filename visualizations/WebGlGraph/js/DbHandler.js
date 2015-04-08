@@ -21,7 +21,9 @@ GLGR.DbHandler = function () {
 
     }
     else
-        console.log("DB-Handler: Could not find widget helper");
+    {
+        //console.log("DB-Handler: Could not find widget helper");
+    }
 
     this.last_created_graph_ = null;
 
@@ -205,7 +207,7 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
 
 
 GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
-    console.log("DB-HANDLER: UPDATED DB CB CALLED --> GRAPH REDRAW NEEDED!");
+    //console.log("DB-HANDLER: UPDATED DB CB CALLED --> GRAPH REDRAW NEEDED!");
 
     var that = GLGR.DbHandler.getSingleton();
     that.getAllQueries(function (q_data) {
@@ -231,25 +233,25 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
 
             //If last graph to add is empty -> move to this one!
             var last_graph_with_existing_querystr = null;
-            
+
             //Use as parent
             var last_added = null;
-            
+
             for (var i = 0; i < graphs.length; i++)
             {
                 //Prevent adding if:
                 // * No recs
                 // * Query exists!
-                
-                
-                
+
+
+
                 //Get last added as parent
                 if (webgl_scene.getGraphs().length)
                 {
-                    var length_already_added_graphs =webgl_scene.getGraphs().length;
+                    var length_already_added_graphs = webgl_scene.getGraphs().length;
                     last_added = webgl_scene.getGraphs()[length_already_added_graphs - 1];
                 }
-                
+
 
                 var skip_adding = false;
                 if (!graphs[i].getRecommendations().length)
@@ -279,18 +281,18 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
 
                 if (!skip_adding)
                 {
-                    
+
                     var parent_id = null;
                     if (last_added)
                         parent_id = last_added.getId();
-                    
+
                     //console.log("Adding graph " + graphs[i].getId() +
                     //        " with parent " + parent_id);
 
-                    
+
                     graphs[i].setParent(last_added);
                     webgl_scene.addGraph(graphs[i]);
-                    
+
 
                     if (is_last)
                         webgl_scene.active_graph = graphs[i];
@@ -300,11 +302,11 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
                 {
                     webgl_scene.active_graph = last_graph_with_existing_querystr;
                     webgl_scene.getGraphRelationHandler().setUpdateNeeded(true);
-                    console.log("Skipping an empty graph but moving to it... ");
+                    //console.log("Skipping an empty graph but moving to it... ");
                 }
                 else
                 {
-                    console.log("Skipping an empty graph... ");
+                    //console.log("Skipping an empty graph... ");
                 }
             }
 

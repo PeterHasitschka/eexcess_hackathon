@@ -16,6 +16,8 @@ GLGR.ConnectionGraphGraph = function (src_graph, dst_graph) {
     };
 
     this.log = true;
+    
+    this.is_visible_ = true;
 };
 
 GLGR.ConnectionGraphGraph.prototype = new GLGR.ConnectionAbstract();

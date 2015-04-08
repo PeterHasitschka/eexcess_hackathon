@@ -93,15 +93,12 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
 
 
             //Setting graph positions
-            for (var root_graph_id in hierachy_data)
-            {
-                this.setHierachicalPosition(null, hierachy_data, 0, 0);
-            }
+            this.setHierachicalPosition(null, hierachy_data, 0, 0);
 
             //Move camera to active graph or to farest one
             if (this.scene_.active_graph)
             {
-                console.log("moving camera to active", this.scene_.active_graph);
+                //console.log("moving camera to active", this.scene_.active_graph);
                 this.scene_.getNavigationHandler().setCamera(
                         this.scene_.active_graph.getPosition().x,
                         this.scene_.active_graph.getPosition().y
@@ -118,7 +115,7 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
 
             for (var i = 0; i < this.scene_.getGraphs().length; i++)
             {
-                
+
                 var curr_graph = this.scene_.getGraphs()[i];
                 var graph_connection = new GLGR.ConnectionGraphGraph(
                         curr_graph,
@@ -157,10 +154,10 @@ GLGR.GraphRelationHandler.prototype.setHierachicalPosition = function (graph_id,
     }
 
 
-
-
     //console.log("graph-id: " + graph_id + "  level: " + level + "  silblingnum " + silbling_num);
 
+    //GO DOWN RECURSIVELY 
+    
     var silblings = 0;
     for (var child_graph_id in hierarchy)
     {

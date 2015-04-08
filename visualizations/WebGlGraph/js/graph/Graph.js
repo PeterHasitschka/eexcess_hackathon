@@ -18,7 +18,6 @@ GLGR.Graph = function (graph_name, data)
     //Number to distinguish the silblings in the hierachical branch
     this.parents_childnum_ = null;
 
-    this.is_active_ = true;
 
     //Flag that can be set to force an update also if graph inactive
     this.force_update_while_inactive = false;
@@ -58,7 +57,19 @@ GLGR.Graph = function (graph_name, data)
                 }
             };
 
+
+
+    //Graph gets updated in each step
+    this.is_active_ = true;
+
+    //Hide Recommendations (Move them to center)
     this.is_graph_collapsed_ = false;
+
+    //Hides or shows the complete graph
+    this.is_graph_visible_ = true;
+
+
+
 
     /**
      * @type Array holding recommendations
@@ -383,24 +394,24 @@ GLGR.Graph.prototype.handleGraphClick = function () {
     else
         that.expandGraph();
 
-        
+
     console.log("GRAPH CLICKED :", that);
 
     //Demo
     /*
-    var infoblock = jQuery('#information-container-graph-info');
-    if (!infoblock.length)
-        throw ("ERROR: DEMO GRAPH INFO BLOCK NOT EXISTING! CLEAN UP YOUR CODE!");
-    jQuery('#information-container-graph-info-id').html(that.getId());
-    jQuery('#information-container-graph-info-title').html(that.graph_name_);
-    infoblock.show();
-    
-    */
-   
-   var status_text = that.graph_name_ + " (ID: " + that.getId() + ")";
-   
-   jQuery('#webgl_status_bar_content').html(status_text);
-   
+     var infoblock = jQuery('#information-container-graph-info');
+     if (!infoblock.length)
+     throw ("ERROR: DEMO GRAPH INFO BLOCK NOT EXISTING! CLEAN UP YOUR CODE!");
+     jQuery('#information-container-graph-info-id').html(that.getId());
+     jQuery('#information-container-graph-info-title').html(that.graph_name_);
+     infoblock.show();
+     
+     */
+
+    var status_text = that.graph_name_ + " (ID: " + that.getId() + ")";
+
+    jQuery('#webgl_status_bar_content').html(status_text);
+
 };
 
 
@@ -443,8 +454,52 @@ GLGR.Graph.prototype.setIsActive = function (is_active) {
     this.force_update_while_inactive = true;
 };
 
+/**
+ * Hides the graph (Not visible at all)
+ */
+GLGR.Graph.prototype.hide = function () {
+    this.setMeshesVisible_(false);
+};
+
+/**
+ * Shows (unhides) the graph
+ */
+GLGR.Graph.prototype.show = function () {
+    this.setMeshesVisible_(true);
+};
+
+GLGR.Graph.prototype.setMeshesVisible_ = function (status) {
 
 
+    this.is_graph_visible_ = status;
+
+
+    this.webGlObjects_.node.visible = status;
+
+    for (var i = 0; i < this.recommendations_.length; i++)
+    {
+        if (status)
+            this.recommendations_[i].show();
+        else
+            this.recommendations_[i].hide();
+    }
+
+    for (var i = 0; i < this.rec_connections_.length; i++)
+    {
+        if (status)
+            this.rec_connections_[i].show();
+        else
+            this.rec_connections_[i].hide();
+    }
+};
+
+/**
+ * Returns 
+ * @returns {Boolean}
+ */
+GLGR.Graph.prototype.getisVisible = function () {
+    return this.is_graph_visible_;
+};
 
 /**
  * Setting the id of the parent's child.
