@@ -68,7 +68,8 @@ GLGR.Graph = function (graph_name, data)
     //Hides or shows the complete graph
     this.is_graph_visible_ = true;
 
-
+    //Flag that holds select-status
+    this.is_graph_selected_ = false;
 
 
     /**
@@ -245,6 +246,9 @@ GLGR.Graph.prototype.update = function () {
     {
         /** @type {GLGR.ConnectionGraphRec} **/
         var curr_rec_connection = this.rec_connections_[i];
+        
+        curr_rec_connection.setIsBold(this.is_graph_selected_);
+
         curr_rec_connection.update();
     }
 };
@@ -388,12 +392,14 @@ GLGR.Graph.prototype.handleGraphClick = function () {
     }
 
 
+    /*
+     if (that.is_graph_collapsed_ === false)
+     that.collapseGraph();
+     else
+     that.expandGraph();
+     */
 
-    if (that.is_graph_collapsed_ === false)
-        that.collapseGraph();
-    else
-        that.expandGraph();
-
+     that.setIsSelected(true);
 
     console.log("GRAPH CLICKED :", that);
 
@@ -460,6 +466,17 @@ GLGR.Graph.prototype.setIsActive = function (is_active) {
 GLGR.Graph.prototype.hide = function () {
     this.setMeshesVisible_(false);
 };
+
+
+GLGR.Graph.prototype.setIsSelected = function (is_selected) {
+    this.is_graph_selected_ = is_selected;
+};
+
+
+GLGR.Graph.prototype.getIsSelected = function () {
+    return this.is_graph_selected_;
+};
+
 
 /**
  * Shows (unhides) the graph

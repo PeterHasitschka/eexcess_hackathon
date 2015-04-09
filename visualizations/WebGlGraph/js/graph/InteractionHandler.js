@@ -79,6 +79,18 @@ GLGR.InteractionHandler.getSingleton = function () {
  */
 GLGR.InteractionHandler.prototype.handleInteraction_ = function (event, interaction_type) {
 
+
+
+    //Deselect all graphs
+    for (var i=0; i < this.scene_.getGraphs().length; i++)
+    {   
+        /** @type {GLGR.Graph} **/
+        var curr_graph = this.scene_.getGraphs()[i];
+        curr_graph.setIsSelected(false);
+       
+    }
+
+
     var intersected = this.getIntersectedObjects_(event);
 
 

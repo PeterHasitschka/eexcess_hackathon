@@ -17,13 +17,17 @@ GLGR.ConnectionAbstract = function () {
 
     this.vis_data = {
         width: null,
+        bold_width: null,
         color: null,
         z: null
     };
 
     this.line_mesh_ = null;
-    
+
     this.is_visible_ = null;
+    this.is_bold = false;
+    
+    this.force_update_ = false;
 };
 
 
@@ -53,7 +57,11 @@ GLGR.ConnectionAbstract.prototype.update = function () {
             )
         line_needs_update = true;
 
-    //
+    if (this.force_update_)
+    {
+        line_needs_update = true;
+        this.force_update_ = false;
+    }
 
 
     //Only update if changed
@@ -65,6 +73,15 @@ GLGR.ConnectionAbstract.prototype.update = function () {
 
         //Necessary for camera movement
         this.line_mesh_.geometry.computeBoundingSphere();
+
+
+
+        var width = this.vis_data.width;
+        if (this.is_bold)
+            width = this.vis_data.bold_width;
+ 
+ 
+        this.line_mesh_.material.linewidth = width;
 
 
         this.last_pos = pos;
@@ -122,7 +139,18 @@ GLGR.ConnectionAbstract.prototype.setMeshesVisible_ = function (status) {
     this.line_mesh_.visible = status;
 };
 
-
+/**
+ * Set if line should be bold or not
+ * @param {boolean} bold
+ */
+GLGR.ConnectionAbstract.prototype.setIsBold = function (bold_val) {
+    
+    if (this.is_bold !== bold_val)
+    {
+        this.force_update_ = true;
+    }
+    this.is_bold = bold_val;
+};
 
 
 GLGR.ConnectionAbstract.prototype.getPosSrc = function () {

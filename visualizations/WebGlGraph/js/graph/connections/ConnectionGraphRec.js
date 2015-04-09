@@ -11,11 +11,13 @@ GLGR.ConnectionGraphRec = function (graph, recommendation) {
     
     this.vis_data = {
         width: 1,
+        bold_width: 3,
         color: 0x668866,
         z: -50
     };
     
     this.is_visible_ = true;
+    this.is_bold = false;
 };
 
 GLGR.ConnectionGraphRec.prototype = new GLGR.ConnectionAbstract();

@@ -11,13 +11,15 @@ GLGR.ConnectionGraphGraph = function (src_graph, dst_graph) {
 
     this.vis_data = {
         width: 0.5,
+        bold_width: 1,
         color: 0xFF3333,
         z: -50
     };
 
     this.log = true;
-    
+
     this.is_visible_ = true;
+    this.is_bold = false;
 };
 
 GLGR.ConnectionGraphGraph.prototype = new GLGR.ConnectionAbstract();
@@ -37,13 +39,13 @@ GLGR.ConnectionGraphGraph.prototype.getPosSrc = function () {
 
 GLGR.ConnectionGraphGraph.prototype.getPosDst = function () {
 
-    
+
     if (!this.dst_)
         return null;
 
     var pos = this.dst_.getNodePosition();
-    
-  
+
+
     if (!pos)
         return null;
     return {x: pos.x, y: pos.y};
