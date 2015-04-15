@@ -82,14 +82,14 @@ GLGR.InteractionHandler.prototype.handleInteraction_ = function (event, interact
 
 
     //Deselect all graphs
+    /*
     for (var i=0; i < this.scene_.getGraphs().length; i++)
     {   
-        /** @type {GLGR.Graph} **/
         var curr_graph = this.scene_.getGraphs()[i];
         curr_graph.setIsSelected(false);
        
     }
-
+    */
 
     var intersected = this.getIntersectedObjects_(event);
 

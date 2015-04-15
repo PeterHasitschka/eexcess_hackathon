@@ -246,7 +246,7 @@ GLGR.Graph.prototype.update = function () {
     {
         /** @type {GLGR.ConnectionGraphRec} **/
         var curr_rec_connection = this.rec_connections_[i];
-        
+
         curr_rec_connection.setIsBold(this.is_graph_selected_);
 
         curr_rec_connection.update();
@@ -388,18 +388,18 @@ GLGR.Graph.prototype.handleGraphClick = function () {
     if (!that.is_active_)
     {
         that.setIsActive(true);
-        return;
     }
-
+    
+    that.setIsSelected(!that.getIsSelected());
 
     /*
      if (that.is_graph_collapsed_ === false)
      that.collapseGraph();
      else
-     that.expandGraph();
+     that.expandGraph();s
      */
 
-     that.setIsSelected(true);
+    
 
     console.log("GRAPH CLICKED :", that);
 
