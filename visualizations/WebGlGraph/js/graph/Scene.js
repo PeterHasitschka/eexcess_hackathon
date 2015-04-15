@@ -104,7 +104,11 @@ GLGR.Scene = function (canvas_element) {
     this.graph_connections_ = [];
     
     this.active_graph = null;
-
+    
+    /**
+     * For comparing 2 graphs
+     */
+    this.simple_compare_ = new GLGR.SimpleCompare();
 };
 
 /**
@@ -301,6 +305,18 @@ GLGR.Scene.prototype.addGraphConnection = function (connection) {
 GLGR.Scene.prototype.clearGraphConnection = function () {
     this.graph_connections_ = [];
 };
+
+
+
+GLGR.Scene.prototype.getSimpleComparer = function(){
+  return this.simple_compare_;  
+};
+
+
+
+
+
+
 
 /**
  * Logging-function of the scene

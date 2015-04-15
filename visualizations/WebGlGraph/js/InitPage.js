@@ -16,6 +16,7 @@ jQuery(document).ready(function () {
             GLGR.Debug.debugTime("Created Graph");
         });
     });
+
 });
 
 

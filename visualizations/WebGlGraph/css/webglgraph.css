@@ -35,6 +35,19 @@ html, body {
 #webgl_status_bar_content {
     color: white;
     margin: 4px 3px;
-    float: right;
-    font-size: 11px;    
+    float: left;
+    font-size: 12px;    
+}
+
+#webgl_status_bar_buttoncompare_simple {
+    float:right;
+    margin:0 5px;
+    color:white;
+    display:none;
+}
+
+#webgl_status_bar_buttoncompare_simple a {
+    color:white;
+    font-size: 15px;
+    font-weight: bold;
 }
