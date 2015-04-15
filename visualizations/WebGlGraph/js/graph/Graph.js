@@ -238,7 +238,11 @@ GLGR.Graph.prototype.update = function () {
             curr_recommendation.setPositionData(
                     old_degr_ + 0.005 * GLGR.Scene.getSingleton().getTimeDelta() / 10,
                     null);
-
+        
+        //Delete overwritten color if not allowed
+        if (!GLGR.Scene.getSingleton().allow_rec_color_overwrites)
+            curr_recommendation.setColorOverwrite(null);
+        
         curr_recommendation.update();
     }
 
@@ -392,9 +396,14 @@ GLGR.Graph.prototype.handleGraphClick = function () {
     
     that.setIsSelected(!that.getIsSelected());
     
+    
+    
+    
     //Show/Hide compare button
     GLGR.Scene.getSingleton().getSimpleComparer().manageCompareButton();
     
+    //Unset all overwritten colors of every rec
+    GLGR.Scene.getSingleton().allow_rec_color_overwrites = false;
 
     /*
      if (that.is_graph_collapsed_ === false)

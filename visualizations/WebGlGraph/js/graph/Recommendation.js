@@ -45,8 +45,10 @@ GLGR.Recommendation = function (rec_id, rec_data) {
 
     this.is_minimized_ = false;
     this.is_visible_ = true;
-    
+
     this.transparency_from_graph_ = null;
+
+    this.overwrite_color_ = null;
 
     //Static object holding several parameters for visualization
     GLGR.Recommendation.vis_params =
@@ -56,6 +58,8 @@ GLGR.Recommendation = function (rec_id, rec_data) {
                 node_radius: 5,
                 node_min_radius: 0.5,
                 node_color: 0x4444FF,
+                node_color_positive: 0x00CC00,
+                node_color_negative: 0xCC0000,
                 sphere: {
                     segments: 8,
                     rings: 8
@@ -182,7 +186,13 @@ GLGR.Recommendation.prototype.update = function () {
         this.webGlObjects_[gl_obj_key].material.opacity = this.transparency_from_graph_;
     }
 
-
+    var color_to_set;
+    if (this.overwrite_color_)
+        color_to_set = this.overwrite_color_;
+    else
+        color_to_set = GLGR.Recommendation.vis_params.node_color;
+    
+    this.webGlObjects_.node.material.color.setHex(color_to_set);
 
 };
 
@@ -394,7 +404,7 @@ GLGR.Recommendation.prototype.handleRecClick = function () {
     var that = this.recref;
 
 
-    console.log("REC clicked :" ,that);
+    console.log("REC clicked :", that);
     //Demo
     var infoblock = jQuery('#information-container-rec-info');
 
@@ -435,7 +445,7 @@ GLGR.Recommendation.prototype.toggleStateMinimized = function ()
 /**
  * Hides the rec (Not visible at all)
  */
-GLGR.Recommendation.prototype.hide = function() {
+GLGR.Recommendation.prototype.hide = function () {
     this.is_visible_ = false;
     this.setMeshesVisible_(false);
 };
@@ -443,15 +453,15 @@ GLGR.Recommendation.prototype.hide = function() {
 /**
  * Shows (unhides) the rec
  */
-GLGR.Recommendation.prototype.show = function() {
+GLGR.Recommendation.prototype.show = function () {
     //this.setIsActive(true);
     this.is_visible_ = true;
     this.setMeshesVisible_(true);
 };
 
-GLGR.Recommendation.prototype.setMeshesVisible_ = function(status){
+GLGR.Recommendation.prototype.setMeshesVisible_ = function (status) {
     this.webGlObjects_.node.visible = status;
-    
+
 };
 
 
@@ -461,4 +471,16 @@ GLGR.Recommendation.prototype.setMeshesVisible_ = function(status){
  */
 GLGR.Recommendation.prototype.setTransparencyFromGraph = function (transparency_factor) {
     this.transparency_from_graph_ = transparency_factor;
+};
+
+
+/**
+ * Set a color for the node. If null / undefined -> gets deleted
+ * @param {int|null} color
+ */
+GLGR.Recommendation.prototype.setColorOverwrite = function (color) {
+    if (color === null || color === undefined)
+        this.overwrite_color_ = null;
+    else
+        this.overwrite_color_ = color;
 };

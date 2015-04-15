@@ -78,6 +78,8 @@ GLGR.SimpleCompare.prototype.handleClick = function () {
 
 GLGR.SimpleCompare.prototype.compare = function () {
 
+    GLGR.Scene.getSingleton().allow_rec_color_overwrites = true;
+    
     if (!this.graphs_.g1 || !this.graphs_.g2)
         throw("Can't compare - At least 1 Graph not set!");
 
@@ -90,17 +92,28 @@ GLGR.SimpleCompare.prototype.compare = function () {
     for (var i = 0; i < this.graphs_.g2.getRecommendations().length; i++)
         recs_2.push(this.graphs_.g2.getRecommendations()[i].getId());
 
-    console.log(recs_1, recs_2);
-    
-    for (var i=0; i < recs_1.length; i++){
-        if(jQuery.inArray(recs_1[i], recs_2) !== -1) {
-            console.log(this.graphs_.g1.getRecommendations()[i].getId() + " also in G2");
+
+    var color_positive = GLGR.Recommendation.vis_params.node_color_positive;
+    var color_negative = GLGR.Recommendation.vis_params.node_color_negative;
+
+
+    for (var i = 0; i < recs_1.length; i++) {
+        var curr_rec = this.graphs_.g1.getRecommendations()[i];
+        if (jQuery.inArray(recs_1[i], recs_2) !== -1) {
+            curr_rec.setColorOverwrite(color_positive);
+            console.log(curr_rec.getId() + " also in G2");
         }
+        else
+            curr_rec.setColorOverwrite(color_negative);
     }
-    for (var i=0; i < recs_2.length; i++){
-         if(jQuery.inArray(recs_2[i], recs_1) !== -1) {
-            console.log(this.graphs_.g2.getRecommendations()[i].getId() + " also in G1");
+    for (var i = 0; i < recs_2.length; i++) {
+        var curr_rec = this.graphs_.g2.getRecommendations()[i];
+        if (jQuery.inArray(recs_2[i], recs_1) !== -1) {
+            curr_rec.setColorOverwrite(color_positive);
+            console.log(curr_rec.getId() + " also in G1");
         }
+        else
+            curr_rec.setColorOverwrite(color_negative);
     }
 
 };

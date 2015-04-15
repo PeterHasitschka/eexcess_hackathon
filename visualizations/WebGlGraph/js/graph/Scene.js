@@ -109,6 +109,8 @@ GLGR.Scene = function (canvas_element) {
      * For comparing 2 graphs
      */
     this.simple_compare_ = new GLGR.SimpleCompare();
+    
+    this.allow_rec_color_overwrites = false;
 };
 
 /**
