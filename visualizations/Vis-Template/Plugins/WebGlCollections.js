@@ -46,12 +46,12 @@
 
         if (!WebGlCollectionsPlugin.librariesLoaded) {
             require(['gl_jquery', 'gl_jquerymousewheel',
-                'gl_threejs', 'gl_gldebugger', 'gl_interactionhandler',
+                'gl_threejs', 'gl_gldebugger', 'gl_dbhandler', 'gl_interactionhandler',
                 'gl_glscene', 'gl_navigationhandler', 'gl_simplecompare',
                 'gl_connectionabstract', 'gl_connectionabstract',
                 'gl_connectiongrpahrec', 'gl_connectiongraphgraph',
                 'gl_graphrelationhandler', 'gl_graph', 'gl_recommendation',
-                'gl_storage', 'gl_dbhandler', 'gl_initpage'
+                'gl_storage', 'gl_initpage'
             ], function () {
                 WebGlCollectionsPlugin.librariesLoaded = true;
                 WebGlCollectionsPlugin.draw();

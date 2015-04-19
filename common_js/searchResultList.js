@@ -176,10 +176,12 @@ EEXCESS.searchResultList = function (divContainer, options) {
         }
 
         //Notify webGL Graph
+        /*  (NOT INCLUDED IN WIDGET ANYMORE)
         if (GLGR !== undefined && GLGR.WidgetHelper !== undefined) {
             var webgl_widgethelper = GLGR.WidgetHelper;
             webgl_widgethelper.finishedSearchResult();
         }
+        */
 
     };
     var moreResults = function (items) {
