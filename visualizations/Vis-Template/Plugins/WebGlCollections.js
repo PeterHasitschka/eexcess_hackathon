@@ -11,7 +11,8 @@
         $root = $(rootSelector);
         // load CSS
         // load other needed scripts (require.js is available)
-
+        
+        loadCss("/visualizations/WebGlGraph/css/webglgraph.css");
 
         requirejs.config({
             baseUrl: '/visualizations/WebGlGraph/js/',
@@ -44,11 +45,11 @@
     WebGlCollectionsPlugin.draw = function (receivedData, mappingCombination, iWidth, iHeight) {
 
         if (!WebGlCollectionsPlugin.librariesLoaded) {
-            require([ 'gl_jquery','gl_jquerymousewheel',
-                'gl_threejs','gl_gldebugger', 'gl_interactionhandler', 
+            require(['gl_jquery', 'gl_jquerymousewheel',
+                'gl_threejs', 'gl_gldebugger', 'gl_interactionhandler',
                 'gl_glscene', 'gl_navigationhandler', 'gl_simplecompare',
-                'gl_connectionabstract', 'gl_connectionabstract', 
-                'gl_connectiongrpahrec', 'gl_connectiongraphgraph', 
+                'gl_connectionabstract', 'gl_connectionabstract',
+                'gl_connectiongrpahrec', 'gl_connectiongraphgraph',
                 'gl_graphrelationhandler', 'gl_graph', 'gl_recommendation',
                 'gl_storage', 'gl_dbhandler', 'gl_initpage'
             ], function () {
@@ -57,23 +58,23 @@
             });
             return;
         }
-       
-        
-        var inner_html = ''                                                 +
-            '<div id="webgl_canvas_container">'                             +
-            '<p>Loading WebGL-Graphs...<br />'                              +
-            ''                                                              +
-            '    Please wait!<br/>'                                         +
-            '    <img src="../WebGlGraph/media/ajax-loader.gif" alt="loading" /></p>'     +
-        '</div>'                                                            +
 
 
-        '<div id="webgl_status_bar">'                                       +
-            '<span id="webgl_status_bar_content"> </span>'                  +
-            '<div id="webgl_status_bar_buttoncompare_simple"><a href="#">'  +
-            '   Compare (Simple)'                                           +
-            '</a></div>'                                                    +
-        '</div>';
+        var inner_html = '' +
+                 '<div id="webgl_status_bar">' +
+                '<span id="webgl_status_bar_content"> </span>' +
+                '<div id="webgl_status_bar_buttoncompare_simple"><a href="#">' +
+                '   Compare (Simple)' +
+                '</a></div>' +
+                '</div>'+
+                
+                '<div id="webgl_canvas_container">' +
+                '<p>Loading WebGL-Graphs...<br />' +
+                '' +
+                '    Please wait!<br/>' +
+                '    <img src="../WebGlGraph/media/ajax-loader.gif" alt="loading" /></p>' +
+                '</div>';
+               
         $root.append(inner_html);
     };
 
@@ -85,6 +86,18 @@
     };
 
     PluginHandler.registerVisualisation(WebGlCollectionsPlugin, {
-        'displayName': 'WebGl-Collections',
+        'displayName': 'WebGl-Collections'
     });
+
+
 })();
+
+
+
+function loadCss(url) {
+    var link = document.createElement("link");
+    link.type = "text/css";
+    link.rel = "stylesheet";
+    link.href = url;
+    document.getElementsByTagName("head")[0].appendChild(link);
+}

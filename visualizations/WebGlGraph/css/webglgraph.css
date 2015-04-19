@@ -23,31 +23,31 @@ html, body {
 
 
 #webgl_status_bar {
-    position: absolute;
     width: 100%;
     text-align: right;
     font-size: 9px;
     float: left;
-    background: black;
-    height: 20px;
+    border: solid 1px #e4e4e4;
+    height: 22px;
 }
 
 #webgl_status_bar_content {
-    color: white;
     margin: 4px 3px;
     float: left;
-    font-size: 12px;    
+    font-size: 12px;
+    width: 337px;
+    height: 15px;
+    text-align: left;  
 }
 
 #webgl_status_bar_buttoncompare_simple {
     float:right;
-    margin:0 5px;
-    color:white;
+    margin: 4px 5px;
     display:none;
+    height: 15px;
+    width: 300px;
 }
 
 #webgl_status_bar_buttoncompare_simple a {
-    color:white;
-    font-size: 15px;
-    font-weight: bold;
+    font-size: 12px;
 }
