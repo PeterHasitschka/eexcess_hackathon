@@ -8,13 +8,21 @@ jQuery(document).ready(function () {
     var db_handler = GLGR.DbHandler.getSingleton();
     db_handler.getAllQueries(function (q_data) {
         GLGR.Debug.debugTime("Got all Queries from DB");
+
         db_handler.getAllRecommendations(function (r_data) {
             GLGR.Debug.debugTime("Got all Recs from DB");
+            
+  
             var query_data = db_handler.prepareQueryRecStructure(q_data, r_data);
             GLGR.Debug.debugTime("Prepared Data");
+            console.log(query_data);
+        
             createScene(query_data);
             GLGR.Debug.debugTime("Created Graph");
+            
+           
         });
+        
     });
 
 });
@@ -73,6 +81,7 @@ function createScene(query_data) {
 
 function animate() {
     requestAnimationFrame(animate);
+    //console.log("ANIMATION STOPPED");
     webgl_scene.render();
 }
 

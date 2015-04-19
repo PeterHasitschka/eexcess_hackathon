@@ -148,7 +148,7 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
  */
 GLGR.GraphRelationHandler.prototype.setHierachicalPosition = function (graph_id, hierarchy, level, silbling_num) {
 
-    if (graph_id !== null)
+    if (GLGR.GraphRelationHandler.isInt(graph_id))
     {
         this.applyHierachicalDataToSingleGraph(graph_id, level, silbling_num);
     }
@@ -157,7 +157,7 @@ GLGR.GraphRelationHandler.prototype.setHierachicalPosition = function (graph_id,
     //console.log("graph-id: " + graph_id + "  level: " + level + "  silblingnum " + silbling_num);
 
     //GO DOWN RECURSIVELY 
-    
+
     var silblings = 0;
     for (var child_graph_id in hierarchy)
     {
@@ -166,7 +166,9 @@ GLGR.GraphRelationHandler.prototype.setHierachicalPosition = function (graph_id,
     }
 };
 
-
+GLGR.GraphRelationHandler.isInt = function (n) {
+    return n !== null && n % 1 === 0;
+};
 
 GLGR.GraphRelationHandler.prototype.applyHierachicalDataToSingleGraph = function (graph_id, level, silbling_num) {
 

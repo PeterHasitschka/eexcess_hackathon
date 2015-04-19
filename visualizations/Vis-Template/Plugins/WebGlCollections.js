@@ -64,7 +64,7 @@
             '<p>Loading WebGL-Graphs...<br />'                              +
             ''                                                              +
             '    Please wait!<br/>'                                         +
-            '    <img src="media/ajax-loader.gif" alt="loading" /></p>'     +
+            '    <img src="../WebGlGraph/media/ajax-loader.gif" alt="loading" /></p>'     +
         '</div>'                                                            +
 
 

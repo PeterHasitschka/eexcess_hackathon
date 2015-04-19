@@ -16,5 +16,5 @@ GLGR.Debug.debugTime = function (text) {
     this.lasttimestamp_ = curr_time;
     
     var alltime = ((curr_time - this.firsttimestamp_) / 1000) + " sec" ;
-    //console.log("DEBUG: " + text + " " + diff + "  (insg. " + alltime + ")");
+    console.log("DEBUG: " + text + " " + diff + "  (insg. " + alltime + ")");
 };
