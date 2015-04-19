@@ -44,7 +44,7 @@
     WebGlCollectionsPlugin.draw = function (receivedData, mappingCombination, iWidth, iHeight) {
 
         if (!WebGlCollectionsPlugin.librariesLoaded) {
-            require([
+            require([ 'gl_jquery','gl_jquerymousewheel',
                 'gl_threejs','gl_gldebugger', 'gl_interactionhandler', 
                 'gl_glscene', 'gl_navigationhandler', 'gl_simplecompare',
                 'gl_connectionabstract', 'gl_connectionabstract', 
@@ -59,8 +59,22 @@
         }
        
         
-        var $inner = $('<div>Implement me!</div>').css('background-color', 'lightgrey').css('height', '100%').css('padding-top', '50px');
-        $root.append($inner);
+        var inner_html = ''                                                 +
+            '<div id="webgl_canvas_container">'                             +
+            '<p>Loading WebGL-Graphs...<br />'                              +
+            ''                                                              +
+            '    Please wait!<br/>'                                         +
+            '    <img src="media/ajax-loader.gif" alt="loading" /></p>'     +
+        '</div>'                                                            +
+
+
+        '<div id="webgl_status_bar">'                                       +
+            '<span id="webgl_status_bar_content"> </span>'                  +
+            '<div id="webgl_status_bar_buttoncompare_simple"><a href="#">'  +
+            '   Compare (Simple)'                                           +
+            '</a></div>'                                                    +
+        '</div>';
+        $root.append(inner_html);
     };
 
     // indexArray: array with items' indices to highlight. They match items in receivedData (parameter in Render.draw)

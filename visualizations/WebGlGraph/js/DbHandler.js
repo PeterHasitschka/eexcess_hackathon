@@ -15,7 +15,7 @@ GLGR.DbHandler = function () {
     this.db_ = null;
     this.query_store_name_ = "queries_full";
 
-
+/*
     if (parent.GLGR.WidgetHelper !== undefined) {
         parent.GLGR.WidgetHelper.db_update_cb = this.getAndDrawNewGraphsFromDb;
 
@@ -24,6 +24,8 @@ GLGR.DbHandler = function () {
     {
         //console.log("DB-Handler: Could not find widget helper");
     }
+*/
+
 
     this.last_created_graph_ = null;
 
