@@ -10,7 +10,7 @@ GLGR.ConnectionGraphGraph = function (src_graph, dst_graph) {
     this.dst_ = dst_graph;
 
     this.vis_data = {
-        width: 0.5,
+        width: 1,
         bold_width: 1,
         color: 0xFF3333,
         z: -50

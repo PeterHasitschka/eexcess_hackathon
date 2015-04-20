@@ -44,7 +44,7 @@ GLGR.SimpleCompare.getSingleton = function () {
 GLGR.SimpleCompare.prototype.manageCompareButton = function () {
 
     var select_count = this.getSelectedGraphs_().length;
-
+    
     if (select_count === 2)
         this.button.show();
     else
