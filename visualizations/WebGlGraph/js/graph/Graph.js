@@ -400,7 +400,7 @@ GLGR.Graph.prototype.handleGraphClick = function () {
     
     
     //Show/Hide compare button
-    GLGR.Scene.getSingleton().getSimpleComparer().manageCompareButton();
+    //GLGR.Scene.getSingleton().getSimpleComparer().manageCompareButton();
     
     //Unset all overwritten colors of every rec
     GLGR.Scene.getSingleton().allow_rec_color_overwrites = false;

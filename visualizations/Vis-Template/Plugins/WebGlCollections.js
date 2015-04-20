@@ -64,7 +64,7 @@
                  '<div id="webgl_status_bar">' +
                 '<span id="webgl_status_bar_content"> </span>' +
                 '<div id="webgl_status_bar_buttoncompare_simple"><a href="#">' +
-                '   Compare (Simple)' +
+                '   Compare (Hierachical)' +
                 '</a></div>' +
                 '</div>'+
                 

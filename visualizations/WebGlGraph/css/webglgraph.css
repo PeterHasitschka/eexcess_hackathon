@@ -43,7 +43,6 @@ html, body {
 #webgl_status_bar_buttoncompare_simple {
     float:right;
     margin: 4px 5px;
-    display:none;
     height: 15px;
     width: 240px;
 }
