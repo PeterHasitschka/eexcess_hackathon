@@ -22,7 +22,7 @@ and open the template in the editor.
         <link rel="stylesheet" type="text/css" href="../../media/css/vis-template-style-.css" />
         <link rel="stylesheet" type="text/css" href="uRank/urank.css" />
         <link rel="stylesheet" type="text/css" href="uRank/vis-template-chart-style.css" />
-        
+
 
         <script type="text/javascript" src="../../libs/d3.v3.js"></script>
         <script type="text/javascript" src="../../libs/leaflet/leaflet-src.js"></script>
@@ -31,16 +31,16 @@ and open the template in the editor.
 
         <script type="text/javascript" src="../../common_js/browser_specific.js" charset="utf-8"></script>
         <script type="text/javascript" src="../bookmarkingAPI.js" charset="utf-8"></script>
-		<script type="text/javascript" src="vis.js"></script>
-		<script type="text/javascript" src="js/utils.js"></script>
-		<script type="text/javascript" src="js/settings.js"></script>
+        <script type="text/javascript" src="vis.js"></script>
+        <script type="text/javascript" src="js/utils.js"></script>
+        <script type="text/javascript" src="js/settings.js"></script>
         <script type="text/javascript" src="js/accordion-and-dropdown.js"></script>
         <script type="text/javascript" src="js/colorpicker.js"></script>
-		<script type="text/javascript" src="js/dummy.js"></script>
-		<script type="text/javascript" src="js/viseval-demodata.js"></script>
-		<script type="text/javascript" src="Timeline/timeline.js"></script>
-		<script type="text/javascript" src="Timeline/js/geometry.js"></script>
-		<script type="text/javascript" src="Barchart/barchart.js"></script>
+        <script type="text/javascript" src="js/dummy.js"></script>
+        <script type="text/javascript" src="js/viseval-demodata.js"></script>
+        <script type="text/javascript" src="Timeline/timeline.js"></script>
+        <script type="text/javascript" src="Timeline/js/geometry.js"></script>
+        <script type="text/javascript" src="Barchart/barchart.js"></script>
         <script type="text/javascript" src="Geochart/geochart.js"></script>
         <script type="text/javascript" src="uRank/urank.js"></script>
         <script type="text/javascript" src="js/pluginhandler.js"></script>
@@ -61,82 +61,96 @@ and open the template in the editor.
     </head>
     <body>
         <!--<?xml-stylesheet type="text/css" href="Geochart/geochart.css" ?>-->
-		
-		<header id="eexcess_header">
-			<div id="eexcess_inner_header">
-		  		<div id="eexcess_header_search" style="white-space: nowrap;">
-		    		<!--<input id="eexcess_search_field" class="eexcess_query_field" type="text" name="query" value="" />
-	                <input id="eexcess_search_button" class=".eexcess_submit_btn" type="button" value="Search" />-->
-	  			</div>
-	  			<div id="eexcess_header_text">
-	  				<span style="display:none;"></span>
+
+        <header id="eexcess_header">
+            <div id="eexcess_inner_header">
+                <div id="eexcess_header_search" style="white-space: nowrap;">
+                    <!--<input id="eexcess_search_field" class="eexcess_query_field" type="text" name="query" value="" />
+            <input id="eexcess_search_button" class=".eexcess_submit_btn" type="button" value="Search" />-->
+                </div>
+                <div id="eexcess_header_text">
+                    <span style="display:none;"></span>
                     <!--<button id="output-button">Out</button>-->
-	  			</div>
-	  			<div id="eexcess_header_filter">
-					<a target="_blank" href="help-visdashboard.html" >
+                </div>
+                <div id="eexcess_header_filter">
+                    <a target="_blank" href="help-visdashboard.html" >
                         <img src="../../media/icons/help.png" />
                     </a>
-	  			</div>
-			</div>
-      	</header>
+                </div>
+            </div>
+        </header>
 
-		<div id="eexcess_main_panel">
-		
-      		<div id="eexcess_content" >
-				<div id="eexcess_collections">
-					<span id="bookmarklist-label">Showing:</span>
-					<span id="eexcess_bookmarkingcollections-placeholder"></span>
-					<input id="eexcess_deleteBookmark_button" type="button" value="x" title="delete selected bookmark collections" />
-					<br />
-					<div id="eexcess_bookmarkselected_container">
-                    	<img class="eexcess_fav_icon" id="bookmark_selected_star" title="bookmark selected" src="../../media/icons/favicon_on.png">
-						<input id="eexcess_addBookmarkItems_button" type="button" value="bookmark selected" />
+        <div id="eexcess_main_panel">
+
+            <div id="eexcess_content" >
+                <div id="eexcess_collections">
+                    <span id="bookmarklist-label">Showing:</span>
+                    <span id="eexcess_bookmarkingcollections-placeholder"></span>
+                    <input id="eexcess_deleteBookmark_button" type="button" value="x" title="delete selected bookmark collections" />
+                    <br />
+                    <div id="eexcess_bookmarkselected_container">
+                        <img class="eexcess_fav_icon" id="bookmark_selected_star" title="bookmark selected" src="../../media/icons/favicon_on.png">
+                        <input id="eexcess_addBookmarkItems_button" type="button" value="bookmark selected" />
 
 
-					<a id="eexcess_export_bookmark" type="button" title="export bookmark">↓</a>
-					<button id="eexcess_import_bookmark_style" type="button" value="" title="import bookmark">↑
-					</button>
-					<input id="eexcess_import_bookmark" type="file">
-					</input>
+                        <a id="eexcess_export_bookmark" type="button" title="export bookmark">↓</a>
+                        <button id="eexcess_import_bookmark_style" type="button" value="" title="import bookmark">↑
+                        </button>
+                        <input id="eexcess_import_bookmark" type="file">
+                        </input>
 
-					</div>
+                    </div>
 
-				</div>
-				<ul class="eexcess_result_list">					
-				</ul>
-			</div>
-			
-			<div id="eexcess_vis_panel">			
-							
-				<div id="eexcess_canvas"></div>
-			</div>
-			
-			<div id="eexcess_controls"> 
-				<div id="eexcess_fixed_controls">
-					<div style="text-align: right;">
-						<button id="eexcess_btnreset" type="button" >Reset</button>
-					</div>
+                </div>
+                
+                
+                <!-- Alternative listing with checkboxes for queries, collections etc.
+                for displaying them in the webGL-View.
+                Trying to implement without replacing the old list at the moment.
+                P.H. 23.04.15
+                -->
+                
+                <div id="eexcess_collections_new">
+                    
+                    
+                </div>
 
-					<div id="eexcess_controls_chart" class="eexcess_controls_select" >
-						<span class="eexcess_controls_title">Chart</span>
-						<select id="eexcess_select_chart" ></select>
-					</div>
-				
-					<div id="eexcess_controls_mappings" class="eexcess_controls_select"></div>
-					<div id="eexcess_controls_dataloading">
-						<h3>Demo:</h3>
-						<button type="button" id="demo-button-university">University Campus</button>
-	                    <button type="button" id="demo-button-historicalbuildings">Historic Buildings</button>
-					</div>
-				</div>
-				<div id="eexcess-filtercontainer">
-				</div>
-			</div>
-		
-		</div>
-		
-		
-		
+
+                <ul class="eexcess_result_list">					
+                </ul>
+            </div>
+
+            <div id="eexcess_vis_panel">			
+
+                <div id="eexcess_canvas"></div>
+            </div>
+
+            <div id="eexcess_controls"> 
+                <div id="eexcess_fixed_controls">
+                    <div style="text-align: right;">
+                        <button id="eexcess_btnreset" type="button" >Reset</button>
+                    </div>
+
+                    <div id="eexcess_controls_chart" class="eexcess_controls_select" >
+                        <span class="eexcess_controls_title">Chart</span>
+                        <select id="eexcess_select_chart" ></select>
+                    </div>
+
+                    <div id="eexcess_controls_mappings" class="eexcess_controls_select"></div>
+                    <div id="eexcess_controls_dataloading">
+                        <h3>Demo:</h3>
+                        <button type="button" id="demo-button-university">University Campus</button>
+                        <button type="button" id="demo-button-historicalbuildings">Historic Buildings</button>
+                    </div>
+                </div>
+                <div id="eexcess-filtercontainer">
+                </div>
+            </div>
+
+        </div>
+
+
+
         <script type="text/javascript" src="starter.js"></script>
     </body>
 </html>

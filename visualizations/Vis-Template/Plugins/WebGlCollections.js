@@ -88,6 +88,7 @@
                 '    <img src="../WebGlGraph/media/ajax-loader.gif" alt="loading" /></p>' +
                 '</div>';
 
+        jQuery('#eexcess_main_panel').addClass("webglview");
         $root.append(inner_html);
     };
 

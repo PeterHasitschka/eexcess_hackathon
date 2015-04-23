@@ -742,6 +742,17 @@ Visualization Panel (center of screen)
 }
 
 
+#eexcess_main_panel.webglview .eexcess_result_list{
+    display:none;
+}
+
+#eexcess_main_panel.webglview #eexcess_content{
+    height:40px;
+}
+#eexcess_main_panel.webglview #eexcess_vis_panel{
+      width: calc(100% - 200px);
+}
+
 /*
     <li> itmes' hover style
 */
