@@ -11,7 +11,7 @@
         $root = $(rootSelector);
         // load CSS
         // load other needed scripts (require.js is available)
-        
+
         loadCss("/visualizations/WebGlGraph/css/webglgraph.css");
 
         requirejs.config({
@@ -45,36 +45,49 @@
     WebGlCollectionsPlugin.draw = function (receivedData, mappingCombination, iWidth, iHeight) {
 
         if (!WebGlCollectionsPlugin.librariesLoaded) {
-            require(['gl_jquery', 'gl_jquerymousewheel',
-                'gl_threejs', 'gl_gldebugger', 'gl_dbhandler', 'gl_interactionhandler',
-                'gl_glscene', 'gl_navigationhandler', 'gl_simplecompare',
-                'gl_connectionabstract', 'gl_connectionabstract',
-                'gl_connectiongrpahrec', 'gl_connectiongraphgraph',
-                'gl_graphrelationhandler', 'gl_graph', 'gl_recommendation',
-                'gl_storage', 'gl_initpage'
-            ], function () {
-                WebGlCollectionsPlugin.librariesLoaded = true;
-                WebGlCollectionsPlugin.draw();
-            });
+            console.log("requiring all the js files for webglcollplugin");
+            require(['gl_jquery',
+                'gl_threejs',
+                'gl_gldebugger',
+                'gl_dbhandler',
+                'gl_interactionhandler',
+                'gl_glscene',
+                'gl_navigationhandler',
+                'gl_simplecompare',
+                'gl_connectionabstract',
+                'gl_connectionabstract',
+                'gl_connectiongrpahrec',
+                'gl_connectiongraphgraph',
+                'gl_graphrelationhandler',
+                'gl_graph',
+                'gl_recommendation',
+                'gl_storage',
+                'gl_initpage',
+                'gl_jquerymousewheel'
+            ],
+                    function () {
+                        console.log("finished calling js files for webglcollplugin");
+                        WebGlCollectionsPlugin.librariesLoaded = true;
+                        WebGlCollectionsPlugin.draw();
+                    });
             return;
         }
 
 
         var inner_html = '' +
-                 '<div id="webgl_status_bar">' +
+                '<div id="webgl_status_bar">' +
                 '<span id="webgl_status_bar_content"> </span>' +
                 '<div id="webgl_status_bar_buttoncompare_simple"><a href="#">' +
                 '   Compare (Hierachical)' +
                 '</a></div>' +
-                '</div>'+
-                
+                '</div>' +
                 '<div id="webgl_canvas_container">' +
                 '<p>Loading WebGL-Graphs...<br />' +
                 '' +
                 '    Please wait!<br/>' +
                 '    <img src="../WebGlGraph/media/ajax-loader.gif" alt="loading" /></p>' +
                 '</div>';
-               
+
         $root.append(inner_html);
     };
 
