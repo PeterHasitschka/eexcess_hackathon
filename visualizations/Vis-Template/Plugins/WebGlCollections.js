@@ -13,7 +13,8 @@
         // load other needed scripts (require.js is available)
 
         loadCss("/visualizations/WebGlGraph/css/webglgraph.css");
-
+        
+        /*
         requirejs.config({
             baseUrl: '/visualizations/WebGlGraph/js/',
             paths: {
@@ -36,7 +37,7 @@
                 gl_initpage: 'InitPage'
             }
         });
-
+        */
 
 
 
