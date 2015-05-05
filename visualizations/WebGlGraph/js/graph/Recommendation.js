@@ -132,7 +132,7 @@ GLGR.Recommendation.prototype.initWegGlObjects = function () {
     this.webGlObjects_.node.position = new THREE.Vector3(rec_pos.x, rec_pos.y, z_pos);
 
 
-    GLGR.Scene.getSingleton().getThreeScene().add(
+    GLGR.Scene.getCurrentScene().getThreeScene().add(
             this.webGlObjects_.node
             );
 
@@ -224,7 +224,7 @@ GLGR.Recommendation.prototype.animate_ = function () {
         //Only animate if not the same!
         if (curr_obj.curr !== curr_obj.goal)
         {
-            var time_delta = GLGR.Scene.getSingleton().getTimeDelta();
+            var time_delta = GLGR.Scene.getCurrentScene().getTimeDelta();
 
             //calculate the new value by the old value plus the diff multiplied
             //with the time delta and the speed factor
@@ -377,7 +377,7 @@ GLGR.Recommendation.prototype.getUsage = function () {
     var out_graph_ids = new Array();
 
     //Get the Scene-Singleton
-    var scene_singleton_ = GLGR.Scene.getSingleton();
+    var scene_singleton_ = GLGR.Scene.getCurrentScene();
     if (scene_singleton_ === null)
         throw new Exception("Scene singleton is null");
 

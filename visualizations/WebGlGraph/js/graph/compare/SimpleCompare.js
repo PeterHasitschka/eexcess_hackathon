@@ -14,29 +14,17 @@ var GLGR = GLGR || {};
  */
 GLGR.SimpleCompare = function () {
 
-    if (GLGR.SimpleCompare.singleton_ !== undefined)
-        throw ("Error! SimpleCompare is Singleton use!");
-
-    GLGR.SimpleCompare.singleton_ = this;
-
-
     this.button = jQuery("#webgl_status_bar_buttoncompare_simple");
 
-
+    var that = this;
     jQuery(document).ready(function () {
 
-        var that = GLGR.SimpleCompare.getSingleton();
+
         jQuery(that.button).click(function () {
             that.handleClick();
         });
     });
 };
-
-GLGR.SimpleCompare.getSingleton = function () {
-    return this.singleton_;
-};
-
-
 
 /**
  * compare after clicking the Compare-Button
@@ -49,9 +37,9 @@ GLGR.SimpleCompare.prototype.handleClick = function () {
 
 GLGR.SimpleCompare.prototype.compare = function () {
 
-    GLGR.Scene.getSingleton().allow_rec_color_overwrites = true;
+    GLGR.Scene.getCurrentScene().allow_rec_color_overwrites = true;
 
-    var graphs = GLGR.Scene.getSingleton().getGraphs();
+    var graphs = GLGR.Scene.getCurrentScene().getGraphs();
 
     for (var i = 0; i < graphs.length; i++)
     {
@@ -97,7 +85,7 @@ GLGR.SimpleCompare.prototype.compare = function () {
  */
 GLGR.SimpleCompare.prototype.getSelectedGraphs_ = function () {
 
-    var scene = GLGR.Scene.getSingleton();
+    var scene = GLGR.Scene.getCurrentScene();
 
     var graphs = scene.getGraphs();
 

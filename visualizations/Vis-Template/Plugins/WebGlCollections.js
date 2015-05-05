@@ -35,7 +35,7 @@
                 '../WebGlGraph/js/graph/Recommendation.js',
                 '../WebGlGraph/js/../../../common_js/storage.js',
                 '../WebGlGraph/js/DbHandler.js',
-                '../WebGlGraph/js/InitPage.js'
+                '../WebGlGraph/js/SceneHandler.js'
             ],
                     function () {
                         console.log("finished calling js files for webglcollplugin");
@@ -47,6 +47,7 @@
 
             return;
         }
+        //console.log("WebGlInit!");
 
 
         var inner_html = '' +
@@ -63,6 +64,32 @@
                 '    <img src="../WebGlGraph/media/ajax-loader.gif" alt="loading" /></p>' +
                 '</div>';
 
+
+        webgl_dbhandler = new GLGR.DbHandler();
+
+        webgl_dbhandler.getAllQueries(function (q_data) {
+            GLGR.Debug.debugTime("Got all Queries from DB");
+
+            webgl_dbhandler.getAllRecommendations(function (r_data) {
+                GLGR.Debug.debugTime("Got all Recs from DB");
+
+
+                var query_data = webgl_dbhandler.prepareQueryRecStructure(q_data, r_data);
+                GLGR.Debug.debugTime("Prepared Data");
+                //console.log(query_data);
+
+                createScene(query_data);
+                GLGR.Debug.debugTime("Created Graph");
+
+
+            });
+
+        });
+
+
+
+
+
         jQuery('#eexcess_main_panel').addClass("webglview");
         $root.append(inner_html);
     };
@@ -72,6 +99,10 @@
     };
 
     WebGlCollectionsPlugin.finalize = function () {
+
+        console.log("WEBGL FINALIZE");
+
+        destroyScene();
     };
 
     PluginHandler.registerVisualisation(WebGlCollectionsPlugin, {

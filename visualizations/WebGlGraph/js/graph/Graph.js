@@ -85,7 +85,10 @@ GLGR.Graph = function (graph_name, data)
     this.is_graph_initialized_ = false;
     this.are_recs_initialized_ = false;
 
-    /** Static array holding the list of all graphs**/
+    /** 
+     * Static array holding the list of all graphs.
+     * Necessary because the graphs may be created before adding to the scene
+     * **/
     GLGR.Graph.graphlist_ = GLGR.Graph.graphlist_ || [];
     this.id_ = GLGR.Graph.graphlist_.length;
     GLGR.Graph.graphlist_.push(this);
@@ -144,7 +147,7 @@ GLGR.Graph.prototype.getParentId = function () {
 GLGR.Graph.prototype.getParent = function () {
     var parent_id = this.getParentId();
 
-    var all_graphs = GLGR.Scene.getSingleton().getGraphs();
+    var all_graphs = GLGR.Scene.getCurrentScene().getGraphs();
     for (var i = 0; i < all_graphs.length; i++)
     {
         if (all_graphs[i].getId() === parent_id)
@@ -236,11 +239,11 @@ GLGR.Graph.prototype.update = function () {
         //Demo (Let's rotate the graph)
         if (GLGR.animation_demo_flag === true)
             curr_recommendation.setPositionData(
-                    old_degr_ + 0.005 * GLGR.Scene.getSingleton().getTimeDelta() / 10,
+                    old_degr_ + 0.005 * GLGR.Scene.getCurrentScene().getTimeDelta() / 10,
                     null);
         
         //Delete overwritten color if not allowed
-        if (!GLGR.Scene.getSingleton().allow_rec_color_overwrites)
+        if (!GLGR.Scene.getCurrentScene().allow_rec_color_overwrites)
             curr_recommendation.setColorOverwrite(null);
         
         curr_recommendation.update();
@@ -304,7 +307,7 @@ GLGR.Graph.prototype.initWegGlObjects = function () {
     };
 
     this.webGlObjects_.node = sphere;
-    GLGR.Scene.getSingleton().getThreeScene().add(this.webGlObjects_.node);
+    GLGR.Scene.getCurrentScene().getThreeScene().add(this.webGlObjects_.node);
 
 
 
@@ -400,10 +403,10 @@ GLGR.Graph.prototype.handleGraphClick = function () {
     
     
     //Show/Hide compare button
-    //GLGR.Scene.getSingleton().getSimpleComparer().manageCompareButton();
+    //GLGR.Scene.getCurrentScene().getSimpleComparer().manageCompareButton();
     
     //Unset all overwritten colors of every rec
-    GLGR.Scene.getSingleton().allow_rec_color_overwrites = false;
+    GLGR.Scene.getCurrentScene().allow_rec_color_overwrites = false;
 
     /*
      if (that.is_graph_collapsed_ === false)

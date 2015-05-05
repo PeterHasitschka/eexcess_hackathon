@@ -5,12 +5,7 @@ var GLGR = GLGR || {};
 
 GLGR.InteractionHandler = function (scene) {
 
-    if (GLGR.InteractionHandler.singleton_ !== undefined)
-    {
-        throw new ("ERROR: Only singleton usage in InteractionHandler");
-    }
-    GLGR.InteractionHandler.singleton_ = this;
-
+    
     /** @var {GLGR.Scene} **/
     this.scene_ = scene;
 
@@ -66,11 +61,6 @@ GLGR.InteractionHandler = function (scene) {
 
     });
 };
-
-GLGR.InteractionHandler.getSingleton = function () {
-    return this.singleton_;
-};
-
 
 
 /**

@@ -56,7 +56,7 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
 
 
         case GLGR.GraphRelationHandler.modes.MODE_HORIZONTAL_ADDING_ORDER:
-            currX = 0 - this.visualization_constants.graph_distance * (graphs.length - 1);
+            var currX = 0 - this.visualization_constants.graph_distance * (graphs.length - 1);
 
             for (var i = 0; i < graphs.length; i++)
             {
@@ -90,6 +90,7 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
                 hierachy_data[root_graph_id] = this.buildHierachy(root_graph_id, hierachy_unordered);
 
             }
+
 
 
             //Setting graph positions
@@ -174,6 +175,7 @@ GLGR.GraphRelationHandler.prototype.applyHierachicalDataToSingleGraph = function
 
     var graphs = this.scene_.getGraphs();
 
+    //console.log(graphs);
     /** @type{GLGR.Graph} **/
     var current_graph = null;
 

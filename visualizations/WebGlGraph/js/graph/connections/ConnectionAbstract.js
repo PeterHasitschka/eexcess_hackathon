@@ -116,7 +116,7 @@ GLGR.ConnectionAbstract.prototype.createMesh_ = function () {
 
 
     this.line_mesh_ = new THREE.Line(line_geometry, line_material);
-    GLGR.Scene.getSingleton().getThreeScene().add(this.line_mesh_);
+    GLGR.Scene.getCurrentScene().getThreeScene().add(this.line_mesh_);
 };
 
 

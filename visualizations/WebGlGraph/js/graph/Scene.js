@@ -20,16 +20,6 @@ GLGR.Scene = function (canvas_element) {
     };
 
 
-
-
-    //Setting the singleton
-    if (GLGR.Scene.singleton_ !== undefined)
-    {
-        throw ('ERROR: Scene is for Singleton usage only!');
-    }
-    GLGR.Scene.singleton_ = this;
-
-
     /**
      * @type THREE.Scene
      */
@@ -102,14 +92,14 @@ GLGR.Scene = function (canvas_element) {
 
     //managed by Graph Relation Handler
     this.graph_connections_ = [];
-    
+
     this.active_graph = null;
-    
+
     /**
      * For comparing 2 graphs
      */
     this.simple_compare_ = new GLGR.SimpleCompare();
-    
+
     this.allow_rec_color_overwrites = false;
 };
 
@@ -177,15 +167,6 @@ GLGR.Scene.prototype._createCamera = function () {
     return true;
 };
 
-
-
-/**
- * Returns the singleton object of the scene-class
- * @returns {GLGR.Scene}
- */
-GLGR.Scene.getSingleton = function () {
-    return GLGR.Scene.singleton_;
-};
 
 
 
@@ -310,8 +291,8 @@ GLGR.Scene.prototype.clearGraphConnection = function () {
 
 
 
-GLGR.Scene.prototype.getSimpleComparer = function(){
-  return this.simple_compare_;  
+GLGR.Scene.prototype.getSimpleComparer = function () {
+    return this.simple_compare_;
 };
 
 
@@ -329,3 +310,9 @@ GLGR.Scene.prototype.log = function (msg) {
     console.log(msg);
 };
 
+
+
+GLGR.Scene.getCurrentScene = function(){
+    
+    return webgl_scene;
+};

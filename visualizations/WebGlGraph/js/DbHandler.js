@@ -6,11 +6,6 @@ var GLGR = GLGR || {};
 
 GLGR.DbHandler = function () {
 
-    if (GLGR.DbHandler.singleton_ !== undefined)
-    {
-        throw ("DbHandler singleton already created");
-    }
-    GLGR.DbHandler.singleton_ = this;
 
     this.db_ = null;
     this.query_store_name_ = "queries_full";
@@ -31,13 +26,6 @@ GLGR.DbHandler = function () {
 
 };
 
-GLGR.DbHandler.getSingleton = function () {
-
-    if (GLGR.DbHandler.singleton_ === undefined)
-        GLGR.DbHandler.singleton_ = new GLGR.DbHandler();
-
-    return GLGR.DbHandler.singleton_;
-};
 
 /**
  * Loading or returning the DB as a param  of a callback function,
@@ -88,17 +76,15 @@ GLGR.DbHandler.prototype.getStorageData_ = function (cb_data_loaded, storage_nam
 
     //console.log("GETTING DATA FROM STORAGE " + storage_name);
 
-    var that = GLGR.DbHandler.getSingleton();
-
 
 
     //callback gets called by storage.getDb or by this.getDb_ depending if 
     //db already loaded
     this.getDb_(function (db) {
-        that.db_ = db;
+        webgl_dbhandler.db_ = db;
 
 
-        var trans = that.db_.transaction(storage_name, 'readonly');
+        var trans = webgl_dbhandler.db_.transaction(storage_name, 'readonly');
         var store = trans.objectStore(storage_name);
 
         var request = store.openCursor();
@@ -153,7 +139,7 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
         var tmp_query_data = query_data[query_count];
 
         //Check if graph already exists
-        var existing = GLGR.Scene.getSingleton().getExistingGraph(
+        var existing = GLGR.Scene.getCurrentScene().getExistingGraph(
                 tmp_query_data.query_str
                 , tmp_query_data.timestamp
                 );
@@ -211,7 +197,7 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
 GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
     //console.log("DB-HANDLER: UPDATED DB CB CALLED --> GRAPH REDRAW NEEDED!");
 
-    var that = GLGR.DbHandler.getSingleton();
+    var that = webgl_dbhandler;
     that.getAllQueries(function (q_data) {
 
         GLGR.Debug.debugTime("Got all Queries from DB");
@@ -223,7 +209,7 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
 
 
             /** @type {GLGR.Scene} **/
-            var webgl_scene = GLGR.Scene.getSingleton();
+            var webgl_scene = GLGR.Scene.getCurrentScene();
 
 
             var newgr_res = that.getNewGraphsFromQueryData(

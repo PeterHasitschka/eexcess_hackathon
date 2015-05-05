@@ -15,12 +15,6 @@ var GLGR = GLGR || {};
  */
 GLGR.DualCompare = function () {
 
-    if (GLGR.DualCompare.singleton_ !== undefined)
-        throw ("Error! DualCompare is Singleton use!");
-
-    GLGR.DualCompare.singleton_ = this;
-
-
     this.button = jQuery("#webgl_status_bar_buttoncompare_dual");
 
     this.graphs_ = {g1: null, g2: null};
@@ -35,9 +29,6 @@ GLGR.DualCompare = function () {
     });
 };
 
-GLGR.DualCompare.getSingleton = function () {
-    return this.singleton_;
-};
 
 /**
  * Just for checking if 2 Graphs are selected.
@@ -80,7 +71,7 @@ GLGR.DualCompare.prototype.handleClick = function () {
 
 GLGR.DualCompare.prototype.compare = function () {
 
-    GLGR.Scene.getSingleton().allow_rec_color_overwrites = true;
+    GLGR.Scene.getCurrentScene().allow_rec_color_overwrites = true;
     
     if (!this.graphs_.g1 || !this.graphs_.g2)
         throw("Can't compare - At least 1 Graph not set!");
@@ -127,7 +118,7 @@ GLGR.DualCompare.prototype.compare = function () {
  */
 GLGR.DualCompare.prototype.getSelectedGraphs_ = function () {
 
-    var scene = GLGR.Scene.getSingleton();
+    var scene = GLGR.Scene.getCurrentScene();
 
     var graphs = scene.getGraphs();
 

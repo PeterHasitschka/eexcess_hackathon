@@ -128,8 +128,8 @@ jQuery(document).ready(function () {
         GLGR.animation_demo_flag = !GLGR.animation_demo_flag;
     });
     jQuery("#toggle_isactive").click(function () {
-        var is_act = GLGR.Scene.getSingleton().getGraphs()[0].is_active_;
-        GLGR.Scene.getSingleton().getGraphs()[0].setIsActive(!is_act);
+        var is_act = GLGR.Scene.getCurrentScene().getGraphs()[0].is_active_;
+        GLGR.Scene.getCurrentScene().getGraphs()[0].setIsActive(!is_act);
         console.log("Changed active to " + !is_act);
     });
 
