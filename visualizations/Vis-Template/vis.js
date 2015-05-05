@@ -105,23 +105,6 @@ function Visualization(EEXCESSobj) {
             taskStorage: 'scripts/taskStorage',
             'vis-controller': 'scripts/vis-controller',
             'vis-controller-customized': 'scripts/vis-controller-customized',
-            gl_jquery: '../../WebGlGraph/js/../../../libs/jquery-1.10.1.min',
-            gl_jquerymousewheel: '../../WebGlGraph/js/../../../libs/jquery-mousewheel/jquery.mousewheel.min',
-            gl_threejs: '../../WebGlGraph/js/libs/three.js/three',
-            gl_gldebugger: '../../WebGlGraph/js/graph/Debugger',
-            gl_interactionhandler: '../../WebGlGraph/js/graph/InteractionHandler',
-            gl_glscene: '../../WebGlGraph/js/graph/Scene',
-            gl_navigationhandler: '../../WebGlGraph/js/graph/NavigationHandler',
-            gl_simplecompare: '../../WebGlGraph/js/graph/compare/SimpleCompare',
-            gl_connectionabstract: '../../WebGlGraph/js/graph/connections/ConnectionAbstract',
-            gl_connectiongrpahrec: '../../WebGlGraph/js/graph/connections/ConnectionGraphRec',
-            gl_connectiongraphgraph: '../../WebGlGraph/js/graph/connections/ConnectionGraphGraph',
-            gl_graphrelationhandler: '../../WebGlGraph/js/graph/GraphRelationHandler',
-            gl_graph: '../../WebGlGraph/js/graph/Graph',
-            gl_recommendation: '../../WebGlGraph/js/graph/Recommendation',
-            gl_storage: '../../WebGlGraph/js/../../../common_js/storage',
-            gl_dbhandler: '../../WebGlGraph/js/DbHandler',
-            gl_initpage: '../../WebGlGraph/js/InitPage'
         }
     });
 

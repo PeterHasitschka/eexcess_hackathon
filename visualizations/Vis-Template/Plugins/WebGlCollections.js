@@ -9,37 +9,7 @@
 
     WebGlCollectionsPlugin.initialize = function (EEXCESSObj, rootSelector) {
         $root = $(rootSelector);
-        // load CSS
-        // load other needed scripts (require.js is available)
-
         loadCss("/visualizations/WebGlGraph/css/webglgraph.css");
-        
-        /*
-        requirejs.config({
-            baseUrl: '/visualizations/WebGlGraph/js/',
-            paths: {
-                gl_jquery: '../../../libs/jquery-1.10.1.min',
-                gl_jquerymousewheel: '../../../libs/jquery-mousewheel/jquery.mousewheel.min',
-                gl_threejs: 'libs/three.js/three',
-                gl_gldebugger: 'graph/Debugger',
-                gl_interactionhandler: 'graph/InteractionHandler',
-                gl_glscene: 'graph/Scene',
-                gl_navigationhandler: 'graph/NavigationHandler',
-                gl_simplecompare: 'graph/compare/SimpleCompare',
-                gl_connectionabstract: 'graph/connections/ConnectionAbstract',
-                gl_connectiongrpahrec: 'graph/connections/ConnectionGraphRec',
-                gl_connectiongraphgraph: 'graph/connections/ConnectionGraphGraph',
-                gl_graphrelationhandler: 'graph/GraphRelationHandler',
-                gl_graph: 'graph/Graph',
-                gl_recommendation: 'graph/Recommendation',
-                gl_storage: '../../../common_js/storage',
-                gl_dbhandler: 'DbHandler',
-                gl_initpage: 'InitPage'
-            }
-        });
-        */
-
-
 
     };
 
@@ -47,30 +17,34 @@
 
         if (!WebGlCollectionsPlugin.librariesLoaded) {
             console.log("requiring all the js files for webglcollplugin");
-            require(['gl_jquery',
-                'gl_threejs',
-                'gl_gldebugger',
-                'gl_dbhandler',
-                'gl_interactionhandler',
-                'gl_glscene',
-                'gl_navigationhandler',
-                'gl_simplecompare',
-                'gl_connectionabstract',
-                'gl_connectionabstract',
-                'gl_connectiongrpahrec',
-                'gl_connectiongraphgraph',
-                'gl_graphrelationhandler',
-                'gl_graph',
-                'gl_recommendation',
-                'gl_storage',
-                'gl_initpage',
-                'gl_jquerymousewheel'
+
+            require([
+                '../WebGlGraph/js/../../../libs/jquery-1.10.1.min.js',
+                '../WebGlGraph/js/../../../libs/jquery-mousewheel/jquery.mousewheel.min.js',
+                '../WebGlGraph/js/libs/three.js/three.js',
+                '../WebGlGraph/js/graph/Debugger.js',
+                '../WebGlGraph/js/graph/InteractionHandler.js',
+                '../WebGlGraph/js/graph/Scene.js',
+                '../WebGlGraph/js/graph/NavigationHandler.js',
+                '../WebGlGraph/js/graph/compare/SimpleCompare.js',
+                '../WebGlGraph/js/graph/connections/ConnectionAbstract.js',
+                '../WebGlGraph/js/graph/connections/ConnectionGraphRec.js',
+                '../WebGlGraph/js/graph/connections/ConnectionGraphGraph.js',
+                '../WebGlGraph/js/graph/GraphRelationHandler.js',
+                '../WebGlGraph/js/graph/Graph.js',
+                '../WebGlGraph/js/graph/Recommendation.js',
+                '../WebGlGraph/js/../../../common_js/storage.js',
+                '../WebGlGraph/js/DbHandler.js',
+                '../WebGlGraph/js/InitPage.js'
             ],
                     function () {
                         console.log("finished calling js files for webglcollplugin");
                         WebGlCollectionsPlugin.librariesLoaded = true;
                         WebGlCollectionsPlugin.draw();
                     });
+
+
+
             return;
         }
 
