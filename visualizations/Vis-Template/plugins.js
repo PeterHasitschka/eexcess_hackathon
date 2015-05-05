@@ -3,7 +3,8 @@ PluginHandler.registerPluginScripts([
 		'TestMiniViz.js' , 
 		'TestMiniVizGeo.js' , 
 		'TestMiniVizList.js' , 
-		'TestMiniVizCategory.js' 
+		'TestMiniVizCategory.js',
+                'WebGlCollections.js'
 	]);
 
 
