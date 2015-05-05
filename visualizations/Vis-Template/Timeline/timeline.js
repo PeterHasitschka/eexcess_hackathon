@@ -71,17 +71,18 @@ function Timeline( root, visTemplate ){
 	//experimental function
 	TIMEVIS.Evt.filterListPerTime = function(minDateInYears,maxDateInYears){
 		var indicesToHighlight = [];
+		var dataToHighlight = [];
 		var currentYear = 0;
 		data.forEach(function(d, i){
 			if(d.hasOwnProperty("year")){	
 				currentYear = d.year.getFullYear();
 				if(minDateInYears <= currentYear && currentYear <= maxDateInYears){
 					indicesToHighlight.push(i);
+					dataToHighlight.push(d);
 				}
 			}
 		});
-		Vis.selectItems( indicesToHighlight, true );
-		FilterHandler.setCurrentFilter('time', minDateInYears, maxDateInYears);
+		FilterHandler.setCurrentFilterRange('time', dataToHighlight, minDateInYears, maxDateInYears);
 	}
 	
 	TIMEVIS.Evt.brushended = function(){
@@ -291,11 +292,14 @@ function Timeline( root, visTemplate ){
 	TIMEVIS.Evt.legendClicked = function( legendDatum, legendIndex ){
 		
 		var indicesToHighlight = [];
+		var dataToHighlight = [];
 		
 		if( legendDatum.selected === false ){				
 			data.forEach(function(d, i){
-				if(d[colorChannel] === legendDatum.item)
+				if(d[colorChannel] === legendDatum.item){
 					indicesToHighlight.push(i);
+					dataToHighlight.push(d);
+				}
 			});
 			
 			legendDomain.forEach(function(l, i){
@@ -307,12 +311,12 @@ function Timeline( root, visTemplate ){
 		}
 		
 		TIMEVIS.Render.highlightNodes( indicesToHighlight, $(this).attr('class') );
-		Vis.selectItems( indicesToHighlight, true );
+		FilterHandler.setCurrentFilterCategories('category', dataToHighlight, colorChannel, [legendDatum.item]);
 		
 		if(legendDatum.selected === true){
 			$(this).find('text').css('font-weight', 'bold');
 		}else{
-			Vis.selectItems(Vis.getAllSelectListItems(), false);
+			FilterHandler.setCurrentFilterCategories('category', null, colorChannel, null);
 		}
 		
 		d3.selectAll('.legend').select("div")

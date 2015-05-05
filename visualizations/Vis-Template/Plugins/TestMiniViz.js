@@ -7,14 +7,14 @@
 		// load other needed scripts (require.js is available)
 	};
 
-	TestMiniViz.draw = function(data, from, to, $container){
+	TestMiniViz.draw = function(data, selectedData, $container, category, categoryValues, fromYear, toYear){
 		var $vis = $container.find('.TestMiniViz');
 		if ($vis.length == 0){
-			$vis = $('<div class="TestMiniViz">Hallo</div>').css('background-color', 'lightgrey').css('margin-top', '10px').css('padding-top', '10px').css('padding-bottom', '10px');		
+			$vis = $('<div class="TestMiniViz">Hallo</div>').css('background-color', 'lightgrey').css('padding-top', '10px').css('padding-bottom', '10px');		
 			$container.append($vis);
 		}
 
-		$vis.html('Filter: ' + from + " - " + to);
+		$vis.html('Filter: ' + fromYear + " - " + toYear + '<br />Highlighted: ' + selectedData.length);
 	};
 
 	TestMiniViz.finalize = function(){

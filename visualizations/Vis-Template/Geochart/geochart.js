@@ -58,8 +58,9 @@ function Geochart(root, visTemplate) {
             }
             return null;
         },
-		getDataIndexArrayPerSelection: function(layer){
-			var indexArray = [];
+		getSelectedData: function(layer){
+			var selectedIndices = [];
+            var selectedData = [];
 			var rectBounds = layer.getBounds();
 			var inputData = GEO.Input.data;
 		    for(var i=0; i < inputData.length; i++){
@@ -71,10 +72,11 @@ function Geochart(root, visTemplate) {
 					inputData[i].coordinate[0] <= rectBounds.getNorth()
 					)
 				{
-					indexArray.push(i);
+					selectedIndices.push(i);
+                    selectedData.push(inputData[i]);
 				}
             }
-            return indexArray;
+            return { selectedData: selectedData, selectedIndices: selectedIndices };
 		}
     };
 
@@ -170,15 +172,21 @@ function Geochart(root, visTemplate) {
 				GEO.map.addLayer(layer);
 				currentOneLayer = layer;
 				//make selection list
-				Vis.selectItems(
-					GEO.Internal.getDataIndexArrayPerSelection(layer),
-                    true
-				);
+                var selectionResult = GEO.Internal.getSelectedData(layer);
+
+                var bounds = layer.getBounds();
+                FilterHandler.setCurrentFilterRange('geo', selectionResult.selectedData, bounds._northEast, bounds._southWest);
 			}
 
 			// Do whatever else you need to. (save to db, add to map etc)
 			//GEO.map.addLayer(layer);
 		});
+        $(document).keyup(function(e) {
+            if (e.keyCode == 27) { // ESC
+                GEO.Render.deleteCurrentSelect();
+                FilterHandler.setCurrentFilterRange('geo', [], null, null);
+            } 
+        });
 	};
 	GEO.Render.deleteCurrentSelect = function(){
 		if(currentOneLayer != null && GEO.map.hasLayer(currentOneLayer)){
@@ -243,10 +251,10 @@ function Geochart(root, visTemplate) {
             marker.on('click', function(e){
                 if (e && e.target && e.target.options && e.target.options.dataObject){
 					GEO.Render.deleteCurrentSelect();
-                    Vis.selectItems([GEO.Internal.getDataIndex(e.target.options.dataObject.id)], true);
+                    FilterHandler.setCurrentFilterListItems([e.target.options.dataObject]);
                 }
             }).on('popupclose', function(){
-                    Vis.selectItems([]);
+                    FilterHandler.setCurrentFilterListItems([]);
             });
             GEO.markersGroup.addLayer(marker);
             GEO.Input.data[i].geoMarker = marker;
@@ -331,7 +339,6 @@ function Geochart(root, visTemplate) {
         GEO.Render.drawMarkers();
         GEO.Render.centerMap();
 		GEO.Render.deleteCurrentSelect();
-		
 	};
 
 
