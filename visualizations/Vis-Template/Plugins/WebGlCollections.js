@@ -35,7 +35,7 @@
                 '../WebGlGraph/js/graph/Recommendation.js',
                 '../WebGlGraph/js/../../../common_js/storage.js',
                 '../WebGlGraph/js/DbHandler.js',
-                '../WebGlGraph/js/SceneHandler.js'
+                '../WebGlGraph/js/DashboardHandler.js'
             ],
                     function () {
                         console.log("finished calling js files for webglcollplugin");
