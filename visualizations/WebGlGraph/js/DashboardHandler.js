@@ -25,7 +25,7 @@ function createScene(query_data) {
 
     //@TODO: Fix Problems with parents, then activate!
 
-
+    webgl_dbhandler.all_graphs_created_cb = fillBookmarkDropdown;
     webgl_dbhandler.getAndDrawNewGraphsFromDb();
 
 
@@ -38,8 +38,27 @@ function createScene(query_data) {
 
     GLGR.Debug.debugTime("CREATE GRAPH: AFTER ANIMATE");
 
-    //console.log(webgl_scene);
 
+
+
+
+}
+
+/**
+ * Adding all loaded graphs (queries or collections) to the bookmark
+ * dropdown of the rec-dashboard
+ * @returns {undefined}
+ */
+function fillBookmarkDropdown() {
+
+    var bookmark_element = jQuery('.eexcess-bookmark-dropdown-list ul');
+
+
+    var graphs = webgl_scene.getGraphs();
+
+    for (var i = 0; i < graphs.length; i++) {
+        bookmark_element.append("<li><p>" + graphs[i].getId() + "</p></li>");
+    }
 }
 
 

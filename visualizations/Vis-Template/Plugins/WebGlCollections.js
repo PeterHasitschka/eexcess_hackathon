@@ -10,11 +10,15 @@
     WebGlCollectionsPlugin.initialize = function (EEXCESSObj, rootSelector) {
         $root = $(rootSelector);
         loadCss("/visualizations/WebGlGraph/css/webglgraph.css");
+        
+        console.log("GLGRPLUGIN INIT");
 
     };
 
     WebGlCollectionsPlugin.draw = function (receivedData, mappingCombination, iWidth, iHeight) {
-
+        
+        console.log("GLGRPLUGIN DRAW START");
+        
         if (!WebGlCollectionsPlugin.librariesLoaded) {
             console.log("requiring all the js files for webglcollplugin");
 
@@ -92,6 +96,8 @@
 
         jQuery('#eexcess_main_panel').addClass("webglview");
         $root.append(inner_html);
+        
+        console.log("GLGRPLUGIN DRAW END");
     };
 
     // indexArray: array with items' indices to highlight. They match items in receivedData (parameter in Render.draw)
@@ -100,7 +106,7 @@
 
     WebGlCollectionsPlugin.finalize = function () {
 
-        console.log("WEBGL FINALIZE");
+        console.log("GLGRPLUGIN FINALIZE");
 
         destroyScene();
     };
