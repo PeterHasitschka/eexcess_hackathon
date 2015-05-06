@@ -57,7 +57,7 @@ function fillBookmarkDropdown() {
     var graphs = webgl_scene.getGraphs();
 
     for (var i = 0; i < graphs.length; i++) {
-        bookmark_element.append("<li><p>" + graphs[i].getId() + "</p></li>");
+        bookmark_element.append("<li><a href='#'>(radio/cb) GRAPH " + graphs[i].getId() + "</a></li>");
     }
 }
 
