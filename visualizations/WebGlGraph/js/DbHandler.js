@@ -83,10 +83,10 @@ GLGR.DbHandler.prototype.getStorageData_ = function (cb_data_loaded, storage_nam
     //callback gets called by storage.getDb or by this.getDb_ depending if 
     //db already loaded
     this.getDb_(function (db) {
-        webgl_dbhandler.db_ = db;
+        GLGR.WebGlDashboardHandler.webgl_dbhandler.db_ = db;
 
 
-        var trans = webgl_dbhandler.db_.transaction(storage_name, 'readonly');
+        var trans = GLGR.WebGlDashboardHandler.webgl_dbhandler.db_.transaction(storage_name, 'readonly');
         var store = trans.objectStore(storage_name);
 
         var request = store.openCursor();
@@ -199,7 +199,7 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
 GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
     //console.log("DB-HANDLER: UPDATED DB CB CALLED --> GRAPH REDRAW NEEDED!");
 
-    var that = webgl_dbhandler;
+    var that = GLGR.WebGlDashboardHandler.webgl_dbhandler;
     that.getAllQueries(function (q_data) {
 
         GLGR.Debug.debugTime("Got all Queries from DB");
@@ -302,7 +302,7 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
 
 
             GLGR.Debug.debugTime("Created Graph");
-            
+
             //Calling finished callback if set
             if (that.all_graphs_created_cb !== null)
                 that.all_graphs_created_cb();

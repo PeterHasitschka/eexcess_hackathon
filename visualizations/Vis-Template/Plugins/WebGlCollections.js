@@ -67,20 +67,20 @@
                 '</div>';
 
 
-        webgl_dbhandler = new GLGR.DbHandler();
+        GLGR.WebGlDashboardHandler.webgl_dbhandler = new GLGR.DbHandler();
 
-        webgl_dbhandler.getAllQueries(function (q_data) {
+        GLGR.WebGlDashboardHandler.webgl_dbhandler.getAllQueries(function (q_data) {
             GLGR.Debug.debugTime("Got all Queries from DB");
 
-            webgl_dbhandler.getAllRecommendations(function (r_data) {
+            GLGR.WebGlDashboardHandler.webgl_dbhandler.getAllRecommendations(function (r_data) {
                 GLGR.Debug.debugTime("Got all Recs from DB");
 
 
-                var query_data = webgl_dbhandler.prepareQueryRecStructure(q_data, r_data);
+                var query_data = GLGR.WebGlDashboardHandler.webgl_dbhandler.prepareQueryRecStructure(q_data, r_data);
                 GLGR.Debug.debugTime("Prepared Data");
                 //console.log(query_data);
 
-                createScene(query_data);
+                GLGR.WebGlDashboardHandler.createScene(query_data);
                 GLGR.Debug.debugTime("Created Graph");
 
 
@@ -109,7 +109,7 @@
 
         console.log("GLGRPLUGIN FINALIZE");
         jQuery('.webgl_select_content').remove();
-        destroyScene();
+        GLGR.WebGlDashboardHandler.destroyScene();
     };
 
     PluginHandler.registerVisualisation(WebGlCollectionsPlugin, {

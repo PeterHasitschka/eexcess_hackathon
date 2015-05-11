@@ -314,5 +314,5 @@ GLGR.Scene.prototype.log = function (msg) {
 
 GLGR.Scene.getCurrentScene = function(){
     
-    return webgl_scene;
+    return GLGR.WebGlDashboardHandler.webgl_scene;
 };
