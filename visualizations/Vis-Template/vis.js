@@ -1496,7 +1496,8 @@ function Visualization(EEXCESSobj) {
 
 
     BOOKMARKS.destroyBookmarkDialog = function () {
-        $(colorPickerId).colorpicker('destroy');
+        if (jQuery.colorpicker !== undefined)
+            $(colorPickerId).colorpicker('destroy');
         $(bookmarkDialogClass).remove();
 
         isBookmarkDialogOpen = false;

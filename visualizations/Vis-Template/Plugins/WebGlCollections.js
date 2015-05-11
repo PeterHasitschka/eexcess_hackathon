@@ -12,7 +12,7 @@
         loadCss("/visualizations/WebGlGraph/css/webglgraph.css");
         
         console.log("GLGRPLUGIN INIT");
-
+        
     };
 
     WebGlCollectionsPlugin.draw = function (receivedData, mappingCombination, iWidth, iHeight) {
@@ -46,8 +46,6 @@
                         WebGlCollectionsPlugin.librariesLoaded = true;
                         WebGlCollectionsPlugin.draw();
                     });
-
-
 
             return;
         }
@@ -97,6 +95,9 @@
         jQuery('#eexcess_main_panel').addClass("webglview");
         $root.append(inner_html);
         
+        
+
+        
         console.log("GLGRPLUGIN DRAW END");
     };
 
@@ -107,7 +108,7 @@
     WebGlCollectionsPlugin.finalize = function () {
 
         console.log("GLGRPLUGIN FINALIZE");
-
+        jQuery('.webgl_select_content').remove();
         destroyScene();
     };
 

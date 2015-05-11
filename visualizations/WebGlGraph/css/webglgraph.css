@@ -50,3 +50,14 @@ html, body {
 #webgl_status_bar_buttoncompare_simple a {
     font-size: 12px;
 }
+
+
+.eexcess-bookmark-dropdown-list .webgl_select_content, .eexcess-bookmark-dropdown-list .webgl_select_content span {
+    color:red;
+    float:left;
+    width: 100%;
+}
+
+.eexcess-bookmark-dropdown-list .webgl_select_content a, .eexcess-bookmark-dropdown-list .webgl_select_content input {
+    float:left;
+}
