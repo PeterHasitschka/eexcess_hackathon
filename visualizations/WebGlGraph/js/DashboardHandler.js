@@ -9,7 +9,6 @@ jQuery(document).ready(function () {
 
 
 GLGR.WebGlDashboardHandler = {
-    
     //Because needed while creating scene
     webgl_simplecomparer: null,
     webgl_dbhandler: null,
@@ -56,45 +55,67 @@ GLGR.WebGlDashboardHandler.createScene = function (query_data) {
 GLGR.WebGlDashboardHandler.fillBookmarkDropdown = function () {
 
     var bookmark_element = jQuery('.eexcess-bookmark-dropdown-list ul');
-
     var graphs = GLGR.WebGlDashboardHandler.webgl_scene.getGraphs();
 
-
     var graph_list_template = jQuery("<li class=' webgl_select_content webgl_select_graph_element'></div>");
-    graph_list_template.html("<input type=checkbox></input><a href='#' graph_id=''><span></span></a>");
+    graph_list_template.html("<input type=checkbox checked='checked'></input><a href='#' ><span></span></a>");
 
     bookmark_element.append("<li class='webgl_select_content' id='webgl_select_separator'>----------</li>");
 
     for (var i = 0; i < graphs.length; i++) {
-
         var graph_name = graphs[i].getUniqueData().name;
         graph_name = graph_name.substring(0, 19);
 
         var new_list_element = graph_list_template.clone();
-        new_list_element.find("a").attr("graph_id", graphs[i].getId());
+        new_list_element.attr("graph_id", graphs[i].getId());
         new_list_element.find("span").html(graph_name);
         bookmark_element.append(new_list_element);
 
 
-        new_list_element.click(function () {
-            alert("click");
+        new_list_element.find("input").click(function () {
+            GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange(jQuery(this));
+        });
+
+        new_list_element.find("a").click(function () {
+            var checkbox = jQuery(jQuery(this).siblings("input")[0]);
+            checkbox.prop('checked', !checkbox.prop('checked'));
+            GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange(checkbox);
+
         });
     }
 };
 
+GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange = function (checkbox) {
+    var graph_id = checkbox.parent().attr("graph_id");
+
+    if (graph_id === undefined)
+        throw("ERROR: COULD NOT FIND GRAPH ID IN DROPDOWN!!!");
+
+    var checkbox_status = checkbox.prop("checked");
+    var scene = GLGR.WebGlDashboardHandler.webgl_scene;
+    var graphs = scene.getGraphs();
+
+    for (var i = 0; i < graphs.length; i++) {
+        var curr_graph = graphs[i];
+        if (curr_graph.getId().toString() === graph_id) {
+            if (checkbox_status)
+                curr_graph.show();
+            else
+                curr_graph.hide();
+        }
+    }
+};
 
 GLGR.WebGlDashboardHandler.destroyScene = function () {
-    
+
     this.webgl_scene = null;
     this.webgl_dbhandler = null;
     GLGR.Graph.graphlist_ = null;
-
     this.animcount = 0;
-
 };
 
 GLGR.WebGlDashboardHandler.animate = function () {
-    
+
     if (!GLGR.WebGlDashboardHandler.webgl_scene)
         return;
 
