@@ -35,7 +35,6 @@ html, body {
     margin: 4px 3px;
     float: left;
     font-size: 12px;
-    width: 337px;
     height: 15px;
     text-align: left;  
 }
@@ -60,4 +59,9 @@ html, body {
 
 .eexcess-bookmark-dropdown-list .webgl_select_content a, .eexcess-bookmark-dropdown-list .webgl_select_content input {
     float:left;
+}
+
+.wrapper-dropdown .dropdown {
+    max-height:none!important;
+
 }
