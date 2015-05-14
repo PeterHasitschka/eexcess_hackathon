@@ -41,7 +41,9 @@ GLGR.GraphRelationHandler.prototype.setUpdateNeeded = function (update_needed) {
 GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
 
     if (!this.pos_update_needed_)
+    {
         return;
+    }
 
     var graphs = this.scene_.getGraphs();
 
@@ -63,6 +65,7 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
                 graphs[i].setPosition(currX, null);
                 graphs[i].force_update_while_inactive = true;
                 graphs[i].update();
+
                 currX += this.graph_distance_ + this.horizontal_offset_;
             }
             break;
@@ -91,7 +94,32 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
 
             }
 
-
+            
+            /**
+             * 
+             * if true, then hidden graphs are getting skipped and are thrown
+             * out of hierarchy!
+             * 
+             * 
+             * PROBLEMS: Setting the graphs parent? Side effects (e.g. compare?)
+             * 
+             */
+            var skip_hidden_graphs = true;
+            
+            if (skip_hidden_graphs){
+                
+                
+                
+                
+                
+                
+            }
+            
+            
+            
+            
+            
+            
 
             //Setting graph positions
             this.setHierachicalPosition(null, hierachy_data, 0, 0);

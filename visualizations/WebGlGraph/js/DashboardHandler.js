@@ -104,6 +104,10 @@ GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange = function (checkbox) {
                 curr_graph.hide();
         }
     }
+    
+    //Update because of hidden or newly showed graphs!
+    scene.getGraphRelationHandler().setGraphPositions();
+    scene.getGraphRelationHandler().setUpdateNeeded(true);
 };
 
 GLGR.WebGlDashboardHandler.destroyScene = function () {
