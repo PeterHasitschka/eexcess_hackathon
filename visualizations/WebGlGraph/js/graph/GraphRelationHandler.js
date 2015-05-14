@@ -94,32 +94,7 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
 
             }
 
-            
-            /**
-             * 
-             * if true, then hidden graphs are getting skipped and are thrown
-             * out of hierarchy!
-             * 
-             * 
-             * PROBLEMS: Setting the graphs parent? Side effects (e.g. compare?)
-             * 
-             */
-            var skip_hidden_graphs = true;
-            
-            if (skip_hidden_graphs){
-                
-                
-                
-                
-                
-                
-            }
-            
-            
-            
-            
-            
-            
+  
 
             //Setting graph positions
             this.setHierachicalPosition(null, hierachy_data, 0, 0);

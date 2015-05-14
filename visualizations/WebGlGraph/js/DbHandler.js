@@ -11,6 +11,9 @@ GLGR.DbHandler = function () {
     this.query_store_name_ = "queries_full";
 
 
+    this.graph_ids_to_skip_by_dashboard = [];
+
+
     this.all_graphs_created_cb = null;
     /*
      if (parent.GLGR.WidgetHelper !== undefined) {
@@ -199,6 +202,26 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
 GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
     //console.log("DB-HANDLER: UPDATED DB CB CALLED --> GRAPH REDRAW NEEDED!");
 
+
+
+
+
+
+    /*
+     * HERE'S A PROBLEM (TRY CHANGING CHECKBOXES SEVERAL TIMES.............
+     * 
+     */
+    GLGR.Graph.graphlist_ = [];
+    GLGR.Scene.graphs_ = [];
+    
+    throw("FIX THAT ERROR WITH RESETTING GRAPH LIST!!!!!!!!!!!!!!!!");
+
+
+
+
+
+
+
     var that = GLGR.WebGlDashboardHandler.webgl_dbhandler;
     that.getAllQueries(function (q_data) {
 
@@ -229,10 +252,14 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
 
             for (var i = 0; i < graphs.length; i++)
             {
+                /** @type {GLGR.Graph} **/
+                var curr_graph = graphs[i];
+
+
                 //Prevent adding if:
                 // * No recs
                 // * Query exists!
-
+                // * Is Hidden!
 
 
                 //Get last added as parent
@@ -244,7 +271,29 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
 
 
                 var skip_adding = false;
-                if (!graphs[i].getRecommendations().length)
+
+
+
+
+
+
+                //Skip if hidden!
+
+                for (var hide_counter = 0; hide_counter < that.graph_ids_to_skip_by_dashboard.length; hide_counter++) {
+
+                    var curr_hide_id = parseInt(that.graph_ids_to_skip_by_dashboard[hide_counter]);
+
+                    console.log(curr_graph.getId(), curr_hide_id);
+                }
+
+
+
+
+
+
+
+
+                if (!curr_graph.getRecommendations().length && !skip_adding)
                 {
 
                     //Check if query exists
@@ -253,7 +302,7 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
                         var graph_to_check = webgl_scene.getGraphs()[j];
                         var query_str_to_check = graph_to_check.getUniqueData().name;
 
-                        var current_query_str = graphs[i].getUniqueData().name;
+                        var current_query_str = curr_graph.getUniqueData().name;
 
                         if (query_str_to_check === current_query_str)
                         {
@@ -280,12 +329,12 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
                     //        " with parent " + parent_id);
 
 
-                    graphs[i].setParent(last_added);
-                    webgl_scene.addGraph(graphs[i]);
+                    curr_graph.setParent(last_added);
+                    webgl_scene.addGraph(curr_graph);
 
 
                     if (is_last)
-                        webgl_scene.active_graph = graphs[i];
+                        webgl_scene.active_graph = curr_graph;
                 }
                 //If last to add, and gets skipped, move to the already searched
                 else if (is_last)
