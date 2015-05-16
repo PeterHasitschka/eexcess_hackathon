@@ -50,3 +50,7 @@ GLGR.ConnectionGraphGraph.prototype.getPosDst = function () {
         return null;
     return {x: pos.x, y: pos.y};
 };
+
+GLGR.ConnectionGraphGraph.prototype.getDstGraph = function(){
+    return this.dst_;
+};

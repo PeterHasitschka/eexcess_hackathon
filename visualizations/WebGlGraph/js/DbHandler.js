@@ -11,7 +11,6 @@ GLGR.DbHandler = function () {
     this.query_store_name_ = "queries_full";
 
 
-    this.graph_ids_to_skip_by_dashboard = [];
 
 
     this.all_graphs_created_cb = null;
@@ -203,25 +202,6 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
     //console.log("DB-HANDLER: UPDATED DB CB CALLED --> GRAPH REDRAW NEEDED!");
 
 
-
-
-
-
-    /*
-     * HERE'S A PROBLEM (TRY CHANGING CHECKBOXES SEVERAL TIMES.............
-     * 
-     */
-    GLGR.Graph.graphlist_ = [];
-    GLGR.Scene.graphs_ = [];
-    
-    throw("FIX THAT ERROR WITH RESETTING GRAPH LIST!!!!!!!!!!!!!!!!");
-
-
-
-
-
-
-
     var that = GLGR.WebGlDashboardHandler.webgl_dbhandler;
     that.getAllQueries(function (q_data) {
 
@@ -250,6 +230,8 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
             //Use as parent
             var last_added = null;
 
+
+            //console.log("GRAPH LENGTH!: ", graphs.length);
             for (var i = 0; i < graphs.length; i++)
             {
                 /** @type {GLGR.Graph} **/
@@ -259,7 +241,7 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
                 //Prevent adding if:
                 // * No recs
                 // * Query exists!
-                // * Is Hidden!
+
 
 
                 //Get last added as parent
@@ -270,30 +252,15 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
                 }
 
 
+
+
                 var skip_adding = false;
 
 
 
 
 
-
-                //Skip if hidden!
-
-                for (var hide_counter = 0; hide_counter < that.graph_ids_to_skip_by_dashboard.length; hide_counter++) {
-
-                    var curr_hide_id = parseInt(that.graph_ids_to_skip_by_dashboard[hide_counter]);
-
-                    console.log(curr_graph.getId(), curr_hide_id);
-                }
-
-
-
-
-
-
-
-
-                if (!curr_graph.getRecommendations().length && !skip_adding)
+                if (!curr_graph.getRecommendations().length)
                 {
 
                     //Check if query exists
@@ -345,7 +312,6 @@ GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
                 }
                 else
                 {
-                    //console.log("Skipping an empty graph... ");
                 }
             }
 

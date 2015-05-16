@@ -241,11 +241,11 @@ GLGR.Graph.prototype.update = function () {
             curr_recommendation.setPositionData(
                     old_degr_ + 0.005 * GLGR.Scene.getCurrentScene().getTimeDelta() / 10,
                     null);
-        
+
         //Delete overwritten color if not allowed
         if (!GLGR.Scene.getCurrentScene().allow_rec_color_overwrites)
             curr_recommendation.setColorOverwrite(null);
-        
+
         curr_recommendation.update();
     }
 
@@ -396,15 +396,15 @@ GLGR.Graph.prototype.handleGraphClick = function () {
     {
         that.setIsActive(true);
     }
-    
+
     that.setIsSelected(!that.getIsSelected());
-    
-    
-    
-    
+
+
+
+
     //Show/Hide compare button
     //GLGR.Scene.getCurrentScene().getSimpleComparer().manageCompareButton();
-    
+
     //Unset all overwritten colors of every rec
     GLGR.Scene.getCurrentScene().allow_rec_color_overwrites = false;
 
@@ -415,7 +415,7 @@ GLGR.Graph.prototype.handleGraphClick = function () {
      that.expandGraph();s
      */
 
-    
+
 
     console.log("GRAPH CLICKED :", that);
 
@@ -470,6 +470,7 @@ GLGR.Graph.prototype.setIsActive = function (is_active) {
  * Hides the graph (Not visible at all)
  */
 GLGR.Graph.prototype.hide = function () {
+    console.log("HIDING GRAPH " + this.getId());
     this.setMeshesVisible_(false);
 };
 
@@ -488,6 +489,7 @@ GLGR.Graph.prototype.getIsSelected = function () {
  * Shows (unhides) the graph
  */
 GLGR.Graph.prototype.show = function () {
+    console.log("SHOWING GRAPH " + this.getId());
     this.setMeshesVisible_(true);
 };
 
@@ -514,6 +516,24 @@ GLGR.Graph.prototype.setMeshesVisible_ = function (status) {
         else
             this.rec_connections_[i].hide();
     }
+
+
+    var graph_connections = GLGR.Scene.getCurrentScene().getGraphConnections();
+
+    for (var i = 0; i < graph_connections.length; i++)
+    {
+        /** @type {GLGR.ConnectionGraphGraph} **/
+        var curr_connection = graph_connections[i];
+
+        var dst_graph = curr_connection.getDstGraph();
+        if (dst_graph.getId() === this.getId()) {
+            if (status)
+                curr_connection.show();
+            else
+                curr_connection.hide();
+        }
+    }
+
 };
 
 /**

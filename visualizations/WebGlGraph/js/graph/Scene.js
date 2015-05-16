@@ -284,6 +284,9 @@ GLGR.Scene.prototype.addGraphConnection = function (connection) {
     this.graph_connections_.push(connection);
 };
 
+GLGR.Scene.prototype.getGraphConnections = function () {
+    return this.graph_connections_;
+};
 
 GLGR.Scene.prototype.clearGraphConnection = function () {
     this.graph_connections_ = [];

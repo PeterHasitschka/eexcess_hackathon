@@ -122,8 +122,8 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
 
                 var curr_graph = this.scene_.getGraphs()[i];
                 var graph_connection = new GLGR.ConnectionGraphGraph(
-                        curr_graph,
-                        curr_graph.getParent()
+                        curr_graph.getParent(),
+                        curr_graph
                         );
 
                 this.scene_.addGraphConnection(graph_connection);
