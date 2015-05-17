@@ -13,7 +13,8 @@ GLGR.WebGlDashboardHandler = {
     webgl_simplecomparer: null,
     webgl_dbhandler: null,
     webgl_scene: null,
-    animcount: 0
+    animcount: 0,
+    graphs_to_skip_by_checkbox: []
 
 };
 
@@ -73,63 +74,87 @@ GLGR.WebGlDashboardHandler.fillBookmarkDropdown = function () {
 
 
         new_list_element.find("input").click(function () {
-            GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange(jQuery(this));
+            GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange();
         });
 
         new_list_element.find("a").click(function () {
             var checkbox = jQuery(jQuery(this).siblings("input")[0]);
             checkbox.prop('checked', !checkbox.prop('checked'));
-            GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange(jQuery(this));
+            GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange();
 
         });
     }
 };
 
+/*
+ GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange = function (checkbox) {
+ var graph_id = checkbox.parent().attr("graph_id");
+ 
+ if (graph_id === undefined)
+ throw("ERROR: COULD NOT FIND GRAPH ID IN DROPDOWN!!!");
+ 
+ var checkbox_status = checkbox.prop("checked");
+ var scene = GLGR.WebGlDashboardHandler.webgl_scene;
+ var graphs = scene.getGraphs();
+ 
+ 
+ 
+ for (var i = 0; i < graphs.length; i++) {
+ var curr_graph = graphs[i];
+ 
+ 
+ if (curr_graph.getId().toString() === graph_id) {
+ 
+ if (checkbox_status)
+ curr_graph.show();
+ else
+ curr_graph.hide();
+ 
+ 
+ }
+ }
+ 
+ scene.getGraphRelationHandler().setUpdateNeeded(true);
+ };
+ */
 
-GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange = function (checkbox) {
-    var graph_id = checkbox.parent().attr("graph_id");
 
-    if (graph_id === undefined)
-        throw("ERROR: COULD NOT FIND GRAPH ID IN DROPDOWN!!!");
+GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange = function () {
 
-    var checkbox_status = checkbox.prop("checked");
-    var scene = GLGR.WebGlDashboardHandler.webgl_scene;
-    var graphs = scene.getGraphs();
+    this.webgl_dbhandler.all_graphs_created_cb = null;
+    var checkboxes = jQuery(".webgl_select_graph_element").find("input");
 
+    this.graphs_to_skip_by_checkbox = [];
 
+    var graphs = this.webgl_scene.getGraphs();
 
-    for (var i = 0; i < graphs.length; i++) {
-        var curr_graph = graphs[i];
+    for (var i = 0; i < checkboxes.length; i++)
+    {
+        var graph_id = parseInt(jQuery(checkboxes[i]).parent().attr("graph_id"));
 
+        var status = jQuery(checkboxes[i]).prop("checked");
 
-        if (curr_graph.getId().toString() === graph_id) {
+        //Set to list for skipping in GraphRelationHandler
+        if (!status)
+            this.graphs_to_skip_by_checkbox.push(graph_id);
 
-            if (checkbox_status)
-                curr_graph.show();
-            else
-                curr_graph.hide();
+        //Hide graph itself
+        for (var j = 0; j < graphs.length; j++) {
+            if (graphs[j].getId() === graph_id) {
 
+                if (status)
+                    graphs[j].show();
+                else
+                    graphs[j].hide();
 
+                break;
+            }
         }
     }
 
+    this.webgl_scene.getGraphRelationHandler().setUpdateNeeded(true);
 };
 
-/*
- GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange = function () {
- 
- this.webgl_dbhandler.all_graphs_created_cb = null;
- var checkboxes = jQuery(".webgl_select_graph_element").find("input");
- 
- var graphs_to_skip = [];
- for (var i = 0; i < checkboxes.length; i++)
- {
- if (!jQuery(checkboxes[i]).prop("checked"))
- graphs_to_skip.push(jQuery(checkboxes[i]).parent().attr("graph_id"));
- }
- 
- };
- */
 
 
 GLGR.WebGlDashboardHandler.destroyScene = function () {

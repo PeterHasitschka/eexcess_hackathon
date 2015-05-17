@@ -85,6 +85,9 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
                     roots.push(graph_id);
             }
 
+            //Skip graphs that are unchecked in dashboard bookmark list
+            hierachy_unordered = this.filterHiddenGraphs_(hierachy_unordered);
+
 
             //Building hierachy tree
             var hierachy_data = {};
@@ -94,7 +97,11 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
 
             }
 
-  
+
+
+
+
+
 
             //Setting graph positions
             this.setHierachicalPosition(null, hierachy_data, 0, 0);
@@ -142,6 +149,55 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
     this.setUpdateNeeded(false);
 };
 
+
+
+/**
+ * Filtering out graphs that are hidden by checkbox in Dashboard.
+ * Going through variable GLGR.WebGlDashboardHandler.graphs_to_skip_by_checkbox
+ * @param {type} hierachy_data
+ * @returns {undefined}
+ */
+
+GLGR.GraphRelationHandler.prototype.filterHiddenGraphs_ = function (hierachy_unordered) {
+
+    var graphs_to_skip = GLGR.WebGlDashboardHandler.graphs_to_skip_by_checkbox;
+
+    
+    
+    for (var i = 0; i < graphs_to_skip.length; i++) {
+
+        var graph_id_to_skip = graphs_to_skip[i];
+
+        //Getting parent
+        var new_parent_id = hierachy_unordered[parseInt(graph_id_to_skip)];
+
+        for (var hierarchy_key in hierachy_unordered) {
+            
+
+            //Delete node to hide
+            if (parseInt(hierarchy_key) === parseInt(graph_id_to_skip)) {
+                delete hierachy_unordered[hierarchy_key];
+            }
+
+            //Set parent of deleted to all children
+            if (parseInt(hierachy_unordered[hierarchy_key]) === parseInt(graph_id_to_skip)) {
+                
+                hierachy_unordered[hierarchy_key] = parseInt(new_parent_id);
+            }
+
+        }
+    }
+
+    console.log(hierachy_unordered);
+
+    return hierachy_unordered;
+};
+
+
+
+
+
+
 /**
  * Setting the positions of the graphs hierarchical in a recursive way
  * 
@@ -165,7 +221,10 @@ GLGR.GraphRelationHandler.prototype.setHierachicalPosition = function (graph_id,
     var silblings = 0;
     for (var child_graph_id in hierarchy)
     {
-        this.setHierachicalPosition(child_graph_id, hierarchy[child_graph_id], level + 1, silblings);
+        var next_level;
+        next_level = level + 1;
+
+        this.setHierachicalPosition(child_graph_id, hierarchy[child_graph_id], next_level, silblings);
         silblings++;
     }
 };
@@ -195,8 +254,8 @@ GLGR.GraphRelationHandler.prototype.applyHierachicalDataToSingleGraph = function
 
     if (!current_graph)
         throw("ERROR: Could not find graph with id " + graph_id);
-
-
+    
+    
     var parent_y_add = 0;
     var parent = current_graph.getParent();
     if (parent) {
@@ -210,8 +269,11 @@ GLGR.GraphRelationHandler.prototype.applyHierachicalDataToSingleGraph = function
             silbling_num + parent_y_add;
 
 
+    var x_pos;
+    x_pos = level * this.visualization_constants.graph_distance;
 
-    current_graph.setPosition(level * this.visualization_constants.graph_distance, y_pos_level);
+
+    current_graph.setPosition(x_pos, y_pos_level);
 
 
     //Alternate label position a little bit...

@@ -1,0 +1,7 @@
+Error in event handler for runtime.onMessage: TypeError: $(...).dropdown is not a function
+    at Object.Visualization.FILTER.changeDropDownList (chrome-extension://fgpomkabapaklbglfeelmpoapifimoej/visualizations/Vis-Template/vis.js:1806:39)
+    at Object.Visualization.FILTER.buildFilterBookmark (chrome-extension://fgpomkabapaklbglfeelmpoapifimoej/visualizations/Vis-Template/vis.js:1869:16)
+    at Object.Visualization.START.refresh (chrome-extension://fgpomkabapaklbglfeelmpoapifimoej/visualizations/Vis-Template/vis.js:191:16)
+    at onDataReceived (chrome-extension://fgpomkabapaklbglfeelmpoapifimoej/visualizations/Vis-Template/starter.js:26:17)
+    at requestVisualization (chrome-extension://fgpomkabapaklbglfeelmpoapifimoej/visualizations/Vis-Template/starter.js:49:28)
+    at chrome-extension://fgpomkabapaklbglfeelmpoapifimoej/visualizations/Vis-Template/starter.js:81:17

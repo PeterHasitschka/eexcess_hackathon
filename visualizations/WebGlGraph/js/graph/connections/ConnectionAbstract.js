@@ -136,7 +136,10 @@ GLGR.ConnectionAbstract.prototype.show = function () {
 
 GLGR.ConnectionAbstract.prototype.setMeshesVisible_ = function (status) {
     this.is_visible_ = status;
-    this.line_mesh_.visible = status;
+    if (this.line_mesh_ !== null)
+        this.line_mesh_.visible = status;
+    else
+        console.log("line mesh of connection is null... skipping");
 };
 
 /**
