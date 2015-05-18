@@ -125,6 +125,20 @@ GLGR.Scene.prototype.getGraphs = function () {
     return this.graphs_;
 };
 
+/**
+ * Getting a graph with a specific id
+ * @param {integer} graph_id
+ * @returns {GLGR.Graph || null}
+ */
+GLGR.Scene.prototype.getGraph = function (graph_id) {
+    graph_id = parseInt(graph_id);
+    for (var i = 0; i < this.graphs_.length; i++) {
+        if (this.graphs_[i].getId() === graph_id)
+            return this.graphs_[i];
+    }
+    return null;
+};
+
 
 
 /**
@@ -315,7 +329,7 @@ GLGR.Scene.prototype.log = function (msg) {
 
 
 
-GLGR.Scene.getCurrentScene = function(){
-    
+GLGR.Scene.getCurrentScene = function () {
+
     return GLGR.WebGlDashboardHandler.webgl_scene;
 };

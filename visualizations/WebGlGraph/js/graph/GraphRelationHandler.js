@@ -75,36 +75,43 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
 
         case GLGR.GraphRelationHandler.modes.MODE_HORIZONTAL_HIERACHICAL:
 
-            var hierachy_unordered = this.getParentChildMap();
+            var hierarchy_unordered = this.getParentChildMap();
 
             //Getting roots
             var roots = [];
-            for (var graph_id in hierachy_unordered)
+            for (var graph_id in hierarchy_unordered)
             {
-                if (hierachy_unordered[graph_id] === null)
+                if (hierarchy_unordered[graph_id] === null)
                     roots.push(graph_id);
             }
 
-            //Skip graphs that are unchecked in dashboard bookmark list
-            hierachy_unordered = this.filterHiddenGraphs_(hierachy_unordered);
+
+            /*
+             * Skip graphs that are unchecked in dashboard bookmark list.
+             * @see {GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange}
+             */
+            hierarchy_unordered = this.filterHiddenGraphs_(hierarchy_unordered);
+
+            //Updating the parent-ids of existing graphs
+            this.updateParents_(hierarchy_unordered);
 
 
-            //Building hierachy tree
-            var hierachy_data = {};
+
+
+            //Building hierarchy tree
+            var hierarchy_data = {};
             for (var root_graph_id in roots)
             {
-                hierachy_data[root_graph_id] = this.buildHierachy(root_graph_id, hierachy_unordered);
+                hierarchy_data[root_graph_id] = this.buildHierachy(root_graph_id, hierarchy_unordered);
 
             }
-
-
 
 
 
 
 
             //Setting graph positions
-            this.setHierachicalPosition(null, hierachy_data, 0, 0);
+            this.setHierachicalPosition(null, hierarchy_data, 0, 0);
 
             //Move camera to active graph or to farest one
             if (this.scene_.active_graph)
@@ -154,46 +161,65 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
 /**
  * Filtering out graphs that are hidden by checkbox in Dashboard.
  * Going through variable GLGR.WebGlDashboardHandler.graphs_to_skip_by_checkbox
- * @param {type} hierachy_data
+ * Beware that the graphs are still visible after this function. It only calculates
+ * the positions and hierarchies. They are getting hidden in the @see{GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange} function.
+ * @param {type} hierarchy_data
  * @returns {undefined}
  */
-
-GLGR.GraphRelationHandler.prototype.filterHiddenGraphs_ = function (hierachy_unordered) {
+GLGR.GraphRelationHandler.prototype.filterHiddenGraphs_ = function (hierarchy_unordered) {
 
     var graphs_to_skip = GLGR.WebGlDashboardHandler.graphs_to_skip_by_checkbox;
 
-    
-    
     for (var i = 0; i < graphs_to_skip.length; i++) {
-
         var graph_id_to_skip = graphs_to_skip[i];
 
         //Getting parent
-        var new_parent_id = hierachy_unordered[parseInt(graph_id_to_skip)];
-
-        for (var hierarchy_key in hierachy_unordered) {
-            
+        var new_parent_id = hierarchy_unordered[parseInt(graph_id_to_skip)];
+        
+        if (new_parent_id !== null)
+            new_parent_id = parseInt(new_parent_id);
+        
+        
+        for (var hierarchy_key in hierarchy_unordered) {
 
             //Delete node to hide
             if (parseInt(hierarchy_key) === parseInt(graph_id_to_skip)) {
-                delete hierachy_unordered[hierarchy_key];
+                delete hierarchy_unordered[hierarchy_key];
             }
 
             //Set parent of deleted to all children
-            if (parseInt(hierachy_unordered[hierarchy_key]) === parseInt(graph_id_to_skip)) {
-                
-                hierachy_unordered[hierarchy_key] = parseInt(new_parent_id);
+            if (parseInt(hierarchy_unordered[hierarchy_key]) === parseInt(graph_id_to_skip)) {
+                hierarchy_unordered[hierarchy_key] = new_parent_id;
             }
-
         }
     }
-
-    console.log(hierachy_unordered);
-
-    return hierachy_unordered;
+    return hierarchy_unordered;
 };
 
 
+/**
+ * After updating the hierarchy existing graphs in the scene may have the wrong
+ * parent-id. This function updates each existing graph's parent.
+ * @param {} hierarchy_unordered
+ */
+GLGR.GraphRelationHandler.prototype.updateParents_ = function (hierarchy_unordered) {
+
+    for (var current_graph_id in hierarchy_unordered) {
+
+        var current_parent_id = hierarchy_unordered[current_graph_id];
+        console.log("UPDATING PARENTS: " + current_graph_id + " -> " + current_parent_id);
+        
+        /** @type {GLGR.Graph} **/
+        var graph = this.scene_.getGraph(current_graph_id);
+        
+        if (!graph)
+            throw("Could not get graph to set parent id: " + current_graph_id);
+        
+        var parent_graph = this.scene_.getGraph(current_parent_id);
+        graph.setParent(parent_graph);
+    }
+
+};
 
 
 
@@ -254,8 +280,8 @@ GLGR.GraphRelationHandler.prototype.applyHierachicalDataToSingleGraph = function
 
     if (!current_graph)
         throw("ERROR: Could not find graph with id " + graph_id);
-    
-    
+
+
     var parent_y_add = 0;
     var parent = current_graph.getParent();
     if (parent) {
@@ -290,14 +316,14 @@ GLGR.GraphRelationHandler.prototype.applyHierachicalDataToSingleGraph = function
 
 
 /**
- * Calculate hierachy recursively
+ * Calculate hierarchy recursively
  * 
  * @param {integer} parent_id
- * @param {type} hierachy_unordered array holding each graphid -> parentid
+ * @param {type} hierarchy_unordered array holding each graphid -> parentid
  * @param {integer} depth optional for calculating the maximal level of the tree
- * @returns {} Object holding the hierachy
+ * @returns {} Object holding the hierarchy
  */
-GLGR.GraphRelationHandler.prototype.buildHierachy = function (parent_id, hierachy_unordered, depth) {
+GLGR.GraphRelationHandler.prototype.buildHierachy = function (parent_id, hierarchy_unordered, depth) {
 
     if (depth === undefined)
         depth = 0;
@@ -305,11 +331,11 @@ GLGR.GraphRelationHandler.prototype.buildHierachy = function (parent_id, hierach
     this.max_depth_of_graphs_ = Math.max(this.max_depth_of_graphs_, depth);
 
     var children = {};
-    for (var graph_id in hierachy_unordered)
+    for (var graph_id in hierarchy_unordered)
     {
-        if (parseInt(hierachy_unordered[graph_id]) === parseInt(parent_id))
+        if (parseInt(hierarchy_unordered[graph_id]) === parseInt(parent_id))
         {
-            children[graph_id] = this.buildHierachy(graph_id, hierachy_unordered, depth + 1);
+            children[graph_id] = this.buildHierachy(graph_id, hierarchy_unordered, depth + 1);
         }
     }
     return children;
@@ -323,7 +349,7 @@ GLGR.GraphRelationHandler.prototype.getParentChildMap = function () {
 
     var graphs = this.scene_.getGraphs();
 
-    var hierachy = {};
+    var hierarchy = {};
 
 
 
@@ -332,10 +358,10 @@ GLGR.GraphRelationHandler.prototype.getParentChildMap = function () {
         /** @type{GLGR.Graph} **/
         var graph = graphs[i];
         var parent_id = graph.getParentId();
-        hierachy[graph.getId()] = parent_id;
+        hierarchy[graph.getId()] = parent_id;
     }
 
-    return hierachy;
+    return hierarchy;
 };
 
 

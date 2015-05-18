@@ -146,7 +146,6 @@ GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange = function () {
                     graphs[j].show();
                 else
                     graphs[j].hide();
-
                 break;
             }
         }
