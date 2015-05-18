@@ -88,11 +88,14 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
             }
 
 
+            console.log(hierarchy_unordered);
             /*
              * Skip graphs that are unchecked in dashboard bookmark list.
              * @see {GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange}
              */
             hierarchy_unordered = this.filterHiddenGraphs_(hierarchy_unordered);
+            console.log(hierarchy_unordered);
+
 
             //Updating the parent-ids of existing graphs
             this.updateParents_(hierarchy_unordered);
@@ -287,8 +290,10 @@ GLGR.GraphRelationHandler.prototype.applyHierachicalDataToSingleGraph = function
     }
 
 
-    if (!current_graph)
-        throw("ERROR: Could not find graph with id " + graph_id);
+    if (!current_graph) {
+        console.log("WARNING: Could not find graph with id " + graph_id);
+        return;
+    }
 
 
     var parent_y_add = 0;
@@ -303,7 +308,7 @@ GLGR.GraphRelationHandler.prototype.applyHierachicalDataToSingleGraph = function
             this.visualization_constants.graph_y_level_static_add) *
             silbling_num + parent_y_add;
 
-    
+
     var x_pos;
     x_pos = level * this.visualization_constants.graph_distance;
 
