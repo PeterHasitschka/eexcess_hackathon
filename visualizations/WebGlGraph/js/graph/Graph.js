@@ -128,8 +128,11 @@ GLGR.Graph.prototype.getRecommendations = function () {
  */
 GLGR.Graph.prototype.setParent = function (parent_graph) {
 
-    if (parent_graph !== null && parent_graph !== undefined)
-        this.parent_id_ = parent_graph.getId();
+    if (parent_graph !== undefined)
+        if (parent_graph !== null)
+            this.parent_id_ = parent_graph.getId();
+        else
+            this.parent_id_ = null;
 };
 
 /**
@@ -390,7 +393,10 @@ GLGR.Graph.prototype.handleGraphClick = function () {
     /** @var {GLGR.Graph} **/
     var that = this.graphref;
 
-
+    //Ignore click if hidden!
+    if (!that.getisVisible())
+        return;
+    
     //Activate on click
     if (!that.is_active_)
     {

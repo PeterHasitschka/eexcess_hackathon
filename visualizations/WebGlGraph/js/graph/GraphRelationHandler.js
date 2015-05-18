@@ -44,6 +44,8 @@ GLGR.GraphRelationHandler.prototype.setGraphPositions = function () {
     {
         return;
     }
+    console.log("UPDATING GRAPH-RELATION-POSITIONS!");
+
 
     var graphs = this.scene_.getGraphs();
 
@@ -175,11 +177,11 @@ GLGR.GraphRelationHandler.prototype.filterHiddenGraphs_ = function (hierarchy_un
 
         //Getting parent
         var new_parent_id = hierarchy_unordered[parseInt(graph_id_to_skip)];
-        
+
         if (new_parent_id !== null)
             new_parent_id = parseInt(new_parent_id);
-        
-        
+
+
         for (var hierarchy_key in hierarchy_unordered) {
 
             //Delete node to hide
@@ -207,14 +209,13 @@ GLGR.GraphRelationHandler.prototype.updateParents_ = function (hierarchy_unorder
     for (var current_graph_id in hierarchy_unordered) {
 
         var current_parent_id = hierarchy_unordered[current_graph_id];
-        console.log("UPDATING PARENTS: " + current_graph_id + " -> " + current_parent_id);
-        
+
         /** @type {GLGR.Graph} **/
         var graph = this.scene_.getGraph(current_graph_id);
-        
+
         if (!graph)
             throw("Could not get graph to set parent id: " + current_graph_id);
-        
+
         var parent_graph = this.scene_.getGraph(current_parent_id);
         graph.setParent(parent_graph);
     }
@@ -259,6 +260,14 @@ GLGR.GraphRelationHandler.isInt = function (n) {
     return n !== null && n % 1 === 0;
 };
 
+
+
+/**
+ * Setting the absolute positions of the graphs.
+ * @param {integer} graph_id
+ * @param {integer} level Step from left to right
+ * @param {integer} silbling_num The silbling-order of the graph. (E.g. 1 for single child)
+ */
 GLGR.GraphRelationHandler.prototype.applyHierachicalDataToSingleGraph = function (graph_id, level, silbling_num) {
 
     var graphs = this.scene_.getGraphs();
@@ -294,20 +303,14 @@ GLGR.GraphRelationHandler.prototype.applyHierachicalDataToSingleGraph = function
             this.visualization_constants.graph_y_level_static_add) *
             silbling_num + parent_y_add;
 
-
+    
     var x_pos;
     x_pos = level * this.visualization_constants.graph_distance;
 
 
+//    console.log("GRAPH " + current_graph.getId() + " POSX: " + x_pos);
+
     current_graph.setPosition(x_pos, y_pos_level);
-
-
-    //Alternate label position a little bit...
-    //var y_label_offset = 35 * (level % 2);
-    //current_graph.setLabelIndividualYOffset(y_label_offset);
-
-
-
 
     current_graph.force_update_while_inactive = true;
     current_graph.update();
