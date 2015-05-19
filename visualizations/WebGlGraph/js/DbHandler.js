@@ -198,12 +198,21 @@ GLGR.DbHandler.prototype.getNewGraphsFromQueryData = function (query_data) {
 };
 
 
-GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function () {
+GLGR.DbHandler.prototype.getAndDrawNewGraphsFromDb = function (limit_queries) {
     //console.log("DB-HANDLER: UPDATED DB CB CALLED --> GRAPH REDRAW NEEDED!");
 
 
     var that = GLGR.WebGlDashboardHandler.webgl_dbhandler;
     that.getAllQueries(function (q_data) {
+        
+        if (limit_queries){
+            while (q_data.length > limit_queries) {
+                q_data.shift();
+                console.log("shift....");
+            }
+            
+        }
+        
 
         GLGR.Debug.debugTime("Got all Queries from DB");
         that.getAllRecommendations(function (r_data) {

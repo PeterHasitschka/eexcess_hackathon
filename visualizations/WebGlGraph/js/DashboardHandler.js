@@ -31,22 +31,27 @@ GLGR.WebGlDashboardHandler.createScene = function (query_data) {
 
     //@TODO: Fix Problems with parents, then activate!
 
-    this.webgl_dbhandler.all_graphs_created_cb = this.fillBookmarkDropdown;
-    this.webgl_dbhandler.getAndDrawNewGraphsFromDb();
+    this.webgl_dbhandler.all_graphs_created_cb = this.cbDbDataLoaded;
+    this.webgl_dbhandler.getAndDrawNewGraphsFromDb(20);
 
 
 
-    this.webgl_scene.getNavigationHandler().zoom(0.5);
 
-
-    GLGR.Debug.debugTime("CREATE GRAPH: END");
-    this.animate();
-
-    GLGR.Debug.debugTime("CREATE GRAPH: AFTER ANIMATE");
 
 };
 
+GLGR.WebGlDashboardHandler.cbDbDataLoaded = function () {
 
+    GLGR.WebGlDashboardHandler.fillBookmarkDropdown();
+
+    GLGR.WebGlDashboardHandler.webgl_scene.getNavigationHandler().zoom(0.5);
+
+
+    GLGR.Debug.debugTime("CREATE GRAPH: END");
+    GLGR.WebGlDashboardHandler.animate();
+
+    GLGR.Debug.debugTime("CREATE GRAPH: AFTER ANIMATE");
+};
 
 /**
  * Adding all loaded graphs (queries or collections) to the bookmark
