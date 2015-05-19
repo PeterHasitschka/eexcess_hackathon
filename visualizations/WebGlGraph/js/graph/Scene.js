@@ -213,6 +213,9 @@ GLGR.Scene.prototype.render = function () {
 
     this.three_renderer_.render(this.three_scene_, this.three_camera_);
 
+
+    this.navigation_handler_.performAnimations();
+
     //GLGR.Debug.debugTime("RENDER: START");
 };
 

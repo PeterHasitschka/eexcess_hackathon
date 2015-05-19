@@ -44,8 +44,9 @@ GLGR.InteractionHandler = function (scene) {
                 return;
             
             var zoom_factor = 1 / that.scene_.getNavigationHandler().getZoomFactor();
-            curr_mouse_x_diff = 0 - (event.clientX - mouse_x_prev) * zoom_factor;
-
+            var curr_mouse_x_diff = 0 - (event.clientX - mouse_x_prev) * zoom_factor;
+            
+            that.scene_.getNavigationHandler().resetAnimationMovement();
             that.scene_.getNavigationHandler().moveCamera(curr_mouse_x_diff);
             mouse_x_prev = event.clientX;
         });
@@ -53,6 +54,7 @@ GLGR.InteractionHandler = function (scene) {
 
         //MOUSE-WHEEL (ZOOM)
         jQuery(that.scene_.getCanvas()).mousewheel(function (event) {
+            that.scene_.getNavigationHandler().resetAnimationZoom();
             that.scene_.getNavigationHandler().zoomDelta(event.deltaY);
         });
 
