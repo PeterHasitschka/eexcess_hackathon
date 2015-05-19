@@ -30,7 +30,11 @@ GLGR.SimpleCompare = function () {
  * compare after clicking the Compare-Button
  */
 GLGR.SimpleCompare.prototype.handleClick = function () {
-    this.compare();
+
+    if (!GLGR.Scene.getCurrentScene().allow_rec_color_overwrites)
+        this.compare();
+    else
+        GLGR.Scene.getCurrentScene().allow_rec_color_overwrites = false;
 };
 
 

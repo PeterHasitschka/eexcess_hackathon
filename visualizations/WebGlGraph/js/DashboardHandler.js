@@ -155,7 +155,13 @@ GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange = function () {
             }
         }
     }
-
+    
+    
+    //If a compare of graphs was made before, unset the changed colors,
+    //because compare may be wrong now!
+    this.webgl_scene.allow_rec_color_overwrites = false;
+    
+    
     this.webgl_scene.getGraphRelationHandler().setUpdateNeeded(true);
 };
 

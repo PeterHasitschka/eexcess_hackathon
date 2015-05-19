@@ -75,3 +75,17 @@ GLGR.NavigationHandler.prototype.zoomDelta = function (delta_zoom_factor) {
     var zoom = this.scene_.getThreeCamera().zoom + (delta_zoom_factor / 100);
     this.zoom(zoom);
 };
+
+
+
+/**
+ * 
+ * @param {GLGR.Graph} graph
+ * @param {function} callback when ready
+ */
+GLGR.NavigationHandler.prototype.focusGraph = function(graph, cb) {
+    
+    console.log("FOCUSGRAPH: ", graph.getPosition().x, graph.getPosition().y);
+    
+    
+};

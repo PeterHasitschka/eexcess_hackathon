@@ -408,11 +408,13 @@ GLGR.Graph.prototype.handleGraphClick = function () {
 
 
 
+
+
     //Show/Hide compare button
     //GLGR.Scene.getCurrentScene().getSimpleComparer().manageCompareButton();
 
     //Unset all overwritten colors of every rec
-    GLGR.Scene.getCurrentScene().allow_rec_color_overwrites = false;
+    //GLGR.Scene.getCurrentScene().allow_rec_color_overwrites = false;
 
     /*
      if (that.is_graph_collapsed_ === false)
