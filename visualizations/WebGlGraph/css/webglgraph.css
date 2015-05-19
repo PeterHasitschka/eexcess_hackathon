@@ -34,7 +34,7 @@ html, body {
 #webgl_status_bar_content {
     margin: 4px 3px;
     float: left;
-    font-size: 12px;
+    font-size: 10px;
     height: 15px;
     text-align: left;  
 }

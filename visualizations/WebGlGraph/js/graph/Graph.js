@@ -396,7 +396,7 @@ GLGR.Graph.prototype.handleGraphClick = function () {
     //Ignore click if hidden!
     if (!that.getisVisible())
         return;
-    
+
     //Activate on click
     if (!that.is_active_)
     {
@@ -407,7 +407,11 @@ GLGR.Graph.prototype.handleGraphClick = function () {
 
 
 
+    GLGR.Scene.getCurrentScene().getNavigationHandler().focusGraph(that, function () {
 
+        console.log("FOCUSGRAPH: Callback finish!");
+
+    });
 
 
     //Show/Hide compare button

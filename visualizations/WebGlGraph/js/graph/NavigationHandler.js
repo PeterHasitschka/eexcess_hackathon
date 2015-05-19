@@ -60,7 +60,7 @@ GLGR.NavigationHandler.prototype.zoom = function (zoom_factor) {
 
 };
 
-GLGR.NavigationHandler.prototype.getZoomFactor = function() {
+GLGR.NavigationHandler.prototype.getZoomFactor = function () {
     return this.scene_.getThreeCamera().zoom;
 };
 
@@ -71,7 +71,7 @@ GLGR.NavigationHandler.prototype.getZoomFactor = function() {
 GLGR.NavigationHandler.prototype.zoomDelta = function (delta_zoom_factor) {
     //console.log("DELTA-ZOOM-INPUT: " + delta_zoom_factor);
     //console.log("OLD-ZOOM-FACTOR: " + this.scene_.getThreeCamera().zoom);
-    
+
     var zoom = this.scene_.getThreeCamera().zoom + (delta_zoom_factor / 100);
     this.zoom(zoom);
 };
@@ -81,11 +81,16 @@ GLGR.NavigationHandler.prototype.zoomDelta = function (delta_zoom_factor) {
 /**
  * 
  * @param {GLGR.Graph} graph
- * @param {function} callback when ready
+ * @param {function} callback_fct callback when ready
  */
-GLGR.NavigationHandler.prototype.focusGraph = function(graph, cb) {
-    
-    console.log("FOCUSGRAPH: ", graph.getPosition().x, graph.getPosition().y);
-    
-    
+GLGR.NavigationHandler.prototype.focusGraph = function (graph, callback_fct) {
+
+    console.log("FOCUSGRAPH: ", graph.getPosition().x, graph.getPosition().y, this.scene_.getThreeCamera().position.x);
+
+
+    this.setCamera(graph.getPosition().x, graph.getPosition().y);
+    this.zoom(1);
+
+    if (callback_fct)
+        callback_fct();
 };
