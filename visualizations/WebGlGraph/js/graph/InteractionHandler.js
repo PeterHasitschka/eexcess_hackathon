@@ -78,11 +78,18 @@ GLGR.InteractionHandler.prototype.handleInteraction_ = function (event, interact
 
 
 
-    //Deselect all graphs
+    //Deselect all graphs and recs
     for (var i = 0; i < this.scene_.getGraphs().length; i++)
     {
         var curr_graph = this.scene_.getGraphs()[i];
         curr_graph.setIsSelected(false);
+        
+        var recs = curr_graph.getRecommendations();
+        
+        for (var j=0; j < recs.length; j++) {
+            var curr_rec = recs[j];
+            curr_rec.setIsActive(false);
+        }
 
     }
 

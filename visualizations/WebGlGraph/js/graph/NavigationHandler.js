@@ -70,7 +70,7 @@ GLGR.NavigationHandler.prototype.getZoomFactor = function () {
  */
 GLGR.NavigationHandler.prototype.zoomDelta = function (delta_zoom_factor) {
     //console.log("DELTA-ZOOM-INPUT: " + delta_zoom_factor);
-    console.log("OLD-ZOOM-FACTOR: " + this.scene_.getThreeCamera().zoom);
+    //console.log("OLD-ZOOM-FACTOR: " + this.scene_.getThreeCamera().zoom);
     var zoom = this.scene_.getThreeCamera().zoom + (delta_zoom_factor / 100);
     this.zoom(zoom);
 };
@@ -156,7 +156,7 @@ GLGR.NavigationHandler.prototype.performZoomStep_ = function () {
             delta_zoom_step_sqrt *= -1;
         this.zoomDelta(delta_zoom_step_sqrt);
         current_zoom = this.scene_.getThreeCamera().zoom;
-        console.log("FOCUSGRAPH: ", zoom_goal, current_zoom, delta_zoom_step_sqrt);
+        //console.log("FOCUSGRAPH: ", zoom_goal, current_zoom, delta_zoom_step_sqrt);
     }
     else {
         this.zoom(zoom_goal);

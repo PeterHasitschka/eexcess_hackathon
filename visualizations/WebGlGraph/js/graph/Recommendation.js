@@ -57,6 +57,7 @@ GLGR.Recommendation = function (rec_id, rec_data) {
                 node_z: -30,
                 node_radius: 5,
                 node_min_radius: 0.5,
+                node_active_radius: 10,
                 node_color: 0x4444FF,
                 node_color_positive: 0x00CC00,
                 node_color_negative: 0xCC0000,
@@ -83,6 +84,8 @@ GLGR.Recommendation = function (rec_id, rec_data) {
         this.rec_data_ = rec_data;
 
     this.is_initialized_ = false;
+
+    this.is_active_ = false;
 };
 
 
@@ -173,8 +176,19 @@ GLGR.Recommendation.prototype.update = function () {
             );
 
     var curr_scale = curr_val / old_val;
+    
+    
+    //If selected, set other color
+    if (this.is_active_)
+        this.setColorOverwrite(0xFF0000);
+    
+    
 
-    this.webGlObjects_.node.scale.set(curr_scale, curr_scale, curr_scale);
+    if (curr_scale !== 1)
+        this.webGlObjects_.node.scale.set(curr_scale, curr_scale, curr_scale);
+
+
+
 
 
 
@@ -191,7 +205,7 @@ GLGR.Recommendation.prototype.update = function () {
         color_to_set = this.overwrite_color_;
     else
         color_to_set = GLGR.Recommendation.vis_params.node_color;
-    
+
     this.webGlObjects_.node.material.color.setHex(color_to_set);
 
 };
@@ -402,23 +416,10 @@ GLGR.Recommendation.prototype.getUsage = function () {
 GLGR.Recommendation.prototype.handleRecClick = function () {
 
     var that = this.recref;
-
-
+    that.setIsActive(true);
     console.log("REC clicked :", that);
-    //Demo
-    var infoblock = jQuery('#information-container-rec-info');
 
-    if (!infoblock.length)
-        throw ("ERROR: DEMO REC INFO BLOCK NOT EXISTING! CLEAN UP YOUR CODE!");
-
-
-    jQuery('#information-container-rec-info-id').html(that.getId());
-
-    if (that.rec_data_.title !== undefined)
-        jQuery('#information-container-rec-info-title').html(that.rec_data_.title);
-    if (that.rec_data_.url !== undefined)
-        jQuery('#information-container-rec-info-url').html(that.rec_data_.url);
-    infoblock.show();
+   
 
 };
 
@@ -483,4 +484,11 @@ GLGR.Recommendation.prototype.setColorOverwrite = function (color) {
         this.overwrite_color_ = null;
     else
         this.overwrite_color_ = color;
+};
+
+
+GLGR.Recommendation.prototype.setIsActive = function (active) {
+
+    this.is_active_ = active;
+
 };
