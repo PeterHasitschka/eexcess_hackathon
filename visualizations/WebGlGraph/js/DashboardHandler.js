@@ -32,7 +32,7 @@ GLGR.WebGlDashboardHandler.createScene = function (query_data) {
     //@TODO: Fix Problems with parents, then activate!
 
     this.webgl_dbhandler.all_graphs_created_cb = this.cbDbDataLoaded;
-    this.webgl_dbhandler.getAndDrawNewGraphsFromDb(20);
+    this.webgl_dbhandler.getAndDrawNewGraphsFromDb();
 
 
 
