@@ -5,7 +5,7 @@ var GLGR = GLGR || {};
 
 GLGR.InteractionHandler = function (scene) {
 
-    
+
     /** @var {GLGR.Scene} **/
     this.scene_ = scene;
 
@@ -26,9 +26,11 @@ GLGR.InteractionHandler = function (scene) {
         //MOUSE-MOVE (CLICKED)
         var is_mouse_down_in_canvas = false;
         var mouse_x_prev = null;
+        var mouse_y_prev = null;
         jQuery(that.scene_.getCanvas()).mousedown(function (event) {
             is_mouse_down_in_canvas = true;
             mouse_x_prev = event.clientX;
+            mouse_y_prev = event.clientY;
         });
 
         jQuery(window).mouseup(function (event) {
@@ -42,20 +44,22 @@ GLGR.InteractionHandler = function (scene) {
         jQuery(that.scene_.getCanvas()).mousemove(function (event) {
             if (!is_mouse_down_in_canvas)
                 return;
-            
+
             var zoom_factor = 1 / that.scene_.getNavigationHandler().getZoomFactor();
             var curr_mouse_x_diff = 0 - (event.clientX - mouse_x_prev) * zoom_factor;
-            
+            var curr_mouse_y_diff = 0 - (event.clientY - mouse_y_prev) * zoom_factor;
+
             that.scene_.getNavigationHandler().resetAnimationMovement();
-            that.scene_.getNavigationHandler().moveCamera(curr_mouse_x_diff);
+            that.scene_.getNavigationHandler().moveCamera(curr_mouse_x_diff, curr_mouse_y_diff);
             mouse_x_prev = event.clientX;
+            mouse_y_prev = event.clientY;
         });
 
 
         //MOUSE-WHEEL (ZOOM)
         jQuery(that.scene_.getCanvas()).mousewheel(function (event) {
             that.scene_.getNavigationHandler().resetAnimationZoom();
-            that.scene_.getNavigationHandler().zoomDelta(event.deltaY);
+            that.scene_.getNavigationHandler().zoomDelta(event.deltaY * 5);
         });
 
 
@@ -76,13 +80,13 @@ GLGR.InteractionHandler.prototype.handleInteraction_ = function (event, interact
 
     //Deselect all graphs
     /*
-    for (var i=0; i < this.scene_.getGraphs().length; i++)
-    {   
-        var curr_graph = this.scene_.getGraphs()[i];
-        curr_graph.setIsSelected(false);
-       
-    }
-    */
+     for (var i=0; i < this.scene_.getGraphs().length; i++)
+     {   
+     var curr_graph = this.scene_.getGraphs()[i];
+     curr_graph.setIsSelected(false);
+     
+     }
+     */
 
     var intersected = this.getIntersectedObjects_(event);
 
