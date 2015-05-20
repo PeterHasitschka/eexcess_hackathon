@@ -92,42 +92,41 @@ GLGR.NavigationHandler.prototype.performMoveStep_ = function () {
     var curr_x = parseFloat(this.scene_.getThreeCamera().position.x);
     var curr_y = parseFloat(this.scene_.getThreeCamera().position.y);
 
+    var speed = 20;
+    var diff_x = 0;
+    var diff_y = 0;
 
-    if (Math.abs((curr_x - this.moveanimation_.goal.x)) > threshold ||
-            Math.abs((curr_y - this.moveanimation_.goal.y)) > threshold) {
 
 
-        var goal_x = parseFloat(this.moveanimation_.goal.x);
-        var goal_y = parseFloat(this.moveanimation_.goal.y);
+    var goal_x = parseFloat(this.moveanimation_.goal.x);
+    var goal_y = parseFloat(this.moveanimation_.goal.y);
 
-        var speed = 20;
 
-        var diff_x;
-        var diff_y;
 
+    if (Math.abs((curr_x - this.moveanimation_.goal.x)) > threshold) {
         if (curr_x < goal_x)
             diff_x = speed;
         else if (curr_x > goal_x)
             diff_x = speed * -1;
-        else
-            diff_x = 0;
+    }
 
+
+    if (Math.abs((curr_y - this.moveanimation_.goal.y)) > threshold) {
         if (curr_y < goal_y)
             diff_y = speed;
         else if (curr_y > goal_y)
             diff_y = speed * -1;
-        else
-            diff_y = 0;
-
-        /*
-         console.log("FOCUSGRAPH MOVE: ",
-         this.moveanimation_.goal.x, this.moveanimation_.goal.y,
-         curr_x, this.scene_.getThreeCamera().position.y, curr_y,
-         diff_x, diff_y, this.moveanimation_.goal);
-         */
-
-        this.moveCamera(diff_x, diff_y);
     }
+
+    /*
+     console.log("FOCUSGRAPH MOVE: ",
+     this.moveanimation_.goal.x, this.moveanimation_.goal.y,
+     curr_x, this.scene_.getThreeCamera().position.y, curr_y,
+     diff_x, diff_y, this.moveanimation_.goal);
+     */
+    
+    if (diff_x !== 0 || diff_y !== 0)
+        this.moveCamera(diff_x, diff_y);
     else {
         this.setCamera(this.moveanimation_.goal.x, this.moveanimation_.goal.y);
         var cb = this.moveanimation_.cb;
