@@ -95,7 +95,7 @@
         jQuery('#eexcess_main_panel').addClass("webglview");
         $root.append(inner_html);
         
-        
+        jQuery('#eexcess_controls').append("<div id='webgl_plugin_info'><div id='webgl_info_title'></div><div id='webgl_info_content'></div></div>");
 
         
         console.log("GLGRPLUGIN DRAW END");
@@ -109,6 +109,7 @@
 
         console.log("GLGRPLUGIN FINALIZE");
         jQuery('.webgl_select_content').remove();
+        jQuery('#webgl_plugin_info').remove();
         GLGR.WebGlDashboardHandler.destroyScene();
     };
 

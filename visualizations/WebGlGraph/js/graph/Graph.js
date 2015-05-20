@@ -434,7 +434,10 @@ GLGR.Graph.prototype.handleGraphClick = function () {
 
     var status_text = that.graph_name_ + " (ID: " + that.getId() + ")";
 
-    jQuery('#webgl_status_bar_content').html(status_text);
+    //jQuery('#webgl_status_bar_content').html(status_text);
+    
+    jQuery('#webgl_info_title').html('Query/Collection #' + that.getId());
+    jQuery('#webgl_info_content').html('Name: ' + that.graph_name_ + "<br/>");
 
 };
 

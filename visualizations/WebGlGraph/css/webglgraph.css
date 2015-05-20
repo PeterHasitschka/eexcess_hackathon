@@ -65,3 +65,22 @@ html, body {
     max-height:none!important;
 
 }
+
+#eexcess_controls #webgl_plugin_info {
+    height: 213px;
+    width: auto;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #e4e4e4;
+}
+
+#eexcess_controls #webgl_plugin_info #webgl_info_title {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #008746;
+}
+
+#eexcess_controls #webgl_plugin_info #webgl_info_content {
+    text-align: left;
+}
