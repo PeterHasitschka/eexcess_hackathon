@@ -51,10 +51,17 @@ html, body {
 }
 
 
+.eexcess-bookmark-dropdown-list .webgl_select_content a {
+    width: 104px;
+}
+.eexcess-bookmark-dropdown-list .webgl_select_content a:hover {
+    background: rgb(255, 254, 238);
+}
 .eexcess-bookmark-dropdown-list .webgl_select_content, .eexcess-bookmark-dropdown-list .webgl_select_content span {
-    color:red;
-    float:left;
+    color: black;
+    float: left;
     width: 100%;
+    font-size: 9px;
 }
 
 .eexcess-bookmark-dropdown-list .webgl_select_content a, .eexcess-bookmark-dropdown-list .webgl_select_content input {

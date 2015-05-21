@@ -78,50 +78,37 @@ GLGR.WebGlDashboardHandler.fillBookmarkDropdown = function () {
         bookmark_element.append(new_list_element);
 
 
+        //Select / Deselect for displaying graph
         new_list_element.find("input").click(function () {
             GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange();
         });
 
-        new_list_element.find("a").click(function () {
-            var checkbox = jQuery(jQuery(this).siblings("input")[0]);
-            checkbox.prop('checked', !checkbox.prop('checked'));
-            GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange();
 
+
+        //Focus graph on click
+        new_list_element.find("a").click(function () {
+            
+            var graph_id = jQuery(this).parent().attr("graph_id");
+            console.log("focusing graph " + graph_id + " now");
+            
+            /** @type{GLGR.Graph} **/
+            var graph = GLGR.Scene.getCurrentScene().getGraph(graph_id);
+            
+            if (!graph)
+            {
+                console.log("ERROR: Graph " + graph_id + " not found");
+                return;
+            }
+            
+            var interaction_handler = GLGR.Scene.getCurrentScene().getInteractionHandler();
+            interaction_handler.deactivateAllGraphs();
+            
+            graph.selectAndFocus();
+           
         });
     }
 };
 
-/*
- GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange = function (checkbox) {
- var graph_id = checkbox.parent().attr("graph_id");
- 
- if (graph_id === undefined)
- throw("ERROR: COULD NOT FIND GRAPH ID IN DROPDOWN!!!");
- 
- var checkbox_status = checkbox.prop("checked");
- var scene = GLGR.WebGlDashboardHandler.webgl_scene;
- var graphs = scene.getGraphs();
- 
- 
- 
- for (var i = 0; i < graphs.length; i++) {
- var curr_graph = graphs[i];
- 
- 
- if (curr_graph.getId().toString() === graph_id) {
- 
- if (checkbox_status)
- curr_graph.show();
- else
- curr_graph.hide();
- 
- 
- }
- }
- 
- scene.getGraphRelationHandler().setUpdateNeeded(true);
- };
- */
 
 
 GLGR.WebGlDashboardHandler.handleBookmarkCheckboxChange = function () {

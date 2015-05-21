@@ -293,6 +293,13 @@ GLGR.Scene.prototype.getNavigationHandler = function () {
     return this.navigation_handler_;
 };
 
+/**
+ * @returns {GLGR.InteractionHandler}
+ */
+GLGR.Scene.prototype.getInteractionHandler = function () {
+    return this.interaction_handler_;
+};
+
 GLGR.Scene.prototype.getGraphRelationHandler = function () {
     return this.graph_pos_handler_;
 };

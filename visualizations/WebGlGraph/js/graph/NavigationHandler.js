@@ -88,34 +88,28 @@ GLGR.NavigationHandler.prototype.performMoveStep_ = function () {
 
     if (this.moveanimation_.goal.x === null || this.moveanimation_.goal.y === null)
         return;
-    var threshold = 30;
+    var threshold = 2;
     var curr_x = parseFloat(this.scene_.getThreeCamera().position.x);
     var curr_y = parseFloat(this.scene_.getThreeCamera().position.y);
 
-    var speed = 20;
     var diff_x = 0;
     var diff_y = 0;
-
-
 
     var goal_x = parseFloat(this.moveanimation_.goal.x);
     var goal_y = parseFloat(this.moveanimation_.goal.y);
 
+    var time_diff_fact = GLGR.Scene.getCurrentScene().getTimeDelta() / 10;
 
-
-    if (Math.abs((curr_x - this.moveanimation_.goal.x)) > threshold) {
-        if (curr_x < goal_x)
-            diff_x = speed;
-        else if (curr_x > goal_x)
-            diff_x = speed * -1;
+    var dist_x = curr_x - this.moveanimation_.goal.x;
+    if (Math.abs(dist_x) > threshold) {
+        diff_x = Math.sqrt(Math.abs(dist_x)) * -1 * (Math.abs(dist_x) / dist_x);
+        diff_x *= time_diff_fact;
     }
 
-
-    if (Math.abs((curr_y - this.moveanimation_.goal.y)) > threshold) {
-        if (curr_y < goal_y)
-            diff_y = speed;
-        else if (curr_y > goal_y)
-            diff_y = speed * -1;
+    var dist_y = curr_y - this.moveanimation_.goal.y;
+    if (Math.abs(dist_y) > threshold) {
+        diff_y = Math.sqrt(Math.abs(dist_y)) * -1 * (Math.abs(dist_y) / dist_y);
+        diff_y *= time_diff_fact;
     }
 
     /*
@@ -124,7 +118,7 @@ GLGR.NavigationHandler.prototype.performMoveStep_ = function () {
      curr_x, this.scene_.getThreeCamera().position.y, curr_y,
      diff_x, diff_y, this.moveanimation_.goal);
      */
-    
+
     if (diff_x !== 0 || diff_y !== 0)
         this.moveCamera(diff_x, diff_y);
     else {

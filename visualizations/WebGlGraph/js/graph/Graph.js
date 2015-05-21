@@ -397,52 +397,37 @@ GLGR.Graph.prototype.handleGraphClick = function () {
     if (!that.getisVisible())
         return;
 
+    that.selectAndFocus();
+};
+
+GLGR.Graph.prototype.selectAndFocus = function () {
+
     //Activate on click
-    if (!that.is_active_)
+    if (!this.is_active_)
     {
-        that.setIsActive(true);
+        this.setIsActive(true);
     }
 
-    that.setIsSelected(!that.getIsSelected());
+    this.setIsSelected(true);
 
 
 
-    GLGR.Scene.getCurrentScene().getNavigationHandler().focusGraph(that, function () {
+    GLGR.Scene.getCurrentScene().getNavigationHandler().focusGraph(this, function () {
 
         console.log("FOCUSGRAPH: Callback finish!");
 
     });
 
-
-    //Show/Hide compare button
-    //GLGR.Scene.getCurrentScene().getSimpleComparer().manageCompareButton();
-
-    //Unset all overwritten colors of every rec
-    //GLGR.Scene.getCurrentScene().allow_rec_color_overwrites = false;
-
-    /*
-     if (that.is_graph_collapsed_ === false)
-     that.collapseGraph();
-     else
-     that.expandGraph();s
-     */
-
-
-
-    console.log("GRAPH CLICKED :", that);
-
-
-    var status_text = that.graph_name_ + " (ID: " + that.getId() + ")";
+    var status_text = this.graph_name_ + " (ID: " + this.getId() + ")";
 
     //jQuery('#webgl_status_bar_content').html(status_text);
-    
-    jQuery('#webgl_info_title').html('Query/Collection #' + that.getId());
-    
+
+    jQuery('#webgl_info_title').html('Query/Collection #' + this.getId());
+
     var info_content_container = jQuery('#webgl_info_content');
     info_content_container.html("");
-    info_content_container.append('<p>Name: ' + that.graph_name_ + "</p>");
-    info_content_container.append('<p>Results: ' + that.getRecommendations().length + "</p>");
-
+    info_content_container.append('<p>Name: ' + this.graph_name_ + "</p>");
+    info_content_container.append('<p>Results: ' + this.getRecommendations().length + "</p>");
 };
 
 

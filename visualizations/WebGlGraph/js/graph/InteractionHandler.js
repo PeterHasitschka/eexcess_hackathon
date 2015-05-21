@@ -69,6 +69,24 @@ GLGR.InteractionHandler = function (scene) {
 };
 
 
+GLGR.InteractionHandler.prototype.deactivateAllGraphs = function () {
+    //Deselect all graphs and recs
+    for (var i = 0; i < this.scene_.getGraphs().length; i++)
+    {
+        var curr_graph = this.scene_.getGraphs()[i];
+        curr_graph.setIsSelected(false);
+
+        var recs = curr_graph.getRecommendations();
+
+        for (var j = 0; j < recs.length; j++) {
+            var curr_rec = recs[j];
+            curr_rec.setIsActive(false);
+        }
+
+    }
+};
+
+
 /**
  * Calls interaction function on Three-Object if exists
  * @param {event} event 
@@ -77,22 +95,7 @@ GLGR.InteractionHandler = function (scene) {
 GLGR.InteractionHandler.prototype.handleInteraction_ = function (event, interaction_type) {
 
 
-
-    //Deselect all graphs and recs
-    for (var i = 0; i < this.scene_.getGraphs().length; i++)
-    {
-        var curr_graph = this.scene_.getGraphs()[i];
-        curr_graph.setIsSelected(false);
-        
-        var recs = curr_graph.getRecommendations();
-        
-        for (var j=0; j < recs.length; j++) {
-            var curr_rec = recs[j];
-            curr_rec.setIsActive(false);
-        }
-
-    }
-
+    this.deactivateAllGraphs();
 
     var intersected = this.getIntersectedObjects_(event);
 
