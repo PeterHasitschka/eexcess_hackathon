@@ -418,10 +418,6 @@ GLGR.Graph.prototype.selectAndFocus = function () {
 
     });
 
-    var status_text = this.graph_name_ + " (ID: " + this.getId() + ")";
-
-    //jQuery('#webgl_status_bar_content').html(status_text);
-
     jQuery('#webgl_info_title').html('Query/Collection #' + this.getId());
 
     var info_content_container = jQuery('#webgl_info_content');

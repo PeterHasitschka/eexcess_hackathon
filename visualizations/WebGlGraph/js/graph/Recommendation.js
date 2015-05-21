@@ -176,13 +176,13 @@ GLGR.Recommendation.prototype.update = function () {
             );
 
     var curr_scale = curr_val / old_val;
-    
-    
+
+
     //If selected, set other color
     if (this.is_active_)
         this.setColorOverwrite(0xFF0000);
-    
-    
+
+
 
     if (curr_scale !== 1)
         this.webGlObjects_.node.scale.set(curr_scale, curr_scale, curr_scale);
@@ -419,8 +419,20 @@ GLGR.Recommendation.prototype.handleRecClick = function () {
     that.setIsActive(true);
     console.log("REC clicked :", that);
 
-   
+    jQuery('#webgl_info_title').html('Recommendation ' + that.getId());
 
+    var rec_data = that.rec_data_;
+
+    var info_content_container = jQuery('#webgl_info_content');
+    info_content_container.html("");
+    info_content_container.append('<p>Title: ' + rec_data.title + "</p>");
+    info_content_container.append('<p>Collection-Name: ' + rec_data.collectionName + "</p>");
+    info_content_container.append('<p>DB-ID: ' + rec_data.db_id + "</p>");
+    info_content_container.append('<p>EEXCESS-URI: <a target="_blank" href="' + rec_data.eexcessURI + '">LINK</a></p>');
+    info_content_container.append('<p>URL: <a target="_blank" href="' + rec_data.uri + '">LINK</a></p>');
+
+    for (var facet_name in rec_data.facets)
+        info_content_container.append('<p>FACET: "' + facet_name + ': "' + rec_data.facets[facet_name] + '"</p>');
 };
 
 
