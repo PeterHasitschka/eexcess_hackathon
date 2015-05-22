@@ -38,7 +38,7 @@ GLVIS.Collection = function (eexcess_data) {
         status: GLVIS.Collection.STATUSFLAGS.NORMAL,
         position: {
             x: (0.5 - Math.random()) * 100,
-            y: 0
+            y: (0.5 - Math.random()) * 100
         },
         gl_objects: []
     };
@@ -96,6 +96,9 @@ GLVIS.Collection.prototype.render = function () {
 
 
 
+
+
+
 /**
  * Called by interactionhandler. Function registered in mesh-objects
  * @returns {undefined}
@@ -137,6 +140,12 @@ GLVIS.Collection.prototype.setMyGlObjectsDirty_ = function () {
 
     }
 };
+
+
+
+
+
+
 
 
 GLVIS.Collection.prototype.getId = function () {

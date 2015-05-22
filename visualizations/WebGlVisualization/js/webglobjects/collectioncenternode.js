@@ -10,6 +10,8 @@ GLVIS.CollectionCenterNode = function (collection) {
 
     /** @type{GLVIS.Collection} **/
     this.collection_ = collection;
+    
+    this.default_color_ = GLVIS.config.collection.center_node.sphere.color;
 
     this.dirty_ = true;
 
@@ -70,7 +72,7 @@ GLVIS.CollectionCenterNode.prototype.render = function () {
     if (this.collection_.getStatus() === GLVIS.Collection.STATUSFLAGS.SELECTED)
         sphere_color = GLVIS.config.collection.center_node.sphere.select_color;
     else
-        sphere_color = GLVIS.config.collection.center_node.sphere.color;
+        sphere_color = this.default_color_;
 
     this.webgl_objects_.sphere.material.color.setHex(sphere_color);
     

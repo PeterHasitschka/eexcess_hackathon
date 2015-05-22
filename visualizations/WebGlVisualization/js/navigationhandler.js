@@ -6,7 +6,7 @@ var GLVIS = GLVIS || {};
 GLVIS.NavigationHandler = function (scene) {
     /** @type {GLVIS.Scene} **/
     this.scene_ = scene;
-    
+
     this.zoomanimation_ = {
         goal: null,
         cb: null
@@ -30,10 +30,11 @@ GLVIS.NavigationHandler.prototype.setCamera = function (x, y) {
         x = 0;
     if (y === null || y === undefined)
         y = 0;
-    
+
     this.scene_.getWebGlHandler().getCamera().position.x = x;
     this.scene_.getWebGlHandler().getCamera().position.y = y;
 };
+
 /**
  * Move the scene's camera
  * @param {float | null} x
@@ -88,32 +89,22 @@ GLVIS.NavigationHandler.prototype.performMoveStep_ = function () {
 
     if (this.moveanimation_.goal.x === null || this.moveanimation_.goal.y === null)
         return;
-    var threshold = 2;
+
+    var config = GLVIS.config.navigation.move.animated;
+
+    var threshold = config.threshold;
     var curr_x = parseFloat(this.scene_.getWebGlHandler().getCamera().position.x);
     var curr_y = parseFloat(this.scene_.getWebGlHandler().getCamera().position.y);
 
-    var diff_x = 0;
-    var diff_y = 0;
 
     var goal_x = parseFloat(this.moveanimation_.goal.x);
     var goal_y = parseFloat(this.moveanimation_.goal.y);
 
-    var time_diff_fact = this.scene_.getTimeDelta() / 10;
+    var calc_x = GLVIS.AnimationHelper.getStepRoot(curr_x, goal_x, config.root, config.speed_fct, threshold);
+    var calc_y = GLVIS.AnimationHelper.getStepRoot(curr_y, goal_y, config.root, config.speed_fct, threshold);
 
-    var dist_x = curr_x - this.moveanimation_.goal.x;
-    if (Math.abs(dist_x) > threshold) {
-        diff_x = Math.sqrt(Math.abs(dist_x)) * -1 * (Math.abs(dist_x) / dist_x);
-        diff_x *= time_diff_fact;
-    }
-
-    var dist_y = curr_y - this.moveanimation_.goal.y;
-    if (Math.abs(dist_y) > threshold) {
-        diff_y = Math.sqrt(Math.abs(dist_y)) * -1 * (Math.abs(dist_y) / dist_y);
-        diff_y *= time_diff_fact;
-    }
-
-    if (diff_x !== 0 || diff_y !== 0)
-        this.moveCamera(diff_x, diff_y);
+    if (calc_x !== 0 && calc_y !== 0)
+        this.moveCamera(calc_x, calc_y);
     else {
         this.setCamera(this.moveanimation_.goal.x, this.moveanimation_.goal.y);
         var cb = this.moveanimation_.cb;
@@ -123,6 +114,9 @@ GLVIS.NavigationHandler.prototype.performMoveStep_ = function () {
     }
 }
 ;
+
+
+
 /**
  * Do an animated zoom step called by perfomMovements
  */
@@ -131,20 +125,19 @@ GLVIS.NavigationHandler.prototype.performZoomStep_ = function () {
     if (this.zoomanimation_.goal === null)
         return;
     var zoom_goal = this.zoomanimation_.goal;
-    var threshold = 0.0001;
-    var speed_root = 1.5;
-    var speed_fct = 3;
-    var current_zoom = this.scene_.getWebGlHandler().getCamera().zoom;
-    if (Math.abs((current_zoom - zoom_goal)) > threshold) {
 
-        var delta_zoom_step = 1.0 - ((parseFloat(current_zoom) / parseFloat(zoom_goal)));
-        var delta_zoom_step_sqrt = Math.pow(Math.abs(delta_zoom_step), 1 / speed_root) * speed_fct;
-        if (delta_zoom_step < 0)
-            delta_zoom_step_sqrt *= -1;
-        this.zoomDelta(delta_zoom_step_sqrt);
-        current_zoom = this.scene_.getWebGlHandler().getCamera().zoom;
-    }
-    else {
+    var config = GLVIS.config.navigation.zoom.animated;
+    var threshold = config.threshold;
+    var speed_root = config.speed_root;
+    var speed_fct = config.speed_fct;
+
+    var current_zoom = this.scene_.getWebGlHandler().getCamera().zoom;
+
+    var zoom = GLVIS.AnimationHelper.getStepRoot(current_zoom, zoom_goal, speed_root, speed_fct, threshold);
+    this.zoomDelta(zoom);
+
+    if (zoom === 0)
+    {
         this.zoom(zoom_goal);
         var cb = this.zoomanimation_.cb;
         this.resetAnimationZoom();

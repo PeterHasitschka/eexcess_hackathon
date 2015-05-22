@@ -31,6 +31,22 @@ GLVIS.config = {
             init_distance: 150,
             collapse_distance: 15
         }
+    },
+    navigation: {
+        zoom: {
+            animated: {
+                threshold: 0.0001,
+                speed_root: 1.5,
+                speed_fct: 1
+            }
+        },
+        move: {
+            animated: {
+                threshold: 0.1,
+                root: 2,
+                speed_fct: 1
+            }
+        }
     }
 
 };
