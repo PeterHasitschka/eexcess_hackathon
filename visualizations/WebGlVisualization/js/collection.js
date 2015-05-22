@@ -76,10 +76,10 @@ GLVIS.Collection.prototype.initGlNode = function () {
 
 
 GLVIS.Collection.prototype.render = function () {
-    
+
     if (!this.dirty_)
         return;
-    
+
     if (GLVIS.config.debug)
         console.log("Collection with id " + this.id_ + " rendered!");
 
@@ -87,7 +87,7 @@ GLVIS.Collection.prototype.render = function () {
     for (var key in this.vis_data_.gl_objects) {
         this.vis_data_.gl_objects[key].render();
     }
-    
+
     this.dirty_ = false;
 };
 
@@ -95,6 +95,48 @@ GLVIS.Collection.prototype.render = function () {
 
 
 
+
+/**
+ * Called by interactionhandler. Function registered in mesh-objects
+ * @returns {undefined}
+ */
+GLVIS.Collection.prototype.handleClick = function () {
+    /** @type {GLVIS.Collection} **/
+    var that = this.collection;
+
+    if (that.getStatus() === GLVIS.Collection.STATUSFLAGS.HIDDEN)
+        return;
+
+    that.selectAndFocus();
+};
+
+
+GLVIS.Collection.prototype.selectAndFocus = function () {
+
+    this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
+
+
+    GLVIS.Scene.getCurrentScene().getNavigationHandler().focusCollection(this, function () {
+
+        console.log("FOCUSGRAPH: Callback finish!");
+
+    });
+
+    jQuery('#webgl_info_title').html('Query/Collection #' + this.getId());
+
+    var info_content_container = jQuery('#webgl_info_content');
+    info_content_container.html("");
+    info_content_container.append('<p>Name: ' + this.graph_name_ + "</p>");
+    info_content_container.append('<p>Results: ' + this.getResults().length + "</p>");
+};
+
+
+GLVIS.Collection.prototype.setMyGlObjectsDirty_ = function () {
+    for (var key in this.vis_data_.gl_objects) {
+        this.vis_data_.gl_objects[key].setIsDirty(true);
+
+    }
+};
 
 
 GLVIS.Collection.prototype.getId = function () {
@@ -104,6 +146,38 @@ GLVIS.Collection.prototype.getId = function () {
 GLVIS.Collection.prototype.getPosition = function () {
     return this.vis_data_.position;
 };
+
+GLVIS.Collection.prototype.getResults = function () {
+    return this.results_;
+};
+
+
+
+
+/**
+ * Set the status of the collection.
+ * See @see{GLVIS.Collection.STATUSFLAGS}
+ * @param {type} status
+ * @returns {undefined}
+ */
+GLVIS.Collection.prototype.setStatus = function (status) {
+
+    if (status === this.vis_data_.status)
+        return;
+    
+    this.dirty_ = true;
+    this.vis_data_.status = status;
+    
+    //Status change also means change of visual representation
+    this.setMyGlObjectsDirty_();
+
+};
+
+
+GLVIS.Collection.prototype.getStatus = function () {
+    return this.vis_data_.status;
+};
+
 
 
 

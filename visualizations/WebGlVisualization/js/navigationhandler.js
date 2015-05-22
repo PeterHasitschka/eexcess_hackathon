@@ -112,12 +112,6 @@ GLVIS.NavigationHandler.prototype.performMoveStep_ = function () {
         diff_y *= time_diff_fact;
     }
 
-    /*
-     console.log("FOCUSGRAPH MOVE: ",
-     this.moveanimation_.goal.x, this.moveanimation_.goal.y,
-     diff_x, diff_y, this.moveanimation_.goal);
-     */
-
     if (diff_x !== 0 || diff_y !== 0)
         this.moveCamera(diff_x, diff_y);
     else {
@@ -149,7 +143,6 @@ GLVIS.NavigationHandler.prototype.performZoomStep_ = function () {
             delta_zoom_step_sqrt *= -1;
         this.zoomDelta(delta_zoom_step_sqrt);
         current_zoom = this.scene_.getWebGlHandler().getCamera().zoom;
-        //console.log("FOCUSGRAPH: ", zoom_goal, current_zoom, delta_zoom_step_sqrt);
     }
     else {
         this.zoom(zoom_goal);
@@ -196,15 +189,13 @@ GLVIS.NavigationHandler.prototype.resetAnimationZoom = function () {
 
 /**
  * 
- * @param {GLVIS.Graph} graph
+ * @param {GLVIS.Collection} collection
  * @param {function} callback_fct callback when ready
  */
-/*
-GLVIS.NavigationHandler.prototype.focusGraph = function (graph, callback_fct) {
-
+GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callback_fct) {
     var that = this;
     this.animatedZoom(0.4, function () {
-        that.animatedMovement(graph.getPosition().x, graph.getPosition().y, function () {
+        that.animatedMovement(collection.getPosition().x, collection.getPosition().y, function () {
             console.log("Finished movement to graph");
             that.animatedZoom(1, function () {
                 console.log("finished zoom to 1");
@@ -212,9 +203,6 @@ GLVIS.NavigationHandler.prototype.focusGraph = function (graph, callback_fct) {
         });
     });
 
-    //this.zoom(1);
-
     if (callback_fct)
         callback_fct();
 };
-*/

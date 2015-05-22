@@ -72,24 +72,22 @@ GLVIS.InteractionHandler = function (scene) {
 
 
 GLVIS.InteractionHandler.prototype.deactivateAllCollections = function () {
-    //Deselect all graphs and recs
-    
-    /*
-    for (var i = 0; i < this.scene_.getGraphs().length; i++)
+    //Deselect all collections
+
+    for (var i = 0; i < this.scene_.getCollections().length; i++)
     {
-        var curr_graph = this.scene_.getGraphs()[i];
-        curr_graph.setIsSelected(false);
+        var curr_coll = this.scene_.getCollections()[i];
+        curr_coll.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
 
-        var recs = curr_graph.getRecommendations();
+        var results = curr_coll.getResults();
 
-        for (var j = 0; j < recs.length; j++) {
-            var curr_rec = recs[j];
-            curr_rec.setIsActive(false);
+        for (var j = 0; j < results.length; j++) {
+            var curr_res = results[j];
+            //curr_res.setIsActive(false);
         }
 
     }
     
-    */
 };
 
 
@@ -105,14 +103,16 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
     for (var i_count = 0; i_count < intersected.length; i_count++)
     {
         var curr_intersect_obj = intersected[i_count].object;
-        if (curr_intersect_obj.interaction_handlers instanceof Object)
-        {
+        
+        if (curr_intersect_obj.interaction instanceof Object)
+        {   
+            
             if (
-                    curr_intersect_obj.interaction_handlers[interaction_type] !== undefined &&
-                    curr_intersect_obj.interaction_handlers[interaction_type] !== null
+                    curr_intersect_obj.interaction[interaction_type] !== undefined &&
+                    curr_intersect_obj.interaction[interaction_type] !== null
                     )
             {
-                curr_intersect_obj.interaction_handlers[interaction_type](curr_intersect_obj);
+                curr_intersect_obj.interaction[interaction_type](curr_intersect_obj);
             }
         }
     }

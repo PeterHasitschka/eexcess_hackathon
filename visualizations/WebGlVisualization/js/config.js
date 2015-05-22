@@ -23,7 +23,8 @@ GLVIS.config = {
                 segments: 4,
                 rings: 8,
                 z_value: -20,
-                color: 0x1d904e
+                color: 0x1d904e,
+                select_color: 0xFF0000
             }
         },
         result: {

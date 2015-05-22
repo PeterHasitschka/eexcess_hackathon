@@ -39,11 +39,6 @@ GLVIS.Scene = function (canvas) {
 
 GLVIS.Scene.prototype.render = function () {
 
-    if (GLVIS.config.debug)
-        console.log("RENDER SCENE");
-
-
-
     //Set Time Delta for performance-independent animation speed
     this.time_.current = this.time_.current || Date.now();
     var now = Date.now();
@@ -57,6 +52,9 @@ GLVIS.Scene.prototype.render = function () {
         this.collections_[i].render();
     }
     this.webgl_handler_.render();
+    
+    
+    this.navigation_handler_.performAnimations();
 };
 
 /**
@@ -67,6 +65,13 @@ GLVIS.Scene.prototype.addCollection = function (collection) {
     this.collections_.push(collection);
 };
 
+/**
+ * Returning all registered collections
+ * @returns {Array}
+ */
+GLVIS.Scene.prototype.getCollections = function () {
+    return this.collections_;
+};
 
 
 
