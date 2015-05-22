@@ -9,17 +9,23 @@ var GLVIS = GLVIS || {};
  */
 GLVIS.Scene = function (canvas) {
 
+    if (GLVIS.Scene.current_scene)
+        throw new ("ERROR! ALREADY SCENE REGISTERED AS CURRENT SCENE!");
+    GLVIS.Scene.current_scene = this;
 
-    this.interaction_handler_ = null;
-    this.navigation_handler_ = null;
+
+    /** @type {GLVIS.NavigationHandler} **/
+    this.navigation_handler_ = new GLVIS.NavigationHandler(this);
     this.db_handler_ = null;
     this.recdashboard_handler = null;
 
     /** @type{GLVIS.WebGlHandler} **/
     this.webgl_handler_ = new GLVIS.WebGlHandler(canvas);
 
+    /** @type {GLVIS.InteractionHandler} **/
+    this.interaction_handler_ = new GLVIS.InteractionHandler(this);
 
-    this.time = {
+    this.time_ = {
         current: null,
         delta: null
     };
@@ -36,11 +42,20 @@ GLVIS.Scene.prototype.render = function () {
     if (GLVIS.config.debug)
         console.log("RENDER SCENE");
 
+
+
+    //Set Time Delta for performance-independent animation speed
+    this.time_.current = this.time_.current || Date.now();
+    var now = Date.now();
+    this.time_.delta = now - this.time_.current;
+    this.time_.current = Date.now();
+
+
+
+
     for (var i = 0; i < this.collections_.length; i++) {
         this.collections_[i].render();
     }
-
-
     this.webgl_handler_.render();
 };
 
@@ -50,4 +65,59 @@ GLVIS.Scene.prototype.render = function () {
  */
 GLVIS.Scene.prototype.addCollection = function (collection) {
     this.collections_.push(collection);
+};
+
+
+
+
+
+
+/**
+ * Getter for the WebGlHandler
+ * @returns {GLVIS.WebGlHandler}
+ */
+GLVIS.Scene.prototype.getWebGlHandler = function () {
+    return this.webgl_handler_;
+};
+
+/**
+ * Getter for the NavigationHandler
+ * @returns {GLVIS.NavigationHandler}
+ */
+GLVIS.Scene.prototype.getNavigationHandler = function () {
+    return this.navigation_handler_;
+};
+
+
+/**
+ * 
+ * @returns {float} Time Delta for calculating animation steps
+ */
+GLVIS.Scene.prototype.getTimeDelta = function () {
+    return this.time_.delta;
+    //return 10;
+};
+
+
+
+
+
+/******************
+ * 
+ * Static functions
+ * 
+ ******************/
+
+
+GLVIS.Scene.current_scene = null;
+
+/**
+ * Get current scene
+ * @returns {GLVIS.Scene}
+ */
+GLVIS.Scene.getCurrentScene = function () {
+    if (!this.current_scene)
+        throw("ERROR: NO CURRENT SCENE!");
+
+    return this.current_scene;
 };

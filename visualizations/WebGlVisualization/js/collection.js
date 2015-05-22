@@ -29,7 +29,7 @@ GLVIS.Collection = function (eexcess_data) {
     /**
      * True if collection changed and needs to be re-rendered
      */
-    this.dirty_ = false;
+    this.dirty_ = true;
 
     /**
      * Everything related to visualization
@@ -37,7 +37,7 @@ GLVIS.Collection = function (eexcess_data) {
     this.vis_data_ = {
         status: GLVIS.Collection.STATUSFLAGS.NORMAL,
         position: {
-            x: 0,
+            x: (0.5 - Math.random()) * 100,
             y: 0
         },
         gl_objects: []
@@ -49,16 +49,16 @@ GLVIS.Collection = function (eexcess_data) {
     this.connections_ = {
         to_collection: []
     };
-    
+
     /**
      * Holding all results from the query / collection
      */
     this.results_ = [];
-    
-    
+
+
     this.initGlNode();
-    
-    
+
+
     if (GLVIS.config.debug)
         console.log("Collection with id " + this.id_ + " created!");
 };
@@ -67,22 +67,43 @@ GLVIS.Collection = function (eexcess_data) {
  * Creating a node in the center of the collection
  * @returns {undefined}
  */
-GLVIS.Collection.prototype.initGlNode = function(){
-    
+GLVIS.Collection.prototype.initGlNode = function () {
+
     var gl_node = new GLVIS.CollectionCenterNode(this);
     this.vis_data_.gl_objects.push(gl_node);
 };
 
 
 
-GLVIS.Collection.prototype.render = function(){
-  
-  if (GLVIS.config.debug)
-        console.log("Collection with id " + this.id_ + " rendered!");
+GLVIS.Collection.prototype.render = function () {
     
+    if (!this.dirty_)
+        return;
+    
+    if (GLVIS.config.debug)
+        console.log("Collection with id " + this.id_ + " rendered!");
+
+    //Render all Gl-Objectss
+    for (var key in this.vis_data_.gl_objects) {
+        this.vis_data_.gl_objects[key].render();
+    }
+    
+    this.dirty_ = false;
 };
 
 
+
+
+
+
+
+GLVIS.Collection.prototype.getId = function () {
+    return this.id_;
+};
+
+GLVIS.Collection.prototype.getPosition = function () {
+    return this.vis_data_.position;
+};
 
 
 

@@ -9,7 +9,7 @@ GLVIS.WebGlHandler = function (canvas) {
     this.three_ = {
         scene: null,
         renderer: null,
-        camera : null
+        camera: null
     };
 
     this.cameraconfig_ = GLVIS.config.three.camera;
@@ -66,7 +66,7 @@ GLVIS.WebGlHandler.prototype.createRenderer = function () {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setClearColor(background_color);
     this.canvas_.html(renderer.domElement);
-    
+
     this.three_.renderer = renderer;
 };
 
@@ -75,6 +75,39 @@ GLVIS.WebGlHandler.prototype.createRenderer = function () {
 /**
  * Calling the THREE-JS Render function
  */
-GLVIS.WebGlHandler.prototype.render = function(){
-        this.three_.renderer.render(this.three_.scene, this.three_.camera);
+GLVIS.WebGlHandler.prototype.render = function () {
+    this.three_.renderer.render(this.three_.scene, this.three_.camera);
+};
+
+/**
+ * 
+ * @returns {Three.Scene}
+ */
+GLVIS.WebGlHandler.prototype.getThreeScene = function () {
+    return this.three_.scene;
+};
+
+/**
+ * 
+ * @returns {Three.Renderer}
+ */
+GLVIS.WebGlHandler.prototype.getThreeRenderer = function () {
+    return this.three_.renderer;
+};
+
+/**
+ * 
+ * @returns {Three.Camera}
+ */
+GLVIS.WebGlHandler.prototype.getCamera = function () {
+    return this.three_.camera;
+};
+
+
+/**
+ * 
+ * @returns Canvas
+ */
+GLVIS.WebGlHandler.prototype.getCanvas = function () {
+    return this.canvas_;
 };
