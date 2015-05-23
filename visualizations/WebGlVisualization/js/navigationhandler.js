@@ -103,7 +103,7 @@ GLVIS.NavigationHandler.prototype.performMoveStep_ = function () {
     var calc_x = GLVIS.AnimationHelper.getStepRoot(curr_x, goal_x, config.root, config.speed_fct, threshold);
     var calc_y = GLVIS.AnimationHelper.getStepRoot(curr_y, goal_y, config.root, config.speed_fct, threshold);
 
-    if (calc_x !== 0 && calc_y !== 0)
+    if (calc_x !== 0 || calc_y !== 0)
         this.moveCamera(calc_x, calc_y);
     else {
         this.setCamera(this.moveanimation_.goal.x, this.moveanimation_.goal.y);
