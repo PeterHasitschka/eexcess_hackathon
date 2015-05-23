@@ -36,6 +36,8 @@ GLVIS.Collection = function (eexcess_data) {
      */
     this.vis_data_ = {
         status: GLVIS.Collection.STATUSFLAGS.NORMAL,
+        //Position is stuff that belongs to the collection and not in the node.
+        //Because several visual repr. should be able to use it
         position: {
             x: (0.5 - Math.random()) * 100,
             y: (0.5 - Math.random()) * 100
@@ -62,6 +64,19 @@ GLVIS.Collection = function (eexcess_data) {
     if (GLVIS.config.debug)
         console.log("Collection with id " + this.id_ + " created!");
 };
+
+
+
+/**
+ * 
+ * @param {GLVIS.Result} result Result object to add
+ */
+GLVIS.Collection.prototype.addResult = function (result) {
+    result.setCollection(this);
+    this.results_.push(result);
+};
+
+
 
 /**
  * Creating a node in the center of the collection
@@ -173,10 +188,10 @@ GLVIS.Collection.prototype.setStatus = function (status) {
 
     if (status === this.vis_data_.status)
         return;
-    
+
     this.dirty_ = true;
     this.vis_data_.status = status;
-    
+
     //Status change also means change of visual representation
     this.setMyGlObjectsDirty_();
 

@@ -63,7 +63,7 @@ GLVIS.CollectionCenterNode.prototype.render = function () {
         return;
 
     if (GLVIS.config.debug)
-        console.log("Rendering GRAPH CENTER-NODE  for collection " + this.collection_.getId());
+        console.log("Rendering COLLECTION CENTER-NODE  for collection " + this.collection_.getId());
 
 
 

@@ -106,7 +106,6 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
         
         if (curr_intersect_obj.interaction instanceof Object)
         {   
-            
             if (
                     curr_intersect_obj.interaction[interaction_type] !== undefined &&
                     curr_intersect_obj.interaction[interaction_type] !== null
