@@ -57,6 +57,12 @@ GLVIS.Collection = function (eexcess_data) {
      */
     this.results_ = [];
 
+    /**
+     * Handles the positions of the results
+     * @type{GLVIS.ResultPosDistributed} 
+     */
+    this.result_position_handler_ = new GLVIS.ResultPosDistributed(this);
+
 
     this.initGlNode();
 
@@ -74,6 +80,9 @@ GLVIS.Collection = function (eexcess_data) {
 GLVIS.Collection.prototype.addResult = function (result) {
     result.setCollection(this);
     this.results_.push(result);
+    
+    this.result_position_handler_.calculatePositions();
+    
 };
 
 

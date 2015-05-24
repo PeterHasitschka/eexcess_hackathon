@@ -66,7 +66,7 @@ GLVIS.ResultCommonNode.prototype.render = function () {
     if (GLVIS.config.debug)
         console.log("Rendering RESULT COMMONG-NODE  for result " + this.result_.getId());
     
-    
+        
     var pos = this.result_.getPosition();
 
     var z_pos = GLVIS.config.collection.result.common_node.z_value;
