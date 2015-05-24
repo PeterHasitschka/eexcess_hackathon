@@ -11,6 +11,10 @@ jQuery(document).ready(function () {
     var r2 = new GLVIS.Result();
     var r3 = new GLVIS.Result();
     
+    g1.addResult(r1);
+    g1.addResult(r2);
+    g1.addResult(r3);
+    
     my_scene.addCollection(g1);
     my_scene.addCollection(g2);
     

@@ -102,6 +102,13 @@ GLVIS.Collection.prototype.render = function () {
     for (var key in this.vis_data_.gl_objects) {
         this.vis_data_.gl_objects[key].render();
     }
+    
+    //Render all results
+    for (var i=0; i< this.results_.length; i++){
+        /** @type {GLVIS.Result} **/
+        var curr_res = this.results_[i];
+        curr_res.render();
+    }
 
     this.dirty_ = false;
 };

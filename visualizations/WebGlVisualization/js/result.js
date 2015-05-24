@@ -76,6 +76,27 @@ GLVIS.Result.prototype.initGlNode = function () {
 
 
 
+GLVIS.Result.prototype.render = function () {
+    
+    console.log("Render res called... ");
+    if (!this.dirty_)
+        return;
+
+    if (GLVIS.config.debug)
+        console.log("Result with id " + this.id_ + " rendered!");
+
+    //Render all Gl-Objectss
+    for (var key in this.vis_data_.gl_objects) {
+        this.vis_data_.gl_objects[key].render();
+    }
+
+    this.dirty_ = false;
+};
+
+
+
+
+
 /**
  * Setting the collection that the result belongs to
  * @param {GLVIS.Collection} collection Collection;
@@ -101,6 +122,47 @@ GLVIS.Result.prototype.handleClick = function () {
 
 
 
+
+
+GLVIS.Result.prototype.getStatus = function () {
+    return this.vis_data_.status;
+};
+
+/**
+ * Set the status of the collection.
+ * See @see{GLVIS.Collection.STATUSFLAGS}
+ * @param {type} status
+ * @returns {undefined}
+ */
+GLVIS.Result.prototype.setStatus = function (status) {
+
+    if (status === this.vis_data_.status)
+        return;
+
+    this.dirty_ = true;
+    this.vis_data_.status = status;
+
+    //Status change also means change of visual representation
+    this.setMyGlObjectsDirty_();
+
+};
+
+
+GLVIS.Result.prototype.setMyGlObjectsDirty_ = function () {
+    for (var key in this.vis_data_.gl_objects) {
+        this.vis_data_.gl_objects[key].setIsDirty(true);
+    }
+};
+
+
+GLVIS.Result.prototype.getPosition = function () {
+    return this.vis_data_.relative_position;
+};
+
+
+GLVIS.Result.prototype.getId = function(){
+    return this.id_;
+};
 
 /******************
  * 
