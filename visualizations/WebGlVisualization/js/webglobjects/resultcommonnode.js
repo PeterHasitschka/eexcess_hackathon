@@ -66,9 +66,19 @@ GLVIS.ResultCommonNode.prototype.render = function () {
     if (GLVIS.config.debug)
         console.log("Rendering RESULT COMMONG-NODE  for result " + this.result_.getId());
     
+    
+    
         
-    var pos = this.result_.getPosition();
-
+    var rel_pos = this.result_.getPosition();
+    var collection = this.result_.getCollection();
+    var coll_pos = collection.getPosition();
+    
+    var pos = {
+        x:rel_pos.x + coll_pos.x,
+        y:rel_pos.y + coll_pos.y
+    };
+    
+    
     var z_pos = GLVIS.config.collection.result.common_node.z_value;
     this.webgl_objects_.sphere.position.set(
             pos.x,

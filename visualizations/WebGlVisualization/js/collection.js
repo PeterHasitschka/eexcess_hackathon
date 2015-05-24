@@ -205,9 +205,10 @@ GLVIS.Collection.prototype.setStatus = function (status) {
     if (status === this.vis_data_.status)
         return;
 
-    this.dirty_ = true;
     this.vis_data_.status = status;
 
+
+    this.dirty_ = true;
     //Status change also means change of visual representation
     this.setMyGlObjectsDirty_();
 

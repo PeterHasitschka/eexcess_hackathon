@@ -123,6 +123,13 @@ GLVIS.Result.prototype.handleClick = function () {
 
 
 
+/**
+ * Return parent-collection
+ * @returns {GLVIS.Collection}
+ */
+GLVIS.Result.prototype.getCollection = function () {
+    return this.collection_;
+};
 
 GLVIS.Result.prototype.getStatus = function () {
     return this.vis_data_.status;
@@ -159,6 +166,17 @@ GLVIS.Result.prototype.getPosition = function () {
     return this.vis_data_.relative_position;
 };
 
+
+
+GLVIS.Result.prototype.setRelativePosition = function (x,y) {
+  
+  this.vis_data_.relative_position.x = x;
+  this.vis_data_.relative_position.y = y;
+  
+  //Force redraw of node
+  this.dirty_ = true;
+  this.setMyGlObjectsDirty_();
+};
 
 GLVIS.Result.prototype.getId = function(){
     return this.id_;
