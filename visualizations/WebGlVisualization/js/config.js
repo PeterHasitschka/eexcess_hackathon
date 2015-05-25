@@ -47,6 +47,14 @@ GLVIS.config = {
             }
         }
     },
+    connection: {
+        result_collection: {
+            width: 1,
+            bold_width: 3,
+            color: 0x668866,
+            z: -50
+        }
+    },
     navigation: {
         zoom: {
             animated: {

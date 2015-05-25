@@ -103,7 +103,6 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
     for (var i_count = 0; i_count < intersected.length; i_count++)
     {
         var curr_intersect_obj = intersected[i_count].object;
-        console.log(curr_intersect_obj);
         if (curr_intersect_obj.interaction instanceof Object)
         {   
             if (

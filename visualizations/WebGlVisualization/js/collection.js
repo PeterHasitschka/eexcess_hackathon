@@ -168,7 +168,6 @@ GLVIS.Collection.prototype.selectAndFocus = function () {
 GLVIS.Collection.prototype.setMyGlObjectsDirty_ = function () {
     for (var key in this.vis_data_.gl_objects) {
         this.vis_data_.gl_objects[key].setIsDirty(true);
-
     }
 };
 

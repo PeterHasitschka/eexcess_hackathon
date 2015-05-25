@@ -57,12 +57,6 @@ GLVIS.Result = function (eexcess_data) {
 };
 
 
-/**
- * Gives the result an initial position
- */
-GLVIS.Result.prototype.initPosition = function () {
-
-};
 
 /**
  * Creating a common-node for representing the result
@@ -72,6 +66,9 @@ GLVIS.Result.prototype.initGlNode = function () {
 
     var gl_node = new GLVIS.ResultCommonNode(this);
     this.vis_data_.gl_objects.push(gl_node);
+    
+    var gl_connection = new GLVIS.ConnectionCollectionResult(this);
+    this.vis_data_.gl_objects.push(gl_connection);
 };
 
 
@@ -162,10 +159,29 @@ GLVIS.Result.prototype.setMyGlObjectsDirty_ = function () {
 };
 
 
-GLVIS.Result.prototype.getPosition = function () {
+/**
+ * Get Relative position to the collection
+ * @returns {GLVIS.Result.prototype.getPosition.pos}
+ */
+GLVIS.Result.prototype.getRelativePosition = function () {
     return this.vis_data_.relative_position;
 };
 
+
+/**
+ * Get Absolute position
+ * @returns {GLVIS.Result.prototype.getPosition.pos}
+ */
+GLVIS.Result.prototype.getPosition = function(){
+    var coll_pos = this.getCollection().getPosition();
+    
+    var pos = {
+        x:this.vis_data_.relative_position.x + coll_pos.x,
+        y:this.vis_data_.relative_position.y + coll_pos.y
+    };
+    
+    return pos;
+};
 
 
 GLVIS.Result.prototype.setRelativePosition = function (x,y) {
