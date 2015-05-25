@@ -82,16 +82,11 @@ GLVIS.ResultCommonNode.prototype.render = function () {
 
 
     var curr_radius = this.result_.getRadius();
-
-
-
     scale_factor = curr_radius / this.init_radius_;
-
-
     this.webgl_objects_.sphere.scale.set(scale_factor, scale_factor, scale_factor);
 
 
-
+    this.webgl_objects_.sphere.material.opacity = this.result_.getOpacity();
 
 };
 

@@ -37,7 +37,8 @@ GLVIS.Result = function (eexcess_data) {
             y: 0
         },
         radius: GLVIS.config.collection.result.radius,
-        color: GLVIS.config.collection.result.color
+        color: GLVIS.config.collection.result.color,
+        opacity: 1
         ,
         gl_objects: []
     };
@@ -160,7 +161,7 @@ GLVIS.Result.prototype.setMyGlObjectsDirty_ = function () {
     for (var key in this.vis_data_.gl_objects) {
         this.vis_data_.gl_objects[key].setIsDirty(true);
     }
-    
+
     //Collection needs rendering too to reach result
     this.collection_.setIsDirty(true);
 };
@@ -203,16 +204,39 @@ GLVIS.Result.prototype.setRelativePosition = function (x, y) {
 
 
 GLVIS.Result.prototype.setRadius = function (radius) {
+    if (this.vis_data_.radius === radius)
+        return;
+
     this.vis_data_.radius = radius;
     this.dirty_ = true;
     this.setMyGlObjectsDirty_();
 };
 
+/**
+ * 
+ * @param {integer} color e.g. 0xFF0000
+ */
 GLVIS.Result.prototype.setColor = function (color) {
+    if (this.vis_data_.color === color)
+        return;
+
     this.vis_data_.color = color;
     this.dirty_ = true;
     this.setMyGlObjectsDirty_();
 };
+
+/**
+ * @param {float} opacity 0 - Transparent, 1 - Full visible
+ */
+GLVIS.Result.prototype.setOpacity = function (opacity) {
+    if (this.vis_data_.opacity === opacity)
+        return;    
+    
+    this.vis_data_.opacity = opacity;
+    this.dirty_ = true;
+    this.setMyGlObjectsDirty_();
+};
+
 
 GLVIS.Result.prototype.getRadius = function () {
     return this.vis_data_.radius;
@@ -222,7 +246,9 @@ GLVIS.Result.prototype.getColor = function () {
     return this.vis_data_.color;
 };
 
-
+GLVIS.Result.prototype.getOpacity = function () {
+    return this.vis_data_.opacity;
+};
 
 GLVIS.Result.prototype.getId = function () {
     return this.id_;
