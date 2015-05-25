@@ -15,7 +15,6 @@ GLVIS.ResultPosDistributed = function(collection){
 
 
 GLVIS.ResultPosDistributed.prototype.calculatePositions = function() {
-    console.log("TODO: Distribute Positions of results...");
     
     var results = this.collection_.getResults();
     var res_config = GLVIS.config.collection.result;   

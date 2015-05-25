@@ -17,14 +17,16 @@ GLVIS.Scene = function (canvas) {
     /** @type {GLVIS.NavigationHandler} **/
     this.navigation_handler_ = new GLVIS.NavigationHandler(this);
     this.db_handler_ = null;
-    this.recdashboard_handler = null;
+    
+    /** @type {GLVIS.RecDashboardHandler} **/
+    this.recdashboard_handler_ = new GLVIS.RecDashboardHandler();
 
     /** @type{GLVIS.WebGlHandler} **/
     this.webgl_handler_ = new GLVIS.WebGlHandler(canvas);
 
     /** @type {GLVIS.InteractionHandler} **/
     this.interaction_handler_ = new GLVIS.InteractionHandler(this);
-
+    
     this.time_ = {
         current: null,
         delta: null
@@ -93,6 +95,13 @@ GLVIS.Scene.prototype.getNavigationHandler = function () {
     return this.navigation_handler_;
 };
 
+/**
+ * Getter for the Rec-Dashboard-Handler
+ * @returns {GLVIS.RecDashboardHandler}
+ */
+GLVIS.Scene.prototype.getRecDashboardHandler = function () {
+    return this.recdashboard_handler_;
+};
 
 /**
  * 

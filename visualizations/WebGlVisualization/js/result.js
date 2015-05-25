@@ -66,7 +66,7 @@ GLVIS.Result.prototype.initGlNode = function () {
 
     var gl_node = new GLVIS.ResultCommonNode(this);
     this.vis_data_.gl_objects.push(gl_node);
-    
+
     var gl_connection = new GLVIS.ConnectionCollectionResult(this);
     this.vis_data_.gl_objects.push(gl_connection);
 };
@@ -74,8 +74,7 @@ GLVIS.Result.prototype.initGlNode = function () {
 
 
 GLVIS.Result.prototype.render = function () {
-    
-    console.log("Render res called... ");
+
     if (!this.dirty_)
         return;
 
@@ -172,29 +171,29 @@ GLVIS.Result.prototype.getRelativePosition = function () {
  * Get Absolute position
  * @returns {GLVIS.Result.prototype.getPosition.pos}
  */
-GLVIS.Result.prototype.getPosition = function(){
+GLVIS.Result.prototype.getPosition = function () {
     var coll_pos = this.getCollection().getPosition();
-    
+
     var pos = {
-        x:this.vis_data_.relative_position.x + coll_pos.x,
-        y:this.vis_data_.relative_position.y + coll_pos.y
+        x: this.vis_data_.relative_position.x + coll_pos.x,
+        y: this.vis_data_.relative_position.y + coll_pos.y
     };
-    
+
     return pos;
 };
 
 
-GLVIS.Result.prototype.setRelativePosition = function (x,y) {
-  
-  this.vis_data_.relative_position.x = x;
-  this.vis_data_.relative_position.y = y;
-  
-  //Force redraw of node
-  this.dirty_ = true;
-  this.setMyGlObjectsDirty_();
+GLVIS.Result.prototype.setRelativePosition = function (x, y) {
+
+    this.vis_data_.relative_position.x = x;
+    this.vis_data_.relative_position.y = y;
+
+    //Force redraw of node
+    this.dirty_ = true;
+    this.setMyGlObjectsDirty_();
 };
 
-GLVIS.Result.prototype.getId = function(){
+GLVIS.Result.prototype.getId = function () {
     return this.id_;
 };
 

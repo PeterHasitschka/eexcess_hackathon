@@ -80,9 +80,9 @@ GLVIS.Collection = function (eexcess_data) {
 GLVIS.Collection.prototype.addResult = function (result) {
     result.setCollection(this);
     this.results_.push(result);
-    
+
     this.result_position_handler_.calculatePositions();
-    
+
 };
 
 
@@ -111,9 +111,9 @@ GLVIS.Collection.prototype.render = function () {
     for (var key in this.vis_data_.gl_objects) {
         this.vis_data_.gl_objects[key].render();
     }
-    
+
     //Render all results
-    for (var i=0; i< this.results_.length; i++){
+    for (var i = 0; i < this.results_.length; i++) {
         /** @type {GLVIS.Result} **/
         var curr_res = this.results_[i];
         curr_res.render();
@@ -156,12 +156,8 @@ GLVIS.Collection.prototype.selectAndFocus = function () {
 
     });
 
-    jQuery('#webgl_info_title').html('Query/Collection #' + this.getId());
 
-    var info_content_container = jQuery('#webgl_info_content');
-    info_content_container.html("");
-    info_content_container.append('<p>Name: ' + this.graph_name_ + "</p>");
-    info_content_container.append('<p>Results: ' + this.getResults().length + "</p>");
+    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onCollectionClick(this);
 };
 
 
