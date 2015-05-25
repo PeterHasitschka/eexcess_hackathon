@@ -187,7 +187,9 @@ GLVIS.Collection.prototype.getResults = function () {
 };
 
 
-
+GLVIS.Collection.prototype.setIsDirty = function(dirty){
+    this.dirty_ = dirty;
+};
 
 /**
  * Set the status of the collection.

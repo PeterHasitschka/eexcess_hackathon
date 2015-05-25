@@ -30,12 +30,12 @@ GLVIS.config = {
         result: {
             init_distance: 150,
             collapse_distance: 15,
+            radius: 5.0,
+            color: 0x4444FF,
             common_node: {
                 z_value: -19,
-                radius: 5,
                 min_radius: 0.5,
                 active_radius: 10,
-                color: 0x4444FF,
                 color_positive: 0x00CC00,
                 color_negative: 0xCC0000,
                 sphere: {

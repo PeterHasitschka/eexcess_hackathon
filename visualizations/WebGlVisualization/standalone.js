@@ -20,6 +20,16 @@ jQuery(document).ready(function () {
 });
 
 
+function setRadius(r) {
+    
+    var coll = my_scene.getCollections()[0];
+    
+    var r1 = coll.getResults()[0];
+    
+    r1.setRadius(r);
+    
+}
+
 function animate() {
 
     requestAnimationFrame(animate);
