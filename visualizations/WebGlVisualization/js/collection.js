@@ -39,8 +39,8 @@ GLVIS.Collection = function (eexcess_data) {
         //Position is stuff that belongs to the collection and not in the node.
         //Because several visual repr. should be able to use it
         position: {
-            x: (0.5 - Math.random()) * 100,
-            y: (0.5 - Math.random()) * 100
+            x: 0,
+            y: 0
         },
         gl_objects: []
     };
@@ -211,13 +211,30 @@ GLVIS.Collection.prototype.setStatus = function (status) {
 
 };
 
-
+/**
+ * Returning the current status
+ * Available flags: @see{GLVIS.Collection.STATUSFLAG}
+ * @returns {integer}
+ */
 GLVIS.Collection.prototype.getStatus = function () {
     return this.vis_data_.status;
 };
 
+/**
+ * Setting the id of the parent-collection
+ * @param {integer} parent_id
+ */
+GLVIS.Collection.prototype.setParentId = function(parent_id) {
+  this.parent_id_ = parent_id;  
+};
 
-
+/**
+ * Returning the parent-collection's id
+ * @returns {integer}
+ */
+GLVIS.Collection.prototype.getParentId = function() {
+  return this.parent_id_;
+};
 
 
 /******************

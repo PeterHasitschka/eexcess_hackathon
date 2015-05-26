@@ -4,18 +4,36 @@ jQuery(document).ready(function () {
 
     my_scene = new GLVIS.Scene(jQuery('#webgl_canvas_container'));
     
-    var g1 = new GLVIS.Collection();
+    var parents = {
+      0 : null,
+      1 : 3,
+      2 : 1,
+      3 : 0,
+      4 : 6,
+      5 : 4,
+      6 : 5,
+      7 : 9,
+      8 : 7,
+      9 : 8
+    };
     
-    var r1 = new GLVIS.Result();
-    var r2 = new GLVIS.Result();
-    var r3 = new GLVIS.Result();
+    for (var c_count=0; c_count < 10; c_count++) {
+        var c = new GLVIS.Collection();
+        
+        c.setParentId(parents[c_count]);
+        
+        
+        for (var r_count=0; r_count < 3; r_count++) {
+            var r = new GLVIS.Result();
+            
+            c.addResult(r);
+        }
+        
+        my_scene.addCollection(c);
+    }
     
-    g1.addResult(r1);
-    g1.addResult(r2);
-    g1.addResult(r3);
     
-    my_scene.addCollection(g1);
-    
+    my_scene.getCollectionPositionHandler().calculatePositions();
     animate();
 });
 

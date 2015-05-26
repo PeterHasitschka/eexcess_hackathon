@@ -27,6 +27,9 @@ GLVIS.Scene = function (canvas) {
     /** @type {GLVIS.InteractionHandler} **/
     this.interaction_handler_ = new GLVIS.InteractionHandler(this);
     
+    /** @type{GLVIS.CollectionPosLinear} **/
+    this.collection_position_handler_ = new GLVIS.CollectionPosLinear();
+    
     this.time_ = {
         current: null,
         delta: null
@@ -65,6 +68,7 @@ GLVIS.Scene.prototype.render = function () {
  */
 GLVIS.Scene.prototype.addCollection = function (collection) {
     this.collections_.push(collection);
+    
 };
 
 /**
@@ -102,6 +106,15 @@ GLVIS.Scene.prototype.getNavigationHandler = function () {
 GLVIS.Scene.prototype.getRecDashboardHandler = function () {
     return this.recdashboard_handler_;
 };
+
+/**
+ * Returning the scene's position handler for the collections
+ * @returns {GLVIS.CollectionPosLinear}
+ */
+GLVIS.Scene.prototype.getCollectionPositionHandler = function() {
+    return this.collection_position_handler_;
+};
+
 
 /**
  * 

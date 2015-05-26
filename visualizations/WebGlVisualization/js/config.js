@@ -21,7 +21,7 @@ GLVIS.config = {
             sphere: {
                 radius: 10.0,
                 segments: 4,
-                rings: 8,
+                rings: 6,
                 z_value: -20,
                 color: 0x1d904e,
                 select_color: 0xFF0000
@@ -39,8 +39,8 @@ GLVIS.config = {
                 color_positive: 0x00CC00,
                 color_negative: 0xCC0000,
                 sphere: {
-                    segments: 8,
-                    rings: 8
+                    segments: 4,
+                    rings: 6
                 }
             },
             animation: {
