@@ -18,9 +18,11 @@ GLVIS.AnimationHelper = {};
  */
 GLVIS.AnimationHelper.getStepRoot = function (curr, goal, root, speedfactor, threshold) {
 
+    goal = parseFloat(goal);
+    
     if (Math.abs(Math.max(curr, goal) - Math.min(curr, goal)) > threshold) {
 
-        if (goal !== 0)
+        if (goal !== 0.0)
             var delta = 1.0 - ((parseFloat(curr) / parseFloat(goal)));
         else
             var delta = 1.0 - (parseFloat(curr));
@@ -29,7 +31,7 @@ GLVIS.AnimationHelper.getStepRoot = function (curr, goal, root, speedfactor, thr
         if (delta < 0)
             delta_calc *= -1;
 
-        if (goal <= 0) {
+        if (goal < 0) {
             delta_calc *= -1;
         }
         
