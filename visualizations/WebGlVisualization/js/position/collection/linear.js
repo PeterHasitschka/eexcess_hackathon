@@ -48,8 +48,10 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function () {
     
     //Use array to get the keys in right order
     
-    var x_step = 200;
+    var x_step = GLVIS.config.collection.init_distance;
     var init_x = 0;
+    
+    var last_coll = null;
     for (var coll_count in parent_mapping) {
         var collection_key = parent_mapping[coll_count][0];
         
@@ -59,7 +61,15 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function () {
         var current_collection = collections[collection_key];
         
         current_collection.setPosition(curr_x, null);
+        
+        var last_coll = current_collection;
     }
     
     
+    //Focus last collection
+    var navigation_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
+    navigation_handler.focusCollection(last_coll,function(){
+        
+        //Ready focusing
+    });
 };

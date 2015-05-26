@@ -14,6 +14,9 @@ GLVIS.config = {
         canvas_color: 0xFBFFFD
     },
     collection: {
+        
+        init_distance : 400,
+        
         center_node: {
             transparency: {
                 inactive: 0.5
@@ -60,14 +63,14 @@ GLVIS.config = {
             animated: {
                 threshold: 0.0001,
                 speed_root: 1.5,
-                speed_fct: 1
+                speed_fct: 2
             }
         },
         move: {
             animated: {
                 threshold: 1,
                 root: 2,
-                speed_fct: 1
+                speed_fct: 40
             }
         }
     }
