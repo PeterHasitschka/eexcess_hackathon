@@ -6,15 +6,15 @@ jQuery(document).ready(function () {
     
     var parents = {
       0 : null,
-      1 : 3,
+      1 : 2,
       2 : 1,
       3 : 0,
-      4 : 6,
-      5 : 4,
-      6 : 5,
-      7 : 9,
-      8 : 7,
-      9 : 8
+      4 : 5,
+      5 : 3,
+      6 : 4,
+      7 : 8,
+      8 : 6,
+      9 : 7
     };
     
     for (var c_count=0; c_count < 10; c_count++) {

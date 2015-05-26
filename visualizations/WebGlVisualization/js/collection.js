@@ -182,6 +182,20 @@ GLVIS.Collection.prototype.getPosition = function () {
     return this.vis_data_.position;
 };
 
+/**
+ * Set the coordinates of the collection.
+ * If one parameter is null or undefined it gets ignored
+ * @param {float} x
+ * @param {float} y
+ */
+GLVIS.Collection.prototype.setPosition = function(x,y){
+    if (x !== undefined && x !== null)
+        this.vis_data_.position.x = x;
+    
+    if (y !== undefined && y !== null)
+        this.vis_data_.position.y = y;
+};
+
 GLVIS.Collection.prototype.getResults = function () {
     return this.results_;
 };
