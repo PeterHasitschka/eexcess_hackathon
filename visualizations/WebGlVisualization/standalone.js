@@ -6,7 +6,7 @@ jQuery(document).ready(function () {
     
     var parents = {
       0 : null,
-      1 : 2,
+      1 : 0,
       2 : 1,
       3 : 0,
       4 : 5,
@@ -33,7 +33,7 @@ jQuery(document).ready(function () {
     }
     
     
-    my_scene.getCollectionPositionHandler().calculatePositions();
+    my_scene.initCollectionNetwork();
     animate();
 });
 

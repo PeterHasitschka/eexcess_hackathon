@@ -188,10 +188,10 @@ GLVIS.Collection.prototype.getPosition = function () {
  * @param {float} x
  * @param {float} y
  */
-GLVIS.Collection.prototype.setPosition = function(x,y){
+GLVIS.Collection.prototype.setPosition = function (x, y) {
     if (x !== undefined && x !== null)
         this.vis_data_.position.x = x;
-    
+
     if (y !== undefined && y !== null)
         this.vis_data_.position.y = y;
 };
@@ -201,7 +201,7 @@ GLVIS.Collection.prototype.getResults = function () {
 };
 
 
-GLVIS.Collection.prototype.setIsDirty = function(dirty){
+GLVIS.Collection.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 };
 
@@ -238,16 +238,37 @@ GLVIS.Collection.prototype.getStatus = function () {
  * Setting the id of the parent-collection
  * @param {integer} parent_id
  */
-GLVIS.Collection.prototype.setParentId = function(parent_id) {
-  this.parent_id_ = parent_id;  
+GLVIS.Collection.prototype.setParentId = function (parent_id) {
+    this.parent_id_ = parent_id;
+};
+
+/**
+ * Resets the connection to the parent-collection. Necessary after initializing
+ * all nodes and on possible change of collection-network
+ * @returns {undefined}
+ */
+GLVIS.Collection.prototype.updateParentConnection = function () {
+    //Set Parent Connection
+    if (this.parent_id_ !== null) {
+        var parent_collection = GLVIS.Scene.getCurrentScene().getCollection(this.parent_id_);
+       
+        if (parent_collection)
+        {
+            console.log("parent collection found. Creating connection");
+            var parent_connection = new GLVIS.ConnectionCollectionCollection(parent_collection, this);
+            this.vis_data_.gl_objects.push(parent_connection);
+        }
+        else
+            throw("PARENT COLLECTION WITH ID " + this.parent_id_ + " NOT FOUND");
+    }
 };
 
 /**
  * Returning the parent-collection's id
  * @returns {integer}
  */
-GLVIS.Collection.prototype.getParentId = function() {
-  return this.parent_id_;
+GLVIS.Collection.prototype.getParentId = function () {
+    return this.parent_id_;
 };
 
 

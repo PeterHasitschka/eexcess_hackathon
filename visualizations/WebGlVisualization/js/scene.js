@@ -17,7 +17,7 @@ GLVIS.Scene = function (canvas) {
     /** @type {GLVIS.NavigationHandler} **/
     this.navigation_handler_ = new GLVIS.NavigationHandler(this);
     this.db_handler_ = null;
-    
+
     /** @type {GLVIS.RecDashboardHandler} **/
     this.recdashboard_handler_ = new GLVIS.RecDashboardHandler();
 
@@ -26,10 +26,10 @@ GLVIS.Scene = function (canvas) {
 
     /** @type {GLVIS.InteractionHandler} **/
     this.interaction_handler_ = new GLVIS.InteractionHandler(this);
-    
+
     /** @type{GLVIS.CollectionPosLinear} **/
     this.collection_position_handler_ = new GLVIS.CollectionPosLinear();
-    
+
     this.time_ = {
         current: null,
         delta: null
@@ -57,8 +57,8 @@ GLVIS.Scene.prototype.render = function () {
         this.collections_[i].render();
     }
     this.webgl_handler_.render();
-    
-    
+
+
     this.navigation_handler_.performAnimations();
 };
 
@@ -68,7 +68,7 @@ GLVIS.Scene.prototype.render = function () {
  */
 GLVIS.Scene.prototype.addCollection = function (collection) {
     this.collections_.push(collection);
-    
+
 };
 
 /**
@@ -111,7 +111,7 @@ GLVIS.Scene.prototype.getRecDashboardHandler = function () {
  * Returning the scene's position handler for the collections
  * @returns {GLVIS.CollectionPosLinear}
  */
-GLVIS.Scene.prototype.getCollectionPositionHandler = function() {
+GLVIS.Scene.prototype.getCollectionPositionHandler = function () {
     return this.collection_position_handler_;
 };
 
@@ -122,11 +122,37 @@ GLVIS.Scene.prototype.getCollectionPositionHandler = function() {
  */
 GLVIS.Scene.prototype.getTimeDelta = function () {
     return this.time_.delta;
-    //return 10;
 };
 
+/**
+ * 
+ * @param {integer} collection_id
+ * @returns {GLIVS.Collection || null}
+ */
+GLVIS.Scene.prototype.getCollection = function (collection_id) {
 
+    collection_id = parseInt(collection_id);
 
+    for (var key in this.collections_) {
+        if (this.collections_[key].getId() === collection_id)
+            return this.collections_[key];
+
+    }
+    return null;
+};
+
+/**
+ * Sets positions of the loaded collections and connects them with a connection
+ * @returns {undefined}
+ */
+GLVIS.Scene.prototype.initCollectionNetwork = function () {
+    this.getCollectionPositionHandler().calculatePositions();
+
+    //Creating parent connections
+    for (var key in this.collections_) {
+        this.collections_[key].updateParentConnection();
+    }
+};
 
 
 /******************
@@ -148,3 +174,4 @@ GLVIS.Scene.getCurrentScene = function () {
 
     return this.current_scene;
 };
+

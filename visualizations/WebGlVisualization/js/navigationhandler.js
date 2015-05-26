@@ -192,10 +192,12 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
             console.log("Finished movement to graph");
             that.animatedZoom(1, function () {
                 console.log("finished zoom to 1");
+
+                if (callback_fct)
+                    callback_fct();
             });
         });
     });
 
-    if (callback_fct)
-        callback_fct();
+
 };

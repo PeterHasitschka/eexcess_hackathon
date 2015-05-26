@@ -21,7 +21,6 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function () {
 
     
     //Store parent-id and key in an array to sort it
-
     var parent_mapping = [];
     for (var coll_key in collections) {
 
@@ -35,7 +34,6 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function () {
     }
 
     //Sort array
-    
     parent_mapping.sort(function (a, b) {
         if (b[1] === null)
             return a;
@@ -43,11 +41,8 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function () {
         return a[1] - b[1];
     });
     
-    
-    
-    
+
     //Use array to get the keys in right order
-    
     var x_step = GLVIS.config.collection.init_distance;
     var init_x = 0;
     
@@ -71,5 +66,7 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function () {
     navigation_handler.focusCollection(last_coll,function(){
         
         //Ready focusing
+        if (GLVIS.config.debug)
+            console.log("COLLECTION LINEAR POS: Ready positioning");
     });
 };

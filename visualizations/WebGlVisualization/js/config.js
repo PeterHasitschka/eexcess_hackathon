@@ -1,8 +1,6 @@
 
 
 var GLVIS = GLVIS || {};
-
-
 GLVIS.config = {
     debug: true,
     three: {
@@ -14,9 +12,7 @@ GLVIS.config = {
         canvas_color: 0xFBFFFD
     },
     collection: {
-        
-        init_distance : 400,
-        
+        init_distance: 400,
         center_node: {
             transparency: {
                 inactive: 0.5
@@ -56,6 +52,12 @@ GLVIS.config = {
             bold_width: 3,
             color: 0x668866,
             z: -50
+        },
+        collection_collection: {
+            width: 1,
+            color: 0xFF3333,
+            z: -52,
+            opacity: 0.3
         }
     },
     navigation: {
@@ -68,9 +70,9 @@ GLVIS.config = {
         },
         move: {
             animated: {
-                threshold: 1,
+                threshold: 8,
                 root: 2,
-                speed_fct: 40
+                speed_fct: 3
             }
         }
     }
