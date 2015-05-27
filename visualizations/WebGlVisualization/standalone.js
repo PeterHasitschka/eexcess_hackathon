@@ -4,13 +4,12 @@ jQuery(document).ready(function () {
     
     my_scene = new GLVIS.Scene(jQuery('#webgl_canvas_container'));
     
+    /*
     db_handler = new GLVIS.DbHandler();
     db_handler.loadQueries(function(){
-        
-        
         console.log("DB Load queries ready");
     });
-    
+    */
     
 
     createRandomCollections();
