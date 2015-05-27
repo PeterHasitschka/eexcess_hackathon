@@ -19,11 +19,11 @@ GLVIS.RecDashboardHandler.prototype.onCollectionClick = function(collection){
 
 
 /**
- * Handles visualization of click on result in rec-dashboard html
- * @param {GLVIS.Result} result
+ * Handles visualization of click on recommendation in rec-dashboard html
+ * @param {GLVIS.Recommendation} recommendation
  */
-GLVIS.RecDashboardHandler.prototype.onResultClick = function(result){
-     jQuery('#webgl_info_title').html('Result #' + result.getId());
+GLVIS.RecDashboardHandler.prototype.onRecommendationClick = function(recommendation){
+     jQuery('#webgl_info_title').html('Recommendation #' + recommendation.getId());
 
     var info_content_container = jQuery('#webgl_info_content');
     info_content_container.html("");

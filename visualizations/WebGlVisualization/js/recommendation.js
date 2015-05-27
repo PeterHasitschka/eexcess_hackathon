@@ -3,16 +3,16 @@
 var GLVIS = GLVIS || {};
 
 
-GLVIS.Result = function (eexcess_data) {
+GLVIS.Recommendation = function (eexcess_data) {
 
 
     /**
      * Internal increment id
      */
-    this.id_ = GLVIS.Result.getNewId();
+    this.id_ = GLVIS.Recommendation.getNewId();
 
     /**
-     * Collection that has this result
+     * Collection that has this recommendation
      * @type{GLVIS.Collection} 
      */
     this.collection_ = null;
@@ -23,7 +23,7 @@ GLVIS.Result = function (eexcess_data) {
     this.eexcess_data_ = eexcess_data;
 
     /**
-     * True if result changed and needs to be re-rendered
+     * True if recommendation changed and needs to be re-rendered
      */
     this.dirty_ = true;
 
@@ -31,13 +31,13 @@ GLVIS.Result = function (eexcess_data) {
      * Everything related to visualization
      */
     this.vis_data_ = {
-        status: GLVIS.Result.STATUSFLAGS.NORMAL,
+        status: GLVIS.Recommendation.STATUSFLAGS.NORMAL,
         relative_position: {
             x: 0,
             y: 0
         },
-        radius: GLVIS.config.collection.result.radius,
-        color: GLVIS.config.collection.result.color,
+        radius: GLVIS.config.collection.recommendation.radius,
+        color: GLVIS.config.collection.recommendation.color,
         opacity: 1
         ,
         gl_objects: []
@@ -56,34 +56,34 @@ GLVIS.Result = function (eexcess_data) {
 
 
     if (GLVIS.config.debug)
-        console.log("Result with id " + this.id_ + " created!");
+        console.log("Recommendation with id " + this.id_ + " created!");
 
 };
 
 
 
 /**
- * Creating a common-node for representing the result
+ * Creating a common-node for representing the recommendation
  * @returns {undefined}
  */
-GLVIS.Result.prototype.initGlNode = function () {
+GLVIS.Recommendation.prototype.initGlNode = function () {
 
-    var gl_node = new GLVIS.ResultCommonNode(this);
+    var gl_node = new GLVIS.RecommendationCommonNode(this);
     this.vis_data_.gl_objects.push(gl_node);
 
-    var gl_connection = new GLVIS.ConnectionCollectionResult(this);
+    var gl_connection = new GLVIS.ConnectionCollectionRecommendation(this);
     this.vis_data_.gl_objects.push(gl_connection);
 };
 
 
 
-GLVIS.Result.prototype.render = function () {
+GLVIS.Recommendation.prototype.render = function () {
 
     if (!this.dirty_)
         return;
 
     if (GLVIS.config.debug)
-        console.log("Result with id " + this.id_ + " rendered!");
+        console.log("Recommendation with id " + this.id_ + " rendered!");
 
     //Render all Gl-Objectss
     for (var key in this.vis_data_.gl_objects) {
@@ -98,10 +98,10 @@ GLVIS.Result.prototype.render = function () {
 
 
 /**
- * Setting the collection that the result belongs to
+ * Setting the collection that the recommendation belongs to
  * @param {GLVIS.Collection} collection Collection;
  */
-GLVIS.Result.prototype.setCollection = function (collection) {
+GLVIS.Recommendation.prototype.setCollection = function (collection) {
     this.collection_ = collection;
 };
 
@@ -110,16 +110,16 @@ GLVIS.Result.prototype.setCollection = function (collection) {
  * Called by interactionhandler. Function registered in mesh-objects
  * @returns {undefined}
  */
-GLVIS.Result.prototype.handleClick = function () {
-    /** @type {GLVIS.Result} **/
-    var that = this.result;
+GLVIS.Recommendation.prototype.handleClick = function () {
+    /** @type {GLVIS.Recommendation} **/
+    var that = this.recommendation;
 
-    if (that.getStatus() === GLVIS.Result.STATUSFLAGS.HIDDEN)
+    if (that.getStatus() === GLVIS.Recommendation.STATUSFLAGS.HIDDEN)
         return;
-    console.log("RESULT " + that.getId() + " clicked");
+    console.log("RECOMMENDATION " + that.getId() + " clicked");
 
 
-    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onResultClick(that);
+    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(that);
 };
 
 
@@ -129,11 +129,11 @@ GLVIS.Result.prototype.handleClick = function () {
  * Return parent-collection
  * @returns {GLVIS.Collection}
  */
-GLVIS.Result.prototype.getCollection = function () {
+GLVIS.Recommendation.prototype.getCollection = function () {
     return this.collection_;
 };
 
-GLVIS.Result.prototype.getStatus = function () {
+GLVIS.Recommendation.prototype.getStatus = function () {
     return this.vis_data_.status;
 };
 
@@ -143,7 +143,7 @@ GLVIS.Result.prototype.getStatus = function () {
  * @param {type} status
  * @returns {undefined}
  */
-GLVIS.Result.prototype.setStatus = function (status) {
+GLVIS.Recommendation.prototype.setStatus = function (status) {
 
     if (status === this.vis_data_.status)
         return;
@@ -157,30 +157,30 @@ GLVIS.Result.prototype.setStatus = function (status) {
 };
 
 
-GLVIS.Result.prototype.setMyGlObjectsDirty_ = function () {
+GLVIS.Recommendation.prototype.setMyGlObjectsDirty_ = function () {
     for (var key in this.vis_data_.gl_objects) {
         this.vis_data_.gl_objects[key].setIsDirty(true);
     }
 
-    //Collection needs rendering too to reach result
+    //Collection needs rendering too to reach recommendation
     this.collection_.setIsDirty(true);
 };
 
 
 /**
  * Get Relative position to the collection
- * @returns {GLVIS.Result.prototype.getPosition.pos}
+ * @returns {GLVIS.Recommendation.prototype.getPosition.pos}
  */
-GLVIS.Result.prototype.getRelativePosition = function () {
+GLVIS.Recommendation.prototype.getRelativePosition = function () {
     return this.vis_data_.relative_position;
 };
 
 
 /**
  * Get Absolute position
- * @returns {GLVIS.Result.prototype.getPosition.pos}
+ * @returns {GLVIS.Recommendation.prototype.getPosition.pos}
  */
-GLVIS.Result.prototype.getPosition = function () {
+GLVIS.Recommendation.prototype.getPosition = function () {
     var coll_pos = this.getCollection().getPosition();
 
     var pos = {
@@ -192,7 +192,7 @@ GLVIS.Result.prototype.getPosition = function () {
 };
 
 
-GLVIS.Result.prototype.setRelativePosition = function (x, y) {
+GLVIS.Recommendation.prototype.setRelativePosition = function (x, y) {
 
     this.vis_data_.relative_position.x = x;
     this.vis_data_.relative_position.y = y;
@@ -203,7 +203,7 @@ GLVIS.Result.prototype.setRelativePosition = function (x, y) {
 };
 
 
-GLVIS.Result.prototype.setRadius = function (radius) {
+GLVIS.Recommendation.prototype.setRadius = function (radius) {
     if (this.vis_data_.radius === radius)
         return;
 
@@ -216,7 +216,7 @@ GLVIS.Result.prototype.setRadius = function (radius) {
  * 
  * @param {integer} color e.g. 0xFF0000
  */
-GLVIS.Result.prototype.setColor = function (color) {
+GLVIS.Recommendation.prototype.setColor = function (color) {
     if (this.vis_data_.color === color)
         return;
 
@@ -228,7 +228,7 @@ GLVIS.Result.prototype.setColor = function (color) {
 /**
  * @param {float} opacity 0 - Transparent, 1 - Full visible
  */
-GLVIS.Result.prototype.setOpacity = function (opacity) {
+GLVIS.Recommendation.prototype.setOpacity = function (opacity) {
     if (this.vis_data_.opacity === opacity)
         return;    
     
@@ -238,19 +238,19 @@ GLVIS.Result.prototype.setOpacity = function (opacity) {
 };
 
 
-GLVIS.Result.prototype.getRadius = function () {
+GLVIS.Recommendation.prototype.getRadius = function () {
     return this.vis_data_.radius;
 };
 
-GLVIS.Result.prototype.getColor = function () {
+GLVIS.Recommendation.prototype.getColor = function () {
     return this.vis_data_.color;
 };
 
-GLVIS.Result.prototype.getOpacity = function () {
+GLVIS.Recommendation.prototype.getOpacity = function () {
     return this.vis_data_.opacity;
 };
 
-GLVIS.Result.prototype.getId = function () {
+GLVIS.Recommendation.prototype.getId = function () {
     return this.id_;
 };
 
@@ -263,15 +263,15 @@ GLVIS.Result.prototype.getId = function () {
  ******************/
 
 
-GLVIS.Result.current_id = 0;
-GLVIS.Result.getNewId = function () {
+GLVIS.Recommendation.current_id = 0;
+GLVIS.Recommendation.getNewId = function () {
     var id = this.current_id;
     this.current_id++;
     return id;
 };
 
 
-GLVIS.Result.STATUSFLAGS = {
+GLVIS.Recommendation.STATUSFLAGS = {
     NORMAL: 0x000,
     HIDDEN: 0x001,
     SELECTED: 0x002

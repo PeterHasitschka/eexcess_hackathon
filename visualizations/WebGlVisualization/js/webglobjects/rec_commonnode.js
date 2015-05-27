@@ -3,20 +3,20 @@ GLVIS = GLVIS || {};
 
 
 /**
- * Representing a common result of a Collection in WebGl
- * @param {GLVIS.Result} result result that node represents
+ * Representing a common recommendation of a Collection in WebGl
+ * @param {GLVIS.Recommendation} recommendation recommendation that node represents
  */
-GLVIS.ResultCommonNode = function (result) {
+GLVIS.RecommendationCommonNode = function (recommendation) {
 
     this.dirty_ = true;
-    this.result_ = result;
+    this.recommendation_ = recommendation;
 
     this.webgl_objects_ = {
         sphere: null
     };
 
     //Needed due to relative scaling.
-    this.init_radius_ = this.result_.getRadius();
+    this.init_radius_ = this.recommendation_.getRadius();
 
 
     this.initAndRegisterGlObj();
@@ -24,14 +24,14 @@ GLVIS.ResultCommonNode = function (result) {
 
 
 
-GLVIS.ResultCommonNode.prototype.initAndRegisterGlObj = function () {
+GLVIS.RecommendationCommonNode.prototype.initAndRegisterGlObj = function () {
 
-    var config = GLVIS.config.collection.result.common_node;
+    var config = GLVIS.config.collection.recommendation.common_node;
 
     var sphereMaterial =
             new THREE.MeshBasicMaterial(
                     {
-                        color: this.result_.getColor(),
+                        color: this.recommendation_.getColor(),
                         transparent: true
                     });
 
@@ -45,8 +45,8 @@ GLVIS.ResultCommonNode.prototype.initAndRegisterGlObj = function () {
 
     //Register click-function
     sphere.interaction = {
-        "mouseclick": this.result_.handleClick,
-        "result": this.result_
+        "mouseclick": this.recommendation_.handleClick,
+        "recommendation": this.recommendation_
     };
 
 
@@ -58,7 +58,7 @@ GLVIS.ResultCommonNode.prototype.initAndRegisterGlObj = function () {
 };
 
 
-GLVIS.ResultCommonNode.prototype.render = function () {
+GLVIS.RecommendationCommonNode.prototype.render = function () {
 
     if (!this.dirty_)
         return;
@@ -66,14 +66,14 @@ GLVIS.ResultCommonNode.prototype.render = function () {
 
 
     if (GLVIS.config.debug)
-        console.log("Rendering RESULT COMMON-NODE  for result " + this.result_.getId());
+        console.log("Rendering RECOMMENDATION COMMON-NODE  for recommendation " + this.recommendation_.getId());
 
 
 
 
-    var abs_pos = this.result_.getPosition();
+    var abs_pos = this.recommendation_.getPosition();
 
-    var z_pos = GLVIS.config.collection.result.common_node.z_value;
+    var z_pos = GLVIS.config.collection.recommendation.common_node.z_value;
     this.webgl_objects_.sphere.position.set(
             abs_pos.x,
             abs_pos.y,
@@ -81,22 +81,22 @@ GLVIS.ResultCommonNode.prototype.render = function () {
             );
 
 
-    var curr_radius = this.result_.getRadius();
+    var curr_radius = this.recommendation_.getRadius();
     scale_factor = curr_radius / this.init_radius_;
     this.webgl_objects_.sphere.scale.set(scale_factor, scale_factor, scale_factor);
 
 
-    this.webgl_objects_.sphere.material.opacity = this.result_.getOpacity();
+    this.webgl_objects_.sphere.material.opacity = this.recommendation_.getOpacity();
 
 };
 
 
 
 
-GLVIS.ResultCommonNode.prototype.setIsDirty = function (dirty) {
+GLVIS.RecommendationCommonNode.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 };
 
-GLVIS.ResultCommonNode.prototype.getIsDirty = function () {
+GLVIS.RecommendationCommonNode.prototype.getIsDirty = function () {
     return this.dirty_;
 };

@@ -26,7 +26,7 @@ GLVIS.config = {
                 select_color: 0xFF0000
             }
         },
-        result: {
+        recommendation: {
             init_distance: 150,
             collapse_distance: 15,
             radius: 5.0,
@@ -47,7 +47,7 @@ GLVIS.config = {
         }
     },
     connection: {
-        result_collection: {
+        recommendation_collection: {
             width: 1,
             bold_width: 3,
             color: 0x668866,

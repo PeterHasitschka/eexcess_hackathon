@@ -3,12 +3,12 @@ var GLVIS = GLVIS || {};
 
 /**
  * 
- * @param {GLVIS.Result} result
+ * @param {GLVIS.Recommendation} recommendation
  */
-GLVIS.ConnectionCollectionResult = function (result) {
+GLVIS.ConnectionCollectionRecommendation = function (recommendation) {
 
-    /** @type{GLVIS.Result} **/
-    this.result_ = result;
+    /** @type{GLVIS.Recommendation} **/
+    this.recommendation_ = recommendation;
     this.dirty_ = true;
 
     this.webgl_objects_ = {
@@ -18,9 +18,9 @@ GLVIS.ConnectionCollectionResult = function (result) {
     this.initAndRegisterGlObj();
 };
 
-GLVIS.ConnectionCollectionResult.prototype.initAndRegisterGlObj = function () {
+GLVIS.ConnectionCollectionRecommendation.prototype.initAndRegisterGlObj = function () {
 
-    var config = GLVIS.config.connection.result_collection;
+    var config = GLVIS.config.connection.recommendation_collection;
 
 
     var line_material = new THREE.LineBasicMaterial({
@@ -55,21 +55,21 @@ GLVIS.ConnectionCollectionResult.prototype.initAndRegisterGlObj = function () {
 };
 
 
-GLVIS.ConnectionCollectionResult.prototype.render = function () {
+GLVIS.ConnectionCollectionRecommendation.prototype.render = function () {
 
     if (!this.dirty_)
         return;
 
-    var config = GLVIS.config.connection.result_collection;
-    var res_pos = this.result_.getPosition();
+    var config = GLVIS.config.connection.recommendation_collection;
+    var rec_pos = this.recommendation_.getPosition();
 
-    var coll_pos = this.result_.getCollection().getPosition();
+    var coll_pos = this.recommendation_.getCollection().getPosition();
 
     if (GLVIS.config.debug)
-        console.log("Rendering CONNECTION for result " + this.result_.getId());
+        console.log("Rendering CONNECTION for recommendation " + this.recommendation_.getId());
 
 
-    this.webgl_objects_.line.geometry.vertices[0].set(res_pos.x, res_pos.y, config.z);
+    this.webgl_objects_.line.geometry.vertices[0].set(rec_pos.x, rec_pos.y, config.z);
     this.webgl_objects_.line.geometry.vertices[1].set(coll_pos.x, coll_pos.y, config.z);
     this.webgl_objects_.line.geometry.verticesNeedUpdate = true;
 
@@ -83,10 +83,10 @@ GLVIS.ConnectionCollectionResult.prototype.render = function () {
 
 
 
-GLVIS.ConnectionCollectionResult.prototype.setIsDirty = function (dirty) {
+GLVIS.ConnectionCollectionRecommendation.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 };
 
-GLVIS.ConnectionCollectionResult.prototype.getIsDirty = function () {
+GLVIS.ConnectionCollectionRecommendation.prototype.getIsDirty = function () {
     return this.dirty_;
 };

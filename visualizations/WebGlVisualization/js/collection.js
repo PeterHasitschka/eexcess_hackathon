@@ -53,15 +53,15 @@ GLVIS.Collection = function (eexcess_data) {
     };
 
     /**
-     * Holding all results from the query / collection
+     * Holding all recommendations from the query / collection
      */
-    this.results_ = [];
+    this.recommendations_ = [];
 
     /**
-     * Handles the positions of the results
-     * @type{GLVIS.ResultPosDistributed} 
+     * Handles the positions of the recommendations
+     * @type{GLVIS.RecommendationPosDistributed} 
      */
-    this.result_position_handler_ = new GLVIS.ResultPosDistributed(this);
+    this.recommendation_position_handler_ = new GLVIS.RecommendationPosDistributed(this);
 
 
     this.initGlNode();
@@ -75,13 +75,13 @@ GLVIS.Collection = function (eexcess_data) {
 
 /**
  * 
- * @param {GLVIS.Result} result Result object to add
+ * @param {GLVIS.Recommendation} recommendation Recommendation object to add
  */
-GLVIS.Collection.prototype.addResult = function (result) {
-    result.setCollection(this);
-    this.results_.push(result);
+GLVIS.Collection.prototype.addRecommendation = function (recommendation) {
+    recommendation.setCollection(this);
+    this.recommendations_.push(recommendation);
 
-    this.result_position_handler_.calculatePositions();
+    this.recommendation_position_handler_.calculatePositions();
 
 };
 
@@ -112,11 +112,11 @@ GLVIS.Collection.prototype.render = function () {
         this.vis_data_.gl_objects[key].render();
     }
 
-    //Render all results
-    for (var i = 0; i < this.results_.length; i++) {
-        /** @type {GLVIS.Result} **/
-        var curr_res = this.results_[i];
-        curr_res.render();
+    //Render all recommendations
+    for (var i = 0; i < this.recommendations_.length; i++) {
+        /** @type {GLVIS.Recommendation} **/
+        var curr_rec = this.recommendations_[i];
+        curr_rec.render();
     }
 
     this.dirty_ = false;
@@ -196,8 +196,8 @@ GLVIS.Collection.prototype.setPosition = function (x, y) {
         this.vis_data_.position.y = y;
 };
 
-GLVIS.Collection.prototype.getResults = function () {
-    return this.results_;
+GLVIS.Collection.prototype.getRecommendations = function () {
+    return this.recommendations_;
 };
 
 

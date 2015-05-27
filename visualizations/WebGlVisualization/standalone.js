@@ -13,7 +13,7 @@ jQuery(document).ready(function () {
     
     
 
-    //createRandomCollections();
+    createRandomCollections();
 
 
 
@@ -33,12 +33,12 @@ function loadCollectionsFromDb() {
 
 function setRadius(r) {
     var coll = my_scene.getCollections()[0];
-    var r1 = coll.getResults()[0];
+    var r1 = coll.getRecommendations()[0];
     r1.setRadius(r);
 }
 function setOpacity(o) {
     var coll = my_scene.getCollections()[0];
-    var r1 = coll.getResults()[0];
+    var r1 = coll.getRecommendations()[0];
     r1.setOpacity(o);
 }
 
@@ -72,9 +72,9 @@ function createRandomCollections() {
 
 
         for (var r_count = 0; r_count < 5; r_count++) {
-            var r = new GLVIS.Result();
+            var r = new GLVIS.Recommendation();
 
-            c.addResult(r);
+            c.addRecommendation(r);
         }
 
         my_scene.addCollection(c);
