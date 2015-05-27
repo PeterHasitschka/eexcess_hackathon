@@ -12,14 +12,20 @@ GLVIS.CollectionPosLinear = function () {
 
 };
 
-
-GLVIS.CollectionPosLinear.prototype.calculatePositions = function () {
+/**
+ * Sets the positions of each collections
+ * @param {boolean} focus_last If true, the last collection gets focused in the end
+ */
+GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
 
     if (GLVIS.config.debug)
         console.log("COLLECTION POS HANDLER: Recalculating positions");
     var collections = this.scene_.getCollections();
 
-    
+    if (!collections.length)
+        return;
+
+
     //Store parent-id and key in an array to sort it
     var parent_mapping = [];
     for (var coll_key in collections) {
@@ -37,36 +43,38 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function () {
     parent_mapping.sort(function (a, b) {
         if (b[1] === null)
             return a;
-        
+
         return a[1] - b[1];
     });
-    
+
 
     //Use array to get the keys in right order
     var x_step = GLVIS.config.collection.init_distance;
     var init_x = 0;
-    
+
     var last_coll = null;
     for (var coll_count in parent_mapping) {
         var collection_key = parent_mapping[coll_count][0];
-        
+
         var curr_x = init_x + coll_count * x_step;
-        
+
         /** @type{GLVIS.Collection} **/
         var current_collection = collections[collection_key];
-        
+
         current_collection.setPosition(curr_x, null);
-        
+
         var last_coll = current_collection;
     }
-    
-    
+
+
     //Focus last collection
-    var navigation_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
-    navigation_handler.focusCollection(last_coll,function(){
-        
-        //Ready focusing
-        if (GLVIS.config.debug)
-            console.log("COLLECTION LINEAR POS: Ready positioning");
-    });
+    if (focus_last) {
+        var navigation_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
+        navigation_handler.focusCollection(last_coll, function () {
+
+            //Ready focusing
+            if (GLVIS.config.debug)
+                console.log("COLLECTION LINEAR POS: Ready positioning");
+        });
+    }
 };

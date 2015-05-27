@@ -257,6 +257,7 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
             console.log("parent collection found. Creating connection");
             var parent_connection = new GLVIS.ConnectionCollectionCollection(parent_collection, this);
             this.vis_data_.gl_objects.push(parent_connection);
+            this.dirty_ = true;
         }
         else
             throw("PARENT COLLECTION WITH ID " + this.parent_id_ + " NOT FOUND");

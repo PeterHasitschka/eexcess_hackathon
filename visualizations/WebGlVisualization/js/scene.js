@@ -146,7 +146,7 @@ GLVIS.Scene.prototype.getCollection = function (collection_id) {
  * @returns {undefined}
  */
 GLVIS.Scene.prototype.initCollectionNetwork = function () {
-    this.getCollectionPositionHandler().calculatePositions();
+    this.getCollectionPositionHandler().calculatePositions(true);
 
     //Creating parent connections
     for (var key in this.collections_) {
