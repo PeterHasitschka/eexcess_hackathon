@@ -122,6 +122,7 @@ function Visualization(EEXCESSobj) {
 
     var START = {};
     START.plugins = [];
+    START.inputData = [];
 
     /**
      * 	Initizialization function called from starter.js
@@ -220,99 +221,82 @@ function Visualization(EEXCESSobj) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    var PREPROCESSING = {};
-
-
-    /**
-     *	Bind event handlers to buttons
-     *$
-     * */
-    PREPROCESSING.bindEventHandlers = function () {
-        $(btnSearch).click(function () {
-            EVTHANDLER.btnSearchClicked();
-        });
-        $(searchField).on('keypress', function (e) {
-            if (e.keyCode == 13)
-                EVTHANDLER.btnSearchClicked();
-        });
-        $(btnReset).click(function () {
-            EVTHANDLER.btnResetClicked();
-        });
-        $('html').click(function () {
-            if (isBookmarkDialogOpen)
-                BOOKMARKS.destroyBookmarkDialog();
-        });
-        $('#demo-button-university').click(function (e) {
-            $(this).addClass('checked');
-            $('#demo-button-historicalbuildings').removeClass('checked');
-            onDataReceived(getDemoResultsUniversity());
-        });
-        $('#demo-button-historicalbuildings').click(function (e) {
-            $(this).addClass('checked');
-            $('#demo-button-university').removeClass('checked');
-            onDataReceived(getDemoResultsHistoricBuildings());
-        });
-    };
+	
+	var PREPROCESSING = {};
+	
+	
+	/**
+	 *	Bind event handlers to buttons
+	 *$
+	 * */
+	PREPROCESSING.bindEventHandlers = function(){
+		$( btnSearch  ).click( function(){ EVTHANDLER.btnSearchClicked(); });
+		$( searchField ).on('keypress', function(e){ if (e.keyCode == 13) EVTHANDLER.btnSearchClicked(); });
+		$( btnReset   ).click( function(){ EVTHANDLER.btnResetClicked(); });
+        $( 'html' ).click(function(){ if(isBookmarkDialogOpen) BOOKMARKS.destroyBookmarkDialog(); });
+        $( '#demo-button-university' ).click(function(e){ $(this).addClass('checked'); $('#demo-button-historicalbuildings').removeClass('checked'); onDataReceived(getDemoResultsUniversity()); });
+        $( '#demo-button-historicalbuildings' ).click(function(e){ $(this).addClass('checked'); $('#demo-button-university').removeClass('checked'); onDataReceived(getDemoResultsHistoricBuildings()); });
+		$('#globalsettings').on('click', function(e){ e.preventDefault(); alert('Einstellungen noch nicht verfügbar.'); });
+	};
+	
 
 
+	
+	/**
+	 * Format the received mapping combinations so they can be more easily manipulated
+	 * 
+	 **/
+	PREPROCESSING.getFormattedMappings = function( originalMappings ){
+		
+		formattedMappings = [];
+			
+		charts.forEach(function(chart, chartIndex){
+			
+			// formattedMappings[].combinations is a 2D array containing all the possible combinations for each chart
+			// outer array => 1 mapping combination per element. Inner array => 1 visual channel/attribute per element
+			formattedMappings.push({ 'chart': chart, 'combinations': new Array() });		
+			var keys = [];
+			
+			// Find in the mappings received the first mapping combination for the current chart
+			var firstIndex = 0;
+			while(firstIndex < originalMappings.length && originalMappings[firstIndex].chartname != chart)
+				firstIndex++;
+			
+			// Find the visual channels' keys for the current chart
+			originalMappings[firstIndex].visualchannels.forEach(function(vc){
+				keys.push(vc.label);
+			});
+			
+			// Find all the mapping combinations for the current chart, starting from firstIndex
+			//(it's already known that the previous mappings are not for current chart)
+			for(var i = firstIndex; i < originalMappings.length; i++){
+				
+				if(originalMappings[i].chartname == chart){
+					
+					//	Mapping combination found. Add new array element to formattedMappings[].combinations[] array   
+					var combIndex = formattedMappings[chartIndex].combinations.length;		
+					formattedMappings[chartIndex].combinations[combIndex] = new Array();
+					
+					originalMappings[i].visualchannels.forEach(function(vc){
+					
+						var visChannel = {'facet': vc.component.facet, 'visualattribute': vc.label};
+						var vcIndex = keys.indexOf(vc.label);
+						
+						formattedMappings[chartIndex].combinations[combIndex][vcIndex] = visChannel;
+					});
+				}
+			}
+		});
 
+		formattedMappings = PREPROCESSING.dirtyFixForMappings(formattedMappings);	// once fixed in server delete this line and the method
+		return formattedMappings;
+	};
+	
+	
+	PREPROCESSING.dirtyFixForMappings = function(formattedMappings){
 
-    /**
-     * Format the received mapping combinations so they can be more easily manipulated
-     * 
-     **/
-    PREPROCESSING.getFormattedMappings = function (originalMappings) {
-
-        formattedMappings = [];
-
-        charts.forEach(function (chart, chartIndex) {
-
-            // formattedMappings[].combinations is a 2D array containing all the possible combinations for each chart
-            // outer array => 1 mapping combination per element. Inner array => 1 visual channel/attribute per element
-            formattedMappings.push({'chart': chart, 'combinations': new Array()});
-            var keys = [];
-
-            // Find in the mappings received the first mapping combination for the current chart
-            var firstIndex = 0;
-            while (firstIndex < originalMappings.length && originalMappings[firstIndex].chartname != chart)
-                firstIndex++;
-
-            // Find the visual channels' keys for the current chart
-            originalMappings[firstIndex].visualchannels.forEach(function (vc) {
-                keys.push(vc.label);
-            });
-
-            // Find all the mapping combinations for the current chart, starting from firstIndex
-            //(it's already known that the previous mappings are not for current chart)
-            for (var i = firstIndex; i < originalMappings.length; i++) {
-
-                if (originalMappings[i].chartname == chart) {
-
-                    //	Mapping combination found. Add new array element to formattedMappings[].combinations[] array   
-                    var combIndex = formattedMappings[chartIndex].combinations.length;
-                    formattedMappings[chartIndex].combinations[combIndex] = new Array();
-
-                    originalMappings[i].visualchannels.forEach(function (vc) {
-
-                        var visChannel = {'facet': vc.component.facet, 'visualattribute': vc.label};
-                        var vcIndex = keys.indexOf(vc.label);
-
-                        formattedMappings[chartIndex].combinations[combIndex][vcIndex] = visChannel;
-                    });
-                }
-            }
-        });
-
-        formattedMappings = PREPROCESSING.dirtyFixForMappings(formattedMappings);	// once fixed in server delete this line and the method
-        return formattedMappings;
-    };
-
-
-    PREPROCESSING.dirtyFixForMappings = function (formattedMappings) {
-
-        var i = formattedMappings.getIndexOf("barchart", "chart");
-        if (i != -1)
+		var i = formattedMappings.getIndexOf("barchart", "chart");
+		if (i != -1)
             formattedMappings.splice(i, 1);
 
         i = formattedMappings.push({'chart': 'barchart', 'combinations': new Array()});
@@ -439,74 +423,71 @@ function Visualization(EEXCESSobj) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    var EVTHANDLER = {};
-
-
-    /**
-     * Click on search button triggers a new search
-     * 
-     * */
-    EVTHANDLER.btnSearchClicked = function () {
-        QUERY.refreshResults();
-    };
+	
+	var EVTHANDLER = {};
 
 
-    /**
-     * 	Chart <select> changed
-     * 
-     * */
-    EVTHANDLER.chartSelectChanged = function () {
-        VISPANEL.drawChart();
-    };
+	/**
+	 * Click on search button triggers a new search
+	 * 
+	 * */
+	EVTHANDLER.btnSearchClicked = function(){
+		QUERY.refreshResults();
+	};
 
+	
+	/**
+	 * 	Chart <select> changed
+	 * 
+	 * */
+	EVTHANDLER.chartSelectChanged = function(){		
+		VISPANEL.drawChart();
+	};
+	
+	
+	/**
+	 *	Function that wraps the change event handlers. These events are triggered by the <select> elements (chart and visual channels)
+	 *
+	 * */
+	EVTHANDLER.setSelectChangeHandlers = function(){
+		// Change event handler for visual channels' <select> elements
+		$(mappingSelectors).each(function(i, item){	
 
-    /**
-     *	Function that wraps the change event handlers. These events are triggered by the <select> elements (chart and visual channels)
-     *
-     * */
-    EVTHANDLER.setSelectChangeHandlers = function () {
-        // Change event handler for visual channels' <select> elements
-        $(mappingSelectors).each(function (i, item) {
+            if($(item).attr('isDynamic').toBool())
+                $(item).change(function(){
+				    VISPANEL.drawChart( item );
+			 });
+		});
+		
+	};
+	
+	
+	////////	content list item click	////////
+	
+	EVTHANDLER.listItemClicked = function(d, i, isSelectedFromOutside, x, y, z){
+		if (d3.event.ctrlKey){
+        	LIST.selectListItem( d, i, false, true);
+		} else {
+        	LIST.selectListItem( d, i, false, false);
+    	}
+	};
+	
 
-            if ($(item).attr('isDynamic').toBool())
-                $(item).change(function () {
-                    VISPANEL.drawChart(item);
-                });
-        });
-
-    };
-
-
-    ////////	content list item click	////////
-
-    EVTHANDLER.listItemClicked = function (d, i, isSelectedFromOutside, x, y, z) {
-        if (d3.event.ctrlKey) {
-            LIST.selectListItem(d, i, false, true, false);
-        } else {
-            LIST.selectListItem(d, i, false, false, false);
-        }
-    };
-
-
-
-
-    ////////	Reset Button Click	////////
-
-    EVTHANDLER.btnResetClicked = function () {
-        indicesToHighlight = VISPANEL.getAllSelectListItems();
-
-        LIST.highlightListItems(indicesToHighlight, true);
-        //$(filterBookmarkDialogId+">div>span").text(STR_SHOWALLRESULTS);
-        //$(filterBookmarkDialogId+">div>div").css("background","inherit");
-        //$(deleteBookmark).prop("disabled",true);
-
-        //FILTER.showStars();	
-        //FILTER.updateData();	
-
-        VISPANEL.updateCurrentChart("reset_chart");
-        FilterHandler.clearCurrent();
-    };
+	
+	
+	////////	Reset Button Click	////////
+	
+	EVTHANDLER.btnResetClicked = function(){			
+		LIST.highlightListItems();
+		LIST.scrollToFirst();
+		//$(filterBookmarkDialogId+">div>span").text(STR_SHOWALLRESULTS);
+		//$(filterBookmarkDialogId+">div>div").css("background","inherit");
+		//$(deleteBookmark).prop("disabled",true);		
+		//FILTER.showStars();	
+		//FILTER.updateData();			
+		VISPANEL.updateCurrentChart( "reset_chart" );
+        FilterHandler.reset();
+	};
 
 
     /**** Bookmark section in content list items ****/
@@ -871,106 +852,119 @@ function Visualization(EEXCESSobj) {
 
         $(colorIcon).remove();
 
-        var iconColorScale = (VISPANEL.chartName == 'timeline') ? timeVis.colorScale : (VISPANEL.chartName == 'barchart') ? barVis.colorScale : 'undefined';
+		$( contentList ).scrollTo( "top" );
+	};
+	
+	
+	
+	/**
+	 * Draws legend color icons in each content list item
+	 * */
+	LIST.setColorIcon = function(){
+		
+		$( colorIcon ).remove();
+		
+		var iconColorScale = (VISPANEL.chartName == 'timeline') ?  timeVis.colorScale : (VISPANEL.chartName == 'barchart') ?  barVis.colorScale : 'undefined'; 
+		
+		if( iconColorScale != 'undefined' ){
+			
+			var facet;
+			for(var i = 0; i < mappingSelectors.length; i++){
+				if($(mappingSelectors[i]).attr("name") == "color")
+					facet = $(mappingSelectors[i]).val();
+			}
+			
+			for(var i = 0; i < data.length; i++){	
+				var item = $(listItem +""+ i + " .eexcess_item_ctl");
+				var title = data[i].facets[facet] || 'en';
+				item.append( "<div class=\"color_icon\" title=\""+ title +"\" ></div>" );	
+				item.find( colorIcon ).css( 'background', iconColorScale(data[i].facets[facet] || 'en') );
+			}
+		}
+	};
+	
+	
+	/**
+	 * Draws legend color icons in each content list item
+	 * */
+	LIST.selectListItem = function( d, i, flagSelectedOutside, addItemToCurrentSelection){
 
-        if (iconColorScale != 'undefined') {
+		var addItemToCurrentSelection = addItemToCurrentSelection || false;
+		var isSelectedFromOutside = flagSelectedOutside || false;
+		var index = i;
+		var indicesToHighlight = [];
 
-            var facet;
-            for (var i = 0; i < mappingSelectors.length; i++) {
-                if ($(mappingSelectors[i]).attr("name") == "color")
-                    facet = $(mappingSelectors[i]).val();
-            }
+		var indexWasAlreadySelected = LIST.indicesSelected.indexOf(index) > -1;
 
-            for (var i = 0; i < data.length; i++) {
-                var item = $(listItem + "" + i + " .eexcess_item_ctl");
-                var title = data[i].facets[facet] || 'en';
-                item.append("<div class=\"color_icon\" title=\"" + title + "\" ></div>");
-                item.find(colorIcon).css('background', iconColorScale(data[i].facets[facet] || 'en'));
-            }
-        }
-    };
+		if (addItemToCurrentSelection)
+			indicesToHighlight = LIST.indicesSelected;
 
+		if (indexWasAlreadySelected)
+			indicesToHighlight.splice(indicesToHighlight.indexOf(index), 1);
+		else
+			indicesToHighlight.push(index);
 
-    /**
-     * Draws legend color icons in each content list item
-     * */
-    LIST.selectListItem = function (d, i, flagSelectedOutside, addItemToCurrentSelection, scrollToFirst) {
+		LIST.indicesSelected = indicesToHighlight;
+		if (indicesToHighlight.length == 0)
+			indicesToHighlight = VISPANEL.getAllSelectListItems();
 
-        var addItemToCurrentSelection = addItemToCurrentSelection || false;
-        var isSelectedFromOutside = flagSelectedOutside || false;
-        var index = i;
-        var indicesToHighlight = [];
-        var wasFirstItemSelectedWithAddingKey = false;
+		if( !flagSelectedOutside )
+			VISPANEL.updateCurrentChart( 'highlight_item_selected', indicesToHighlight ); // todo: remove
 
-        var indexWasAlreadySelected = LIST.indicesSelected.indexOf(index) > -1;
-
-        if (addItemToCurrentSelection)
-            indicesToHighlight = LIST.indicesSelected;
-
-        if (addItemToCurrentSelection && LIST.indicesSelected.length == 0)
-            wasFirstItemSelectedWithAddingKey = true;
-
-        if (indexWasAlreadySelected)
-            indicesToHighlight.splice(indicesToHighlight.indexOf(index), 1);
-        else
-            indicesToHighlight.push(index);
-
-        LIST.indicesSelected = indicesToHighlight;
-        if (indicesToHighlight.length == 0)
-            indicesToHighlight = VISPANEL.getAllSelectListItems();
-
-        if (!flagSelectedOutside)
-            VISPANEL.updateCurrentChart('highlight_item_selected', indicesToHighlight);
-
-        var dataSelected = LIST.internal.getDataItemsFromIndices(data, LIST.indicesSelected);
-        FilterHandler.setCurrentFilterListItems(dataSelected, wasFirstItemSelectedWithAddingKey);
-    };
-
-
-
-
-    /**
-     *	Function that highlights items on the content list, according to events happening on the visualization.
-     *	E.g. when one or more keywords are selected, the matching list items remain highlighted, while the others become translucid
-     *	If no parameters are received, all the list items are restored to the default opacity 
-     *
-     * */
-    LIST.highlightListItems = function (dummy, scrollToFirst) { // todo: scrollToFirst handling needs to be triggered differently
-
-        scrollToFirst = scrollToFirst == undefined ? true : scrollToFirst;
-        var dataToHighlightIds = FilterHandler.mergeFilteredDataIds();
-        if (dataToHighlightIds == null) {
-            d3.selectAll(allListItems).style("opacity", "1");
-            return;
-        }
-
-        indicesHighlighted = []; // todo: really needed?
-
-        if (dataToHighlightIds.length > 0) {
-
-            for (var i = 0; i < data.length; i++) {
-                var item = d3.select(listItem + "" + i);
-
-                if (_.contains(dataToHighlightIds, data[i].id)) {
-                    item.style("opacity", "1");
-                    indicesHighlighted.push(i);
-                } else {
-                    item.style("opacity", "0.2");
-                }
-            }
-
-            if (scrollToFirst)
-                $(contentList).scrollTo(listItem + "" + indicesHighlighted[0], {offsetTop: 90});
-        } else {
-            d3.selectAll(allListItems).style("opacity", "1");
-            if (scrollToFirst)
-                $(contentList).scrollTo("top");
-        }
-    };
+		var dataItemSelected = LIST.internal.getDataItemsFromIndices(data, [index]);
+		var selectedWithAddingKey = addItemToCurrentSelection;
+		FilterHandler.singleItemSelected(dataItemSelected[0], selectedWithAddingKey);	
+	};
+	
 
 
+	
+	/**
+	 *	Function that highlights items on the content list, according to events happening on the visualization.
+	 *	E.g. when one or more keywords are selected, the matching list items remain highlighted, while the others become translucid
+	 *	If no parameters are received, all the list items are restored to the default opacity 
+	 *
+	 * */
+	LIST.highlightListItems = function(){ // todo: rename: highlightItems
 
-    LIST.turnFaviconOnAndShowDetailsIcon = function (index) {
+		var dataToHighlightIds = FilterHandler.mergeFilteredDataIds();
+		d3.selectAll(allListItems).classed("highlighted", false);
+		if (dataToHighlightIds == null){
+			d3.selectAll( allListItems ).style("opacity", "1");
+			return;
+		}
+		
+		if(dataToHighlightIds.length > 0){
+			
+			for(var i = 0; i < data.length; i++){			
+				var item = d3.select(listItem +""+ i);
+				
+				if(_.contains(dataToHighlightIds, data[i].id)){
+					item.style("opacity", "1");
+					item.classed("highlighted", true);
+				} else {
+					item.style("opacity", "0.2");
+				}
+			}
+		} else {
+			d3.selectAll( allListItems ).style("opacity", "1");
+		}
+		
+		VISPANEL.updateCurrentChart( 'highlight_item_selected', null,  dataToHighlightIds); // todo: remove
+	};
+	
+	LIST.scrollToFirst = function(){
+		var $highlighted = $(contentList).find('.highlighted');
+		if ($highlighted.length > 0){
+			$( contentList ).scrollTo("#" + $highlighted.attr('id'), {offsetTop: 90});	
+		} else {
+			$( contentList ).scrollTo( "top" ); // is this needed???
+		}
+	};
+	
+	
+
+    LIST.turnFaviconOnAndShowDetailsIcon = function( index ){
         // Replace favicon_off with favicon_on
         d3.select(listItem + '' + index).select(favIconClass).transition().attr("src", FAV_ICON_ON).duration(2000);
         // show bookmark details icon
@@ -1111,125 +1105,105 @@ function Visualization(EEXCESSobj) {
         // cleanup added controls:
         $('#eexcess_vis_panel').children().not('#eexcess_canvas').remove()
         $('#eexcess_main_panel').attr('class', ''); // removing urank class
-        LIST.buildContentList();
+		LIST.buildContentList();
 
-        var oldChartName = VISPANEL.chartName;
-        var selectedMapping = this.internal.getSelectedMapping(item);
-        if (oldChartName != VISPANEL.chartName) {
-            VISPANEL.chartChanged(oldChartName, VISPANEL.chartName);
-        }
+		var oldChartName = VISPANEL.chartName;
+		var selectedMapping = this.internal.getSelectedMapping( item );
+		if (oldChartName != VISPANEL.chartName){
+			VISPANEL.chartChanged(oldChartName, VISPANEL.chartName);
+		}
 
-        var plugin = PluginHandler.getByDisplayName(VISPANEL.chartName);
-        if (plugin != null) {
-            if (plugin.Object.draw != undefined)
-                plugin.Object.draw(data, selectedMapping, width, height);
-        } else {
-            switch (VISPANEL.chartName) {		// chartName is assigned in internal.getSelectedMapping() 
-                case "timeline" :
-                    timeVis.draw(data, selectedMapping, width, height);
-                    break;
-                case "barchart":
-                    barVis.draw(data, selectedMapping, width, height);
-                    break;
-                case "geochart":
-                    geoVis.draw(data, selectedMapping, width, height);
-                    break;
-                case "urank":
-                    urankVis.draw(data, selectedMapping, width, height);
-                    break;
-                default :
-                    d3.select(root).text("No Visualization");
-            }
-        }
+		var plugin = PluginHandler.getByDisplayName(VISPANEL.chartName);
+		if (plugin != null){
+			if (plugin.Object.draw != undefined)
+				plugin.Object.draw(data, selectedMapping, width, height);			
+		} else {
+			switch(VISPANEL.chartName){		// chartName is assigned in internal.getSelectedMapping() 
+				case "timeline" : timeVis.draw(data, selectedMapping, width, height); break;
+				case "barchart":  barVis.draw(data, selectedMapping, width, height); break;
+	            case "geochart":  geoVis.draw(data, selectedMapping, width, height); break;
+                case "urank":  urankVis.draw(data, selectedMapping, width, height); break;
+				default : d3.select(root).text("No Visualization");	
+			}
+		}
 
-        LIST.setColorIcon();
-        LIST.highlightListItems(VISPANEL.getAllSelectListItems(), false);//(indicesToHighlight); //changecode
-    };
+		LIST.setColorIcon();
+		LIST.highlightListItems();
+	};
+	
+	
+	VISPANEL.chartChanged = function(oldChartName, newChartName){
+		if (oldChartName === "")
+			return
 
+		FilterHandler.makeCurrentPermanent();
+		var plugin = PluginHandler.getByDisplayName(oldChartName);
+		if (plugin != null && plugin.Object.finalize != undefined)
+			plugin.Object.finalize();
+	};
+	
+	VISPANEL.getAllSelectListItems = function(){
+		var array =[];
+		data.forEach(function(element,index){
+			array.push(index);
+		});
+		return array;
+	};
+	
+	VISPANEL.updateCurrentChart = function( action, arg, arg2 ){
+		
+		var plugin = PluginHandler.getByDisplayName(VISPANEL.chartName);
+		switch( action ){
+			
+			case "reset_chart":		
+				if (plugin != null){
+					if (plugin.Object.reset != undefined)
+						plugin.Object.reset();
+				} else {
+					switch(VISPANEL.chartName){
+						case "timeline": timeVis.reset(); break;
+						case "barchart": barVis.reset(); break;
+	                    case "geochart": geoVis.reset(); break;
+                    	case "urank": urankVis.reset(); break;
+					}
+				}
+				break;
 
-    VISPANEL.chartChanged = function (oldChartName, newChartName) {
-        if (oldChartName === "")
-            return
-
-        FilterHandler.makeCurrentPermanent();
-        var plugin = PluginHandler.getByDisplayName(oldChartName);
-        if (plugin != null && plugin.Object.finalize != undefined)
-            plugin.Object.finalize();
-    };
-
-    VISPANEL.getAllSelectListItems = function () {
-        var array = [];
-        data.forEach(function (element, index) {
-            array.push(index);
-        });
-        return array;
-    };
-
-    VISPANEL.updateCurrentChart = function (action, arg) {
-
-        var plugin = PluginHandler.getByDisplayName(VISPANEL.chartName);
-        switch (action) {
-
-            case "reset_chart":
-                if (plugin != null) {
-                    if (plugin.Object.reset != undefined)
-                        plugin.Object.reset();
-                } else {
-                    switch (VISPANEL.chartName) {
-                        case "timeline":
-                            timeVis.reset();
-                            break;
-                        case "barchart":
-                            barVis.reset();
-                            break;
-                        case "geochart":
-                            geoVis.reset();
-                            break;
-                        case "urank":
-                            urankVis.reset();
-                            break;
-                    }
-                }
-                break;
-
-            case "highlight_item_selected":
-                var arrayIndices = arg;
-                if (plugin != null) {
-                    if (plugin.Object.highlightItems != undefined)
-                        plugin.Object.highlightItems(arrayIndices);
-                } else {
-                    switch (VISPANEL.chartName) {
-                        case "timeline":
-                            timeVis.selectNodes(arrayIndices, self);
-                            break;
-                        case "barchart":
-                            barVis.clearSelection();
-                            break;
-                        case "geochart":
-                            geoVis.highlightItems(arrayIndices);
-                            break;
-                        case "urank":
-                            urankVis.highlightItems(arrayIndices);
-                            break;
-                    }
-                }
-                break;
-        }
-
-    };
-
-
-    VISPANEL.clearCanvasAndShowMessage = function (message) {
-
-        $(root).empty();
-
-        var messageOnCanvasDiv = d3.select(root).append("div")
-                .attr("id", "eexcess_message_on_canvas");
-
-        messageOnCanvasDiv.append("span")
-                .text(message);
-
-        if (message == STR_LOADING) {
+			case "highlight_item_selected":
+				var arrayIndices = arg;
+				var dataToHighlightIds = arg2;
+				if (plugin != null){
+					if (plugin.Object.highlightItems != undefined)
+						plugin.Object.highlightItems(arrayIndices);
+				} else if (dataToHighlightIds != null) {
+					switch(VISPANEL.chartName){
+	                    case "geochart": geoVis.highlightItems(arrayIndices, dataToHighlightIds); break;
+					}
+				} else {
+					switch(VISPANEL.chartName){
+						case "timeline": timeVis.selectNodes(arrayIndices, self); break;
+	                    case "barchart": barVis.clearSelection(); break;
+	                    //case "geochart": geoVis.highlightItems(arrayIndices); break;
+                    	case "urank": urankVis.highlightItems(arrayIndices); break;
+					}
+				}
+				break;
+		}
+	
+	};
+    
+    
+    VISPANEL.clearCanvasAndShowMessage = function( message ){
+        
+        $( root ).empty();
+			
+		var messageOnCanvasDiv = d3.select( root ).append("div")
+            .attr("id", "eexcess_message_on_canvas");
+			
+		messageOnCanvasDiv.append("span")
+            .text( message );	
+			
+        if( message == STR_LOADING ){
             messageOnCanvasDiv.append("img")
                     .attr("src", LOADING_IMG);
         }
@@ -1729,23 +1703,26 @@ function Visualization(EEXCESSobj) {
 
 
     var EXT = {};
+	
+		
+	EXT.ListItemSelected = function(datum, index){
+		LIST.selectListItem( datum, index, true, false);
+	};
+	
+	EXT.scrollToFirst = function(){
+		LIST.scrollToFirst();
+	};
+	
+	EXT.selectItems = function(){
+		LIST.highlightListItems();
+	};
 
-
-    EXT.ListItemSelected = function (datum, index, scrollToFirst) {
-        LIST.selectListItem(datum, index, true, false, scrollToFirst);
-    };
-
-
-    EXT.selectItems = function (itemIndicesArray, scrollToFirst) {
-        LIST.highlightListItems(itemIndicesArray, scrollToFirst);
-    };
-
-    EXT.getAllSelectListItems = function () {
-        return VISPANEL.getAllSelectListItems();
-    };
-
-    EXT.faviconClicked = function (d, i) {
-        EVTHANDLER.faviconClicked(d, i);
+	EXT.getAllSelectListItems = function(){
+		return VISPANEL.getAllSelectListItems();
+	};
+	
+    EXT.faviconClicked = function(d, i){
+    	EVTHANDLER.faviconClicked(d, i);
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1839,89 +1816,90 @@ function Visualization(EEXCESSobj) {
                 }
             }
         });
+		
+		$(filterBookmarkDialogId).on("mousedown",function(evt){
+			BOOKMARKS.destroyBookmarkDialog();
+			isBookmarkDialogOpen = false;	
+		});
+		
+		$(filterBookmarkDialogId).slideDown('slow');
+	};
+	
+	/*
+	FILTER.filterBookmark = function(inputDataParam,currentBookmark,func){
+		inputDataParam.forEach(function(elementData,indexData){
+			currentBookmark.forEach(function(elementBookmark,indexBookmark){
+				if(elementData.id == elementBookmark.id){
+					func(inputDataParam,indexData);
+				}
+			});
+		});
+	}
+	*/
+	
+	// build filter bookmark and delete bookmark control.
+	FILTER.buildFilterBookmark = function(){
+	
+	    BOOKMARKS.destroyBookmarkDialog();
+		inputData=data;
+		START.inputData = data;
 
-        $(filterBookmarkDialogId).on("mousedown", function (evt) {
-            BOOKMARKS.destroyBookmarkDialog();
-            isBookmarkDialogOpen = false;
-        });
+		FILTER.changeDropDownList();
+		
+		d3.select(addBookmarkItems).on("click", FILTER.buildAddBookmarkItems);
+		
+		d3.select(deleteBookmark).on("click",function(){
 
-        $(filterBookmarkDialogId).slideDown('slow');
-    };
+			if (confirm("Delete current bookmark?") == true) {
+				var bookmarkName = $(filterBookmarkDialogId+">div>span").text().split(":")[0].trim();
+				BookmarkingAPI.deleteBookmark(bookmarkName);
+				
+				FILTER.changeDropDownList();
+				
+				FILTER.showStars();
+				FILTER.updateData();
+				FILTER.showStars();
+				FILTER.updateData();
+			} 
 
-    /*
-     FILTER.filterBookmark = function(inputDataParam,currentBookmark,func){
-     inputDataParam.forEach(function(elementData,indexData){
-     currentBookmark.forEach(function(elementBookmark,indexBookmark){
-     if(elementData.id == elementBookmark.id){
-     func(inputDataParam,indexData);
-     }
-     });
-     });
-     }
-     */
+		});
+		$(deleteBookmark).prop("disabled",true);
+	};
+	
+	FILTER.showStars = function(){
+		var input ={};
+		input.data = [];
+		input.data = inputData;
+		// update bookmarking changes:
+		input.data.forEach(function(dataItem){
+			if(typeof bookmarkedItems[dataItem.id] != 'undefined' &&
+				bookmarkedItems[dataItem.id] != 'undefined'){
+				dataItem['bookmarked'] = true;
+			}else{
+				dataItem['bookmarked'] = false;
+			}	
+		});
+		data = input.data;	
+		
+		//FILTER.updateData();
+	};
+	
+	FILTER.updateData = function(){
+		// Initialize template's elements
+		//PREPROCESSING.setAncillaryVariables();
+		BOOKMARKS.updateBookmarkedItems();
+		//PREPROCESSING.extendDataWithAncillaryDetails();
+		QUERY.updateHeaderText( "Query Results : " + data.length );
+		QUERY.updateSearchField( query );
+		//CONTROLS.reloadChartSelect();
+		LIST.buildContentList();
+		VISPANEL.drawChart();
+	};
+	
+	
+	
 
-    // build filter bookmark and delete bookmark control.
-    FILTER.buildFilterBookmark = function () {
-
-        BOOKMARKS.destroyBookmarkDialog();
-        inputData = data;
-
-        FILTER.changeDropDownList();
-
-        d3.select(addBookmarkItems).on("click", FILTER.buildAddBookmarkItems);
-
-        d3.select(deleteBookmark).on("click", function () {
-
-            if (confirm("Delete current bookmark?") == true) {
-                var bookmarkName = $(filterBookmarkDialogId + ">div>span").text().split(":")[0].trim();
-                BookmarkingAPI.deleteBookmark(bookmarkName);
-
-                FILTER.changeDropDownList();
-
-                FILTER.showStars();
-                FILTER.updateData();
-                FILTER.showStars();
-                FILTER.updateData();
-            }
-
-        });
-        $(deleteBookmark).prop("disabled", true);
-    };
-
-    FILTER.showStars = function () {
-        var input = {};
-        input.data = [];
-        input.data = inputData;
-        // update bookmarking changes:
-        input.data.forEach(function (dataItem) {
-            if (typeof bookmarkedItems[dataItem.id] != 'undefined' &&
-                    bookmarkedItems[dataItem.id] != 'undefined') {
-                dataItem['bookmarked'] = true;
-            } else {
-                dataItem['bookmarked'] = false;
-            }
-        });
-        data = input.data;
-
-        //FILTER.updateData();
-    };
-
-    FILTER.updateData = function () {
-        // Initialize template's elements
-        //PREPROCESSING.setAncillaryVariables();
-        BOOKMARKS.updateBookmarkedItems();
-        //PREPROCESSING.extendDataWithAncillaryDetails();
-        QUERY.updateHeaderText("Query Results : " + data.length);
-        QUERY.updateSearchField(query);
-        //CONTROLS.reloadChartSelect();
-        LIST.buildContentList();
-        VISPANEL.drawChart();
-    };
-
-
-
-
-    FILTER.buildAddBookmarkItems = function (d, i) {
+	FILTER.buildAddBookmarkItems = function(d, i){
 //BookmarkingAPI.deleteBookmark("");
         d3.event.stopPropagation();
         BOOKMARKS.buildSaveBookmarkDialog(
