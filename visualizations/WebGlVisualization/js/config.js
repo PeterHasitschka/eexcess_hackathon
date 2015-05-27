@@ -63,16 +63,16 @@ GLVIS.config = {
     navigation: {
         zoom: {
             animated: {
-                threshold: 0.0001,
-                speed_root: 1.5,
-                speed_fct: 2
+                threshold: 0.001,
+                pow: 0.1,
+                speed_fct: 10
             }
         },
         move: {
             animated: {
-                threshold: 8,
-                root: 2,
-                speed_fct: 3
+                threshold: 1,
+                pow: 0.2,
+                speed_fct: 0.5
             }
         }
     }

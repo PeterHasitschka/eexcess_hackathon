@@ -24,7 +24,7 @@ GLVIS.ResultPosDistributed.prototype.calculatePositions = function() {
     
     
     var degree_step = (Math.PI * 2) / num_res;
-    var curr_degree = 0.0;
+    var curr_degree = - Math.PI / 2.0;
     
     for (var i=0; i< results.length; i++) {
         /** @type{GLVIS.Result} **/

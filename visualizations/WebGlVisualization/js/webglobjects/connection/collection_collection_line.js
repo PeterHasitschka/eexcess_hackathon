@@ -76,7 +76,6 @@ GLVIS.ConnectionCollectionCollection.prototype.render = function () {
     if (GLVIS.config.debug)
         console.log("Rendering CONNECTION for Collections " + this.c1_.getId() + "/" + this.c2_.getId());
 
-        console.log(config.z);
     this.webgl_objects_.line.geometry.vertices[0].set(pos1.x, pos1.y, config.z);
     this.webgl_objects_.line.geometry.vertices[1].set(pos2.x, pos2.y, config.z);
     this.webgl_objects_.line.geometry.verticesNeedUpdate = true;

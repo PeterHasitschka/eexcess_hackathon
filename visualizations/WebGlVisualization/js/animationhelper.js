@@ -7,46 +7,41 @@ GLVIS = GLVIS || {};
 
 GLVIS.AnimationHelper = {};
 
-/**
- * 
- * @param {type} curr Current value
- * @param {type} goal Goal Value
- * @param {type} root 2,3, ...
- * @param {type} speedfactor e.g. 3
- * @param {type} threshold e.g. 0.0001
- * @returns {Number} calculated step value
- */
-GLVIS.AnimationHelper.getStepRoot = function (curr, goal, root, speedfactor, threshold) {
 
+
+GLVIS.AnimationHelper.getStepByExpSlowdown = function (curr, goal, max_diff, factor, pow, threshold) {
+
+    curr = parseFloat(curr);
     goal = parseFloat(goal);
-    
-    if (Math.abs(Math.max(curr, goal) - Math.min(curr, goal)) > threshold) {
+    max_diff = parseFloat(max_diff);
+    var diff = goal - curr;
 
-        if (goal !== 0.0)
-            var delta = 1.0 - ((parseFloat(curr) / parseFloat(goal)));
-        else
-            var delta = 1.0 - (parseFloat(curr));
+    var max_val = Math.max(curr, goal);
+    var min_val = Math.min(curr, goal);
 
-        var delta_calc = Math.pow(Math.abs(delta), 1 / root) * speedfactor;
-        if (delta < 0)
-            delta_calc *= -1;
-
-        if (goal < 0) {
-            delta_calc *= -1;
-        }
-        
-        
-        //console.log(curr, goal, delta_calc);
-        //Insert time diff for smooth animation independent from performance
-        var time_diff_fact = GLVIS.Scene.getCurrentScene().getTimeDelta() / 10;
-        delta_calc *= time_diff_fact;
+    var abs_diff = max_val - min_val;
 
 
-        return delta_calc;
+
+    if (abs_diff > threshold) {
+
+        //Normalize to a small value
+        var normalized_diff = diff / max_diff;
+
+        // 1 if goal > curr | -1 else
+        var direction = normalized_diff / Math.abs(normalized_diff);
+
+        var power = Math.pow(Math.abs(normalized_diff), pow);
+        power /= 2;
+
+        //console.log(max_diff, diff, normalized_diff, pow, power, direction);
+        return power * diff * factor;
     }
     else {
-        return 0;
+        return 0.0;
     }
 
 };
+
+
 

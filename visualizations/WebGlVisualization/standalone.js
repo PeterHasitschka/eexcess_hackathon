@@ -23,7 +23,7 @@ jQuery(document).ready(function () {
         c.setParentId(parents[c_count]);
         
         
-        for (var r_count=0; r_count < 3; r_count++) {
+        for (var r_count=0; r_count < 5; r_count++) {
             var r = new GLVIS.Result();
             
             c.addResult(r);
