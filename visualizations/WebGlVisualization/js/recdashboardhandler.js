@@ -14,9 +14,7 @@ GLVIS.RecDashboardHandler = function(){
     
 };
 
-GLVIS.RecDashboardHandler.prototype.init = function(){
-    console.log("INITIAL CALL FOR REC DASHBOARD HANDLER");
-}
+
 
 /**
  * Handles visualization of click on collection in rec-dashboard html

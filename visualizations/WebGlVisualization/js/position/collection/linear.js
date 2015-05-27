@@ -28,7 +28,7 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
 
     //Store parent-id and key in an array to sort it
     var parent_mapping = [];
-    for (var coll_key in collections) {
+    for (var coll_key = 0; coll_key < collections.length; coll_key++) {
 
         /** @type{GLVIS.Collection} **/
         var current_collection = collections[coll_key];
@@ -53,14 +53,13 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
     var init_x = 0;
 
     var last_coll = null;
-    for (var coll_count in parent_mapping) {
+    for (var coll_count = 0; coll_count < parent_mapping.length; coll_count++) {
         var collection_key = parent_mapping[coll_count][0];
 
         var curr_x = init_x + coll_count * x_step;
 
         /** @type{GLVIS.Collection} **/
         var current_collection = collections[collection_key];
-
         current_collection.setPosition(curr_x, null);
 
         var last_coll = current_collection;

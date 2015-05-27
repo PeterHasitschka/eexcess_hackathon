@@ -133,7 +133,7 @@ GLVIS.Scene.prototype.getCollection = function (collection_id) {
 
     collection_id = parseInt(collection_id);
 
-    for (var key in this.collections_) {
+    for (var key=0; key < this.collections_.length; key++) {
         if (this.collections_[key].getId() === collection_id)
             return this.collections_[key];
 
@@ -149,7 +149,7 @@ GLVIS.Scene.prototype.initCollectionNetwork = function () {
     this.getCollectionPositionHandler().calculatePositions(true);
 
     //Creating parent connections
-    for (var key in this.collections_) {
+    for (var key=0; key < this.collections_.length; key++) {
         this.collections_[key].updateParentConnection();
     }
 };

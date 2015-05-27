@@ -108,7 +108,7 @@ GLVIS.Collection.prototype.render = function () {
         console.log("Collection with id " + this.id_ + " rendered!");
 
     //Render all Gl-Objectss
-    for (var key in this.vis_data_.gl_objects) {
+    for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
         this.vis_data_.gl_objects[key].render();
     }
 
@@ -162,7 +162,7 @@ GLVIS.Collection.prototype.selectAndFocus = function () {
 
 
 GLVIS.Collection.prototype.setMyGlObjectsDirty_ = function () {
-    for (var key in this.vis_data_.gl_objects) {
+    for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
         this.vis_data_.gl_objects[key].setIsDirty(true);
     }
 };
@@ -251,7 +251,7 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
     //Set Parent Connection
     if (this.parent_id_ !== null) {
         var parent_collection = GLVIS.Scene.getCurrentScene().getCollection(this.parent_id_);
-       
+
         if (parent_collection)
         {
             console.log("parent collection found. Creating connection");

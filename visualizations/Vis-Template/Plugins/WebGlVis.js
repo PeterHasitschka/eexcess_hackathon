@@ -20,7 +20,7 @@
 
                     if (!WebGlVisPlugin.librariesLoaded) {
                         require([
-                            "../../../libs/jquery-1.10.1.min.js",
+                            "../../../libs/jquery-1.10.1.min.js",                    
                             "../../../libs/jquery-mousewheel/jquery.mousewheel.min.js",
                             "../WebGlVisualization/lib/three.js/three.min.js",
                             "../WebGlVisualization/js/config.js",
@@ -41,8 +41,7 @@
                             "../WebGlVisualization/js/scene.js",
                             
                             "../WebGlVisualization/html/recdashboard/init.js"
-                            
-                            
+                           
                         ],
                                 function () {
                                     console.log("finished calling js files for webglvis-plugin");

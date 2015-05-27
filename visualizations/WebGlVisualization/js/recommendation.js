@@ -86,7 +86,7 @@ GLVIS.Recommendation.prototype.render = function () {
         console.log("Recommendation with id " + this.id_ + " rendered!");
 
     //Render all Gl-Objectss
-    for (var key in this.vis_data_.gl_objects) {
+    for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
         this.vis_data_.gl_objects[key].render();
     }
 
@@ -158,7 +158,8 @@ GLVIS.Recommendation.prototype.setStatus = function (status) {
 
 
 GLVIS.Recommendation.prototype.setMyGlObjectsDirty_ = function () {
-    for (var key in this.vis_data_.gl_objects) {
+    for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
+
         this.vis_data_.gl_objects[key].setIsDirty(true);
     }
 
@@ -230,8 +231,8 @@ GLVIS.Recommendation.prototype.setColor = function (color) {
  */
 GLVIS.Recommendation.prototype.setOpacity = function (opacity) {
     if (this.vis_data_.opacity === opacity)
-        return;    
-    
+        return;
+
     this.vis_data_.opacity = opacity;
     this.dirty_ = true;
     this.setMyGlObjectsDirty_();
