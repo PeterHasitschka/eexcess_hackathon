@@ -240,8 +240,8 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
     var that = this;
     var callback_called = false;
 
-    this.animatedZoom(0.4, function () {
-        that.animatedZoom(1, function () {
+    this.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_out, function () {
+        that.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_in, function () {
             console.log("finished zoom to 1");
 
             if (callback_fct && !callback_called) {

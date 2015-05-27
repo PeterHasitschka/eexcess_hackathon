@@ -64,8 +64,10 @@ GLVIS.config = {
         zoom: {
             animated: {
                 threshold: 0.001,
-                pow: 0.1,
-                speed_fct: 10
+                pow: 0.0001,
+                speed_fct: 10,
+                zoom_out: 0.7,
+                zoom_in: 1
             }
         },
         move: {

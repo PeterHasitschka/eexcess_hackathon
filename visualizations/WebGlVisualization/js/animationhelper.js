@@ -21,15 +21,10 @@ GLVIS.AnimationHelper.getStepByExpSlowdown = function (curr, goal, max_diff, fac
 
     var abs_diff = max_val - min_val;
 
-
-
     if (abs_diff > threshold) {
 
         //Normalize to a small value
         var normalized_diff = diff / max_diff;
-
-        // 1 if goal > curr | -1 else
-        var direction = normalized_diff / Math.abs(normalized_diff);
 
         var power = Math.pow(Math.abs(normalized_diff), pow);
         power /= 2;
