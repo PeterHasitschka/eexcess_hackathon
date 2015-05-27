@@ -20,34 +20,37 @@
 
                     if (!WebGlVisPlugin.librariesLoaded) {
                         require([
-                            "../../../libs/jquery-1.10.1.min.js",                    
+                            "../../../libs/jquery-1.10.1.min.js",
                             "../../../libs/jquery-mousewheel/jquery.mousewheel.min.js",
-                            "../WebGlVisualization/lib/three.js/three.min.js",
-                            "../WebGlVisualization/js/config.js",
-                            "../WebGlVisualization/js/db/db_handler.js",
-                            "../WebGlVisualization/js/animationhelper.js",
-                            "../WebGlVisualization/js/webglhandler.js",
-                            "../WebGlVisualization/js/interactionhandler.js",
-                            "../WebGlVisualization/js/navigationhandler.js",
-                            "../WebGlVisualization/js/recdashboardhandler.js",
-                            "../WebGlVisualization/js/webglobjects/collection_centernode.js",
-                            "../WebGlVisualization/js/webglobjects/rec_commonnode.js",
-                            "../WebGlVisualization/js/collection.js",
-                            "../WebGlVisualization/js/recommendation.js",
-                            "../WebGlVisualization/js/position/recommendation/distributed.js",
-                            "../WebGlVisualization/js/position/collection/linear.js",
-                            "../WebGlVisualization/js/webglobjects/connection/collection_rec_line.js",
-                            "../WebGlVisualization/js/webglobjects/connection/collection_collection_line.js",
-                            "../WebGlVisualization/js/scene.js",
-                            
-                            "../WebGlVisualization/html/recdashboard/init.js"
-                           
-                        ],
+                            "../WebGlVisualization/lib/three.js/three.min.js"],
                                 function () {
-                                    console.log("finished calling js files for webglvis-plugin");
-                                    WebGlVisPlugin.librariesLoaded = true;
-                                    WebGlVisPlugin.draw();
-                                });
+                                    require([
+                                        "../WebGlVisualization/js/config.js",
+                                        "../WebGlVisualization/js/db/db_handler.js",
+                                        "../WebGlVisualization/js/animationhelper.js",
+                                        "../WebGlVisualization/js/webglhandler.js",
+                                        "../WebGlVisualization/js/interactionhandler.js",
+                                        "../WebGlVisualization/js/navigationhandler.js",
+                                        "../WebGlVisualization/js/recdashboardhandler.js",
+                                        "../WebGlVisualization/js/webglobjects/collection_centernode.js",
+                                        "../WebGlVisualization/js/webglobjects/rec_commonnode.js",
+                                        "../WebGlVisualization/js/collection.js",
+                                        "../WebGlVisualization/js/recommendation.js",
+                                        "../WebGlVisualization/js/position/recommendation/distributed.js",
+                                        "../WebGlVisualization/js/position/collection/linear.js",
+                                        "../WebGlVisualization/js/webglobjects/connection/collection_rec_line.js",
+                                        "../WebGlVisualization/js/webglobjects/connection/collection_collection_line.js",
+                                        "../WebGlVisualization/js/scene.js",
+                                        "../WebGlVisualization/html/recdashboard/init.js"
+                                    ],
+                                            function () {
+                                                console.log("finished calling js files for webglvis-plugin");
+                                                WebGlVisPlugin.librariesLoaded = true;
+                                                WebGlVisPlugin.draw();
+                                            });
+                                }
+                        );
+
                     }
 
 

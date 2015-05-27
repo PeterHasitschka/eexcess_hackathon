@@ -51,7 +51,6 @@ jQuery(document).ready(function () {
 
             for (var r_count = 0; r_count < 5; r_count++) {
                 var r = new GLVIS.Recommendation();
-                console.log(r);
                 c.addRecommendation(r);
             }
 
