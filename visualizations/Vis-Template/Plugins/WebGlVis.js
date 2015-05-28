@@ -1,6 +1,9 @@
 (function () {
 
-    var WebGlVisPlugin = {};
+    var WebGlVisPlugin = {
+        scene: null,
+        db_handler: null
+    };
     var $root = null;
 
     WebGlVisPlugin.initialize = function (EEXCESSObj, rootSelector) {
@@ -13,11 +16,16 @@
 
     WebGlVisPlugin.draw = function (receivedData, mappingCombination, iWidth, iHeight) {
 
-
+        //Load HTML-Credentials via AJAX
         jQuery.get(
                 "../WebGlVisualization/html/recdashboard/index.html", function (data) {
                     $root.append(data);
 
+                    /**
+                     * Run require in two steps... Otherwise it may happen
+                     * randomly that three.js doesn't get loaded until the scene
+                     * gets created.
+                     */
                     if (!WebGlVisPlugin.librariesLoaded) {
                         require([
                             "../../../libs/jquery-1.10.1.min.js",
@@ -41,18 +49,25 @@
                                         "../WebGlVisualization/js/webglobjects/connection/collection_rec_line.js",
                                         "../WebGlVisualization/js/webglobjects/connection/collection_collection_line.js",
                                         "../WebGlVisualization/js/scene.js",
-                                        "../WebGlVisualization/html/recdashboard/init.js",
-                                        
-                                        "js/utils.js"   //Important to prevent .scrollTo-Bug
+                                        //"../WebGlVisualization/html/recdashboard/init.js",
+                                        "js/utils.js", //Important to prevent .scrollTo-Bug
+                                        "js/colorpicker.js", //Important to prevent .colorPicker-Bug
+                                        "js/accordion-and-dropdown.js"   //Important to prevent .dropdown-Bug
                                     ],
                                             function () {
                                                 console.log("finished calling js files for webglvis-plugin");
                                                 WebGlVisPlugin.librariesLoaded = true;
+
+                                                //Recall this function
                                                 WebGlVisPlugin.draw();
                                             });
                                 }
                         );
 
+                    }
+                    else
+                    {
+                        GLVIS.RecDashboardHandler.initScene(this.scene, this.db_handler);
                     }
 
 
@@ -70,6 +85,7 @@
     };
 
     WebGlVisPlugin.finalize = function () {
+        GLVIS.RecDashboardHandler.cleanup();
     };
 
 

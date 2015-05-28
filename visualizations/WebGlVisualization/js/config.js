@@ -77,6 +77,9 @@ GLVIS.config = {
                 speed_fct: 0.5
             }
         }
+    },
+    rec_dashboard : {
+        selector: '#webgl_canvas_container'
     }
 
 };

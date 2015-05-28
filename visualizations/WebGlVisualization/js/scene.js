@@ -9,10 +9,7 @@ var GLVIS = GLVIS || {};
  */
 GLVIS.Scene = function (canvas) {
 
-    if (GLVIS.Scene.current_scene)
-        throw new ("ERROR! ALREADY SCENE REGISTERED AS CURRENT SCENE!");
     GLVIS.Scene.current_scene = this;
-
 
     /** @type {GLVIS.NavigationHandler} **/
     this.navigation_handler_ = new GLVIS.NavigationHandler(this);
@@ -133,7 +130,7 @@ GLVIS.Scene.prototype.getCollection = function (collection_id) {
 
     collection_id = parseInt(collection_id);
 
-    for (var key=0; key < this.collections_.length; key++) {
+    for (var key = 0; key < this.collections_.length; key++) {
         if (this.collections_[key].getId() === collection_id)
             return this.collections_[key];
 
@@ -149,10 +146,13 @@ GLVIS.Scene.prototype.initCollectionNetwork = function () {
     this.getCollectionPositionHandler().calculatePositions(true);
 
     //Creating parent connections
-    for (var key=0; key < this.collections_.length; key++) {
+    for (var key = 0; key < this.collections_.length; key++) {
         this.collections_[key].updateParentConnection();
     }
 };
+
+
+
 
 
 /******************
@@ -170,8 +170,18 @@ GLVIS.Scene.current_scene = null;
  */
 GLVIS.Scene.getCurrentScene = function () {
     if (!this.current_scene)
-        throw("ERROR: NO CURRENT SCENE!");
+        console.log("WARNING: NO CURRENT SCENE!");
 
     return this.current_scene;
 };
 
+
+GLVIS.Scene.animate = function () {
+    var curr_scene = GLVIS.Scene.getCurrentScene();
+    
+    if (!curr_scene)
+        return;
+    
+    requestAnimationFrame(GLVIS.Scene.animate);
+    curr_scene.render();
+};
