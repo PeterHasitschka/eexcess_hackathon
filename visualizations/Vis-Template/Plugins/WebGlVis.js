@@ -19,12 +19,12 @@
     WebGlVisPlugin.draw = function (receivedData, mappingCombination, iWidth, iHeight) {
 
         /**
-         * All necessary libraries are getting loaded from the RecDashboardHandler.
+         * All necessary libraries are getting loaded from the InitHandler.
          * Therefore only one file has to be required first.
          */
         if (typeof (GLVIS) === "undefined") {
             require([
-                "../WebGlVisualization/js/recdashboardhandler.js"
+                "../WebGlVisualization/js/inithandler.js"
                 
             ],
                     function () {
@@ -36,7 +36,7 @@
             /**
              * Init loads html framework via ajax and all other required libraries
              */
-            GLVIS.RecDashboardHandler.init($root, "../WebGlVisualization/");
+            GLVIS.InitHandler.init($root, "../WebGlVisualization/");
         }
 
     };
@@ -48,7 +48,7 @@
     };
 
     WebGlVisPlugin.finalize = function () {
-        GLVIS.RecDashboardHandler.cleanup();
+        GLVIS.InitHandler.cleanup();
     };
 
 
