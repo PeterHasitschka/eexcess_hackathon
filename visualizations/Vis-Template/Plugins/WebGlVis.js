@@ -49,6 +49,7 @@
                                         "../WebGlVisualization/js/webglobjects/connection/collection_rec_line.js",
                                         "../WebGlVisualization/js/webglobjects/connection/collection_collection_line.js",
                                         "../WebGlVisualization/js/scene.js",
+                                        '../../common_js/storage.js',
                                         //"../WebGlVisualization/html/recdashboard/init.js",
                                         "js/utils.js", //Important to prevent .scrollTo-Bug
                                         "js/colorpicker.js", //Important to prevent .colorPicker-Bug

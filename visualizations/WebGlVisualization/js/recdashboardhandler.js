@@ -97,15 +97,12 @@ GLVIS.RecDashboardHandler.initScene = function (scene, db_handler) {
 
 
 GLVIS.RecDashboardHandler.cleanup = function () {
-
+    
+    console.log("RECDASHBOARD: CLEANUP!");
+    
     delete GLVIS.Scene.getCurrentScene();
     GLVIS.Scene.current_scene = null;
 
     delete GLVIS.DbHandler.getCurrentDbHandler();
     GLVIS.DbHandler.current_db_handler_ = null;
-
-    GLVIS.Collection.current_id = 0;
-    GLVIS.Recommendation.current_id = 0;
-
-
 };

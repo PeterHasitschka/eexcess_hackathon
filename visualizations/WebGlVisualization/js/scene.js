@@ -36,6 +36,10 @@ GLVIS.Scene = function (canvas) {
      * Holding @see{GLVIS.Collection} objects
      */
     this.collections_ = [];
+
+    //Reset counter of collections / recs
+    GLVIS.Collection.current_id = 0;
+    GLVIS.Recommendation.current_id = 0;
 };
 
 
@@ -166,22 +170,21 @@ GLVIS.Scene.current_scene = null;
 
 /**
  * Get current scene
- * @returns {GLVIS.Scene}
+ * @returns {GLVIS.Scene || null}
  */
 GLVIS.Scene.getCurrentScene = function () {
     if (!this.current_scene)
-        console.log("WARNING: NO CURRENT SCENE!");
-
+        return null;
     return this.current_scene;
 };
 
 
 GLVIS.Scene.animate = function () {
     var curr_scene = GLVIS.Scene.getCurrentScene();
-    
+
     if (!curr_scene)
         return;
-    
+
     requestAnimationFrame(GLVIS.Scene.animate);
     curr_scene.render();
 };
