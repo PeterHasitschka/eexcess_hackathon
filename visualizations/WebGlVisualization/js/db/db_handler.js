@@ -15,11 +15,11 @@ GLVIS.DbHandler.prototype.loadQueries = function (callback_ready) {
 
         if (GLVIS.config.debug)
             console.log("DBHANDLER: Init DB ready.");
-        
-        
-        
-        
-        
+
+
+
+
+
         if (callback_ready)
             callback_ready();
     });
@@ -39,11 +39,8 @@ GLVIS.DbHandler.prototype.initDb_ = function (callback_ready) {
 
     console.log("GO ON HERE AFTER INTEGRATION IN REC-DASHBOARD");
 
-/*
-    EEXCESS.storage.getDb(callback_ready, function () {
-        throw("ERROR LOADING DB");
-    });
-*/
+
+    callback_ready();
 
 
 };

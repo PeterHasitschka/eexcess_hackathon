@@ -45,9 +45,16 @@ GLVIS.RecDashboardHandler.prototype.onRecommendationClick = function (recommenda
  * @param {GLVIS.DbHandler} db_handler
  */
 GLVIS.RecDashboardHandler.initScene = function (scene, db_handler) {
-    
+
     scene = new GLVIS.Scene(jQuery(GLVIS.config.rec_dashboard.selector));
     db_handler = new GLVIS.DbHandler();
+
+    db_handler.loadQueries(function () {
+
+        console.log("***** QUERIES LOADED *******");
+    });
+
+
 
     /**
      * LOAD DATA HERE
@@ -89,16 +96,16 @@ GLVIS.RecDashboardHandler.initScene = function (scene, db_handler) {
 
 
 
-GLVIS.RecDashboardHandler.cleanup = function(){
-  
+GLVIS.RecDashboardHandler.cleanup = function () {
+
     delete GLVIS.Scene.getCurrentScene();
     GLVIS.Scene.current_scene = null;
-    
+
     delete GLVIS.DbHandler.getCurrentDbHandler();
     GLVIS.DbHandler.current_db_handler_ = null;
-    
-    GLVIS.Collection.current_id=0;
-    GLVIS.Recommendation.current_id=0;
-    
-    
+
+    GLVIS.Collection.current_id = 0;
+    GLVIS.Recommendation.current_id = 0;
+
+
 };
