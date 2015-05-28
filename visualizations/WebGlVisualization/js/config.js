@@ -80,6 +80,17 @@ GLVIS.config = {
     },
     rec_dashboard : {
         selector: '#webgl_canvas_container'
+    },
+    
+    db: {
+        query : {
+            storage_name : "queries_full",
+            fields_to_load : ["id", "timestamp", "query"]
+        },
+        rec : {
+            storage_name : "recommendations",
+            fields_to_load : ["recommendation_id", "context", "result", "timestamp"]
+        }
     }
 
 };

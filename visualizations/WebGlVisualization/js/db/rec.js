@@ -6,9 +6,7 @@ var GLVIS = GLVIS || {};
  * 
  */
 
-
-
-GLVIS.DbQueryObj = function (data) {
+GLVIS.DbRecObj = function (data) {
 
     this.data_ = null;
     if (data)
@@ -19,7 +17,7 @@ GLVIS.DbQueryObj = function (data) {
  * Set Data coming from @see{GLVIS.DbHandler.getStorageData_}
  * @param {type} data Obj
  */
-GLVIS.DbQueryObj.prototype.setData = function (data) {
+GLVIS.DbRecObj.prototype.setData = function (data) {
     this.data_ = data;
 };
 
@@ -27,17 +25,17 @@ GLVIS.DbQueryObj.prototype.setData = function (data) {
  * Returning (processed) data originally from @see{GLVIS.DbHandler.getStorageData_}.
  * @returns {object}
  */
-GLVIS.DbQueryObj.prototype.getData = function () {
+GLVIS.DbRecObj.prototype.getData = function () {
     return this.data_;
 };
 
 
-GLVIS.DbQueryObj.createObjectsFromDbData = function (data) {
+GLVIS.DbRecObj.createObjectsFromDbData = function (data) {
 
     var objects_ = [];
 
     for (var i = 0; i < data.length; i++)
-        objects_.push(new GLVIS.DbQueryObj(data[i]));
+        objects_.push(new GLVIS.DbRecObj(data[i]));
 
 
     return objects_;

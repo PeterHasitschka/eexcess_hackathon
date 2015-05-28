@@ -71,6 +71,8 @@ GLVIS.RecDashboardHandler.init = function (root_element, path_to_webglvisualizat
                                 require([
                                     path + "js/config.js",
                                     path + "js/db/db_handler.js",
+                                    path + "js/db/query.js",
+                                    path + "js/db/rec.js",
                                     path + "js/animationhelper.js",
                                     path + "js/webglhandler.js",
                                     path + "js/interactionhandler.js",
@@ -129,7 +131,7 @@ GLVIS.RecDashboardHandler.initScene = function (scene, db_handler) {
     scene = new GLVIS.Scene(jQuery(GLVIS.config.rec_dashboard.selector));
     db_handler = new GLVIS.DbHandler();
 
-    db_handler.loadQueries(function () {
+    db_handler.loadQueriesAndRecs(function () {
 
         console.log("***** QUERIES LOADED *******");
     });
