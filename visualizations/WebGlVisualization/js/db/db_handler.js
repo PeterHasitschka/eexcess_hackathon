@@ -22,14 +22,16 @@ GLVIS.DbHandler.prototype.loadQueriesAndRecs = function (callback_ready) {
          * Load raw query data then load raw rec data
          */
 
-        that.getFullQueryStorageData(function () {
-            that.getFullRecStorageData(function () {
+        that.getFullQueryStorageData_(function () {
+            that.getFullRecStorageData_(function () {
 
 
                 /**
                  * Query- and Rec- Data loaded now.
                  * Time to process them.
                  */
+                that.injectRecDataIntoQueryData_();
+
 
                 console.log("QUERY- AND REC-DATA: ", that.query_data_, that.rec_data_);
                 //Finally callback
@@ -69,7 +71,7 @@ GLVIS.DbHandler.prototype.initDb_ = function (callback_ready) {
  * @param {type} success_cb
  * @returns {undefined}
  */
-GLVIS.DbHandler.prototype.getFullQueryStorageData = function (success_cb) {
+GLVIS.DbHandler.prototype.getFullQueryStorageData_ = function (success_cb) {
 
     var config = GLVIS.config.db.query;
     var that = this;
@@ -86,7 +88,7 @@ GLVIS.DbHandler.prototype.getFullQueryStorageData = function (success_cb) {
  * @param {type} success_cb
  * @returns {undefined}
  */
-GLVIS.DbHandler.prototype.getFullRecStorageData = function (success_cb) {
+GLVIS.DbHandler.prototype.getFullRecStorageData_ = function (success_cb) {
 
     var config = GLVIS.config.db.rec;
     var that = this;
@@ -96,6 +98,45 @@ GLVIS.DbHandler.prototype.getFullRecStorageData = function (success_cb) {
     },
             config.storage_name, config.fields_to_load);
 
+};
+
+/**
+ * Fill the query-data with the data-objects of the rec-results
+ * @returns {undefined}
+ */
+GLVIS.DbHandler.prototype.injectRecDataIntoQueryData_ = function () {
+
+    for (var q_count = 0; q_count < this.query_data_.length; q_count++) {
+
+        /** @type{GLVIS.DbQueryObj} **/
+        var current_query_db_obj = this.query_data_[q_count];
+
+        for (var r_count = 0; r_count < this.rec_data_.length; r_count++) {
+
+            /** @type{GLVIS.DbRecObj} **/
+            var current_rec_db_obj = this.rec_data_[r_count];
+
+            //Maybe already unset
+            if (!current_rec_db_obj)
+                continue;
+
+            /*
+             * If they have the same timestamp -> Add data(!) from the rec-obj to the query-obj
+             * Afterwards delete the rec-obj
+             */
+            if (current_query_db_obj.getTimestamp() === current_rec_db_obj.getTimestamp()) {
+                current_query_db_obj.addRec(current_rec_db_obj.getData());
+                delete this.rec_data_[r_count];
+            }
+            else
+                continue;
+        }
+    }
+    
+    //Delete empty but long array
+    this.rec_data_ = [];
+    
+    console.log("DBHANDLER: Finished injecting recs in queries");
 };
 
 

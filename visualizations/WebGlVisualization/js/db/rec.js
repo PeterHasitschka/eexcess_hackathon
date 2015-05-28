@@ -29,6 +29,14 @@ GLVIS.DbRecObj.prototype.getData = function () {
     return this.data_;
 };
 
+/**
+ * Returns the timestamp from the db data
+ * @returns {float} timestamp
+ */
+GLVIS.DbRecObj.prototype.getTimestamp = function(){
+    return this.data_.timestamp;
+};
+
 
 GLVIS.DbRecObj.createObjectsFromDbData = function (data) {
 
