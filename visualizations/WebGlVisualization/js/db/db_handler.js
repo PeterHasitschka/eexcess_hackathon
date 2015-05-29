@@ -9,7 +9,12 @@ GLVIS.DbHandler = function () {
     this.rec_data_ = [];
 };
 
-
+/**
+ * Getting queries and recommendations from DB
+ * Combining them
+ * Flagging duplicates
+ * @param {type} callback_ready Function called when ready
+ */
 GLVIS.DbHandler.prototype.loadQueriesAndRecs = function (callback_ready) {
 
     var that = this;
@@ -31,7 +36,8 @@ GLVIS.DbHandler.prototype.loadQueriesAndRecs = function (callback_ready) {
                  * Time to process them.
                  */
                 that.injectRecDataIntoQueryData_();
-
+                
+                
 
                 console.log("QUERY- AND REC-DATA: ", that.query_data_, that.rec_data_);
                 //Finally callback
@@ -63,6 +69,15 @@ GLVIS.DbHandler.prototype.initDb_ = function (callback_ready) {
 
 };
 
+
+/**
+ * Flagging queries that have the same search term like another one in the db.
+ */
+GLVIS.DbHandler.prototype.flagDuplicateQueryObjects_ = function() {
+    
+    
+    
+};
 
 
 
