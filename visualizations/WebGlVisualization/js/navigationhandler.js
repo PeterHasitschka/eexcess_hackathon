@@ -63,10 +63,8 @@ GLVIS.NavigationHandler.prototype.moveCamera = function (x, y) {
  */
 GLVIS.NavigationHandler.prototype.zoom = function (zoom_factor) {
 
-    //console.log("FINAL-ZOOM-FACTOR 1: " + zoom_factor);
     if (zoom_factor < 0)
         zoom_factor = 0;
-    //console.log("FINAL-ZOOM-FACTOR 2: " + zoom_factor);
 
     this.scene_.getWebGlHandler().getCamera().zoom = zoom_factor;
     this.scene_.getWebGlHandler().getCamera().updateProjectionMatrix();
@@ -242,7 +240,9 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
 
     this.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_out, function () {
         that.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_in, function () {
-            console.log("finished zoom to 1");
+            GLVIS.Debugger.debug("NavigationHandler",
+                    "finished zoom to 1",
+                    3);
 
             if (callback_fct && !callback_called) {
                 callback_called = true;
@@ -251,7 +251,10 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
         });
     });
     this.animatedMovement(collection.getPosition().x, collection.getPosition().y, function () {
-        console.log("Finished movement to graph");
+
+        GLVIS.Debugger.debug("NavigationHandler",
+                "Finished movement to graph",
+                3);
         if (callback_fct && !callback_called) {
             callback_called = true;
             callback_fct();

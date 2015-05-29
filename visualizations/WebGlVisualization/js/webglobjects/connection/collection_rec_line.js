@@ -65,8 +65,9 @@ GLVIS.ConnectionCollectionRecommendation.prototype.render = function () {
 
     var coll_pos = this.recommendation_.getCollection().getPosition();
 
-    if (GLVIS.config.debug)
-        console.log("Rendering CONNECTION for recommendation " + this.recommendation_.getId());
+    GLVIS.Debugger.debug("ConnectionCollectionRecommendation",
+            "Rendering CONNECTION for recommendation " + this.recommendation_.getId(),
+            5);
 
 
     this.webgl_objects_.line.geometry.vertices[0].set(rec_pos.x, rec_pos.y, config.z);

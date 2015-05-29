@@ -18,8 +18,10 @@ GLVIS.CollectionPosLinear = function () {
  */
 GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
 
-    if (GLVIS.config.debug)
-        console.log("COLLECTION POS HANDLER: Recalculating positions");
+    GLVIS.Debugger.debug("CollectionPosLinear",
+            "COLLECTION POS HANDLER: Recalculating positions",
+            5);
+
     var collections = this.scene_.getCollections();
 
     if (!collections.length)
@@ -72,8 +74,9 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
         navigation_handler.focusCollection(last_coll, function () {
 
             //Ready focusing
-            if (GLVIS.config.debug)
-                console.log("COLLECTION LINEAR POS: Ready positioning");
+            GLVIS.Debugger.debug("CollectionPosLinear",
+                    "COLLECTION LINEAR POS: Ready positioning",
+                    5);
         });
     }
 };

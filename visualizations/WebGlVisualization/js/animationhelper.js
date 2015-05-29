@@ -29,7 +29,10 @@ GLVIS.AnimationHelper.getStepByExpSlowdown = function (curr, goal, max_diff, fac
         var power = Math.pow(Math.abs(normalized_diff), pow);
         power /= 2;
 
-        //console.log(max_diff, diff, normalized_diff, pow, power, direction);
+        GLVIS.Debugger.debug("AnimationHelper",
+                [max_diff, diff, normalized_diff, pow, power, factor],
+                8);
+
         return power * diff * factor;
     }
     else {

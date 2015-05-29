@@ -2,7 +2,11 @@
 
 var GLVIS = GLVIS || {};
 GLVIS.config = {
-    debug: true,
+    debug: {
+        active : true,
+        level : 5, // 1:Very important ... 10:Verbose story telling,
+        prefix : "GLVIS::"
+    },
     three: {
         camera: {
             NEAR: 0.1,

@@ -73,8 +73,11 @@ GLVIS.ConnectionCollectionCollection.prototype.render = function () {
     var pos1 = this.c1_.getPosition();
     var pos2 = this.c2_.getPosition();
 
-    if (GLVIS.config.debug)
-        console.log("Rendering CONNECTION for Collections " + this.c1_.getId() + "/" + this.c2_.getId());
+
+    GLVIS.Debugger.debug("ConnectionCollectionCollection",
+    "Rendering CONNECTION for Collections " + this.c1_.getId() + "/" + this.c2_.getId(),
+    5);
+    
 
     this.webgl_objects_.line.geometry.vertices[0].set(pos1.x, pos1.y, config.z);
     this.webgl_objects_.line.geometry.vertices[1].set(pos2.x, pos2.y, config.z);

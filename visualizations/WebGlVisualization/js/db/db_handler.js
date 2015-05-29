@@ -20,8 +20,9 @@ GLVIS.DbHandler.prototype.loadQueriesAndRecs = function (callback_ready) {
     var that = this;
     this.initDb_(function () {
 
-        if (GLVIS.config.debug)
-            console.log("DBHANDLER: Init DB ready.");
+        GLVIS.Debugger.debug("DbHandler",
+                "DBHANDLER: Init DB ready.",
+                3);
 
         /**
          * Load raw query data then load raw rec data
@@ -36,10 +37,12 @@ GLVIS.DbHandler.prototype.loadQueriesAndRecs = function (callback_ready) {
                  * Time to process them.
                  */
                 that.injectRecDataIntoQueryData_();
-                
-                
 
-                console.log("QUERY- AND REC-DATA: ", that.query_data_, that.rec_data_);
+
+                GLVIS.Debugger.debug("DbHandler",
+                        ["QUERY- AND REC-DATA", that.query_data_, that.rec_data_],
+                        3);
+
                 //Finally callback
                 if (callback_ready)
                     callback_ready();
@@ -73,10 +76,10 @@ GLVIS.DbHandler.prototype.initDb_ = function (callback_ready) {
 /**
  * Flagging queries that have the same search term like another one in the db.
  */
-GLVIS.DbHandler.prototype.flagDuplicateQueryObjects_ = function() {
-    
-    
-    
+GLVIS.DbHandler.prototype.flagDuplicateQueryObjects_ = function () {
+
+
+
 };
 
 
@@ -147,11 +150,13 @@ GLVIS.DbHandler.prototype.injectRecDataIntoQueryData_ = function () {
                 continue;
         }
     }
-    
+
     //Delete empty but long array
     this.rec_data_ = [];
-    
-    console.log("DBHANDLER: Finished injecting recs in queries");
+
+    GLVIS.Debugger.debug("DbHandler",
+            "DBHANDLER: Finished injecting recs in queries",
+            3);
 };
 
 
@@ -167,7 +172,10 @@ GLVIS.DbHandler.prototype.injectRecDataIntoQueryData_ = function () {
  */
 GLVIS.DbHandler.prototype.getStorageData_ = function (cb_data_loaded, storage_name, fields) {
 
-    console.log("GETTING DATA FROM " + storage_name);
+    GLVIS.Debugger.debug("DbHandler",
+            "GETTING DATA FROM " + storage_name,
+            4);
+
     if (!this.db_)
         throw ("DBHANDLER: ERROR: NO DB SET!");
 
@@ -202,7 +210,8 @@ GLVIS.DbHandler.prototype.getStorageData_ = function (cb_data_loaded, storage_na
     };
 
     request.onerror = function (evt) {
-        console.log("ERROR on Request");
+        throw ("ERROR on Request");
+        ;
     };
 
 

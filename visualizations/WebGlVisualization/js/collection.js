@@ -67,8 +67,10 @@ GLVIS.Collection = function (eexcess_data) {
     this.initGlNode();
 
 
-    if (GLVIS.config.debug)
-        console.log("Collection with id " + this.id_ + " created!");
+
+    GLVIS.Debugger.debug("Collection",
+            "Collection with id " + this.id_ + " created!",
+            5);
 };
 
 
@@ -104,8 +106,9 @@ GLVIS.Collection.prototype.render = function () {
     if (!this.dirty_)
         return;
 
-    if (GLVIS.config.debug)
-        console.log("Collection with id " + this.id_ + " rendered!");
+    GLVIS.Debugger.debug("Collection",
+            "Collection with id " + this.id_ + " rendered!",
+            5);
 
     //Render all Gl-Objectss
     for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
@@ -152,8 +155,9 @@ GLVIS.Collection.prototype.selectAndFocus = function () {
 
     GLVIS.Scene.getCurrentScene().getNavigationHandler().focusCollection(this, function () {
 
-        console.log("FOCUSGRAPH: Callback finish!");
-
+        GLVIS.Debugger.debug("Collection",
+                "FOCUSGRAPH: Callback finish!",
+                3);
     });
 
 
@@ -254,7 +258,10 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
 
         if (parent_collection)
         {
-            //console.log("parent collection found. Creating connection");
+            GLVIS.Debugger.debug("Collection",
+                    "parent collection found. Creating connection",
+                    8);
+
             var parent_connection = new GLVIS.ConnectionCollectionCollection(parent_collection, this);
             this.vis_data_.gl_objects.push(parent_connection);
             this.dirty_ = true;

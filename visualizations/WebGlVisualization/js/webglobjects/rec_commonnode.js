@@ -65,8 +65,11 @@ GLVIS.RecommendationCommonNode.prototype.render = function () {
 
 
 
-    if (GLVIS.config.debug)
-        console.log("Rendering RECOMMENDATION COMMON-NODE  for recommendation " + this.recommendation_.getId());
+    GLVIS.Debugger.debug(
+            "RecommendationCommonNode",
+            "Rendering RECOMMENDATION COMMON-NODE  for recommendation " + this.recommendation_.getId(),
+            5);
+
 
 
 

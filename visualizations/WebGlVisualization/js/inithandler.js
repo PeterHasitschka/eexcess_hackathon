@@ -38,6 +38,7 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                             function () {
                                 require([
                                     path + "js/config.js",
+                                    path + "js/tools/debugger.js",
                                     path + "js/db/db_handler.js",
                                     path + "js/db/query.js",
                                     path + "js/db/rec.js",
@@ -61,7 +62,10 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                     path + "../Vis-Template/js/accordion-and-dropdown.js"   //Important to prevent .dropdown-Bug
                                 ],
                                         function () {
-                                            console.log("finished calling js files for webglvis-plugin");
+                                            GLVIS.Debugger.debug("InitHandler",
+                                                    "finished calling js files for webglvis-plugin",
+                                                    3);
+
                                             GLVIS.InitHandler.libs_loaded = true;
 
                                             //Recall this function
@@ -101,7 +105,9 @@ GLVIS.InitHandler.initScene = function (scene, db_handler) {
 
     db_handler.loadQueriesAndRecs(function () {
 
-        console.log("***** QUERIES LOADED *******");
+        GLVIS.Debugger.debug("InitHandler",
+                "Queries loaded and processed cb",
+                3);
     });
 
 
@@ -148,7 +154,9 @@ GLVIS.InitHandler.initScene = function (scene, db_handler) {
 
 GLVIS.InitHandler.cleanup = function () {
 
-    console.log("RECDASHBOARD: CLEANUP!");
+    GLVIS.Debugger.debug("InitHandler",
+            "Cleaning up!",
+            3);
 
     delete GLVIS.Scene.getCurrentScene();
     GLVIS.Scene.current_scene = null;

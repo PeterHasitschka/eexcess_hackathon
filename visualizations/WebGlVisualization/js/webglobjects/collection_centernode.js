@@ -10,7 +10,7 @@ GLVIS.CollectionCenterNode = function (collection) {
 
     /** @type{GLVIS.Collection} **/
     this.collection_ = collection;
-    
+
     this.default_color_ = GLVIS.config.collection.center_node.sphere.color;
 
     this.dirty_ = true;
@@ -62,10 +62,10 @@ GLVIS.CollectionCenterNode.prototype.render = function () {
     if (!this.dirty_)
         return;
 
-    if (GLVIS.config.debug)
-        console.log("Rendering COLLECTION CENTER-NODE  for collection " + this.collection_.getId());
 
-
+    GLVIS.Debugger.debug("CollectionCenterNode",
+            "Rendering COLLECTION CENTER-NODE  for collection " + this.collection_.getId(),
+            5);
 
 
     var sphere_color;
@@ -75,9 +75,9 @@ GLVIS.CollectionCenterNode.prototype.render = function () {
         sphere_color = this.default_color_;
 
     this.webgl_objects_.sphere.material.color.setHex(sphere_color);
-    
-    
-    
+
+
+
 
     var pos = this.collection_.getPosition();
 

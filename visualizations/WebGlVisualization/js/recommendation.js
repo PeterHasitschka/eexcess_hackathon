@@ -55,8 +55,9 @@ GLVIS.Recommendation = function (eexcess_data) {
     this.initGlNode();
 
 
-    if (GLVIS.config.debug)
-        console.log("Recommendation with id " + this.id_ + " created!");
+    GLVIS.Debugger.debug("Recommendation",
+            "Recommendation with id " + this.id_ + " created!",
+            5);
 
 };
 
@@ -82,8 +83,9 @@ GLVIS.Recommendation.prototype.render = function () {
     if (!this.dirty_)
         return;
 
-    if (GLVIS.config.debug)
-        console.log("Recommendation with id " + this.id_ + " rendered!");
+    GLVIS.Debugger.debug("Recommendation",
+            "Recommendation with id " + this.id_ + " rendered!",
+            5);
 
     //Render all Gl-Objectss
     for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
@@ -116,8 +118,10 @@ GLVIS.Recommendation.prototype.handleClick = function () {
 
     if (that.getStatus() === GLVIS.Recommendation.STATUSFLAGS.HIDDEN)
         return;
-    console.log("RECOMMENDATION " + that.getId() + " clicked");
 
+    GLVIS.Debugger.debug("Recommendation",
+            "RECOMMENDATION " + that.getId() + " clicked",
+            3);
 
     GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(that);
 };
