@@ -10,10 +10,15 @@ var GLVIS = GLVIS || {};
 
 GLVIS.DbQueryObj = function (data) {
 
+    //For avoiding to join the 'query' array at every compare
+    this.query_str_ = null;
+
     this.data_ = null;
     if (data)
-        this.data_ = data;
-    
+        this.setData(data);
+
+    this.duplicate_ = false;
+
     this.recs_ = [];
 };
 
@@ -23,6 +28,12 @@ GLVIS.DbQueryObj = function (data) {
  */
 GLVIS.DbQueryObj.prototype.setData = function (data) {
     this.data_ = data;
+
+    var words = [];
+    for (var str_c = 0; str_c < data.query.length; str_c++) {
+        words.push(data.query[str_c]["text"]);
+    }
+    this.query_str_ = words.join(" ");
 };
 
 /**
@@ -37,7 +48,7 @@ GLVIS.DbQueryObj.prototype.getData = function () {
  * Returns the timestamp from the db data
  * @returns {float} timestamp
  */
-GLVIS.DbQueryObj.prototype.getTimestamp = function(){
+GLVIS.DbQueryObj.prototype.getTimestamp = function () {
     return this.data_.timestamp;
 };
 
@@ -46,14 +57,42 @@ GLVIS.DbQueryObj.prototype.getTimestamp = function(){
  * @param {type} rec_data GLVIS.DbRecObj.data_
  * @returns {GLVIS.DbQueryObj.data_.timestamp}
  */
-GLVIS.DbQueryObj.prototype.addRec = function(rec_data){
+GLVIS.DbQueryObj.prototype.addRec = function (rec_data) {
     this.recs_.push(rec_data);
+};
+
+/**
+ * Flag this query data as an duplicate
+ */
+GLVIS.DbQueryObj.prototype.flagDuplicate = function () {
+    this.duplicate_ = true;
+};
+
+/**
+ * Returns true if query-search is an duplicate of another one
+ * @returns {Boolean}
+ */
+GLVIS.DbQueryObj.prototype.getIsDuplicate = function () {
+    return(this.duplicate_);
+};
+
+/**
+ * Returns the search string
+ * @returns {string}
+ */
+GLVIS.DbQueryObj.prototype.getQueryStr = function () {
+    return this.query_str_;
 };
 
 
 
 
 
+/**
+ * Create DbQueryObj Array holding the db-data
+ * @param {type} data
+ * @returns {Array}
+ */
 GLVIS.DbQueryObj.createObjectsFromDbData = function (data) {
 
     var objects_ = [];

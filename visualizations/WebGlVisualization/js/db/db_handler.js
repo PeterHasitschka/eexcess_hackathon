@@ -36,7 +36,12 @@ GLVIS.DbHandler.prototype.loadQueriesAndRecs = function (callback_ready) {
                  * Query- and Rec- Data loaded now.
                  * Time to process them.
                  */
+
+                //Load recs into queries
                 that.injectRecDataIntoQueryData_();
+
+                //Filter duplicate queries
+                that.flagDuplicateQueryObjects_();
 
 
                 GLVIS.Debugger.debug("DbHandler",
@@ -60,7 +65,6 @@ GLVIS.DbHandler.prototype.initDb_ = function (callback_ready) {
         return;
     }
 
-
     var that = this;
     EEXCESS.storage.getDb(function (db) {
         that.db_ = db;  //SUCCESS
@@ -69,17 +73,67 @@ GLVIS.DbHandler.prototype.initDb_ = function (callback_ready) {
         throw("ERROR LOADING DB");
     }
     );
-
 };
 
 
 /**
  * Flagging queries that have the same search term like another one in the db.
+ * 
+ * If two queries have the same search string, the OLDER one gets flagged as
+ * duplicate, so newer ones appear in the list, and older ones are e.g. hidden
  */
 GLVIS.DbHandler.prototype.flagDuplicateQueryObjects_ = function () {
 
+    GLVIS.Debugger.debug("DbHandler",
+            "Starting flagging duplicate query-strings",
+            5);
 
 
+    //Just for debug-info
+    var dupl_count = 0;
+
+    /**
+     * Go backwards to avoid flagging newer objects
+     */
+    for (var q_count = this.query_data_.length - 1; q_count >= 0; q_count--) {
+
+        /** @type {DbQueryObj} */
+        var curr_back_q = this.query_data_[q_count];
+
+        //If main object is already flagged, don't need to controll the rest again
+        if (curr_back_q.getIsDuplicate())
+            continue;
+
+        /*
+         * Inner compare-iteration that may get flagged.
+         */
+        for (var contr_count = 0; contr_count < this.query_data_.length; contr_count++) {
+
+            /** @type {DbQueryObj} */
+            var controll_q = this.query_data_[contr_count];
+
+            //Don't compare to yourself!
+            if (curr_back_q.getTimestamp() === controll_q.getTimestamp())
+                continue;
+
+            //If same query, flag controll-object.
+            if (curr_back_q.getQueryStr() === controll_q.getQueryStr()) {
+                controll_q.flagDuplicate();
+
+                GLVIS.Debugger.debug("DbHandler",
+                        "Flagged a query-data as duplicate",
+                        8);
+
+                dupl_count++;
+            }
+        }
+
+    }
+
+    GLVIS.Debugger.debug("DbHandler",
+            "Finished flagging duplicate query-strings " +
+            "(Flagged " + dupl_count + "/" + this.query_data_.length + ")",
+            5);
 };
 
 
