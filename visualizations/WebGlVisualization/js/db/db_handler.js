@@ -9,6 +9,30 @@ GLVIS.DbHandler = function () {
     this.rec_data_ = [];
 };
 
+
+/**
+ * Creates and returns @see{GLVIS.Query} objects.
+ * The function is going BACKWARDS, so if 'end' is not defined or 'end' is the last index,
+ * the last 'length'-elements are getting processed.
+ * @param {integer} length How many objects shoud be created
+ * @param {integer} end Index of the last object in list that should be created
+ * @param {Boolean} load_duplicates If true, also duplicate-flagged queries are fetched
+ * @returns {Array} Holding @see{GLVIS.Query} objects
+ */
+GLVIS.DbHandler.prototype.fetchQueries = function (length, end, load_duplicates) {
+
+    GLVIS.Debugger.debug("DbHandler",
+            "Fetching " + length + " queries from query_data",
+            3);
+    if (!end)
+        end = this.query_data_.length - 1;
+
+    var query_fetcher = new GLVIS.DbQueryFetcher(this.query_data_);
+    var queries = query_fetcher.createQueries(end, length, load_duplicates);
+    return queries;
+};
+
+
 /**
  * Getting queries and recommendations from DB
  * Combining them
@@ -21,13 +45,12 @@ GLVIS.DbHandler.prototype.loadQueriesAndRecs = function (callback_ready) {
     this.initDb_(function () {
 
         GLVIS.Debugger.debug("DbHandler",
-                "DBHANDLER: Init DB ready.",
+                "Init DB ready.",
                 3);
 
         /**
          * Load raw query data then load raw rec data
          */
-
         that.getFullQueryStorageData_(function () {
             that.getFullRecStorageData_(function () {
 
@@ -36,13 +59,11 @@ GLVIS.DbHandler.prototype.loadQueriesAndRecs = function (callback_ready) {
                  * Query- and Rec- Data loaded now.
                  * Time to process them.
                  */
-
                 //Load recs into queries
                 that.injectRecDataIntoQueryData_();
 
                 //Filter duplicate queries
                 that.flagDuplicateQueryObjects_();
-
 
                 GLVIS.Debugger.debug("DbHandler",
                         ["QUERY- AND REC-DATA", that.query_data_, that.rec_data_],

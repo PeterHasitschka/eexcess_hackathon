@@ -42,6 +42,7 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                     path + "js/db/db_handler.js",
                                     path + "js/db/query.js",
                                     path + "js/db/rec.js",
+                                    path + "js/db/query_fetcher.js",
                                     path + "js/animationhelper.js",
                                     path + "js/webglhandler.js",
                                     path + "js/interactionhandler.js",
@@ -106,8 +107,10 @@ GLVIS.InitHandler.initScene = function (scene, db_handler) {
     db_handler.loadQueriesAndRecs(function () {
 
         GLVIS.Debugger.debug("InitHandler",
-                "Queries loaded and processed cb",
+                "Query-Data loaded and processed cb",
                 3);
+
+        var queries_to_add = db_handler.fetchQueries(GLVIS.config.scene.queries_to_fetch);
     });
 
 

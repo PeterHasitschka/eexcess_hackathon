@@ -2,6 +2,9 @@
 
 var GLVIS = GLVIS || {};
 GLVIS.config = {
+    scene : {
+      queries_to_fetch : 20  
+    },
     debug: {
         active : true,
         level : 5, // 1:Very important ... 10:Verbose story telling,
