@@ -144,6 +144,10 @@ GLVIS.Collection.prototype.handleClick = function () {
     if (that.getStatus() === GLVIS.Collection.STATUSFLAGS.HIDDEN)
         return;
 
+    GLVIS.Debugger.debug("Collection",
+            "Collection " + that.getId() + " CLICKED!",
+            3);
+
     that.selectAndFocus();
 };
 
