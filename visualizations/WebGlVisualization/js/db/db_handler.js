@@ -27,8 +27,8 @@ GLVIS.DbHandler.prototype.fetchQueries = function (length, end, load_duplicates)
     if (!end)
         end = this.query_data_.length - 1;
 
-    var query_fetcher = new GLVIS.DbQueryFetcher(this.query_data_);
-    var queries = query_fetcher.createQueries(end, length, load_duplicates);
+    var query_creator = new GLVIS.DbQueryCreator(this.query_data_);
+    var queries = query_creator.createQueries(end, length, load_duplicates);
     return queries;
 };
 

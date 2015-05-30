@@ -42,7 +42,7 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                     path + "js/db/db_handler.js",
                                     path + "js/db/query.js",
                                     path + "js/db/rec.js",
-                                    path + "js/db/query_fetcher.js",
+                                    path + "js/db/query_creator.js",
                                     path + "js/animationhelper.js",
                                     path + "js/webglhandler.js",
                                     path + "js/interactionhandler.js",
@@ -103,7 +103,7 @@ GLVIS.InitHandler.initScene = function (scene, db_handler) {
 
     scene = new GLVIS.Scene(jQuery(GLVIS.config.rec_dashboard.selector));
     db_handler = new GLVIS.DbHandler();
-
+    var queries_to_add = null;
     db_handler.loadQueriesAndRecs(function () {
 
         GLVIS.Debugger.debug("InitHandler",
@@ -111,45 +111,52 @@ GLVIS.InitHandler.initScene = function (scene, db_handler) {
                 3);
 
         var queries_to_add = db_handler.fetchQueries(GLVIS.config.scene.queries_to_fetch);
+
+        for (var q_count = 0; q_count < queries_to_add.length; q_count++)
+            scene.addCollection(queries_to_add[q_count]);
+
+        scene.initCollectionNetwork();
+        GLVIS.Scene.animate();
     });
 
 
 
+
     /**
-     * LOAD DATA HERE
+     * Itty bitty dummy data
      */
 
-    var parents = {
-        0: null,
-        1: 0,
-        2: 1,
-        3: 0,
-        4: 5,
-        5: 3,
-        6: 4,
-        7: 8,
-        8: 6,
-        9: 7
-    };
+    /*
+     var parents = {
+     0: null,
+     1: 0,
+     2: 1,
+     3: 0,
+     4: 5,
+     5: 3,
+     6: 4,
+     7: 8,
+     8: 6,
+     9: 7
+     };
+     
+     for (var c_count = 0; c_count < 10; c_count++) {
+     var c = new GLVIS.Collection();
+     
+     c.setParentId(parents[c_count]);
+     
+     
+     for (var r_count = 0; r_count < 5; r_count++) {
+     var r = new GLVIS.Recommendation();
+     c.addRecommendation(r);
+     }
+     
+     scene.addCollection(c);
+     }
+     */
 
-    for (var c_count = 0; c_count < 10; c_count++) {
-        var c = new GLVIS.Collection();
-
-        c.setParentId(parents[c_count]);
 
 
-        for (var r_count = 0; r_count < 5; r_count++) {
-            var r = new GLVIS.Recommendation();
-            c.addRecommendation(r);
-        }
-
-        scene.addCollection(c);
-    }
-
-
-
-    scene.initCollectionNetwork();
-    GLVIS.Scene.animate();
 };
 
 
