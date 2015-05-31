@@ -4,13 +4,21 @@ GLVIS = GLVIS || {};
 
 /**
  * @param {GLVIS.RingRepresentation} ring_representation Ring Representation
+ * @param {integer} level Between 0 and *. Ring number
+ * @param {float} start_percent 0...100 percent to start. 0 is on the top
+ * @param {float} end_percent 0...100 percent to end. 0 is on the top
+ * @param {integer} color color to fill
  */
-GLVIS.RingSegment = function (ring_representation) {
+GLVIS.RingSegment = function (ring_representation, level, start_percent, end_percent, color) {
 
     /** @type{GLVIS.RingRepresentation} **/
     this.ring_representation_ = ring_representation;
 
-    this.default_color_ = GLVIS.config.collection.ring_segment.color;
+    this.default_color_ = color;
+    this.level_ = level;
+
+    this.start_pc_ = start_percent;
+    this.end_pc_ = end_percent;
 
     this.dirty_ = true;
 
@@ -28,16 +36,21 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
     var material =
             new THREE.MeshBasicMaterial(
                     {
-                        color: ring_config.color,
-                        side: THREE.DoubleSide
+                        color: this.default_color_,
+                        side: THREE.DoubleSide,
+                        transparent: true,
+                        opacity : ring_config.opacity
                     });
 
-    var rad_inner = ring_config.min_distance;
+    var rad_inner = ring_config.min_distance + this.level_ * (ring_config.thickness + ring_config.gap);
+    var rad_outer = rad_inner + ring_config.thickness;
 
+    var rad_fact = Math.PI * 2;
 
-    var rad_outer = ring_config.min_distance + ring_config.thickness;
-
-    var ring_geometry = new THREE.RingGeometry(rad_inner, rad_outer, 20, 8, 0, Math.PI / 2);
+    var ring_start = this.start_pc_ * 0.01 * rad_fact - (Math.PI / 2);
+    var ring_end = this.end_pc_ * 0.01 * rad_fact - (Math.PI / 2);
+    
+    var ring_geometry = new THREE.RingGeometry(rad_inner, rad_outer, ring_config.segments, 8, ring_start, ring_end-ring_start);
     var mesh = new THREE.Mesh(ring_geometry, material);
 
     var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
@@ -82,9 +95,9 @@ GLVIS.RingSegment.prototype.render = function () {
                 pos.y,
                 z_pos
                 );
-        
+
         //this.webgl_objects_[key].geometry.computeBoundingSphere();
-        
+
         GLVIS.Debugger.debug("RingSegment",
                 "Setting pos to: " + pos.x + " " + pos.y + " " + z_pos,
                 5);

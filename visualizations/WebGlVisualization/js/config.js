@@ -54,10 +54,13 @@ GLVIS.config = {
         },
         
         ring_segment : {
-            min_distance: 50,
-            thickness : 30,
+            min_distance: 15,
+            thickness : 28,
+            gap: 5,
             color: 0xFF00FF,
-            z_value : -20
+            z_value : -15,
+            segments : 20,
+            opacity : 0.5
         }
     },
     connection: {
