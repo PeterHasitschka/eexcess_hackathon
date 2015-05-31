@@ -60,7 +60,7 @@ GLVIS.config = {
             color: 0xFF00FF,
             z_value : -15,
             segments : 20,
-            opacity : 0.5
+            opacity : 0.3
         }
     },
     connection: {

@@ -29,6 +29,8 @@ GLVIS.RingSegment = function (ring_representation, level, start_percent, end_per
         ring_seg: null
     };
 
+    this.is_selected_ = false;
+
     this.initAndRegisterGlObj();
 };
 
@@ -41,8 +43,7 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
                     {
                         color: this.default_color_,
                         side: THREE.DoubleSide,
-                        transparent: true,
-                        opacity : ring_config.opacity
+                        transparent: true
                     });
 
     var rad_inner = ring_config.min_distance + this.level_ * (ring_config.thickness + ring_config.gap);
@@ -52,8 +53,8 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
 
     var ring_start = this.start_pc_ * 0.01 * rad_fact - (Math.PI / 2);
     var ring_end = this.end_pc_ * 0.01 * rad_fact - (Math.PI / 2);
-    
-    var ring_geometry = new THREE.RingGeometry(rad_inner, rad_outer, ring_config.segments, 8, ring_start, ring_end-ring_start);
+
+    var ring_geometry = new THREE.RingGeometry(rad_inner, rad_outer, ring_config.segments, 8, ring_start, ring_end - ring_start);
     var mesh = new THREE.Mesh(ring_geometry, material);
 
     var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
@@ -70,7 +71,7 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
 
 
 GLVIS.RingSegment.prototype.render = function () {
-    
+
     if (!this.dirty_)
         return;
 
@@ -82,19 +83,22 @@ GLVIS.RingSegment.prototype.render = function () {
 
     var z_pos = GLVIS.config.collection.ring_segment.z_value;
 
-    for (var key in this.webgl_objects_){
-        this.webgl_objects_[key].position.set(
-                pos.x,
-                pos.y,
-                z_pos
-                );
+    this.webgl_objects_.ring_seg.position.set(
+            pos.x,
+            pos.y,
+            z_pos
+            );
 
-        GLVIS.Debugger.debug("RingSegment",
-                "Setting pos to: " + pos.x + " " + pos.y + " " + z_pos,
-                6);
-    }
+    GLVIS.Debugger.debug("RingSegment",
+            "Setting pos to: " + pos.x + " " + pos.y + " " + z_pos,
+            6);
 
-    this.webgl_objects_.ring_seg.geometry.computeBoundingSphere();
+    if (this.is_selected_)
+        this.webgl_objects_.ring_seg.material.opacity = 1;
+    else
+        this.webgl_objects_.ring_seg.material.opacity = GLVIS.config.collection.ring_segment.opacity;
+
+    //this.webgl_objects_.ring_seg.geometry.computeBoundingSphere();
     this.dirty_ = false;
 };
 
@@ -106,11 +110,37 @@ GLVIS.RingSegment.prototype.handleClick = function () {
             "RING SEGMENT CLICKED",
             3);
 
+    var that = this.ringseg;
+
+    if (that.is_selected_ === true)
+        return;
+
+    that.is_selected_ = true;
+    that.setIsDirty(true);
+
+};
+
+GLVIS.RingSegment.prototype.deSelect = function () {
+
+    if (this.is_selected_ !== true)
+        return;
+
+    GLVIS.Debugger.debug("RingSegment",
+            "Deselecting ring segment",
+            6);
+
+    this.is_selected_ = true;
+    this.setIsDirty(true);
 };
 
 
 GLVIS.RingSegment.prototype.setIsDirty = function (dirty) {
+
+    if (dirty === this.dirty_)
+        return;
+
     this.dirty_ = dirty;
+    this.ring_representation_.setIsDirty(true);
 };
 
 GLVIS.RingSegment.prototype.getIsDirty = function () {

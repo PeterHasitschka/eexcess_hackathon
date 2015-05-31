@@ -54,6 +54,7 @@ GLVIS.RingRepresentation.prototype.render = function () {
 
 GLVIS.RingRepresentation.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
+    this.collection_.setIsDirty(true);
 };
 
 /**
