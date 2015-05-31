@@ -62,6 +62,14 @@ GLVIS.DbQueryObj.prototype.addRec = function (rec_data) {
 };
 
 /**
+ * Returning array of rec-data @see{GLVIS.DbRecObj}
+ * @returns {Array}
+ */
+GLVIS.DbQueryObj.prototype.getRecs = function () {
+    return this.recs_;
+};
+
+/**
  * Flag this query data as an duplicate
  */
 GLVIS.DbQueryObj.prototype.flagDuplicate = function () {
