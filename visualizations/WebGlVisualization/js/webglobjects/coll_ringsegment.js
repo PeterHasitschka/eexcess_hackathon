@@ -1,8 +1,11 @@
 
-GLVIS = GLVIS || {};
+var GLVIS = GLVIS || {};
 
 
 /**
+ * Holding the visual representation and data of a segment in one of the rings
+ * in the @see{GLVIS.RingRepresentation}.
+ * 
  * @param {GLVIS.RingRepresentation} ring_representation Ring Representation
  * @param {integer} level Between 0 and *. Ring number
  * @param {float} start_percent 0...100 percent to start. 0 is on the top
@@ -55,52 +58,40 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
 
     var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
     webgl_handler.getThreeScene().add(mesh);
-    //ring_geometry.computeBoundingSphere();
     this.webgl_objects_.ring_seg = mesh;
 
     //Register click-function
-    ring_geometry.interaction = {
+    mesh.interaction = {
         "mouseclick": this.handleClick,
         "ringseg": this
     };
-
-
-
 };
 
 
 
 GLVIS.RingSegment.prototype.render = function () {
-
+    
     if (!this.dirty_)
         return;
-
 
     GLVIS.Debugger.debug("RingSegment",
             "Rendering RING SEGMENT",
             5);
 
-
-
-
-
     var pos = this.ring_representation_.getPosition();
 
     var z_pos = GLVIS.config.collection.ring_segment.z_value;
 
-    for (var key in this.webgl_objects_)
-    {
+    for (var key in this.webgl_objects_){
         this.webgl_objects_[key].position.set(
                 pos.x,
                 pos.y,
                 z_pos
                 );
 
-        //this.webgl_objects_[key].geometry.computeBoundingSphere();
-
         GLVIS.Debugger.debug("RingSegment",
                 "Setting pos to: " + pos.x + " " + pos.y + " " + z_pos,
-                5);
+                6);
     }
 
     this.webgl_objects_.ring_seg.geometry.computeBoundingSphere();
@@ -116,7 +107,6 @@ GLVIS.RingSegment.prototype.handleClick = function () {
             3);
 
 };
-
 
 
 GLVIS.RingSegment.prototype.setIsDirty = function (dirty) {

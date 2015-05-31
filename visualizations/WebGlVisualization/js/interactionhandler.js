@@ -87,7 +87,7 @@ GLVIS.InteractionHandler.prototype.deactivateAllCollections = function () {
         }
 
     }
-    
+
 };
 
 
@@ -100,16 +100,28 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
     this.deactivateAllCollections();
     var intersected = this.getIntersectedObjects_(event);
 
+    GLVIS.Debugger.debug("InteractionHandler",
+            "HANDLING CLICK ON SCENE", 5);
+
     for (var i_count = 0; i_count < intersected.length; i_count++)
     {
+
         var curr_intersect_obj = intersected[i_count].object;
+
+        GLVIS.Debugger.debug("InteractionHandler",
+                ["Going through intersected object:", curr_intersect_obj], 9);
+
         if (curr_intersect_obj.interaction instanceof Object)
-        {   
+        {
+            GLVIS.Debugger.debug("InteractionHandler",
+                    "...which is an Object", 9);
             if (
                     curr_intersect_obj.interaction[interaction_type] !== undefined &&
                     curr_intersect_obj.interaction[interaction_type] !== null
                     )
             {
+                GLVIS.Debugger.debug("InteractionHandler",
+                        "Intersected Object has following interaction-type: '" + interaction_type + "'", 8);
                 curr_intersect_obj.interaction[interaction_type](curr_intersect_obj);
             }
         }
@@ -130,10 +142,8 @@ GLVIS.InteractionHandler.prototype.getIntersectedObjects_ = function (event) {
     var rel_l = event.pageX - jQuery(renderer.domElement).position().left;
     var rel_t = event.pageY - jQuery(renderer.domElement).position().top;
 
-
     this.mouse_.x = (rel_l / renderer.domElement.width) * 2 - 1;
     this.mouse_.y = -(rel_t / renderer.domElement.height) * 2 + 1;
-
 
     this.raycaster_.setFromCamera(this.mouse_, camera);
 

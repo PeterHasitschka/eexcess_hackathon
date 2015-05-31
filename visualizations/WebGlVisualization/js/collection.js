@@ -64,17 +64,13 @@ GLVIS.Collection = function (eexcess_data) {
      */
     this.ring_representation_ = null;
 
-
     /**
      * Handles the positions of the recommendations
      * @type{GLVIS.RecommendationPosDistributed} 
      */
     this.recommendation_position_handler_ = new GLVIS.RecommendationPosDistributed(this);
 
-
     this.initGlNode();
-
-
 
     GLVIS.Debugger.debug("Collection",
             "Collection with id " + this.id_ + " created!",
@@ -92,7 +88,6 @@ GLVIS.Collection.prototype.addRecommendation = function (recommendation) {
     this.recommendations_.push(recommendation);
 
     this.recommendation_position_handler_.calculatePositions();
-
 };
 
 
@@ -139,12 +134,6 @@ GLVIS.Collection.prototype.render = function () {
 
 
 
-
-
-
-
-
-
 /**
  * Called by interactionhandler. Function registered in mesh-objects
  * @returns {undefined}
@@ -176,7 +165,6 @@ GLVIS.Collection.prototype.selectAndFocus = function () {
                 3);
     });
 
-
     GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onCollectionClick(this);
 };
 
@@ -186,11 +174,6 @@ GLVIS.Collection.prototype.setMyGlObjectsDirty_ = function () {
         this.vis_data_.gl_objects[key].setIsDirty(true);
     }
 };
-
-
-
-
-
 
 
 
@@ -237,7 +220,6 @@ GLVIS.Collection.prototype.setStatus = function (status) {
         return;
 
     this.vis_data_.status = status;
-
 
     this.dirty_ = true;
     //Status change also means change of visual representation
@@ -287,12 +269,14 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
     }
 };
 
+/**
+ * Creating a @see{GLVIS.RingRepresentation} object.
+ * It shows several data of the collection and recommendations as rings inside
+ * the graph.
+ */
 GLVIS.Collection.prototype.createRingRepresentation = function () {
-
     this.ring_representation_ = new GLVIS.RingRepresentation(this);
-
 };
-
 
 
 /**
