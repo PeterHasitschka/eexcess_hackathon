@@ -29,15 +29,21 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
             new THREE.MeshBasicMaterial(
                     {
                         color: ring_config.color,
-                        transparent: true
+                        side: THREE.DoubleSide
                     });
 
     var rad_inner = ring_config.min_distance;
+
+
     var rad_outer = ring_config.min_distance + ring_config.thickness;
 
-    var ring_geometry = new THREE.RingGeometry(rad_inner, rad_outer, 3, 3, 0, Math.PI / 2);
-
+    var ring_geometry = new THREE.RingGeometry(rad_inner, rad_outer, 20, 8, 0, Math.PI / 2);
     var mesh = new THREE.Mesh(ring_geometry, material);
+
+    var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
+    webgl_handler.getThreeScene().add(mesh);
+    //ring_geometry.computeBoundingSphere();
+    this.webgl_objects_.ring_seg = mesh;
 
     //Register click-function
     ring_geometry.interaction = {
@@ -46,12 +52,6 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
     };
 
 
-    var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
-    webgl_handler.getThreeScene().add(mesh);
-    ring_geometry.computeBoundingSphere();
-
-
-    this.webgl_objects_.ring_seg = mesh;
 
 };
 
@@ -74,16 +74,22 @@ GLVIS.RingSegment.prototype.render = function () {
     var pos = this.ring_representation_.getPosition();
 
     var z_pos = GLVIS.config.collection.ring_segment.z_value;
-    this.webgl_objects_.ring_seg.position.set(
-            pos.x,
-            pos.y,
-            z_pos
-            );
-    GLVIS.Debugger.debug("RingSegment",
-            "Setting pos to: " + pos.x + " " + pos.y + " " + z_pos,
-            5);
-    console.log(this.webgl_objects_.ring_seg);
-    
+
+    for (var key in this.webgl_objects_)
+    {
+        this.webgl_objects_[key].position.set(
+                pos.x,
+                pos.y,
+                z_pos
+                );
+        
+        //this.webgl_objects_[key].geometry.computeBoundingSphere();
+        
+        GLVIS.Debugger.debug("RingSegment",
+                "Setting pos to: " + pos.x + " " + pos.y + " " + z_pos,
+                5);
+    }
+
     this.webgl_objects_.ring_seg.geometry.computeBoundingSphere();
     this.dirty_ = false;
 };
