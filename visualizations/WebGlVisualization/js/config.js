@@ -51,6 +51,13 @@ GLVIS.config = {
             },
             animation: {
             }
+        },
+        
+        ring_segment : {
+            min_distance: 50,
+            thickness : 30,
+            color: 0xFF00FF,
+            z_value : -20
         }
     },
     connection: {

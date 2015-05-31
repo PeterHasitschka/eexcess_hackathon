@@ -47,8 +47,10 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                     path + "js/recdashboardhandler.js",
                                     path + "js/webglobjects/collection_centernode.js",
                                     path + "js/webglobjects/rec_commonnode.js",
+                                    path + "js/webglobjects/coll_ringsegment.js",
                                     path + "js/collection.js",
                                     path + "js/recommendation.js",
+                                    path + "js/ringrepresentation.js",
                                     path + "js/position/recommendation/distributed.js",
                                     path + "js/position/collection/linear.js",
                                     path + "js/webglobjects/connection/collection_rec_line.js",
@@ -104,6 +106,12 @@ GLVIS.InitHandler.initScene = function (scene, db_handler) {
         }
 
         scene.initCollectionNetwork();
+        
+        //Test: Add one ringsegment
+        var last_q = queries_to_add[queries_to_add.length-1];
+        last_q.createRingRepresentation();
+        
+        
         GLVIS.Scene.animate();
     });
 };

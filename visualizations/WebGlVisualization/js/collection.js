@@ -57,6 +57,14 @@ GLVIS.Collection = function (eexcess_data) {
      */
     this.recommendations_ = [];
 
+
+    /**
+     * Created freshly when needed
+     * @type {GLVIS.RingRepresentation}
+     */
+    this.ring_representation_ = null;
+
+
     /**
      * Handles the positions of the recommendations
      * @type{GLVIS.RecommendationPosDistributed} 
@@ -121,6 +129,10 @@ GLVIS.Collection.prototype.render = function () {
         var curr_rec = this.recommendations_[i];
         curr_rec.render();
     }
+
+    //If Ring representation -> render it.
+    if (this.ring_representation_)
+        this.ring_representation_.render();
 
     this.dirty_ = false;
 };
@@ -274,6 +286,14 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
             throw("PARENT COLLECTION WITH ID " + this.parent_id_ + " NOT FOUND");
     }
 };
+
+GLVIS.Collection.prototype.createRingRepresentation = function () {
+
+    this.ring_representation_ = new GLVIS.RingRepresentation(this);
+
+};
+
+
 
 /**
  * Returning the parent-collection's id
