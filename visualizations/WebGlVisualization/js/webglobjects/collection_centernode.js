@@ -65,7 +65,7 @@ GLVIS.CollectionCenterNode.prototype.render = function () {
 
     GLVIS.Debugger.debug("CollectionCenterNode",
             "Rendering COLLECTION CENTER-NODE  for collection " + this.collection_.getId(),
-            5);
+            7);
 
 
     var sphere_color;

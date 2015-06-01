@@ -67,7 +67,7 @@ GLVIS.ConnectionCollectionRecommendation.prototype.render = function () {
 
     GLVIS.Debugger.debug("ConnectionCollectionRecommendation",
             "Rendering CONNECTION for recommendation " + this.recommendation_.getId(),
-            5);
+            7);
 
 
     this.webgl_objects_.line.geometry.vertices[0].set(rec_pos.x, rec_pos.y, config.z);

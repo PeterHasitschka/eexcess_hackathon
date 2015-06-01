@@ -77,7 +77,7 @@ GLVIS.RingSegment.prototype.render = function () {
 
     GLVIS.Debugger.debug("RingSegment",
             "Rendering RING SEGMENT",
-            5);
+            7);
 
     var pos = this.ring_representation_.getPosition();
 

@@ -57,7 +57,7 @@ GLVIS.Recommendation = function (eexcess_data) {
 
     GLVIS.Debugger.debug("Recommendation",
             "Recommendation with id " + this.id_ + " created!",
-            5);
+            6);
 
 };
 
@@ -85,7 +85,7 @@ GLVIS.Recommendation.prototype.render = function () {
 
     GLVIS.Debugger.debug("Recommendation",
             "Recommendation with id " + this.id_ + " rendered!",
-            5);
+            6);
 
     //Render all Gl-Objectss
     for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {

@@ -52,8 +52,6 @@ GLVIS.Scene.prototype.render = function () {
     this.time_.current = Date.now();
 
 
-
-
     for (var i = 0; i < this.collections_.length; i++) {
         this.collections_[i].render();
     }

@@ -2,13 +2,13 @@
 
 var GLVIS = GLVIS || {};
 GLVIS.config = {
-    scene : {
-      queries_to_fetch : 20  
+    scene: {
+        queries_to_fetch: 20
     },
     debug: {
-        active : true,
-        level : 5, // 1:Very important ... 10:Verbose story telling,
-        prefix : "GLVIS::"
+        active: true,
+        level: 5, // 1:Very important ... 10:Verbose story telling,
+        prefix: "GLVIS::"
     },
     three: {
         camera: {
@@ -52,15 +52,27 @@ GLVIS.config = {
             animation: {
             }
         },
-        
-        ring_segment : {
+        ring_segment: {
             min_distance: 15,
-            thickness : 28,
+            thickness: 28,
             gap: 5,
             color: 0xFF00FF,
-            z_value : -15,
-            segments : 20,
-            opacity : 0.3
+            z_value: -15,
+            segments: 20,
+            opacity: 0.3
+        },
+        labels: {
+            vertical_offset: 200,
+            title_color: "#CC0000",
+            distance: 25,
+            init_opacity : 0.7,
+            max_opacity : 0.9,
+            min_opacity : 0.5,
+            init_font_size : 20,
+            max_font_size : 30,
+            min_font_size : 15,
+            weight_size_pow : 0.5,
+            weight_opacity_pow : 0.5
         }
     },
     connection: {
@@ -76,6 +88,15 @@ GLVIS.config = {
             z: -52,
             opacity: 0.3
         }
+    },
+    text: {
+        z_value: -1,
+        render_factor: 3,
+        font: "Arial",
+        font_size: 20,
+        color: "#000000",
+        bg_color: null,
+        opacity: 1
     },
     navigation: {
         zoom: {
@@ -95,18 +116,17 @@ GLVIS.config = {
             }
         }
     },
-    rec_dashboard : {
+    rec_dashboard: {
         selector: '#webgl_canvas_container'
     },
-    
     db: {
-        query : {
-            storage_name : "queries_full",
-            fields_to_load : ["id", "timestamp", "query"]
+        query: {
+            storage_name: "queries_full",
+            fields_to_load: ["id", "timestamp", "query"]
         },
-        rec : {
-            storage_name : "recommendations",
-            fields_to_load : ["recommendation_id", "context", "result", "timestamp"]
+        rec: {
+            storage_name: "recommendations",
+            fields_to_load: ["recommendation_id", "context", "result", "timestamp"]
         }
     }
 

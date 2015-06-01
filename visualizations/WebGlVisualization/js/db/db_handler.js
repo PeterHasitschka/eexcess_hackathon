@@ -67,7 +67,7 @@ GLVIS.DbHandler.prototype.loadQueriesAndRecs = function (callback_ready) {
 
                 GLVIS.Debugger.debug("DbHandler",
                         ["QUERY- AND REC-DATA", that.query_data_, that.rec_data_],
-                        3);
+                        5);
 
                 //Finally callback
                 if (callback_ready)

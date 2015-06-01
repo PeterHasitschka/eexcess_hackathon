@@ -57,6 +57,8 @@ GLVIS.Collection = function (eexcess_data) {
      */
     this.recommendations_ = [];
 
+    /** @type{Array} holding @see{GLVIS.Text} Objects **/
+    this.labels_ = [];
 
     /**
      * Created freshly when needed
@@ -71,6 +73,7 @@ GLVIS.Collection = function (eexcess_data) {
     this.recommendation_position_handler_ = new GLVIS.RecommendationPosDistributed(this);
 
     this.initGlNode();
+    this.initLabels();
 
     GLVIS.Debugger.debug("Collection",
             "Collection with id " + this.id_ + " created!",
@@ -102,6 +105,54 @@ GLVIS.Collection.prototype.initGlNode = function () {
     this.vis_data_.gl_objects.push(gl_node);
 };
 
+/**
+ * Initializing the collection's label
+ */
+GLVIS.Collection.prototype.initLabels = function () {
+
+    var config = GLVIS.config.collection.labels;
+    var init_font_size = config.init_font_size;
+
+    var text = "Collection #" + this.getId();
+
+    var text_element = new GLVIS.Text(text, {
+        font_size: init_font_size,
+        color: config.title_color,
+        opacity: config.init_opacity
+    });
+
+    this.labels_.push(text_element);
+
+    if (this.eexcess_data_) {
+
+        for (var i = 0; i < this.eexcess_data_.query.length; i++) {
+
+            var curr_q_data = this.eexcess_data_.query[i];
+
+            var text = curr_q_data.text;
+            var weight = curr_q_data.weight;
+
+            var fontsize = init_font_size * Math.pow(weight, 0.5);
+            fontsize = Math.min(config.max_font_size, fontsize);
+            fontsize = Math.max(config.min_font_size, fontsize);
+
+            var opacity = config.init_opacity * weight * Math.pow(weight, 0.5);
+
+            opacity = Math.min(config.max_opacity, opacity);
+            opacity = Math.max(config.min_opacity, opacity);
+            
+            
+            var text_element = new GLVIS.Text(text, {
+                font_size: fontsize,
+                opacity: opacity
+            });
+
+            this.labels_.push(text_element);
+        }
+    }
+    this.rebuildLabelPositions();
+};
+
 
 
 GLVIS.Collection.prototype.render = function () {
@@ -111,7 +162,7 @@ GLVIS.Collection.prototype.render = function () {
 
     GLVIS.Debugger.debug("Collection",
             "Collection with id " + this.id_ + " rendered!",
-            5);
+            6);
 
     //Render all Gl-Objectss
     for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
@@ -128,6 +179,12 @@ GLVIS.Collection.prototype.render = function () {
     //If Ring representation -> render it.
     if (this.ring_representation_)
         this.ring_representation_.render();
+
+
+    //Render labels
+    for (var i = 0; i < this.labels_.length; i++) {
+        this.labels_[i].render();
+    }
 
     this.dirty_ = false;
 };
@@ -149,6 +206,9 @@ GLVIS.Collection.prototype.handleClick = function () {
             "Collection " + that.getId() + " CLICKED!",
             3);
 
+    GLVIS.Debugger.debug("Collection",
+            that,
+            5);
     that.selectAndFocus();
 };
 
@@ -187,6 +247,7 @@ GLVIS.Collection.prototype.getPosition = function () {
 
 /**
  * Set the coordinates of the collection.
+ * If changed several other sub-objects (labels) get affected
  * If one parameter is null or undefined it gets ignored
  * @param {float} x
  * @param {float} y
@@ -197,7 +258,36 @@ GLVIS.Collection.prototype.setPosition = function (x, y) {
 
     if (y !== undefined && y !== null)
         this.vis_data_.position.y = y;
+
+    this.rebuildLabelPositions();
+
+    this.setIsDirty(true);
 };
+
+/**
+ * After changing the absolute position of the collection, the labels that only
+ * hold absolute positions too, need new x and y values.
+ * @returns {undefined}
+ */
+GLVIS.Collection.prototype.rebuildLabelPositions = function () {
+
+    GLVIS.Debugger.debug("Collection", "Rebuilding Text positions", 5);
+
+    var config = GLVIS.config.collection.labels;
+    var vert_dist = config.distance;
+
+    var vert_offset = config.vertical_offset;
+
+    var c_x = this.vis_data_.position.x;
+    var c_y = this.vis_data_.position.y;
+    for (var i = 0; i < this.labels_.length; i++) {
+
+        /** @type {GLVIS.Text} **/
+        var curr_label = this.labels_[i];
+        curr_label.setPosition(c_x, c_y + i * vert_dist + vert_offset);
+    }
+};
+
 
 GLVIS.Collection.prototype.getRecommendations = function () {
     return this.recommendations_;

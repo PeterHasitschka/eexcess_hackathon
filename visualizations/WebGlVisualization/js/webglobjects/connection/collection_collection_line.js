@@ -76,7 +76,7 @@ GLVIS.ConnectionCollectionCollection.prototype.render = function () {
 
     GLVIS.Debugger.debug("ConnectionCollectionCollection",
     "Rendering CONNECTION for Collections " + this.c1_.getId() + "/" + this.c2_.getId(),
-    5);
+    7);
     
 
     this.webgl_objects_.line.geometry.vertices[0].set(pos1.x, pos1.y, config.z);

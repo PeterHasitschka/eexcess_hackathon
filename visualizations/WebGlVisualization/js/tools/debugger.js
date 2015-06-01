@@ -23,7 +23,7 @@ GLVIS.Debugger.debug = function (class_name, value, level) {
     
     
     console.log(
-            this.prefix_ + "L" + level + "::'%c" + class_name + "':%c%s",
+            this.prefix_ + "L" + level + "::'%c" + class_name + "':%c",
             this.classname_css,
             this.css,
             value
