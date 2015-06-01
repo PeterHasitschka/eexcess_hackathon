@@ -11,9 +11,10 @@ GLVIS.InitHandler.libs_loaded = false;
  * 
  * @param {type} root_element
  * @param {type} path_to_webglvisualization_folder
+ * @param {function} cb callback
  * @returns {undefined}
  */
-GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_folder) {
+GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_folder, cb) {
 
     var path = path_to_webglvisualization_folder;
 
@@ -48,6 +49,7 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                     path + "js/webglobjects/collection_centernode.js",
                                     path + "js/webglobjects/rec_commonnode.js",
                                     path + "js/webglobjects/coll_ringsegment.js",
+                                    path + "js/webglobjects/text.js",
                                     path + "js/collection.js",
                                     path + "js/recommendation.js",
                                     path + "js/ringrepresentation.js",
@@ -69,13 +71,13 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                             GLVIS.InitHandler.libs_loaded = true;
 
                                             //Recall this function
-                                            GLVIS.InitHandler.init(root_element, path_to_webglvisualization_folder);
+                                            GLVIS.InitHandler.init(root_element, path_to_webglvisualization_folder, cb);
                                         });
                             }
                     );
                 }
-                else{
-                    GLVIS.InitHandler.initScene(this.scene, this.db_handler);
+                else {
+                    GLVIS.InitHandler.initScene(this.scene, this.db_handler, cb);
                 }
             }
     );
@@ -87,8 +89,9 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
  * Create DB-Handler and Scene. 
  * @param {GLVIS.Scene} scene
  * @param {GLVIS.DbHandler} db_handler
+ * @param {function} cb callback
  */
-GLVIS.InitHandler.initScene = function (scene, db_handler) {
+GLVIS.InitHandler.initScene = function (scene, db_handler, cb) {
 
     scene = new GLVIS.Scene(jQuery(GLVIS.config.rec_dashboard.selector));
     db_handler = new GLVIS.DbHandler();
@@ -106,13 +109,16 @@ GLVIS.InitHandler.initScene = function (scene, db_handler) {
         }
 
         scene.initCollectionNetwork();
-        
+
         //Test: Add one ringsegment
-        var last_q = queries_to_add[queries_to_add.length-1];
+        var last_q = queries_to_add[queries_to_add.length - 1];
         last_q.createRingRepresentation();
-        
-        
+
+
         GLVIS.Scene.animate();
+
+        if (cb)
+            cb();
     });
 };
 
