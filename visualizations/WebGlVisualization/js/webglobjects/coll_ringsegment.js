@@ -112,10 +112,7 @@ GLVIS.RingSegment.prototype.handleClick = function () {
 
     var that = this.ringseg;
 
-    if (that.is_selected_ === true)
-        return;
-
-    that.is_selected_ = true;
+    that.is_selected_ = !that.is_selected_;
     that.setIsDirty(true);
 
 };
