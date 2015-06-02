@@ -31,6 +31,18 @@ GLVIS.DbQueryCreator.prototype.createQueries = function (end_index, length, load
         if (curr_query_data.getIsDuplicate() && !load_duplicates)
             continue;
 
+        //If settings forbid empty queries, skip if no recs
+        if (GLVIS.config.scene.skip_empty_queries) {
+            if (!curr_query_data.getRecs().length) {
+
+                GLVIS.Debugger.debug("DbQueryCreator",
+                        "Skipping empty query while loading from db data",
+                        5);
+
+                continue;
+            }
+        }
+
         selected_query_datas.push(curr_query_data);
     }
 
@@ -65,10 +77,10 @@ GLVIS.DbQueryCreator.prototype.createCollection = function (query_data_obj) {
     for (var r_count = 0; r_count < rec_data_array.length; r_count++) {
         var curr_rec_data = rec_data_array[r_count];
         var curr_rec = new GLVIS.Recommendation(curr_rec_data);
-        
+
         collection.addRecommendation(curr_rec);
     }
-        
+
     GLVIS.Debugger.debug("DbQueryCreator",
             "Collection from query with ID " + collection.getId() + " created", 6);
 
