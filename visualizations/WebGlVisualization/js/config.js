@@ -105,7 +105,7 @@ GLVIS.config = {
                 pow: 0.0001,
                 speed_fct: 10,
                 zoom_out: 0.7,
-                zoom_in: 1
+                zoom_in: 1.5
             }
         },
         move: {
