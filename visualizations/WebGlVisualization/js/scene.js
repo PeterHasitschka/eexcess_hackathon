@@ -26,6 +26,9 @@ GLVIS.Scene = function (canvas) {
 
     /** @type{GLVIS.CollectionPosLinear} **/
     this.collection_position_handler_ = new GLVIS.CollectionPosLinear();
+    
+    /** @type{GLVIS.Animation} **/
+    this.animation_ = new GLVIS.Animation();
 
     this.time_ = {
         current: null,
@@ -44,7 +47,7 @@ GLVIS.Scene = function (canvas) {
 
 
 GLVIS.Scene.prototype.render = function () {
-
+    
     //Set Time Delta for performance-independent animation speed
     this.time_.current = this.time_.current || Date.now();
     var now = Date.now();
@@ -58,7 +61,7 @@ GLVIS.Scene.prototype.render = function () {
     this.webgl_handler_.render();
 
 
-    this.navigation_handler_.performAnimations();
+    this.animation_.animate();
 };
 
 /**
@@ -96,6 +99,14 @@ GLVIS.Scene.prototype.getWebGlHandler = function () {
  */
 GLVIS.Scene.prototype.getNavigationHandler = function () {
     return this.navigation_handler_;
+};
+
+/**
+ * Getter for the Animation-Object
+ * @returns {GLVIS.Animation}
+ */
+GLVIS.Scene.prototype.getAnimation = function () {
+    return this.animation_;
 };
 
 /**
@@ -179,7 +190,7 @@ GLVIS.Scene.getCurrentScene = function () {
 
 GLVIS.Scene.animate = function () {
     var curr_scene = GLVIS.Scene.getCurrentScene();
-
+       
     if (!curr_scene)
         return;
 
