@@ -4,7 +4,7 @@ var GLVIS = GLVIS || {};
 GLVIS.config = {
     scene: {
         queries_to_fetch: 20,
-        skip_empty_queries : true
+        skip_empty_queries: true
     },
     debug: {
         active: true,
@@ -53,27 +53,47 @@ GLVIS.config = {
             animation: {
             }
         },
-        ring_segment: {
-            min_distance: 15,
-            thickness: 28,
-            gap: 5,
-            color: 0xFF00FF,
-            z_value: -15,
-            segments: 20,
-            opacity: 0.3
+        ring: {
+            data: {
+                1: {
+                    type: "facet",
+                    id: "type"
+                },
+                2: {
+                    type: "facet",
+                    id: "language"
+                },
+                3: {
+                    type: "facet",
+                    id: "provider"
+                },
+                4: {
+                    type: "facet",
+                    id: "license"
+                }
+            },
+            ring_segment: {
+                min_distance: 15,
+                thickness: 28,
+                gap: 5,
+                color: 0xFF00FF,
+                z_value: -15,
+                segments: 20,
+                opacity: 0.3
+            }
         },
         labels: {
             vertical_offset: 200,
             title_color: "#CC0000",
             distance: 25,
-            init_opacity : 0.7,
-            max_opacity : 0.9,
-            min_opacity : 0.5,
-            init_font_size : 20,
-            max_font_size : 30,
-            min_font_size : 15,
-            weight_size_pow : 0.5,
-            weight_opacity_pow : 0.5
+            init_opacity: 0.7,
+            max_opacity: 0.9,
+            min_opacity: 0.5,
+            init_font_size: 20,
+            max_font_size: 30,
+            min_font_size: 15,
+            weight_size_pow: 0.5,
+            weight_opacity_pow: 0.5
         }
     },
     connection: {

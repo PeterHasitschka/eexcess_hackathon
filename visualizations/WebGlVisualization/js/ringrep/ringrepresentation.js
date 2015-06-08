@@ -12,7 +12,23 @@ GLVIS.RingRepresentation = function (collection) {
     this.collection_ = collection;
     this.dirty_ = true;
     this.ring_segments_ = [];
+
+
+    this.buildTree_();
+
+
     this.initAndRegisterGlObj();
+};
+
+
+GLVIS.RingRepresentation.prototype.buildTree_ = function () {
+
+    GLVIS.Debugger.debug("RingRepresentation",
+            "Building data-tree for Ring representation", 3);
+
+
+    var tree = new GLVIS.RingTree(this.collection_.getRecommendations());
+
 };
 
 
@@ -26,8 +42,8 @@ GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
 
             var seg_start = seg_count * (100 / num_segs);
             var seg_end = seg_start + (100 / num_segs);
-            
-            this.ring_segments_.push(new GLVIS.RingSegment(this,l_count, seg_start,seg_end, color));
+
+            this.ring_segments_.push(new GLVIS.RingSegment(this, l_count, seg_start, seg_end, color));
         }
     }
 };
@@ -43,7 +59,7 @@ GLVIS.RingRepresentation.prototype.render = function () {
     GLVIS.Debugger.debug("RingRepresentation",
             "Rendering RINGREPRESENTATION " + this.collection_.getId(),
             5);
-            
+
     for (var i = 0; i < this.ring_segments_.length; i++) {
         this.ring_segments_[i].render();
     }

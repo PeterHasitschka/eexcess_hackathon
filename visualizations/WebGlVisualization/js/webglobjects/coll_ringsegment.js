@@ -36,7 +36,7 @@ GLVIS.RingSegment = function (ring_representation, level, start_percent, end_per
 
 GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
 
-    var ring_config = GLVIS.config.collection.ring_segment;
+    var ring_config = GLVIS.config.collection.ring.ring_segment;
 
     var material =
             new THREE.MeshBasicMaterial(
@@ -81,7 +81,7 @@ GLVIS.RingSegment.prototype.render = function () {
 
     var pos = this.ring_representation_.getPosition();
 
-    var z_pos = GLVIS.config.collection.ring_segment.z_value;
+    var z_pos = GLVIS.config.collection.ring.ring_segment.z_value;
 
     this.webgl_objects_.ring_seg.position.set(
             pos.x,
@@ -96,7 +96,7 @@ GLVIS.RingSegment.prototype.render = function () {
     if (this.is_selected_)
         this.webgl_objects_.ring_seg.material.opacity = 1;
     else
-        this.webgl_objects_.ring_seg.material.opacity = GLVIS.config.collection.ring_segment.opacity;
+        this.webgl_objects_.ring_seg.material.opacity = GLVIS.config.collection.ring.ring_segment.opacity;
 
     //this.webgl_objects_.ring_seg.geometry.computeBoundingSphere();
     this.dirty_ = false;

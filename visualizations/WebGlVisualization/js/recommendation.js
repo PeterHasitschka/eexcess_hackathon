@@ -120,7 +120,7 @@ GLVIS.Recommendation.prototype.handleClick = function () {
         return;
 
     GLVIS.Debugger.debug("Recommendation",
-            "RECOMMENDATION " + that.getId() + " clicked",
+            ["RECOMMENDATION " + that.getId() + " clicked", that.eexcess_data_],
             3);
 
     GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(that);
@@ -258,6 +258,11 @@ GLVIS.Recommendation.prototype.getOpacity = function () {
 GLVIS.Recommendation.prototype.getId = function () {
     return this.id_;
 };
+
+GLVIS.Recommendation.prototype.getEexcessData = function () {
+    return this.eexcess_data_;
+};
+
 
 
 
