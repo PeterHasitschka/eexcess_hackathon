@@ -10,7 +10,6 @@ GLVIS.RingTree = function (recs) {
     this.data_structure_ = GLVIS.config.collection.ring.data;
 
     this.tree_ = null;
-
     this.buildBasicTree_();
 };
 
@@ -24,40 +23,36 @@ GLVIS.RingTree.prototype.buildBasicTree_ = function () {
     GLVIS.Debugger.debug("RingTree",
             "Building ring-tree", 3);
 
-    var tree = {
-        id: null,
-        children: []
-    };
-    for (var order in this.data_structure_) {
-
-        //Only ints as key allowed. They represent the order
-        if (Number(order) !== parseInt(order))
-            continue;
-
-        var structure = this.data_structure_[order];
-
-
-        tree.children.push(this.getChildNodes_(this.recs_, structure));
-    }
+    //Smallest level (=key) in config
+    var level_to_start = 1;
+    var tree = this.getSubtree_(this.recs_, this.data_structure_, level_to_start, null);
 
     GLVIS.Debugger.debug("RingTree", tree, 3);
     this.tree_ = tree;
 };
 
+
 /**
- * Separating recommendations by a specified key.
+ * Separating recommendations recursively by a specified key.
  * @param {Array} recs Holding the @see{GLVIS.Recommendation} nodes to separate
- * @param {type} structure Config value holding id (key) and type (e.g. 'facet')
+ * @param {object} structures Config values holding id (key) and type (e.g. 'facet') @see{GLVIS.config.collection.ring.data}
+ * @param {integer} current_depth Current structure id. Beware that these may not be 0...n indizies.
+ * @param {string} val Current value. Just for storing in tree
  * @returns {Object}
  */
-GLVIS.RingTree.prototype.getChildNodes_ = function (recs, structure) {
+GLVIS.RingTree.prototype.getSubtree_ = function (recs, structures, current_depth, val) {
 
-    GLVIS.Debugger.debug("RingTree", [recs, structure], 5);
+    var structure = structures[current_depth];
+
+    if (!structure)
+        return false;
+
+    GLVIS.Debugger.debug("RingTree", ["Calling treebuilder, level " + current_depth, structure, val], 5);
 
     var sorted_recs = {};
 
+    //Collect recommendations 
     for (var i = 0; i < recs.length; i++) {
-
         /** @type{GLVIS.Recommendation} **/
         var curr_rec = recs[i];
         var rec_val = this.getValue(curr_rec, structure);
@@ -66,22 +61,23 @@ GLVIS.RingTree.prototype.getChildNodes_ = function (recs, structure) {
             sorted_recs[rec_val] = [];
 
         sorted_recs[rec_val].push(curr_rec);
-
-
     }
-    
-    
+
     var children = [];
-    
+
     for (var key in sorted_recs) {
-        console.log(key, sorted_recs[key]);
+        var subtree = this.getSubtree_(sorted_recs[key], structures, current_depth + 1, key);
+        if (subtree) {
+            children.push(subtree);
+            subtree.my_val = key;
+            subtree.my_id = structure;
+        }
     }
-    
+
     var tree = {
-        id: structure,
+        children_separate_id: structure,
         children: children
     };
-
     return tree;
 };
 
@@ -91,9 +87,8 @@ GLVIS.RingTree.prototype.getChildNodes_ = function (recs, structure) {
 GLVIS.RingTree.prototype.getValue = function (rec, structure) {
 
     switch (structure.type) {
-
+        
         case "facet" :
-
             var eexcess_data = rec.getEexcessData();
 
             if (!eexcess_data)
@@ -107,7 +102,5 @@ GLVIS.RingTree.prototype.getValue = function (rec, structure) {
 
         default:
             throw ("ERROR: TYPE " + structure.type + " UNKNOWN");
-
     }
-
 };
