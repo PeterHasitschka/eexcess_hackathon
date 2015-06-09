@@ -83,11 +83,16 @@ GLVIS.RingTree.prototype.getSubtree_ = function (recs, structures, current_depth
 
 
 
-
+/**
+ * Get a specific value from the recommendation, defined by "type" in the structure
+ * @param {GLVIS.Recommendation} rec
+ * @param {object} structure holding "id" and "type"
+ * @returns {string} Value
+ */
 GLVIS.RingTree.prototype.getValue = function (rec, structure) {
 
     switch (structure.type) {
-        
+
         case "facet" :
             var eexcess_data = rec.getEexcessData();
 
@@ -103,4 +108,46 @@ GLVIS.RingTree.prototype.getValue = function (rec, structure) {
         default:
             throw ("ERROR: TYPE " + structure.type + " UNKNOWN");
     }
+};
+
+
+/**
+ * Return array with all nodes ordered by level
+ * @returns {Array}
+ */
+GLVIS.RingTree.prototype.getRingStructure = function () {
+
+    if (!this.tree_)
+        throw ("Tree not initialized");
+
+    var collected = [];
+
+    var ring_level = 0;
+    this.collectChildrenForRingStructure_(this.tree_, collected, ring_level);
+
+    return collected;
+};
+
+
+/**
+ * 
+ * @param {object} node Node from tree
+ * @param {array} collected Recursively collected data.
+ * @param {type} ring_level
+ * @returns {undefined}
+ */
+GLVIS.RingTree.prototype.collectChildrenForRingStructure_ = function (node, collected, ring_level) {
+
+    GLVIS.Debugger.debug("RingTree", ["Collecting ring structure ", ring_level], 7);
+
+    for (var i = 0; i < node.children.length; i++) {
+        
+        if (collected[ring_level] === undefined)
+            collected[ring_level] = [];
+
+        var subtree = node.children[i];
+        this.collectChildrenForRingStructure_(subtree, collected, ring_level + 1);
+        collected[ring_level].push(subtree);
+    }
+
 };

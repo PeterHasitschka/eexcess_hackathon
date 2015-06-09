@@ -13,6 +13,7 @@ GLVIS.RingRepresentation = function (collection) {
     this.dirty_ = true;
     this.ring_segments_ = [];
 
+    this.tree_ = null;
 
     this.buildTree_();
 
@@ -25,28 +26,37 @@ GLVIS.RingRepresentation.prototype.buildTree_ = function () {
 
     GLVIS.Debugger.debug("RingRepresentation",
             "Building data-tree for Ring representation", 3);
-
-
-    var tree = new GLVIS.RingTree(this.collection_.getRecommendations());
-
+    this.tree_ = new GLVIS.RingTree(this.collection_.getRecommendations());
 };
 
 
 GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
 
-    for (var l_count = 0; l_count < 3; l_count++) {
-        var num_segs = parseInt(Math.random() * 10);
-        for (var seg_count = 0; seg_count < num_segs; seg_count++) {
+    GLVIS.Debugger.debug("RingRepresentation",
+            "Initializing Ring-Webgl-Objects", 4);
 
+    if (!this.tree_)
+        throw("Tree not initialized");
+
+    var ring_structure = this.tree_.getRingStructure();
+
+    GLVIS.Debugger.debug("RingRepresentation",
+            ["Ring Structure", ring_structure], 4);
+
+    for (var ring_count = 0; ring_count < ring_structure.length; ring_count++) {
+        var curr_ring_data = ring_structure[ring_count];
+
+        for (var seg_count = 0; seg_count < curr_ring_data.length; seg_count++) {
             var color = parseInt(Math.random() * 0xFFFFFF);
 
-            var seg_start = seg_count * (100 / num_segs);
-            var seg_end = seg_start + (100 / num_segs);
+            var seg_start = seg_count * (100 / curr_ring_data.length);
+            var seg_end = seg_start + (100 / curr_ring_data.length);
 
-            this.ring_segments_.push(new GLVIS.RingSegment(this, l_count, seg_start, seg_end, color));
+            this.ring_segments_.push(new GLVIS.RingSegment(this, ring_count, seg_start, seg_end, color));
         }
     }
 };
+
 
 /**
  * Called by collection. Only performs if dirty flag is true
