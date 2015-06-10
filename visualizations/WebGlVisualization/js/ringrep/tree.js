@@ -140,12 +140,23 @@ GLVIS.RingTree.prototype.collectChildrenForRingStructure_ = function (node, coll
 
     GLVIS.Debugger.debug("RingTree", ["Collecting ring structure ", ring_level], 7);
 
+    //The node position describes a value between 0 and 1 where the ring segment will start.
+    //Necessary for the position of the children
+    if (node.position === undefined || node.position === null)
+        node.position = 0.0;
+    
+    if (node.num_siblings === undefined || node.num_siblings === null)
+        node.num_siblings = 1;
+
+
     for (var i = 0; i < node.children.length; i++) {
-        
+
         if (collected[ring_level] === undefined)
             collected[ring_level] = [];
 
         var subtree = node.children[i];
+        subtree.position = node.position + (i / node.children.length) / node.num_siblings;
+        subtree.num_siblings = node.children.length;
         this.collectChildrenForRingStructure_(subtree, collected, ring_level + 1);
         collected[ring_level].push(subtree);
     }
