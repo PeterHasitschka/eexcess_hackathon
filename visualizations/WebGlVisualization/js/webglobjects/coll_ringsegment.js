@@ -38,6 +38,8 @@ GLVIS.RingSegment = function (ring_representation, level, start_percent, end_per
         label: null
     };
 
+    this.relative_pos_ = null;
+
     this.is_selected_ = false;
 
     this.initAndRegisterGlObj();
@@ -63,6 +65,18 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
     var ring_start = this.start_pc_ * 0.01 * rad_fact - (Math.PI / 2);
     var ring_end = this.end_pc_ * 0.01 * rad_fact - (Math.PI / 2);
 
+
+    var segment_middle_rad = (ring_end + ring_start) / 2;
+    var radius_middle = (rad_outer + rad_inner) / 2;
+    this.relative_pos_ = {
+        x: Math.cos(segment_middle_rad) * radius_middle,
+        y: Math.sin(segment_middle_rad) * radius_middle
+    };
+
+
+    /**
+     * Segment
+     */
     var ring_geometry = new THREE.RingGeometry(rad_inner, rad_outer, ring_config.segments, 8, ring_start, ring_end - ring_start);
     var mesh = new THREE.Mesh(ring_geometry, material);
 
@@ -77,47 +91,24 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
     };
 
 
-
-    var segment_middle_rad = (ring_end + ring_start) / 2;
-    var radius_middle = (rad_outer + rad_inner) / 2;
-    var segment_center = {
-        x: Math.cos(segment_middle_rad) * radius_middle,
-        y: Math.sin(segment_middle_rad) * radius_middle
-    };
-
-
-
     /**
-     * DUMMY SPHERE TO DETERMINE CENTER FOR LABEL
+     * Label
      */
+    var label_config = GLVIS.config.collection.ring.ring_segment.label;
 
-
-    var sphereMaterial =
-            new THREE.MeshBasicMaterial(
-                    {
-                        color: 0xFF0000,
-                        transparent: true
-                    });
-
-    var sphere = new THREE.Mesh(
-            new THREE.SphereGeometry(
-                    10,
-                    10,
-                    10),
-            sphereMaterial);
-    webgl_handler.getThreeScene().add(sphere);
-
-
-
-
-
-
-    this.webgl_objects_.label = sphere;
-    sphere.rel_pos = {
-        x: segment_center.x,
-        y: segment_center.y
+    var label_options = {
+        color: label_config.color,
+        bg_color: null,
+        font_size: label_config.font_size,
+        pos_x: 0,
+        pos_y: 0,
+        pos_z: label_config.z_value
     };
 
+    var text = this.data_.val;
+    text = text.replace(" ", "\n");
+    var label = new GLVIS.Text(text, label_options);
+    this.webgl_objects_.label = label;
 };
 
 
@@ -151,13 +142,12 @@ GLVIS.RingSegment.prototype.render = function () {
         this.webgl_objects_.ring_seg.material.opacity = GLVIS.config.collection.ring.ring_segment.opacity;
 
 
-
-    this.webgl_objects_.label.position.set(
-            pos.x + this.webgl_objects_.label.rel_pos.x,
-            pos.y + this.webgl_objects_.label.rel_pos.y,
-            z_pos - 1
+    this.webgl_objects_.label.setPosition(
+            pos.x + this.relative_pos_.x,
+            pos.y + this.relative_pos_.y,
+            null
             );
-
+    this.webgl_objects_.label.render();
 
 
     //this.webgl_objects_.ring_seg.geometry.computeBoundingSphere();

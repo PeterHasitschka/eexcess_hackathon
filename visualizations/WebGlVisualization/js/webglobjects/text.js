@@ -4,7 +4,7 @@ GLVIS = GLVIS || {};
 /**
  * 
  * @param {string} text Text to be rendered
- * @param {object} options Options. Possible values 'color', 'bg_color' 'font_size', 'font', 'opacity', 'pos_x', pos_y', 'render_factor'
+ * @param {object} options Options. Possible values 'color', 'bg_color' 'font_size', 'font', 'opacity', 'pos_x', pos_y', 'pos_z', 'render_factor'
  */
 GLVIS.Text = function (text, options) {
 
@@ -18,6 +18,7 @@ GLVIS.Text = function (text, options) {
         opacity: config.opacity,
         pos_x: 0,
         pos_y: 0,
+        pos_z: config.z_value,
         render_factor: config.render_factor
     };
 
@@ -37,7 +38,8 @@ GLVIS.Text = function (text, options) {
 
     this.pos_ = {
         x: init_data.pos_x,
-        y: init_data.pos_y
+        y: init_data.pos_y,
+        z: init_data.pos_z
     };
 
     this.webgl_objects_ = {
@@ -116,7 +118,7 @@ GLVIS.Text.prototype.updateWebGlObj = function () {
 
     context.font = this.font_;
     context.fillStyle = this.color_;
-    
+
     //Vertical center alignment
     var diff_size_font = h - this.font_size_ * this.render_factor_;
     context.fillText(this.text_, 0, h - diff_size_font * 2);
@@ -146,8 +148,9 @@ GLVIS.Text.prototype.updateWebGlObj = function () {
 
     var x = this.pos_.x;
     var y = this.pos_.y;
+    var z = this.pos_.z;
 
-    mesh.position.set(x, y, config.z_value);
+    mesh.position.set(x, y, z);
 
 
     var scale = 1.0 / this.render_factor_;
@@ -179,8 +182,9 @@ GLVIS.Text.prototype.render = function () {
 
     var pos_x = parseFloat(this.pos_.x);
     var pos_y = parseFloat(this.pos_.y);
+    var pos_z = parseFloat(this.pos_.z);
 
-    this.webgl_objects_.mesh.position.set(pos_x, pos_y, config.z_value);
+    this.webgl_objects_.mesh.position.set(pos_x, pos_y, pos_z);
     this.webgl_objects_.mesh.material.opacity = this.opacity_;
 
     this.setIsDirty(false);

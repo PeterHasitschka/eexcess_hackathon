@@ -52,8 +52,8 @@ GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
             var seg_start = seg_count * (100 / curr_ring_data.length);
             var seg_end = seg_start + (100 / curr_ring_data.length);
 
-            var key = curr_ring_data.my_id;
-            var val = curr_ring_data.my_val;
+            var key = curr_ring_data[seg_count].my_id;
+            var val = curr_ring_data[seg_count].my_val;
             this.ring_segments_.push(new GLVIS.RingSegment(this, ring_count, seg_start, seg_end, color, key, val));
         }
     }

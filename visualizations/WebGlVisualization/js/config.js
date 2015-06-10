@@ -79,7 +79,12 @@ GLVIS.config = {
                 color: 0xFF00FF,
                 z_value: -15,
                 segments: 20,
-                opacity: 0.3
+                opacity: 0.3,
+                label: {
+                    font_size: 8,
+                    color: "#000033",
+                    z_value: -14
+                }
             }
         },
         labels: {
@@ -126,7 +131,7 @@ GLVIS.config = {
                 pow: 0.0001,
                 speed_fct: 10,
                 zoom_out: 0.7,
-                zoom_in: 1.5
+                zoom_in: 2
             }
         },
         move: {
