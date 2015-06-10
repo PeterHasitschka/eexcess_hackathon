@@ -71,13 +71,15 @@ GLVIS.InteractionHandler = function (scene) {
 };
 
 
-GLVIS.InteractionHandler.prototype.deactivateAllCollections = function () {
+GLVIS.InteractionHandler.prototype.deselectAllCollections = function () {
     //Deselect all collections
 
     for (var i = 0; i < this.scene_.getCollections().length; i++)
     {
         var curr_coll = this.scene_.getCollections()[i];
         curr_coll.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
+        
+        curr_coll.deleteRingRepresentation();
 
         var recommendations = curr_coll.getRecommendations();
 
@@ -97,7 +99,7 @@ GLVIS.InteractionHandler.prototype.deactivateAllCollections = function () {
  * @param {string} interaction_type e.g  'mouseclick', 'mouseover' ...
  */
 GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interaction_type) {
-    this.deactivateAllCollections();
+    this.deselectAllCollections();
     var intersected = this.getIntersectedObjects_(event);
 
     GLVIS.Debugger.debug("InteractionHandler",

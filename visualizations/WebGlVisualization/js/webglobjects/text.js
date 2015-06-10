@@ -269,3 +269,13 @@ GLVIS.Text.prototype.setIsDirty = function (dirty) {
 GLVIS.Text.prototype.getIsDirty = function () {
     return this.dirty_;
 };
+
+
+/**
+ * Delete all webgl-objects
+ */
+GLVIS.Text.prototype.delete = function () {
+
+    var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+    three_scene.remove(this.webgl_objects_.mesh);
+};

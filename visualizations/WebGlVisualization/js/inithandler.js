@@ -111,10 +111,6 @@ GLVIS.InitHandler.initScene = function (scene, db_handler, cb) {
 
         scene.initCollectionNetwork();
 
-        //Test: Add one ringsegment
-        var last_q = queries_to_add[queries_to_add.length - 1];
-        last_q.createRingRepresentation();
-
 
         GLVIS.Scene.animate();
 

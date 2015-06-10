@@ -140,8 +140,8 @@ GLVIS.Collection.prototype.initLabels = function () {
 
             opacity = Math.min(config.max_opacity, opacity);
             opacity = Math.max(config.min_opacity, opacity);
-            
-            
+
+
             var text_element = new GLVIS.Text(text, {
                 font_size: fontsize,
                 opacity: opacity
@@ -209,6 +209,9 @@ GLVIS.Collection.prototype.handleClick = function () {
     GLVIS.Debugger.debug("Collection",
             that,
             5);
+
+    that.createRingRepresentation();
+
     that.selectAndFocus();
 };
 
@@ -368,6 +371,12 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
     this.ring_representation_ = new GLVIS.RingRepresentation(this);
 };
 
+
+GLVIS.Collection.prototype.deleteRingRepresentation = function () {
+    if (this.ring_representation_)
+        this.ring_representation_.delete();
+    this.ring_representation_ = null;
+};
 
 /**
  * Returning the parent-collection's id

@@ -195,3 +195,16 @@ GLVIS.RingSegment.prototype.setIsDirty = function (dirty) {
 GLVIS.RingSegment.prototype.getIsDirty = function () {
     return this.dirty_;
 };
+
+
+
+/**
+ * Delete all webgl-objects
+ */
+GLVIS.RingSegment.prototype.delete = function () {
+
+    var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+
+    three_scene.remove(this.webgl_objects_.ring_seg);
+    this.webgl_objects_.label.delete();
+};

@@ -92,3 +92,14 @@ GLVIS.RingRepresentation.prototype.setIsDirty = function (dirty) {
 GLVIS.RingRepresentation.prototype.getPosition = function () {
     return this.collection_.getPosition();
 };
+
+/**
+ * Delete all webgl-objects
+ */
+GLVIS.RingRepresentation.prototype.delete = function(){
+  
+   for (var i=0; i < this.ring_segments_.length; i++) {
+       this.ring_segments_[i].delete();
+   }
+    
+};
