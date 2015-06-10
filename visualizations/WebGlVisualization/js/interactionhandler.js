@@ -79,7 +79,7 @@ GLVIS.InteractionHandler.prototype.deselectAllCollections = function () {
         var curr_coll = this.scene_.getCollections()[i];
         curr_coll.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
         
-        curr_coll.deleteRingRepresentation();
+        //curr_coll.deleteRingRepresentation();
 
         var recommendations = curr_coll.getRecommendations();
 

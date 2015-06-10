@@ -209,7 +209,8 @@ GLVIS.Collection.prototype.handleClick = function () {
     GLVIS.Debugger.debug("Collection",
             that,
             5);
-
+        
+    that.deleteRingRepresentation();
     that.createRingRepresentation();
 
     that.selectAndFocus();

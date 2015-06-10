@@ -212,9 +212,12 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
     var callback_called = false;
 
     this.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_out, function () {
+        GLVIS.Debugger.debug("NavigationHandler",
+                    "finished zoom to " + GLVIS.config.navigation.zoom.animated.zoom_out,
+                    3);
         that.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_in, function () {
             GLVIS.Debugger.debug("NavigationHandler",
-                    "finished zoom to 1",
+                    "finished zoom to " + GLVIS.config.navigation.zoom.animated.zoom_in,
                     3);
 
             if (callback_fct && !callback_called) {
