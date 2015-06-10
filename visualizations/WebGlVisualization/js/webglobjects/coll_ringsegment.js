@@ -11,11 +11,19 @@ var GLVIS = GLVIS || {};
  * @param {float} start_percent 0...100 percent to start. 0 is on the top
  * @param {float} end_percent 0...100 percent to end. 0 is on the top
  * @param {integer} color color to fill
+ * @param {string} key Key like "language"
+ * @param {string} val Value like "de"
  */
-GLVIS.RingSegment = function (ring_representation, level, start_percent, end_percent, color) {
+GLVIS.RingSegment = function (ring_representation, level, start_percent, end_percent, color, key, val) {
 
     /** @type{GLVIS.RingRepresentation} **/
     this.ring_representation_ = ring_representation;
+
+    this.data_ = {
+        key: key,
+        val: val
+    };
+
 
     this.default_color_ = color;
     this.level_ = level;
@@ -26,7 +34,8 @@ GLVIS.RingSegment = function (ring_representation, level, start_percent, end_per
     this.dirty_ = true;
 
     this.webgl_objects_ = {
-        ring_seg: null
+        ring_seg: null,
+        label: null
     };
 
     this.is_selected_ = false;
@@ -66,6 +75,49 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
         "mouseclick": this.handleClick,
         "ringseg": this
     };
+
+
+
+    var segment_middle_rad = (ring_end + ring_start) / 2;
+    var radius_middle = (rad_outer + rad_inner) / 2;
+    var segment_center = {
+        x: Math.cos(segment_middle_rad) * radius_middle,
+        y: Math.sin(segment_middle_rad) * radius_middle
+    };
+
+
+
+    /**
+     * DUMMY SPHERE TO DETERMINE CENTER FOR LABEL
+     */
+
+
+    var sphereMaterial =
+            new THREE.MeshBasicMaterial(
+                    {
+                        color: 0xFF0000,
+                        transparent: true
+                    });
+
+    var sphere = new THREE.Mesh(
+            new THREE.SphereGeometry(
+                    10,
+                    10,
+                    10),
+            sphereMaterial);
+    webgl_handler.getThreeScene().add(sphere);
+
+
+
+
+
+
+    this.webgl_objects_.label = sphere;
+    sphere.rel_pos = {
+        x: segment_center.x,
+        y: segment_center.y
+    };
+
 };
 
 
@@ -97,6 +149,16 @@ GLVIS.RingSegment.prototype.render = function () {
         this.webgl_objects_.ring_seg.material.opacity = 1;
     else
         this.webgl_objects_.ring_seg.material.opacity = GLVIS.config.collection.ring.ring_segment.opacity;
+
+
+
+    this.webgl_objects_.label.position.set(
+            pos.x + this.webgl_objects_.label.rel_pos.x,
+            pos.y + this.webgl_objects_.label.rel_pos.y,
+            z_pos - 1
+            );
+
+
 
     //this.webgl_objects_.ring_seg.geometry.computeBoundingSphere();
     this.dirty_ = false;

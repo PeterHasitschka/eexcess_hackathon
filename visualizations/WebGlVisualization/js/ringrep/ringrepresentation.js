@@ -52,7 +52,9 @@ GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
             var seg_start = seg_count * (100 / curr_ring_data.length);
             var seg_end = seg_start + (100 / curr_ring_data.length);
 
-            this.ring_segments_.push(new GLVIS.RingSegment(this, ring_count, seg_start, seg_end, color));
+            var key = curr_ring_data.my_id;
+            var val = curr_ring_data.my_val;
+            this.ring_segments_.push(new GLVIS.RingSegment(this, ring_count, seg_start, seg_end, color, key, val));
         }
     }
 };
