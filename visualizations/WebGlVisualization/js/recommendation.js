@@ -225,7 +225,7 @@ GLVIS.Recommendation.prototype.setRelativePosition = function (x, y) {
 /**
  * Set the position by a radians value.
  * Necessary for animation
-* @param{GLVIS.Recommendation | null} that Reference to THIS object. (Animation doesn't know me...)
+ * @param{GLVIS.Recommendation | null} that Reference to THIS object. (Animation doesn't know me...)
  * @param {float} rad Radians
  */
 GLVIS.Recommendation.prototype.setRelativePositionByRad = function (that, rad) {
@@ -233,16 +233,13 @@ GLVIS.Recommendation.prototype.setRelativePositionByRad = function (that, rad) {
     if (!that)
         that = this;
 
-    while (rad < 0)
-        rad += (Math.PI * 2);
-
-    while (rad > Math.PI * 2)
-        rad -= Math.PI * 2;
+    
 
     var distance = GLVIS.config.collection.recommendation.init_distance;
-    var pos_x = Math.cos(rad) * distance;
-    var pos_y = Math.sin(rad) * distance;
-    that.setRelativePosition(pos_x, pos_y);
+    
+    var pos = GLVIS.Tools.getPosFromRad(rad, distance);
+
+    that.setRelativePosition(pos.x, pos.y);
 };
 /**
  * Get the radians of the node around the collection.
@@ -252,25 +249,17 @@ GLVIS.Recommendation.prototype.setRelativePositionByRad = function (that, rad) {
  * @returns {float} Radians
  */
 GLVIS.Recommendation.prototype.getRelativePositionRad = function (that) {
-    
+
     if (!that)
         that = this;
 
     var distance = GLVIS.config.collection.recommendation.init_distance;
-    
-    
+
+
     var pos = that.getRelativePosition();
 
-    var rad = Math.atan2(pos.y, pos.x);
-
-
-    while (rad < 0)
-        rad += (Math.PI * 2);
-
-    while (rad > Math.PI * 2)
-        rad -= Math.PI * 2;
-
-    return rad;
+    return GLVIS.Tools.getRadFromPos(pos.x, pos.y);
+    
 };
 GLVIS.Recommendation.prototype.setRadius = function (radius) {
     if (this.vis_data_.radius === radius)

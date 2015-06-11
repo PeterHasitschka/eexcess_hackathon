@@ -200,7 +200,17 @@ GLVIS.RingSegment.prototype.getIsDirty = function () {
     return this.dirty_;
 };
 
+GLVIS.RingSegment.prototype.getLevel = function(){
+    return this.level_;
+};
 
+GLVIS.RingSegment.prototype.getAffectedRecs = function(){
+    return this.affected_recs_;
+};
+
+GLVIS.RingSegment.prototype.getRelativePosition = function(){
+    return this.relative_pos_;
+};
 
 /**
  * Delete all webgl-objects

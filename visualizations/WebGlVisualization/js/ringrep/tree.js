@@ -10,6 +10,8 @@ GLVIS.RingTree = function (recs) {
     this.data_structure_ = GLVIS.config.collection.ring.data;
 
     this.tree_ = null;
+
+    this.ring_structure_ = null;
     this.buildBasicTree_();
 };
 
@@ -126,12 +128,16 @@ GLVIS.RingTree.prototype.getRingStructure = function () {
     if (!this.tree_)
         throw ("Tree not initialized");
 
+    if (this.ring_structure_)
+        return this.ring_structure_;
+
     var collected = [];
 
     var ring_level = 0;
     this.collectChildrenForRingStructure_(this.tree_, collected, ring_level);
 
-    return collected;
+    this.ring_structure_ = collected;
+    return this.ring_structure_;
 };
 
 

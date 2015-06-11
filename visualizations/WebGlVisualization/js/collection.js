@@ -407,6 +407,14 @@ GLVIS.Collection.prototype.getParentId = function () {
     return this.parent_id_;
 };
 
+/**
+ * 
+ * @returns {GLVIS.RingRepresentation}
+ */
+GLVIS.Collection.prototype.getRingRepresentation = function(){
+    return this.ring_representation_;
+};
+
 
 /******************
  * 

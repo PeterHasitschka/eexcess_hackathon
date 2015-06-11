@@ -8,7 +8,7 @@ GLVIS.config = {
     },
     debug: {
         active: true,
-        level: 5, // 1:Very important ... 10:Verbose story telling,
+        level: 1, // 1:Very important ... 10:Verbose story telling,
         prefix: "GLVIS::"
     },
     three: {
@@ -51,6 +51,9 @@ GLVIS.config = {
                 }
             },
             animation: {
+                speed: 0.1,
+                pow: 0.001,
+                threshold: 0.01
             }
         },
         ring: {
@@ -91,6 +94,7 @@ GLVIS.config = {
                     z_value: -14
                 }
             }
+
         },
         labels: {
             vertical_offset: 200,
@@ -135,8 +139,8 @@ GLVIS.config = {
                 threshold: 0.001,
                 pow: 0.0001,
                 speed_fct: 10,
-                zoom_out: 0.7,
-                zoom_in: 1.5
+                zoom_out: 0.5,
+                zoom_in: 2
             }
         },
         move: {
