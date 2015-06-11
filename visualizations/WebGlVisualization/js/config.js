@@ -79,7 +79,7 @@ GLVIS.config = {
                 color: 0xFF00FF,
                 z_value: -15,
                 segments: 20,
-                opacity: 0.3,
+                opacity: 0.8,
                 label: {
                     font_size: 8,
                     color: "#000033",

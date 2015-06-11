@@ -98,7 +98,10 @@ GLVIS.RingTree.prototype.getValue = function (rec, structure) {
 
             if (!eexcess_data)
                 throw ("ERROR: NO EEXCESS DATA FOUND");
-
+            
+            if (!eexcess_data.result.facets)
+                return "NO_FACETS";
+            
             var id = structure.id;
             var val = eexcess_data.result.facets[id];
             return val;

@@ -91,3 +91,26 @@ html, body {
 #eexcess_controls #webgl_plugin_info #webgl_info_content {
     text-align: left;
 }
+
+
+#webgl_toolbar {
+    width: 100%;
+    background: green;
+    margin: 10px 0;
+    float: left;
+}
+
+.webgl_toolbar_row {
+    margin: 2px;
+    padding: 3px;
+    background: rgb(152, 187, 187);
+    float: left;
+    width: 100%;
+}
+
+.webgl_toolbar_element {
+    float: left;
+    width: auto;
+    background: yellow;
+    padding: 5px;
+}
