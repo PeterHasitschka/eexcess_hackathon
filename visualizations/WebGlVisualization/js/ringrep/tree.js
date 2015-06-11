@@ -78,7 +78,8 @@ GLVIS.RingTree.prototype.getSubtree_ = function (recs, structures, current_depth
 
     var tree = {
         children_separate_id: structure,
-        children: children
+        children: children,
+        recs: recs
     };
     return tree;
 };

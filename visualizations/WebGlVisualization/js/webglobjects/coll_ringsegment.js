@@ -14,7 +14,7 @@ var GLVIS = GLVIS || {};
  * @param {string} key Key like "language"
  * @param {string} val Value like "de"
  */
-GLVIS.RingSegment = function (ring_representation, level, start_percent, end_percent, color, key, val) {
+GLVIS.RingSegment = function (ring_representation, level, start_percent, end_percent, color, key, val, recs) {
 
     /** @type{GLVIS.RingRepresentation} **/
     
@@ -26,7 +26,8 @@ GLVIS.RingSegment = function (ring_representation, level, start_percent, end_per
         key: key,
         val: val
     };
-
+    
+    this.affected_recs_ = recs;
 
     this.default_color_ = color;
     this.level_ = level;
@@ -161,11 +162,11 @@ GLVIS.RingSegment.prototype.render = function () {
 
 GLVIS.RingSegment.prototype.handleClick = function () {
 
-    GLVIS.Debugger.debug("RingSegment",
-            "RING SEGMENT CLICKED",
-            3);
-
     var that = this.ringseg;
+
+    GLVIS.Debugger.debug("RingSegment",
+            ["RING SEGMENT CLICKED", that],
+            3);
 
     that.is_selected_ = !that.is_selected_;
     that.setIsDirty(true);
