@@ -55,6 +55,7 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                     path + "js/ringrep/ringrepresentation.js",
                                     path + "js/ringrep/tree.js",
                                     path + "js/position/recommendation/distributed.js",
+                                    path + "js/position/recommendation/ringrep.js",
                                     path + "js/position/collection/linear.js",
                                     path + "js/webglobjects/connection/collection_rec_line.js",
                                     path + "js/webglobjects/connection/collection_collection_line.js",

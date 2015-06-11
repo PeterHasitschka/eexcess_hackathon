@@ -19,8 +19,11 @@ GLVIS.Animation.prototype.animate = function () {
 
         var curr_anim = this.animations_[a_count];
 
-        var curr_val = curr_anim.getter_fct();
-        
+
+        //console.log(curr_anim.getter_fct);
+        //return;
+        var curr_val = curr_anim.getter_fct(curr_anim.object);
+
         if (curr_anim.max_diff === null)
             curr_anim.max_diff = curr_anim.goal - curr_val;
 
@@ -31,7 +34,7 @@ GLVIS.Animation.prototype.animate = function () {
                 curr_anim.pow,
                 curr_anim.threshold
                 );
-        
+
         if (delta !== 0.0) {
             var val_to_set = delta;
             if (curr_anim.add_to_current)
@@ -49,14 +52,17 @@ GLVIS.Animation.prototype.animate = function () {
 
         //Build parameter array for setter function
         var params_for_setting = [];
+        
+        if (curr_anim.object)
+            params_for_setting.push(curr_anim.object);
+
         for (var param_count = 0; param_count < curr_anim.setter_fct_param_num; param_count++)
             params_for_setting.push(null);
         params_for_setting.push(val_to_set);
 
-
         //Call setter fct
         curr_anim.setter_fct.apply(null, params_for_setting);
-        
+
 
         //Animation ready
         if (delta === 0.0) {
@@ -77,16 +83,17 @@ GLVIS.Animation.prototype.animate = function () {
  * 
  * @param {string} identifier String to identify same animation if already exists
  * @param {float} goal Goal value
+ * @param {object | null} object Object to perform getter and setter. If not null it will be the FIRST PARAM of getter and setter.
  * @param {function} getter_fct Function to get the current value
  * @param {function} setter_fct Function to set the new value
- * @param {integer} setter_fct_param_num Number of parameter to use. Starts with 0. Others are set to null
+ * @param {integer} setter_fct_param_num Number of parameter to use. Starts with 0. Others are set to null. If Obj is set it will be prepended
  * @param {float} factor for Speed
  * @param {float} pow Exponent for calculating speed
  * @param {float} threshold Threshold > 0 when animation stops
  * @param {type} callback_fct Function to call after finishing animation
  * @param {boolean} add_to_current If true, not the delta but the value added to current will be set
  */
-GLVIS.Animation.prototype.register = function (identifier, goal, getter_fct, setter_fct,
+GLVIS.Animation.prototype.register = function (identifier, goal, object, getter_fct, setter_fct,
         setter_fct_param_num, factor, pow, threshold, callback_fct, add_to_current) {
 
     //Check if already exists. If is so, remove old from list
@@ -103,11 +110,13 @@ GLVIS.Animation.prototype.register = function (identifier, goal, getter_fct, set
     if (setter_fct_param_num === null) {
         setter_fct_param_num = 1;
     }
+    
 
     var anim_obj = {
         identifier: identifier,
         goal: goal,
         max_diff: null, //Will be set at first animation call
+        object: object,
         getter_fct: getter_fct,
         setter_fct: setter_fct,
         setter_fct_param_num: setter_fct_param_num,
@@ -162,7 +171,7 @@ GLVIS.Animation.prototype.getStepByExpSlowdown_ = function (curr, goal, max_diff
 
         var power = Math.pow(Math.abs(normalized_diff), pow);
         power /= 2;
-        
+
         GLVIS.Debugger.debug("Animation",
                 [max_diff, diff, normalized_diff, pow, power, factor],
                 8);

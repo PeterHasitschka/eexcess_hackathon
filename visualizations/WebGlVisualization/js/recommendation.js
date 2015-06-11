@@ -74,6 +74,8 @@ GLVIS.Recommendation.prototype.initGlNode = function () {
 
     var gl_connection = new GLVIS.ConnectionCollectionRecommendation(this);
     this.vis_data_.gl_objects.push(gl_connection);
+
+    this.setRelativePositionByRad(0);
 };
 
 
@@ -168,7 +170,9 @@ GLVIS.Recommendation.prototype.setMyGlObjectsDirty_ = function () {
     }
 
     //Collection needs rendering too to reach recommendation
-    this.collection_.setIsDirty(true);
+    //May be null when initializing gl objects.
+    if (this.collection_)
+        this.collection_.setIsDirty(true);
 };
 
 
@@ -197,26 +201,84 @@ GLVIS.Recommendation.prototype.getPosition = function () {
 };
 
 
+GLVIS.Recommendation.prototype.getRelativePosition = function () {
+
+    var pos = {
+        x: this.vis_data_.relative_position.x,
+        y: this.vis_data_.relative_position.y
+    };
+    return pos;
+
+};
 GLVIS.Recommendation.prototype.setRelativePosition = function (x, y) {
 
-    this.vis_data_.relative_position.x = x;
-    this.vis_data_.relative_position.y = y;
+    if (x !== null && x !== undefined)
+        this.vis_data_.relative_position.x = x;
+
+    if (y !== null && y !== undefined)
+        this.vis_data_.relative_position.y = y;
 
     //Force redraw of node
     this.dirty_ = true;
     this.setMyGlObjectsDirty_();
 };
+/**
+ * Set the position by a radians value.
+ * Necessary for animation
+* @param{GLVIS.Recommendation | null} that Reference to THIS object. (Animation doesn't know me...)
+ * @param {float} rad Radians
+ */
+GLVIS.Recommendation.prototype.setRelativePositionByRad = function (that, rad) {
+
+    if (!that)
+        that = this;
+
+    while (rad < 0)
+        rad += (Math.PI * 2);
+
+    while (rad > Math.PI * 2)
+        rad -= Math.PI * 2;
+
+    var distance = GLVIS.config.collection.recommendation.init_distance;
+    var pos_x = Math.cos(rad) * distance;
+    var pos_y = Math.sin(rad) * distance;
+    that.setRelativePosition(pos_x, pos_y);
+};
+/**
+ * Get the radians of the node around the collection.
+ 
+ * Necessary for animation
+ * @param{GLVIS.Recommendation | null} that Reference to THIS object. (Animation doesn't know me...)
+ * @returns {float} Radians
+ */
+GLVIS.Recommendation.prototype.getRelativePositionRad = function (that) {
+    
+    if (!that)
+        that = this;
+
+    var distance = GLVIS.config.collection.recommendation.init_distance;
+    
+    
+    var pos = that.getRelativePosition();
+
+    var rad = Math.atan2(pos.y, pos.x);
 
 
+    while (rad < 0)
+        rad += (Math.PI * 2);
+
+    while (rad > Math.PI * 2)
+        rad -= Math.PI * 2;
+
+    return rad;
+};
 GLVIS.Recommendation.prototype.setRadius = function (radius) {
     if (this.vis_data_.radius === radius)
         return;
-
     this.vis_data_.radius = radius;
     this.dirty_ = true;
     this.setMyGlObjectsDirty_();
 };
-
 /**
  * 
  * @param {integer} color e.g. 0xFF0000
@@ -224,48 +286,35 @@ GLVIS.Recommendation.prototype.setRadius = function (radius) {
 GLVIS.Recommendation.prototype.setColor = function (color) {
     if (this.vis_data_.color === color)
         return;
-
     this.vis_data_.color = color;
     this.dirty_ = true;
     this.setMyGlObjectsDirty_();
 };
-
 /**
  * @param {float} opacity 0 - Transparent, 1 - Full visible
  */
 GLVIS.Recommendation.prototype.setOpacity = function (opacity) {
     if (this.vis_data_.opacity === opacity)
         return;
-
     this.vis_data_.opacity = opacity;
     this.dirty_ = true;
     this.setMyGlObjectsDirty_();
 };
-
-
 GLVIS.Recommendation.prototype.getRadius = function () {
     return this.vis_data_.radius;
 };
-
 GLVIS.Recommendation.prototype.getColor = function () {
     return this.vis_data_.color;
 };
-
 GLVIS.Recommendation.prototype.getOpacity = function () {
     return this.vis_data_.opacity;
 };
-
 GLVIS.Recommendation.prototype.getId = function () {
     return this.id_;
 };
-
 GLVIS.Recommendation.prototype.getEexcessData = function () {
     return this.eexcess_data_;
 };
-
-
-
-
 /******************
  * 
  * STATIC FUNCTIONS
@@ -279,8 +328,6 @@ GLVIS.Recommendation.getNewId = function () {
     this.current_id++;
     return id;
 };
-
-
 GLVIS.Recommendation.STATUSFLAGS = {
     NORMAL: 0x000,
     HIDDEN: 0x001,

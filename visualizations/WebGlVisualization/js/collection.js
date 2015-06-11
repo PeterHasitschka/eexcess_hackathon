@@ -93,7 +93,21 @@ GLVIS.Collection.prototype.addRecommendation = function (recommendation) {
     this.recommendation_position_handler_.calculatePositions();
 };
 
+/**
+ * 
+ * @param {GLVIS.RecommendationPosDistributed | GLVIS.RecommendationPosRingRepresentation} pos_handler Some type of position handler
+ */
+GLVIS.Collection.prototype.setRecPosHandler = function (pos_handler) {
+    this.recommendation_position_handler_ = pos_handler;
+};
 
+/**
+ * Returns Recommendation position handler
+ * @returns {GLVIS.RecommendationPosDistributed | GLVIS.RecommendationPosRingRepresentation}
+ */
+GLVIS.Collection.prototype.getRecPosHandler = function () {
+    return this.recommendation_position_handler_;
+};
 
 /**
  * Creating a node in the center of the collection
@@ -209,7 +223,7 @@ GLVIS.Collection.prototype.handleClick = function () {
     GLVIS.Debugger.debug("Collection",
             that,
             5);
-        
+
     that.deleteRingRepresentation();
     that.createRingRepresentation();
 
@@ -370,6 +384,9 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
  */
 GLVIS.Collection.prototype.createRingRepresentation = function () {
     this.ring_representation_ = new GLVIS.RingRepresentation(this);
+
+    this.setRecPosHandler(new GLVIS.RecommendationPosRingRepresentation(this));
+    this.getRecPosHandler().calculatePositions();
 };
 
 
@@ -377,6 +394,9 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
     if (this.ring_representation_)
         this.ring_representation_.delete();
     this.ring_representation_ = null;
+
+    this.setRecPosHandler(new GLVIS.RecommendationPosDistributed(this));
+    this.getRecPosHandler().calculatePositions();
 };
 
 /**

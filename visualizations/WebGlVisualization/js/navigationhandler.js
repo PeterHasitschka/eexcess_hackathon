@@ -139,6 +139,7 @@ GLVIS.NavigationHandler.prototype.animatedMovement = function (move_goal_x, move
     GLVIS.Scene.getCurrentScene().getAnimation().register(
             this.animation_.move_id_x,
             move_goal_x,
+            null,
             getter_x,
             setter,
             setter_param_x,
@@ -152,6 +153,7 @@ GLVIS.NavigationHandler.prototype.animatedMovement = function (move_goal_x, move
     GLVIS.Scene.getCurrentScene().getAnimation().register(
             this.animation_.move_id_y,
             move_goal_y,
+            null,
             getter_y,
             setter,
             setter_param_y,
@@ -181,6 +183,7 @@ GLVIS.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_f
     GLVIS.Scene.getCurrentScene().getAnimation().register(
             this.animation_.zoom_id,
             zoom_goal,
+            null,
             getter,
             setter,
             0,

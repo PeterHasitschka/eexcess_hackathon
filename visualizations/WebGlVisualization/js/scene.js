@@ -26,7 +26,7 @@ GLVIS.Scene = function (canvas) {
 
     /** @type{GLVIS.CollectionPosLinear} **/
     this.collection_position_handler_ = new GLVIS.CollectionPosLinear();
-    
+
     /** @type{GLVIS.Animation} **/
     this.animation_ = new GLVIS.Animation();
 
@@ -47,7 +47,7 @@ GLVIS.Scene = function (canvas) {
 
 
 GLVIS.Scene.prototype.render = function () {
-    
+
     //Set Time Delta for performance-independent animation speed
     this.time_.current = this.time_.current || Date.now();
     var now = Date.now();
@@ -187,13 +187,22 @@ GLVIS.Scene.getCurrentScene = function () {
     return this.current_scene;
 };
 
-
+stop = false;
 GLVIS.Scene.animate = function () {
+
+    if (stop)
+        return;
+
     var curr_scene = GLVIS.Scene.getCurrentScene();
-       
+
     if (!curr_scene)
         return;
 
     requestAnimationFrame(GLVIS.Scene.animate);
     curr_scene.render();
 };
+
+
+function STOP() {
+    stop = true;
+}
