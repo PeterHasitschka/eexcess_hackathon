@@ -43,21 +43,18 @@ GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
     GLVIS.Debugger.debug("RingRepresentation",
             ["Ring Structure", ring_structure], 4);
 
-    
+
     for (var ring_count = 0; ring_count < ring_structure.length; ring_count++) {
         var curr_ring_data = ring_structure[ring_count];
 
         for (var seg_count = 0; seg_count < curr_ring_data.length; seg_count++) {
             var color = parseInt(Math.random() * 0xFFFFFF);
 
-            //var seg_start = seg_count * (100 / curr_ring_data.length);
             var seg_start = curr_ring_data[seg_count].position * 100;
-            //var seg_end = seg_start + (100 / curr_ring_data.length);
-            
+
             var seg_end = 100;
-            if (seg_count+1 !== curr_ring_data.length)
+            if (seg_count + 1 !== curr_ring_data.length)
                 seg_end = curr_ring_data[seg_count + 1].position * 100;
-            
 
             var key = curr_ring_data[seg_count].my_id;
             var val = curr_ring_data[seg_count].my_val;
@@ -103,10 +100,10 @@ GLVIS.RingRepresentation.prototype.getPosition = function () {
 /**
  * Delete all webgl-objects
  */
-GLVIS.RingRepresentation.prototype.delete = function(){
-  
-   for (var i=0; i < this.ring_segments_.length; i++) {
-       this.ring_segments_[i].delete();
-   }
-    
+GLVIS.RingRepresentation.prototype.delete = function () {
+
+    for (var i = 0; i < this.ring_segments_.length; i++) {
+        this.ring_segments_[i].delete();
+    }
+
 };

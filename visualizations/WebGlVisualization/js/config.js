@@ -70,12 +70,17 @@ GLVIS.config = {
                 4: {
                     type: "facet",
                     id: "license"
+                },
+                5: {
+                    type: "facet",
+                    id: "year"
                 }
+
             },
             ring_segment: {
                 min_distance: 15,
-                thickness: 35,
-                gap: 5,
+                thickness: 23,
+                gap: 3,
                 color: 0xFF00FF,
                 z_value: -15,
                 segments: 20,

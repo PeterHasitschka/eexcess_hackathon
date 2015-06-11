@@ -44,34 +44,36 @@ GLVIS.RingTree.prototype.getSubtree_ = function (recs, structures, current_depth
 
     var structure = structures[current_depth];
 
-    if (!structure)
-        return false;
+    if (!structure) {
+        GLVIS.Debugger.debug("RingTree", ["Did not find a substructure for level " + current_depth, structures, val], 7);
+    }
 
-    GLVIS.Debugger.debug("RingTree", ["Calling treebuilder, level " + current_depth, structure, val], 5);
+    GLVIS.Debugger.debug("RingTree", ["Calling treebuilder, level " + current_depth, structure, val], 7);
 
     var sorted_recs = {};
 
     //Collect recommendations 
-    for (var i = 0; i < recs.length; i++) {
-        /** @type{GLVIS.Recommendation} **/
-        var curr_rec = recs[i];
-        var rec_val = this.getValue(curr_rec, structure);
+    if (structure)
+        for (var i = 0; i < recs.length; i++) {
+            /** @type{GLVIS.Recommendation} **/
+            var curr_rec = recs[i];
+            var rec_val = this.getValue(curr_rec, structure);
 
-        if (sorted_recs[rec_val] === undefined)
-            sorted_recs[rec_val] = [];
+            if (sorted_recs[rec_val] === undefined)
+                sorted_recs[rec_val] = [];
 
-        sorted_recs[rec_val].push(curr_rec);
-    }
+            sorted_recs[rec_val].push(curr_rec);
+        }
 
     var children = [];
 
     for (var key in sorted_recs) {
         var subtree = this.getSubtree_(sorted_recs[key], structures, current_depth + 1, key);
-        if (subtree) {
-            children.push(subtree);
-            subtree.my_val = key;
-            subtree.my_id = structure;
-        }
+        children.push(subtree);
+        subtree.my_val = key;
+        subtree.my_id = structure;
+
+        //GLVIS.Debugger.debug("RingTree", "Found no subtree anymore... Level " + current_depth, 5);
     }
 
     var tree = {
@@ -98,10 +100,10 @@ GLVIS.RingTree.prototype.getValue = function (rec, structure) {
 
             if (!eexcess_data)
                 throw ("ERROR: NO EEXCESS DATA FOUND");
-            
+
             if (!eexcess_data.result.facets)
                 return "NO_FACETS";
-            
+
             var id = structure.id;
             var val = eexcess_data.result.facets[id];
             return val;
@@ -147,9 +149,17 @@ GLVIS.RingTree.prototype.collectChildrenForRingStructure_ = function (node, coll
     //Necessary for the position of the children
     if (node.position === undefined || node.position === null)
         node.position = 0.0;
-    
-    if (node.num_siblings === undefined || node.num_siblings === null)
-        node.num_siblings = 1;
+
+    if (node.parent_length === undefined || node.parent_length === null)
+        node.parent_length = 1;
+
+    var seg_length = (1 / node.children.length) * node.parent_length;
+    /*
+     console.log("RL " + ring_level, " NP " + node.position
+     + " NCL " + node.children.length
+     + " SL " + seg_length
+     + " NPL " + node.parent_length);
+     */
 
 
     for (var i = 0; i < node.children.length; i++) {
@@ -158,8 +168,10 @@ GLVIS.RingTree.prototype.collectChildrenForRingStructure_ = function (node, coll
             collected[ring_level] = [];
 
         var subtree = node.children[i];
-        subtree.position = node.position + (i / node.children.length) / node.num_siblings;
-        subtree.num_siblings = node.children.length;
+
+        subtree.position = node.position + i * seg_length;
+        subtree.parent_length = seg_length;
+
         this.collectChildrenForRingStructure_(subtree, collected, ring_level + 1);
         collected[ring_level].push(subtree);
     }

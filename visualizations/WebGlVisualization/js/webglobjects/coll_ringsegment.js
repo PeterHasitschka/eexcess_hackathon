@@ -17,6 +17,9 @@ var GLVIS = GLVIS || {};
 GLVIS.RingSegment = function (ring_representation, level, start_percent, end_percent, color, key, val) {
 
     /** @type{GLVIS.RingRepresentation} **/
+    
+    GLVIS.Debugger.debug("RingSegment",  [level, start_percent, end_percent], 6);
+    
     this.ring_representation_ = ring_representation;
 
     this.data_ = {
