@@ -62,7 +62,7 @@ GLVIS.Animation.prototype.animate = function () {
         //Animation ready
         if (delta === 0.0) {
             GLVIS.Debugger.debug("Animation", "Animation '" +
-                    curr_anim.identifier + "' ready", 5);
+                    curr_anim.identifier + "' ready", 7);
 
             this.unregister(curr_anim.identifier);
             curr_anim.callback_fct();
@@ -116,7 +116,7 @@ GLVIS.Animation.prototype.register = function (identifier, goal, object, getter_
     };
 
     this.animations_.push(anim_obj);
-    GLVIS.Debugger.debug("Animation", "Registered animation '" + identifier + "'", 5);
+    GLVIS.Debugger.debug("Animation", "Registered animation '" + identifier + "'", 7);
 };
 
 /**

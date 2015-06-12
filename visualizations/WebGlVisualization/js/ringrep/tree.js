@@ -163,6 +163,11 @@ GLVIS.RingTree.prototype.collectChildrenForRingStructure_ = function (node, coll
 
     var seg_length = (1 / node.children.length) * node.parent_length;
 
+
+    //Holding the last ring level for recalculating the length.
+    //Otherwise evey child-segment has the same size independent from the num of recs
+    var last_ring_segs = [];
+
     for (var i = 0; i < node.children.length; i++) {
 
         if (collected[ring_level] === undefined)
@@ -175,5 +180,48 @@ GLVIS.RingTree.prototype.collectChildrenForRingStructure_ = function (node, coll
 
         this.collectChildrenForRingStructure_(subtree, collected, ring_level + 1);
         collected[ring_level].push(subtree);
+
+        //For recalculating the length of the last ring level segments
+        if (!subtree.children.length)
+            last_ring_segs.push(subtree);
+    }
+
+    /**
+     * The last ring (sub)segments all have the same distribution.
+     * Independent from the num of recommendations.
+     * So we need to recalculate the positions depending on the num of recs.
+     * At first we collect the total num of recs, then we multiply the length with a factor
+     */
+
+    var total_num_recs_segment = 0;
+    for (var i = 0; i < last_ring_segs.length; i++) {
+        var curr_last_ring_seg = last_ring_segs[i];
+        total_num_recs_segment += curr_last_ring_seg.recs.length;
+    }
+
+    var avg_recs_per_seg = total_num_recs_segment / last_ring_segs.length;
+
+    var parent_length = node.parent_length;
+    var common_seg_length = (1 / last_ring_segs.length) * parent_length;
+
+    var last_pos = node.position;
+    var last_length = 0;
+    for (var i = 0; i < last_ring_segs.length; i++) {
+        
+        var curr_last_ring_seg = last_ring_segs[i];
+        var factor = curr_last_ring_seg.recs.length / avg_recs_per_seg;
+
+        var common_length = common_seg_length;
+        var new_length = common_length * factor;
+
+
+
+        var new_pos = last_pos + last_length;
+        curr_last_ring_seg.position = new_pos;
+
+        //console.log(curr_last_ring_seg, common_length, curr_last_ring_seg.recs.length, factor, new_length, new_pos);
+        
+        last_length = new_length;
+        last_pos = new_pos;
     }
 };
