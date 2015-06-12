@@ -17,7 +17,7 @@ GLVIS.RecommendationDetailNode = function (recommendation) {
 
     //Needed due to relative scaling.
     this.init_radius_ = this.recommendation_.getRadius();
-    
+
     this.initAndRegisterGlObj();
 };
 
@@ -92,10 +92,10 @@ GLVIS.RecommendationDetailNode.prototype.getIsDirty = function () {
 /**
  * Delete all GL-Objects and remove them from the scene
  */
-GLVIS.RecommendationDetailNode.prototype.delete = function(){
-    
+GLVIS.RecommendationDetailNode.prototype.delete = function () {
+
     var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
     three_scene.remove(this.webgl_objects_.sphere);
-    
+
     delete this.webgl_objects_.sphere;
 };

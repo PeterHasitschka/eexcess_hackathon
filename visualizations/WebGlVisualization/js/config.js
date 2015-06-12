@@ -50,7 +50,7 @@ GLVIS.config = {
                     rings: 6
                 }
             },
-             detail_node: {
+            detail_node: {
                 z_value: -19,
                 min_radius: 0.5,
                 active_radius: 10,
@@ -65,6 +65,24 @@ GLVIS.config = {
                 speed: 0.1,
                 pow: 0.001,
                 threshold: 0.01
+            },
+            focus_animation: {
+                move: {
+                    speed: 0.4,
+                    pow: 0.2,
+                    threshold: 0.01
+                },
+                zoom: {
+                    speed: 3,
+                    pow: 0.00001,
+                    threshold: 0.01,
+                    zoom_val: 50
+                }
+            },
+            defocus_animation: {
+                threshold: 0.001,
+                pow: 0.0001,
+                speed: 20
             }
         },
         ring: {

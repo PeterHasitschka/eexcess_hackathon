@@ -159,14 +159,15 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
 
     var abs_pos = this.getPosition();
     var nav_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
+    var move_config = GLVIS.config.collection.recommendation.focus_animation.move;
     var move_setter = nav_handler.moveCamera;
     var move_getter_x = nav_handler.getPosX;
     var move_setter_param_x = 0;
     var move_getter_y = nav_handler.getPosY;
     var move_setter_param_y = 1;
-    var move_factor = 0.4;
-    var move_pow = 0.2;
-    var move_threshold = 0.01;
+    var move_speed = move_config.speed;
+    var move_pow = move_config.pow;
+    var move_threshold = move_config.threshold;
 
     //X
     GLVIS.Scene.getCurrentScene().getAnimation().register(
@@ -176,7 +177,7 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
             move_getter_x,
             move_setter,
             move_setter_param_x,
-            move_factor,
+            move_speed,
             move_pow,
             move_threshold,
             function () {
@@ -191,7 +192,7 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
             move_getter_y,
             move_setter,
             move_setter_param_y,
-            move_factor,
+            move_speed,
             move_pow,
             move_threshold,
             function () {
@@ -199,11 +200,11 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
     );
 
 
-
-    var zoom_threshold = 0.001;
-    var zoom_pow = 0.0001;
-    var zoom_factor = 2;
-    var zoom_goal = 50;
+    var zoom_config = GLVIS.config.collection.recommendation.focus_animation.zoom;
+    var zoom_threshold = zoom_config.threshold;
+    var zoom_pow = zoom_config.pow;
+    var zoom_speed = zoom_config.speed;
+    var zoom_goal = zoom_config.zoom_val;
     var zoom_getter = nav_handler.getZoomFactor;
     var zoom_setter = nav_handler.zoomDelta;
 
@@ -214,14 +215,14 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
             zoom_getter,
             zoom_setter,
             0,
-            zoom_factor,
+            zoom_speed,
             zoom_pow,
             zoom_threshold,
             function () {
                 console.log("READY ZOOM TO REC");
             }
     );
-    
+
     GLVIS.Recommendation.current_selected_rec = this;
 };
 
@@ -257,7 +258,35 @@ GLVIS.Recommendation.prototype.defocusAndZoomOut = function () {
         this.setMyGlObjectsDirty_();
     }
 
-    this.getCollection().selectAndFocus();
+
+
+    var nav_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
+
+    var config = GLVIS.config.collection.recommendation.defocus_animation;
+    var zoom_out_threshold = config.threshold;
+    var zoom_out_pow = config.pow;
+    var zoom_out_speed = config.speed;
+    var zoom_goal = GLVIS.config.navigation.zoom.animated.zoom_in;
+    var zoom_out_getter = nav_handler.getZoomFactor;
+    var zoom_out_setter = nav_handler.zoomDelta;
+
+    var that = this;
+    GLVIS.Scene.getCurrentScene().getAnimation().register(
+            nav_handler.animation_.zoom_id,
+            zoom_goal,
+            null,
+            zoom_out_getter,
+            zoom_out_setter,
+            0,
+            zoom_out_speed,
+            zoom_out_pow,
+            zoom_out_threshold,
+            function () {
+                that.getCollection().selectAndFocus();
+            }
+    );
+
+
     GLVIS.Recommendation.current_selected_rec = null;
 };
 
