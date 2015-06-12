@@ -57,8 +57,7 @@ jQuery('#webgl_toolbar_btn_rec_focusparentcol').click(function () {
     var rdbh = GLVIS.Scene.getCurrentScene().getRecDashboardHandler();
 
     var rec = rdbh.last_clicked_rec;
-    var col = rec.getCollection();
-    col.selectAndFocus();
+    rec.defocusAndZoomOut();
 
     rdbh.hideRecButtons_();
 });

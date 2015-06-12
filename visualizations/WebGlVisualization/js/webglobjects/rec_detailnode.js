@@ -52,6 +52,39 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function () {
 
     this.webgl_objects_.sphere = sphere;
 
+
+
+    var eexcess_data = this.recommendation_.getEexcessData();
+    if (eexcess_data) {
+        var result = eexcess_data.result;
+        var preview_image = result.previewImage;
+        if (preview_image) {
+
+            console.log("preview iamge exiting");
+            var that = this;
+            var image_texture = THREE.ImageUtils.loadTexture(preview_image, {}, function () {
+
+
+                var sphereTextureMaterial =
+                        new THREE.MeshBasicMaterial(
+                                {
+                                    map: image_texture
+                                });
+
+
+                console.log("image loaded and set as metrial");
+                //that.webgl_objects_.sphere.material = image_texture;
+
+            });
+        }
+    }
+
+
+
+
+
+
+
 };
 
 GLVIS.RecommendationDetailNode.prototype.render = function () {

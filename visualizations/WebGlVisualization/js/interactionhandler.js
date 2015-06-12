@@ -132,12 +132,14 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
     /**
      * If clicked on no object we can defocus all recommendations
      */
-    if (!intersected.length) {
-        if (GLVIS.Recommendation.current_selected_rec) {
-            GLVIS.Recommendation.current_selected_rec.defocusAndZoomOut();
-        }
-        
-    }
+    /*
+     if (!intersected.length) {
+     if (GLVIS.Recommendation.current_selected_rec) {
+     GLVIS.Recommendation.current_selected_rec.defocusAndZoomOut();
+     }
+     
+     }
+     */
 };
 
 
