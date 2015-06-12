@@ -32,23 +32,23 @@ GLVIS.RecommendationPosRingRepresentation.prototype.calculatePositions = functio
         if (curr_seg.getLevel() !== ringrep.max_level)
             continue;
 
-        //console.log(curr_seg);
         var recommendations = curr_seg.getAffectedRecs();
-
-
         var num_res = recommendations.length;
-
 
         var seg_pos = curr_seg.getRelativePosition();
         var seg_degree = GLVIS.Tools.getRadFromPos(seg_pos.x, seg_pos.y);
-        //var degree_step = (Math.PI * 2) / num_res;
-        var curr_rad = seg_degree;
+        
+        
+        var seg_length_rad = curr_seg.getRadLength();
+        var rad_step = seg_length_rad / recommendations.length;
+        
+        var curr_rad = seg_degree - seg_length_rad/2 + rad_step/2;
 
-
+        console.log(rad_step, seg_length_rad);
 
         for (var i = 0; i < recommendations.length; i++) {
             /** @type{GLVIS.Recommendation} **/
-            // curr_rad += degree_step + Math.random() / 20;
+
 
             var curr_rec = recommendations[i];
             //Normalization 
@@ -76,6 +76,8 @@ GLVIS.RecommendationPosRingRepresentation.prototype.calculatePositions = functio
                     },
                     true
                     );
+
+            curr_rad += rad_step;
         }
 
 

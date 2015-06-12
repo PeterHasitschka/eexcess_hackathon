@@ -17,16 +17,16 @@ var GLVIS = GLVIS || {};
 GLVIS.RingSegment = function (ring_representation, level, start_percent, end_percent, color, key, val, recs) {
 
     /** @type{GLVIS.RingRepresentation} **/
-    
-    GLVIS.Debugger.debug("RingSegment",  [level, start_percent, end_percent], 6);
-    
+
+    GLVIS.Debugger.debug("RingSegment", [level, start_percent, end_percent], 6);
+
     this.ring_representation_ = ring_representation;
 
     this.data_ = {
         key: key,
         val: val
     };
-    
+
     this.affected_recs_ = recs;
 
     this.default_color_ = color;
@@ -200,16 +200,28 @@ GLVIS.RingSegment.prototype.getIsDirty = function () {
     return this.dirty_;
 };
 
-GLVIS.RingSegment.prototype.getLevel = function(){
+GLVIS.RingSegment.prototype.getLevel = function () {
     return this.level_;
 };
 
-GLVIS.RingSegment.prototype.getAffectedRecs = function(){
+GLVIS.RingSegment.prototype.getAffectedRecs = function () {
     return this.affected_recs_;
 };
 
-GLVIS.RingSegment.prototype.getRelativePosition = function(){
+GLVIS.RingSegment.prototype.getRelativePosition = function () {
     return this.relative_pos_;
+};
+
+/**
+ * Get the length of the segment in Radians
+ * @returns {float}
+ */
+GLVIS.RingSegment.prototype.getRadLength = function () {
+
+    var length_perc = this.end_pc_ - this.start_pc_;
+    var length_rad = length_perc * 0.01 * Math.PI * 2;
+
+    return length_rad;
 };
 
 /**

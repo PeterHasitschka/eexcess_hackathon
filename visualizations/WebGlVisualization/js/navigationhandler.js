@@ -179,7 +179,7 @@ GLVIS.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_f
 
     var getter = this.getZoomFactor;
     var setter = this.zoomDelta;
-    
+
     GLVIS.Scene.getCurrentScene().getAnimation().register(
             this.animation_.zoom_id,
             zoom_goal,
@@ -214,21 +214,25 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
     var that = this;
     var callback_called = false;
 
-    this.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_out, function () {
+    that.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_in, function () {
         GLVIS.Debugger.debug("NavigationHandler",
-                    "finished zoom to " + GLVIS.config.navigation.zoom.animated.zoom_out,
-                    3);
-        that.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_in, function () {
-            GLVIS.Debugger.debug("NavigationHandler",
-                    "finished zoom to " + GLVIS.config.navigation.zoom.animated.zoom_in,
-                    3);
+                "finished zoom to " + GLVIS.config.navigation.zoom.animated.zoom_in,
+                3);
 
-            if (callback_fct && !callback_called) {
-                callback_called = true;
-                callback_fct();
-            }
-        });
+        if (callback_fct && !callback_called) {
+            callback_called = true;
+            callback_fct();
+        }
     });
+
+    /*
+     this.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_out, function () {
+     GLVIS.Debugger.debug("NavigationHandler",
+     "finished zoom to " + GLVIS.config.navigation.zoom.animated.zoom_out,
+     3);
+     //INNER
+     });
+     */
     this.animatedMovement(collection.getPosition().x, collection.getPosition().y, function () {
 
         GLVIS.Debugger.debug("NavigationHandler",
