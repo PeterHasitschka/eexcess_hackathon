@@ -292,7 +292,7 @@ GLVIS.Collection.prototype.setPosition = function (x, y) {
  */
 GLVIS.Collection.prototype.rebuildLabelPositions = function () {
 
-    GLVIS.Debugger.debug("Collection", "Rebuilding Text positions", 5);
+    GLVIS.Debugger.debug("Collection", "Rebuilding Text positions", 7);
 
     var config = GLVIS.config.collection.labels;
     var vert_dist = config.distance;
