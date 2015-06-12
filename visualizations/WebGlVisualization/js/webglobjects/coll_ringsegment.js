@@ -86,7 +86,11 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
     /**
      * Segment
      */
-    var ring_geometry = new THREE.RingGeometry(rad_inner, rad_outer, ring_config.segments, 8, ring_start, ring_end - ring_start);
+    var seg_length = ring_end - ring_start;
+    var seg_num_fact = seg_length / (Math.PI * 2); 
+    var seg_num = Math.round(ring_config.segments * seg_num_fact);
+    
+    var ring_geometry = new THREE.RingGeometry(rad_inner, rad_outer, seg_num , 8, ring_start, seg_length);
     var mesh = new THREE.Mesh(ring_geometry, material);
 
     var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
