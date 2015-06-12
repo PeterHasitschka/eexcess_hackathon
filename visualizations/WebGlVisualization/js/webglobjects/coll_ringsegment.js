@@ -49,6 +49,11 @@ GLVIS.RingSegment = function (ring_representation, level, start_percent, end_per
     this.initAndRegisterGlObj();
 };
 
+
+/**
+ * Initialize the ring-segments GL Objects.
+ * These are the segment itself (Ring Geometry) and the label
+ */
 GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
 
     var ring_config = GLVIS.config.collection.ring.ring_segment;
@@ -115,8 +120,9 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
     this.webgl_objects_.label = label;
 };
 
-
-
+/**
+ * Rendering the ring segment
+ */
 GLVIS.RingSegment.prototype.render = function () {
 
     if (!this.dirty_)
@@ -152,7 +158,6 @@ GLVIS.RingSegment.prototype.render = function () {
             null
             );
     this.webgl_objects_.label.render();
-
 
     //this.webgl_objects_.ring_seg.geometry.computeBoundingSphere();
     this.dirty_ = false;
@@ -200,14 +205,26 @@ GLVIS.RingSegment.prototype.getIsDirty = function () {
     return this.dirty_;
 };
 
+/**
+ * Get the level of the ring. Starting with 0
+ * @returns {float}
+ */
 GLVIS.RingSegment.prototype.getLevel = function () {
     return this.level_;
 };
 
+/**
+ * Returning all recs that are affected by this segment.
+ * @returns {Array}
+ */
 GLVIS.RingSegment.prototype.getAffectedRecs = function () {
     return this.affected_recs_;
 };
 
+/**
+ * Getting the center position around the collection
+ * @returns {GLVIS.RingSegment.relative_pos_}
+ */
 GLVIS.RingSegment.prototype.getRelativePosition = function () {
     return this.relative_pos_;
 };

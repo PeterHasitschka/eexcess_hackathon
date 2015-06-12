@@ -1,9 +1,16 @@
 var GLVIS = GLVIS || {};
 
-
+/**
+ * Some nice little helpers
+ */
 GLVIS.Tools = {};
 
-
+/**
+ * Getting the angle (radians) of something by passing the coordinates
+ * @param {float} x
+ * @param {float} y
+ * @returns {float}
+ */
 GLVIS.Tools.getRadFromPos = function (x, y) {
     var rad = Math.atan2(y, x);
 
@@ -16,7 +23,12 @@ GLVIS.Tools.getRadFromPos = function (x, y) {
     return rad;
 };
 
-
+/**
+ * Getting the x and y position of something by passing the angle and the distance
+ * @param {float} rad Radians
+ * @param {float} distance Distance
+ * @returns {object} Object holding x and y
+ */
 GLVIS.Tools.getPosFromRad = function (rad, distance) {
 
     while (rad < 0)

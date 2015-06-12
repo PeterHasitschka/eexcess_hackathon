@@ -1,8 +1,4 @@
-
-
 var GLVIS = GLVIS || {};
-
-
 
 /** @constructor 
  *  @param {Object} canvas_element jQuery-object of the container holding the canvas
@@ -45,7 +41,9 @@ GLVIS.Scene = function (canvas) {
     GLVIS.Recommendation.current_id = 0;
 };
 
-
+/**
+ * Rendering the whole scene and all its sub-objects
+ */
 GLVIS.Scene.prototype.render = function () {
 
     //Set Time Delta for performance-independent animation speed
@@ -80,10 +78,6 @@ GLVIS.Scene.prototype.addCollection = function (collection) {
 GLVIS.Scene.prototype.getCollections = function () {
     return this.collections_;
 };
-
-
-
-
 
 /**
  * Getter for the WebGlHandler
@@ -187,12 +181,10 @@ GLVIS.Scene.getCurrentScene = function () {
     return this.current_scene;
 };
 
-stop = false;
+/**
+ * Main entry-point for the animation
+ */
 GLVIS.Scene.animate = function () {
-
-    if (stop)
-        return;
-
     var curr_scene = GLVIS.Scene.getCurrentScene();
 
     if (!curr_scene)
@@ -201,8 +193,3 @@ GLVIS.Scene.animate = function () {
     requestAnimationFrame(GLVIS.Scene.animate);
     curr_scene.render();
 };
-
-
-function STOP() {
-    stop = true;
-}

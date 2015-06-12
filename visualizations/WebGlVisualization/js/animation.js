@@ -1,12 +1,12 @@
+var GLVIS = GLVIS || {};
 
 
-
-GLVIS = GLVIS || {};
-
-
-
+/**
+ * All-mighty animation handler.
+ * Calculates at any animation step a relative movement of values that may be
+ * registered.
+ */
 GLVIS.Animation = function () {
-
     this.animations_ = [];
 };
 
@@ -18,9 +18,6 @@ GLVIS.Animation.prototype.animate = function () {
     for (var a_count = 0; a_count < this.animations_.length; a_count++) {
 
         var curr_anim = this.animations_[a_count];
-
-        //console.log(curr_anim.getter_fct);
-        //return;
         var curr_val = curr_anim.getter_fct(curr_anim.object);
 
         if (curr_anim.max_diff === null)
@@ -48,7 +45,6 @@ GLVIS.Animation.prototype.animate = function () {
                 val_to_set = curr_anim.goal;
         }
 
-
         //Build parameter array for setter function
         var params_for_setting = [];
         
@@ -74,7 +70,6 @@ GLVIS.Animation.prototype.animate = function () {
         }
     }
 };
-
 
 /**
  * 
@@ -105,7 +100,6 @@ GLVIS.Animation.prototype.register = function (identifier, goal, object, getter_
         setter_fct_param_num = 1;
     }
     
-
     var anim_obj = {
         identifier: identifier,
         goal: goal,
@@ -125,7 +119,11 @@ GLVIS.Animation.prototype.register = function (identifier, goal, object, getter_
     GLVIS.Debugger.debug("Animation", "Registered animation '" + identifier + "'", 5);
 };
 
-
+/**
+ * Unregisters a animation by passing its id
+ * @param {string} identifier
+ * @returns {undefined}
+ */
 GLVIS.Animation.prototype.unregister = function (identifier) {
     for (var i = 0; i < this.animations_.length; i++) {
         if (this.animations_[i].identifier === identifier) {

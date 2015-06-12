@@ -13,7 +13,9 @@ GLVIS.RecommendationPosDistributed = function (collection) {
     this.collection_ = collection;
 };
 
-
+/**
+ * Distributing the recommendations around the collection
+ */
 GLVIS.RecommendationPosDistributed.prototype.calculatePositions = function () {
 
     var recommendations = this.collection_.getRecommendations();
@@ -29,7 +31,6 @@ GLVIS.RecommendationPosDistributed.prototype.calculatePositions = function () {
 
         curr_rad += degree_step;
 
-
         //Normalization 
         while (curr_rad < 0)
             curr_rad += (Math.PI * 2);
@@ -38,7 +39,6 @@ GLVIS.RecommendationPosDistributed.prototype.calculatePositions = function () {
             curr_rad -= Math.PI * 2;
 
         var curr_rec = recommendations[i];
-
         curr_rec.setRelativePositionByRad(null, curr_rad);
     }
 

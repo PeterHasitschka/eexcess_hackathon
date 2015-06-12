@@ -1,7 +1,11 @@
 
 var GLVIS = GLVIS || {};
 
-
+/**
+ * Holding and managing everything for the scene according to web-gl
+ * @param {} canvas jQuery object of the canvas
+ * @returns {undefined}
+ */
 GLVIS.WebGlHandler = function (canvas) {
 
     this.canvas_ = canvas;
@@ -13,16 +17,11 @@ GLVIS.WebGlHandler = function (canvas) {
     };
 
     this.cameraconfig_ = GLVIS.config.three.camera;
-
-
-
-
     this.three_.scene = new THREE.Scene();
 
     //Creating and adding the camera
     this.createCamera_();
     this.three_.scene.add(this.three_.camera);
-
 
     this.createRenderer();
 };
@@ -50,7 +49,6 @@ GLVIS.WebGlHandler.prototype.createCamera_ = function () {
     this.three_.camera = camera;
 };
 
-
 /**
  * Creating renderer and adding GL-Scene to the canvas
  */
@@ -69,8 +67,6 @@ GLVIS.WebGlHandler.prototype.createRenderer = function () {
 
     this.three_.renderer = renderer;
 };
-
-
 
 /**
  * Calling the THREE-JS Render function

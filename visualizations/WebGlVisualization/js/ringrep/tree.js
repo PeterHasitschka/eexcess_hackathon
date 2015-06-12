@@ -1,6 +1,11 @@
 var GLVIS = GLVIS || {};
 
-
+/**
+ * Responsible for building a tree structure that will represent the ring-structure
+ * later on.
+ * @param {Array} recs
+ * @returns {undefined}
+ */
 GLVIS.RingTree = function (recs) {
 
     GLVIS.Debugger.debug("RingTree",
@@ -86,8 +91,6 @@ GLVIS.RingTree.prototype.getSubtree_ = function (recs, structures, current_depth
     return tree;
 };
 
-
-
 /**
  * Get a specific value from the recommendation, defined by "type" in the structure
  * @param {GLVIS.Recommendation} rec
@@ -118,7 +121,6 @@ GLVIS.RingTree.prototype.getValue = function (rec, structure) {
     }
 };
 
-
 /**
  * Return array with all nodes ordered by level
  * @returns {Array}
@@ -140,7 +142,6 @@ GLVIS.RingTree.prototype.getRingStructure = function () {
     return this.ring_structure_;
 };
 
-
 /**
  * 
  * @param {object} node Node from tree
@@ -161,13 +162,6 @@ GLVIS.RingTree.prototype.collectChildrenForRingStructure_ = function (node, coll
         node.parent_length = 1;
 
     var seg_length = (1 / node.children.length) * node.parent_length;
-    /*
-     console.log("RL " + ring_level, " NP " + node.position
-     + " NCL " + node.children.length
-     + " SL " + seg_length
-     + " NPL " + node.parent_length);
-     */
-
 
     for (var i = 0; i < node.children.length; i++) {
 
@@ -182,5 +176,4 @@ GLVIS.RingTree.prototype.collectChildrenForRingStructure_ = function (node, coll
         this.collectChildrenForRingStructure_(subtree, collected, ring_level + 1);
         collected[ring_level].push(subtree);
     }
-
 };

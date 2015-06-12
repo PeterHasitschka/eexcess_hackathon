@@ -168,7 +168,9 @@ GLVIS.Collection.prototype.initLabels = function () {
 };
 
 
-
+/**
+ * Render the collection and its sub-objects
+ */
 GLVIS.Collection.prototype.render = function () {
 
     if (!this.dirty_)
@@ -203,8 +205,6 @@ GLVIS.Collection.prototype.render = function () {
     this.dirty_ = false;
 };
 
-
-
 /**
  * Called by interactionhandler. Function registered in mesh-objects
  * @returns {undefined}
@@ -230,23 +230,26 @@ GLVIS.Collection.prototype.handleClick = function () {
     that.selectAndFocus();
 };
 
-
+/**
+ * Calls the @see{GLVIS.NavigationHandler.focusCollection} function
+ * to zoom and move to the collection.
+ * Additionaly informs the Rec Dashboard Handler about the click
+ */
 GLVIS.Collection.prototype.selectAndFocus = function () {
 
     this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
 
-
     GLVIS.Scene.getCurrentScene().getNavigationHandler().focusCollection(this, function () {
-
         GLVIS.Debugger.debug("Collection",
                 "FOCUSGRAPH: Callback finish!",
                 3);
     });
-
     GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onCollectionClick(this);
 };
 
-
+/**
+ * Setting all Objects holding GL Objects dirty
+ */
 GLVIS.Collection.prototype.setMyGlObjectsDirty_ = function () {
     for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
         this.vis_data_.gl_objects[key].setIsDirty(true);
@@ -306,7 +309,10 @@ GLVIS.Collection.prototype.rebuildLabelPositions = function () {
     }
 };
 
-
+/**
+ * Get all recommendations holded by the collection
+ * @returns {GLVIS.Collection.recommendations_}
+ */
 GLVIS.Collection.prototype.getRecommendations = function () {
     return this.recommendations_;
 };
@@ -389,7 +395,11 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
     this.getRecPosHandler().calculatePositions();
 };
 
-
+/**
+ * Deleting the ring representation and all its segments etc.
+ * Finally the Distributed Position Handler replaces the Ring Position Handler
+ * for re-distributing the recommendation nodes around the collection
+ */
 GLVIS.Collection.prototype.deleteRingRepresentation = function () {
     if (this.ring_representation_)
         this.ring_representation_.delete();

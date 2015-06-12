@@ -2,9 +2,12 @@
 
 var GLVIS = GLVIS || {};
 
-
+/**
+ * Holding information and GL-Representations of one search Result / One Recommendation
+ * @param {object} eexcess_data Data from the database
+ * @returns {undefined}
+ */
 GLVIS.Recommendation = function (eexcess_data) {
-
 
     /**
      * Internal increment id
@@ -43,7 +46,6 @@ GLVIS.Recommendation = function (eexcess_data) {
         gl_objects: []
     };
 
-
     /**
      * Connections to other objects (e.g parent-collection)
      */
@@ -51,17 +53,12 @@ GLVIS.Recommendation = function (eexcess_data) {
         to_collection: null
     };
 
-
     this.initGlNode();
-
 
     GLVIS.Debugger.debug("Recommendation",
             "Recommendation with id " + this.id_ + " created!",
             6);
-
 };
-
-
 
 /**
  * Creating a common-node for representing the recommendation
@@ -79,7 +76,9 @@ GLVIS.Recommendation.prototype.initGlNode = function () {
 };
 
 
-
+/**
+ * Render the collection and its subnodes
+ */
 GLVIS.Recommendation.prototype.render = function () {
 
     if (!this.dirty_)
@@ -97,10 +96,6 @@ GLVIS.Recommendation.prototype.render = function () {
     this.dirty_ = false;
 };
 
-
-
-
-
 /**
  * Setting the collection that the recommendation belongs to
  * @param {GLVIS.Collection} collection Collection;
@@ -108,7 +103,6 @@ GLVIS.Recommendation.prototype.render = function () {
 GLVIS.Recommendation.prototype.setCollection = function (collection) {
     this.collection_ = collection;
 };
-
 
 /**
  * Called by interactionhandler. Function registered in mesh-objects
@@ -124,12 +118,8 @@ GLVIS.Recommendation.prototype.handleClick = function () {
     GLVIS.Debugger.debug("Recommendation",
             ["RECOMMENDATION " + that.getId() + " clicked", that.eexcess_data_],
             3);
-
     GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(that);
 };
-
-
-
 
 /**
  * Return parent-collection
@@ -139,13 +129,18 @@ GLVIS.Recommendation.prototype.getCollection = function () {
     return this.collection_;
 };
 
+/**
+ * Getting the status of the Recommendation
+* See @see{GLVIS.Recommendation.STATUSFLAGS}
+ * @returns {type}
+ */
 GLVIS.Recommendation.prototype.getStatus = function () {
     return this.vis_data_.status;
 };
 
 /**
- * Set the status of the collection.
- * See @see{GLVIS.Collection.STATUSFLAGS}
+ * Set the status of the Recommendation.
+ * See @see{GLVIS.Recommendation.STATUSFLAGS}
  * @param {type} status
  * @returns {undefined}
  */
@@ -159,10 +154,11 @@ GLVIS.Recommendation.prototype.setStatus = function (status) {
 
     //Status change also means change of visual representation
     this.setMyGlObjectsDirty_();
-
 };
 
-
+/**
+ * Setting all sub-objects that hold GL Objects dirty
+ */
 GLVIS.Recommendation.prototype.setMyGlObjectsDirty_ = function () {
     for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
 
@@ -175,7 +171,6 @@ GLVIS.Recommendation.prototype.setMyGlObjectsDirty_ = function () {
         this.collection_.setIsDirty(true);
 };
 
-
 /**
  * Get Relative position to the collection
  * @returns {GLVIS.Recommendation.prototype.getPosition.pos}
@@ -183,7 +178,6 @@ GLVIS.Recommendation.prototype.setMyGlObjectsDirty_ = function () {
 GLVIS.Recommendation.prototype.getRelativePosition = function () {
     return this.vis_data_.relative_position;
 };
-
 
 /**
  * Get Absolute position
@@ -200,7 +194,10 @@ GLVIS.Recommendation.prototype.getPosition = function () {
     return pos;
 };
 
-
+/**
+ * Getting the relative position of the recommendation related to the collection
+ * @returns {GLVIS.Recommendation.prototype.getRelativePosition.pos}
+ */
 GLVIS.Recommendation.prototype.getRelativePosition = function () {
 
     var pos = {
@@ -210,6 +207,12 @@ GLVIS.Recommendation.prototype.getRelativePosition = function () {
     return pos;
 
 };
+
+/**
+ * Setting the relative position of the recommendation related to the collection
+ * @param {float} x
+ * @param {float} y
+ */
 GLVIS.Recommendation.prototype.setRelativePosition = function (x, y) {
 
     if (x !== null && x !== undefined)
@@ -222,34 +225,31 @@ GLVIS.Recommendation.prototype.setRelativePosition = function (x, y) {
     this.dirty_ = true;
     this.setMyGlObjectsDirty_();
 };
+
 /**
  * Set the position by a radians value.
- * Necessary for animation
+ * Necessary for animation. The "that" parameter is necessary as it is used as
+ * ŕegistered function in the animation without any knowlege about the object.
  * @param{GLVIS.Recommendation | null} that Reference to THIS object. (Animation doesn't know me...)
  * @param {float} rad Radians
  */
 GLVIS.Recommendation.prototype.setRelativePositionByRad = function (that, rad) {
-
     if (!that)
         that = this;
 
-    
-
     var distance = GLVIS.config.collection.recommendation.init_distance;
-    
     var pos = GLVIS.Tools.getPosFromRad(rad, distance);
-
     that.setRelativePosition(pos.x, pos.y);
 };
+
 /**
  * Get the radians of the node around the collection.
- 
- * Necessary for animation
+ * Necessary for animation. The "that" parameter is necessary as it is used as
+ * ŕegistered function in the animation without any knowlege about the object.
  * @param{GLVIS.Recommendation | null} that Reference to THIS object. (Animation doesn't know me...)
  * @returns {float} Radians
  */
 GLVIS.Recommendation.prototype.getRelativePositionRad = function (that) {
-
     if (!that)
         that = this;
 
@@ -268,6 +268,7 @@ GLVIS.Recommendation.prototype.setRadius = function (radius) {
     this.dirty_ = true;
     this.setMyGlObjectsDirty_();
 };
+
 /**
  * 
  * @param {integer} color e.g. 0xFF0000
@@ -279,6 +280,7 @@ GLVIS.Recommendation.prototype.setColor = function (color) {
     this.dirty_ = true;
     this.setMyGlObjectsDirty_();
 };
+
 /**
  * @param {float} opacity 0 - Transparent, 1 - Full visible
  */
@@ -289,21 +291,28 @@ GLVIS.Recommendation.prototype.setOpacity = function (opacity) {
     this.dirty_ = true;
     this.setMyGlObjectsDirty_();
 };
+
 GLVIS.Recommendation.prototype.getRadius = function () {
     return this.vis_data_.radius;
 };
+
 GLVIS.Recommendation.prototype.getColor = function () {
     return this.vis_data_.color;
 };
+
 GLVIS.Recommendation.prototype.getOpacity = function () {
     return this.vis_data_.opacity;
 };
+
 GLVIS.Recommendation.prototype.getId = function () {
     return this.id_;
 };
+
 GLVIS.Recommendation.prototype.getEexcessData = function () {
     return this.eexcess_data_;
 };
+
+
 /******************
  * 
  * STATIC FUNCTIONS

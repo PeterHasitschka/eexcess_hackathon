@@ -13,9 +13,11 @@ GLVIS.RecommendationPosRingRepresentation = function (collection) {
     this.collection_ = collection;
 };
 
-
+/**
+ * Distributing the recommendations according to the ring representation.
+ * @returns {undefined}
+ */
 GLVIS.RecommendationPosRingRepresentation.prototype.calculatePositions = function () {
-
 
     var ringrep = this.collection_.getRingRepresentation();
 
@@ -23,7 +25,6 @@ GLVIS.RecommendationPosRingRepresentation.prototype.calculatePositions = functio
         throw ("No Ring Representation found!");
 
     var segments = ringrep.getRingSegments();
-
 
     for (var seg_count = 0; seg_count < segments.length; seg_count++) {
 
@@ -38,13 +39,10 @@ GLVIS.RecommendationPosRingRepresentation.prototype.calculatePositions = functio
         var seg_pos = curr_seg.getRelativePosition();
         var seg_degree = GLVIS.Tools.getRadFromPos(seg_pos.x, seg_pos.y);
         
-        
         var seg_length_rad = curr_seg.getRadLength();
         var rad_step = seg_length_rad / recommendations.length;
         
         var curr_rad = seg_degree - seg_length_rad/2 + rad_step/2;
-
-        console.log(rad_step, seg_length_rad);
 
         for (var i = 0; i < recommendations.length; i++) {
             /** @type{GLVIS.Recommendation} **/
@@ -79,10 +77,7 @@ GLVIS.RecommendationPosRingRepresentation.prototype.calculatePositions = functio
 
             curr_rad += rad_step;
         }
-
-
-    }
-    ;
+    };
 
 
 

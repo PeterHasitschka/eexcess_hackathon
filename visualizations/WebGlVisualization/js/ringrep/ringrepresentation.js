@@ -66,7 +66,8 @@ GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
             this.ring_segments_.push(new GLVIS.RingSegment(this, ring_count, seg_start, seg_end, color, key, val, curr_ring_data_elm.recs));
         }
     }
-
+    
+    //Needed for finding the last ring
     this.max_level = ring_structure.length - 1;
 };
 
@@ -112,7 +113,6 @@ GLVIS.RingRepresentation.prototype.delete = function () {
     for (var i = 0; i < this.ring_segments_.length; i++) {
         this.ring_segments_[i].delete();
     }
-
 };
 
 /**
@@ -122,7 +122,6 @@ GLVIS.RingRepresentation.prototype.delete = function () {
 GLVIS.RingRepresentation.prototype.getTree = function () {
     return this.tree_;
 };
-
 
 /**
  * 

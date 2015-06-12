@@ -1,4 +1,6 @@
 var GLVIS = GLVIS || {};
+
+
 /**
  * Handling the visual navigation of the scene
  * @param {GLVIS.Scene} scene Current scene
@@ -12,28 +14,8 @@ GLVIS.NavigationHandler = function (scene) {
         move_id_x: 'nh_anim_move_x',
         move_id_y: 'nh_anim_move_y'
     };
-
-    /*
-     this.zoomanimation_ = {
-     //Needed for calculating the ratio
-     largest_diff: null,
-     goal: null,
-     cb: null
-     };
-     this.moveanimation_ = {
-     //Needed for calculating the ratio
-     largest_diff: {
-     x: null,
-     y: null
-     },
-     goal: {
-     x: null,
-     y: null
-     },
-     cb: null
-     };
-     */
 };
+
 /**
  * Set the scene's camera position
  * @param {float | null} x
@@ -49,7 +31,6 @@ GLVIS.NavigationHandler.prototype.setCamera = function (x, y) {
     this.scene_.getWebGlHandler().getCamera().position.x = x;
     this.scene_.getWebGlHandler().getCamera().position.y = y;
 };
-
 
 /**
  * Single getter for animation
@@ -67,7 +48,6 @@ GLVIS.NavigationHandler.prototype.getPosY = function () {
     return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.y;
 };
 
-
 /**
  * Move the scene's camera
  * @param {float | null} x
@@ -83,8 +63,9 @@ GLVIS.NavigationHandler.prototype.moveCamera = function (x, y) {
     GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.x += x;
     GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.y += y;
 };
+
 /**
- * Perform zoom
+ * Perform (absolute) zoom
  * @param {float} zoom_factor
  */
 GLVIS.NavigationHandler.prototype.zoom = function (zoom_factor) {
@@ -96,11 +77,15 @@ GLVIS.NavigationHandler.prototype.zoom = function (zoom_factor) {
     GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().updateProjectionMatrix();
 };
 
-
+/**
+ * Getting the zoom level of the THREE.js Camera
+ * @returns {Three.Camera.zoom}
+ */
 GLVIS.NavigationHandler.prototype.getZoomFactor = function () {
     var zoom = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().zoom;
     return zoom;
 };
+
 /**
  * Perform zoom relative
  * @param {float} delta_zoom_factor
@@ -112,7 +97,6 @@ GLVIS.NavigationHandler.prototype.zoomDelta = function (delta_zoom_factor) {
     //"this" may be unknown... 
     GLVIS.Scene.getCurrentScene().getNavigationHandler().zoom(zoom);
 };
-
 
 /**
  * 
@@ -164,7 +148,6 @@ GLVIS.NavigationHandler.prototype.animatedMovement = function (move_goal_x, move
             );
 };
 
-
 /**
  * 
  * @param {type} zoom_goal zoom level to reach
@@ -194,16 +177,20 @@ GLVIS.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_f
             );
 };
 
-
+/**
+ * Resetting both movement-animations
+ */
 GLVIS.NavigationHandler.prototype.resetAnimationMovement = function () {
     GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animation_.move_id_x);
     GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animation_.move_id_y);
 };
 
+/**
+ * Resetting the zoom-animation
+ */
 GLVIS.NavigationHandler.prototype.resetAnimationZoom = function () {
     GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animation_.zoom_id);
 };
-
 
 /**
  * 
@@ -225,14 +212,6 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
         }
     });
 
-    /*
-     this.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_out, function () {
-     GLVIS.Debugger.debug("NavigationHandler",
-     "finished zoom to " + GLVIS.config.navigation.zoom.animated.zoom_out,
-     3);
-     //INNER
-     });
-     */
     this.animatedMovement(collection.getPosition().x, collection.getPosition().y, function () {
 
         GLVIS.Debugger.debug("NavigationHandler",

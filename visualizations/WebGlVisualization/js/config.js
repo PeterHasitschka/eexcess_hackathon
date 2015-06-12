@@ -8,7 +8,7 @@ GLVIS.config = {
     },
     debug: {
         active: true,
-        level: 1, // 1:Very important ... 10:Verbose story telling,
+        level: 5, // 1:Very important ... 10:Verbose story telling,
         prefix: "GLVIS::"
     },
     three: {
