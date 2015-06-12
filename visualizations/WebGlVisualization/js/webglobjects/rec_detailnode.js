@@ -61,21 +61,12 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function () {
         if (preview_image) {
 
             console.log("preview iamge exiting");
-            var that = this;
-            var image_texture = THREE.ImageUtils.loadTexture(preview_image, {}, function () {
 
-
-                var sphereTextureMaterial =
-                        new THREE.MeshBasicMaterial(
-                                {
-                                    map: image_texture
-                                });
-
-
-                console.log("image loaded and set as metrial");
-                //that.webgl_objects_.sphere.material = image_texture;
-
+            //console.log("image loaded and set as metrial", image_texture);
+            this.webgl_objects_.sphere.material = new THREE.MeshLambertMaterial({
+                map: THREE.ImageUtils.loadTexture(preview_image)
             });
+
         }
     }
 
