@@ -3,6 +3,8 @@ var GLVIS = GLVIS || {};
 
 GLVIS.RecDashboardHandler = function () {
 
+    this.last_clicked_rec = null;
+    this.last_clicked_col = null;
 
 };
 
@@ -15,6 +17,10 @@ GLVIS.RecDashboardHandler.prototype.onCollectionClick = function (collection) {
 
     var info_content_container = jQuery('#webgl_info_content');
     info_content_container.html("");
+
+    this.last_clicked_col = collection;
+
+    this.hideRecButtons_();
 };
 
 
@@ -27,5 +33,32 @@ GLVIS.RecDashboardHandler.prototype.onRecommendationClick = function (recommenda
 
     var info_content_container = jQuery('#webgl_info_content');
     info_content_container.html("");
+
+    this.last_clicked_rec = recommendation;
+
+    this.showRecButtons_();
 };
 
+
+
+GLVIS.RecDashboardHandler.prototype.hideRecButtons_ = function () {
+    jQuery('#webgl_toolbar_btn_rec_focusparentcol').hide();
+};
+
+GLVIS.RecDashboardHandler.prototype.showRecButtons_ = function () {
+    jQuery('#webgl_toolbar_btn_rec_focusparentcol').show();
+};
+
+
+
+
+jQuery('#webgl_toolbar_btn_rec_focusparentcol').click(function () {
+
+    var rdbh = GLVIS.Scene.getCurrentScene().getRecDashboardHandler();
+
+    var rec = rdbh.last_clicked_rec;
+    var col = rec.getCollection();
+    col.selectAndFocus();
+
+    rdbh.hideRecButtons_();
+});

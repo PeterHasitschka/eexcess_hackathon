@@ -3,10 +3,10 @@ GLVIS = GLVIS || {};
 
 
 /**
- * Representing a common recommendation of a Collection in WebGl
+ * Representing a detailed recommendation of a Collection in WebGl
  * @param {GLVIS.Recommendation} recommendation recommendation that node represents
  */
-GLVIS.RecommendationCommonNode = function (recommendation) {
+GLVIS.RecommendationDetailNode = function (recommendation) {
 
     this.dirty_ = true;
     this.recommendation_ = recommendation;
@@ -17,15 +17,13 @@ GLVIS.RecommendationCommonNode = function (recommendation) {
 
     //Needed due to relative scaling.
     this.init_radius_ = this.recommendation_.getRadius();
-
+    
     this.initAndRegisterGlObj();
 };
 
+GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function () {
 
-
-GLVIS.RecommendationCommonNode.prototype.initAndRegisterGlObj = function () {
-
-    var config = GLVIS.config.collection.recommendation.common_node;
+    var config = GLVIS.config.collection.recommendation.detail_node;
 
     var sphereMaterial =
             new THREE.MeshBasicMaterial(
@@ -56,17 +54,13 @@ GLVIS.RecommendationCommonNode.prototype.initAndRegisterGlObj = function () {
 
 };
 
-GLVIS.RecommendationCommonNode.prototype.render = function () {
+GLVIS.RecommendationDetailNode.prototype.render = function () {
 
     if (!this.dirty_)
         return;
-    
-    //May happen after deleting GL-Nodes but render is called once more before deleting
-    if (!this.webgl_objects_.sphere)
-        return;
 
     GLVIS.Debugger.debug(
-            "RecommendationCommonNode",
+            "RecommendationDetailNode",
             "Rendering RECOMMENDATION COMMON-NODE  for recommendation " + this.recommendation_.getId(),
             7);
 
@@ -87,21 +81,21 @@ GLVIS.RecommendationCommonNode.prototype.render = function () {
 
 };
 
-GLVIS.RecommendationCommonNode.prototype.setIsDirty = function (dirty) {
+GLVIS.RecommendationDetailNode.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 };
 
-GLVIS.RecommendationCommonNode.prototype.getIsDirty = function () {
+GLVIS.RecommendationDetailNode.prototype.getIsDirty = function () {
     return this.dirty_;
 };
 
 /**
  * Delete all GL-Objects and remove them from the scene
  */
-GLVIS.RecommendationCommonNode.prototype.delete = function(){
+GLVIS.RecommendationDetailNode.prototype.delete = function(){
     
     var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
     three_scene.remove(this.webgl_objects_.sphere);
-
+    
     delete this.webgl_objects_.sphere;
 };

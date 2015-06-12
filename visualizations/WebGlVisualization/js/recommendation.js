@@ -43,7 +43,8 @@ GLVIS.Recommendation = function (eexcess_data) {
         color: GLVIS.config.collection.recommendation.color,
         opacity: 1
         ,
-        gl_objects: []
+        gl_objects: [],
+        gl_node: null
     };
 
     /**
@@ -71,10 +72,8 @@ GLVIS.Recommendation.prototype.initGlNode = function () {
 
     var gl_connection = new GLVIS.ConnectionCollectionRecommendation(this);
     this.vis_data_.gl_objects.push(gl_connection);
-
     this.setRelativePositionByRad(0);
 };
-
 
 /**
  * Render the collection and its subnodes
@@ -116,9 +115,150 @@ GLVIS.Recommendation.prototype.handleClick = function () {
         return;
 
     GLVIS.Debugger.debug("Recommendation",
-            ["RECOMMENDATION " + that.getId() + " clicked", that.eexcess_data_],
+            ["RECOMMENDATION " + that.getId() + " clicked", that],
             3);
+
+    that.focusAndZoom();
     GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(that);
+};
+
+/**
+ * Swap the (no detailed) common node object with a Detail-Node.
+ * Afterwards zoom and move in to the recommendation
+ */
+GLVIS.Recommendation.prototype.focusAndZoom = function () {
+
+    //Replace common node with detail node
+
+    //Search for common node, delete it
+    //If Detail node already exists -> Do not recreate it
+
+    var rec_detail_node_exists = false;
+
+    for (var i = 0; i < this.vis_data_.gl_objects.length; i++) {
+        if (this.vis_data_.gl_objects[i] instanceof GLVIS.RecommendationCommonNode) {
+            this.vis_data_.gl_objects[i].delete();
+            this.vis_data_.gl_objects.splice(i, 1);
+        }
+
+        if (this.vis_data_.gl_objects[i] instanceof GLVIS.RecommendationDetailNode) {
+            rec_detail_node_exists = true;
+        }
+    }
+
+    //Create new detail node if not already existing
+    if (!rec_detail_node_exists) {
+        var gl_node = new GLVIS.RecommendationDetailNode(this);
+        this.vis_data_.gl_objects.push(gl_node);
+
+        this.dirty_ = true;
+        this.setMyGlObjectsDirty_();
+    }
+
+
+
+    var abs_pos = this.getPosition();
+    var nav_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
+    var move_setter = nav_handler.moveCamera;
+    var move_getter_x = nav_handler.getPosX;
+    var move_setter_param_x = 0;
+    var move_getter_y = nav_handler.getPosY;
+    var move_setter_param_y = 1;
+    var move_factor = 0.4;
+    var move_pow = 0.2;
+    var move_threshold = 0.01;
+
+    //X
+    GLVIS.Scene.getCurrentScene().getAnimation().register(
+            nav_handler.animation_.move_id_x,
+            abs_pos.x,
+            null,
+            move_getter_x,
+            move_setter,
+            move_setter_param_x,
+            move_factor,
+            move_pow,
+            move_threshold,
+            function () {
+            }
+    );
+
+    //Y
+    GLVIS.Scene.getCurrentScene().getAnimation().register(
+            nav_handler.animation_.move_id_y,
+            abs_pos.y,
+            null,
+            move_getter_y,
+            move_setter,
+            move_setter_param_y,
+            move_factor,
+            move_pow,
+            move_threshold,
+            function () {
+            }
+    );
+
+
+
+    var zoom_threshold = 0.001;
+    var zoom_pow = 0.0001;
+    var zoom_factor = 2;
+    var zoom_goal = 50;
+    var zoom_getter = nav_handler.getZoomFactor;
+    var zoom_setter = nav_handler.zoomDelta;
+
+    GLVIS.Scene.getCurrentScene().getAnimation().register(
+            nav_handler.animation_.zoom_id,
+            zoom_goal,
+            null,
+            zoom_getter,
+            zoom_setter,
+            0,
+            zoom_factor,
+            zoom_pow,
+            zoom_threshold,
+            function () {
+                console.log("READY ZOOM TO REC");
+            }
+    );
+    
+    GLVIS.Recommendation.current_selected_rec = this;
+};
+
+/**
+ * De-Focus the Recommendation node.
+ * Swap the detail node to a common node and move and zoom to the collection
+ */
+GLVIS.Recommendation.prototype.defocusAndZoomOut = function () {
+    //Replace detail node with common node
+
+    //Search for detail node, delete it
+    //If common node already exists -> Do not recreate it
+
+    var rec_common_node_exists = false;
+
+    for (var i = 0; i < this.vis_data_.gl_objects.length; i++) {
+        if (this.vis_data_.gl_objects[i] instanceof GLVIS.RecommendationDetailNode) {
+            this.vis_data_.gl_objects[i].delete();
+            this.vis_data_.gl_objects.splice(i, 1);
+        }
+
+        if (this.vis_data_.gl_objects[i] instanceof GLVIS.RecommendationCommonNode) {
+            rec_common_node_exists = true;
+        }
+    }
+
+    //Create new common node if not already existing
+    if (!rec_common_node_exists) {
+        var gl_node = new GLVIS.RecommendationCommonNode(this);
+        this.vis_data_.gl_objects.push(gl_node);
+
+        this.dirty_ = true;
+        this.setMyGlObjectsDirty_();
+    }
+
+    this.getCollection().selectAndFocus();
+    GLVIS.Recommendation.current_selected_rec = null;
 };
 
 /**
@@ -131,7 +271,7 @@ GLVIS.Recommendation.prototype.getCollection = function () {
 
 /**
  * Getting the status of the Recommendation
-* See @see{GLVIS.Recommendation.STATUSFLAGS}
+ * See @see{GLVIS.Recommendation.STATUSFLAGS}
  * @returns {type}
  */
 GLVIS.Recommendation.prototype.getStatus = function () {
@@ -259,7 +399,7 @@ GLVIS.Recommendation.prototype.getRelativePositionRad = function (that) {
     var pos = that.getRelativePosition();
 
     return GLVIS.Tools.getRadFromPos(pos.x, pos.y);
-    
+
 };
 GLVIS.Recommendation.prototype.setRadius = function (radius) {
     if (this.vis_data_.radius === radius)
@@ -328,6 +468,8 @@ GLVIS.Recommendation.getNewId = function () {
 };
 GLVIS.Recommendation.STATUSFLAGS = {
     NORMAL: 0x000,
-    HIDDEN: 0x001,
-    SELECTED: 0x002
+    HIDDEN: 0x001
 };
+
+
+GLVIS.Recommendation.current_selected_rec = null;

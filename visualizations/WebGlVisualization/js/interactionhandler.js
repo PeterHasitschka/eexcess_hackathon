@@ -78,7 +78,7 @@ GLVIS.InteractionHandler.prototype.deselectAllCollections = function () {
     {
         var curr_coll = this.scene_.getCollections()[i];
         curr_coll.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
-        
+
         //curr_coll.deleteRingRepresentation();
 
         var recommendations = curr_coll.getRecommendations();
@@ -127,6 +127,16 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
                 curr_intersect_obj.interaction[interaction_type](curr_intersect_obj);
             }
         }
+    }
+
+    /**
+     * If clicked on no object we can defocus all recommendations
+     */
+    if (!intersected.length) {
+        if (GLVIS.Recommendation.current_selected_rec) {
+            GLVIS.Recommendation.current_selected_rec.defocusAndZoomOut();
+        }
+        
     }
 };
 

@@ -50,6 +50,17 @@ GLVIS.config = {
                     rings: 6
                 }
             },
+             detail_node: {
+                z_value: -19,
+                min_radius: 0.5,
+                active_radius: 10,
+                color_positive: 0x00CC00,
+                color_negative: 0xCC0000,
+                sphere: {
+                    segments: 40,
+                    rings: 60
+                }
+            },
             animation: {
                 speed: 0.1,
                 pow: 0.001,

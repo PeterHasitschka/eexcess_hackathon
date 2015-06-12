@@ -49,6 +49,7 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                     path + "js/recdashboardhandler.js",
                                     path + "js/webglobjects/collection_centernode.js",
                                     path + "js/webglobjects/rec_commonnode.js",
+                                    path + "js/webglobjects/rec_detailnode.js",
                                     path + "js/webglobjects/coll_ringsegment.js",
                                     path + "js/webglobjects/text.js",
                                     path + "js/collection.js",
