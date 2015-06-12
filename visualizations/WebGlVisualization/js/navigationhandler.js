@@ -179,7 +179,7 @@ GLVIS.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_f
 
     var getter = this.getZoomFactor;
     var setter = this.zoomDelta;
-
+    
     GLVIS.Scene.getCurrentScene().getAnimation().register(
             this.animation_.zoom_id,
             zoom_goal,

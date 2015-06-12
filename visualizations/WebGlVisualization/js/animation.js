@@ -19,7 +19,6 @@ GLVIS.Animation.prototype.animate = function () {
 
         var curr_anim = this.animations_[a_count];
 
-
         //console.log(curr_anim.getter_fct);
         //return;
         var curr_val = curr_anim.getter_fct(curr_anim.object);
@@ -97,12 +96,7 @@ GLVIS.Animation.prototype.register = function (identifier, goal, object, getter_
         setter_fct_param_num, factor, pow, threshold, callback_fct, add_to_current) {
 
     //Check if already exists. If is so, remove old from list
-    for (var i = 0; i < this.animations_.length; i++) {
-        if (this.animations_[i].id === identifier) {
-            this.animations_.splice(i, 1);
-            break;
-        }
-    }
+    this.unregister(identifier);
 
     if (!add_to_current)
         add_to_current = false;
