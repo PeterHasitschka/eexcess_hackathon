@@ -46,36 +46,40 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function () {
         "recommendation": this.recommendation_
     };
 
-
     var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
     webgl_handler.getThreeScene().add(sphere);
 
     this.webgl_objects_.sphere = sphere;
 
 
-
     var eexcess_data = this.recommendation_.getEexcessData();
     if (eexcess_data) {
         var result = eexcess_data.result;
         var preview_image = result.previewImage;
+
+        //DUMMY FOR EVERYONE!
+        if (!preview_image)
+            preview_image = "/visualizations/WebGlVisualization/media/testtexture.jpg";
+
         if (preview_image) {
 
-            console.log("preview iamge exiting");
+            GLVIS.Debugger.debug("RecommendationDetailNode", "Preview image exists... start loading", 5);
 
-            //console.log("image loaded and set as metrial", image_texture);
-            this.webgl_objects_.sphere.material = new THREE.MeshLambertMaterial({
-                map: THREE.ImageUtils.loadTexture(preview_image)
+            var that = this;
+            THREE.ImageUtils.loadTexture(preview_image, {}, function (texture) {
+
+                GLVIS.Debugger.debug("RecommendationDetailNode", "Preview loaded. Creating texture", 5);
+                texture.minFilter = THREE.LinearFilter;
+                that.webgl_objects_.sphere.material = new THREE.MeshBasicMaterial({
+                    map: texture
+                });
+                texture.needsUpdate = true;
+
+                that.setIsDirty(true);
+                that.recommendation_.setIsDirty(true);
             });
-
         }
     }
-
-
-
-
-
-
-
 };
 
 GLVIS.RecommendationDetailNode.prototype.render = function () {
@@ -85,8 +89,8 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
 
     GLVIS.Debugger.debug(
             "RecommendationDetailNode",
-            "Rendering RECOMMENDATION COMMON-NODE  for recommendation " + this.recommendation_.getId(),
-            7);
+            "Rendering RECOMMENDATION DETAIL-NODE  for recommendation " + this.recommendation_.getId(),
+            5);
 
     var abs_pos = this.recommendation_.getPosition();
 
