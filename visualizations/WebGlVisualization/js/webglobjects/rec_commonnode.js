@@ -31,14 +31,14 @@ GLVIS.RecommendationCommonNode.prototype.initAndRegisterGlObj = function () {
             new THREE.MeshBasicMaterial(
                     {
                         color: this.recommendation_.getColor(),
-                        transparent: true
+                        transparent: true,
+                        side: THREE.DoubleSide
                     });
 
     var sphere = new THREE.Mesh(
-            new THREE.SphereGeometry(
+            new THREE.CircleGeometry(
                     this.init_radius_,
-                    config.sphere.segments,
-                    config.sphere.rings),
+                    config.sphere.segments),
             sphereMaterial);
 
 

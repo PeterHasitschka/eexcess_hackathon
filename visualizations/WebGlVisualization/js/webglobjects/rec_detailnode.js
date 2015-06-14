@@ -29,14 +29,15 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function () {
             new THREE.MeshBasicMaterial(
                     {
                         color: this.recommendation_.getColor(),
-                        transparent: true
+                        transparent: true,
+                        side: THREE.DoubleSide
                     });
 
     var sphere = new THREE.Mesh(
-            new THREE.SphereGeometry(
+            new THREE.CircleGeometry(
                     this.init_radius_,
-                    config.sphere.segments,
-                    config.sphere.rings),
+                    config.sphere.segments
+                    ),
             sphereMaterial);
 
 
@@ -71,8 +72,10 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function () {
                 GLVIS.Debugger.debug("RecommendationDetailNode", "Preview loaded. Creating texture", 5);
                 texture.minFilter = THREE.LinearFilter;
                 that.webgl_objects_.sphere.material = new THREE.MeshBasicMaterial({
-                    map: texture
+                    map: texture,
+                    side: THREE.DoubleSide
                 });
+                texture.flipY = false;
                 texture.needsUpdate = true;
 
                 that.setIsDirty(true);
@@ -94,7 +97,7 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
 
     var abs_pos = this.recommendation_.getPosition();
 
-    var z_pos = GLVIS.config.collection.recommendation.common_node.z_value;
+    var z_pos = GLVIS.config.collection.recommendation.detail_node.z_value;
     this.webgl_objects_.sphere.position.set(
             abs_pos.x,
             abs_pos.y,

@@ -46,8 +46,7 @@ GLVIS.config = {
                 color_positive: 0x00CC00,
                 color_negative: 0xCC0000,
                 sphere: {
-                    segments: 4,
-                    rings: 6
+                    segments: 10
                 }
             },
             detail_node: {
@@ -57,8 +56,7 @@ GLVIS.config = {
                 color_positive: 0x00CC00,
                 color_negative: 0xCC0000,
                 sphere: {
-                    segments: 40,
-                    rings: 60
+                    segments: 40
                 }
             },
             animation: {
@@ -68,12 +66,12 @@ GLVIS.config = {
             },
             focus_animation: {
                 move: {
-                    speed: 0.4,
+                    speed: 0.2,
                     pow: 0.2,
                     threshold: 0.01
                 },
                 zoom: {
-                    speed: 3,
+                    speed: 2,
                     pow: 0.00001,
                     threshold: 0.01,
                     zoom_val: 50
@@ -116,6 +114,7 @@ GLVIS.config = {
                 color: 0xFF00FF,
                 z_value: -15,
                 segments: 100,
+                phi_seg_num: 8,
                 opacity: 0.8,
                 label: {
                     font_size: 8,

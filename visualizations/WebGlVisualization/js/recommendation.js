@@ -242,7 +242,7 @@ GLVIS.Recommendation.prototype.defocusAndZoomOut = function () {
             zoom_out_pow,
             zoom_out_threshold,
             function () {
-                that.getCollection().selectAndFocus();
+                //that.getCollection().selectAndFocus();
             }
     );
 
