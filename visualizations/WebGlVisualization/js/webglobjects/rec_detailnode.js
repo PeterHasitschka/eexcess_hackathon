@@ -12,7 +12,7 @@ GLVIS.RecommendationDetailNode = function (recommendation) {
     this.recommendation_ = recommendation;
 
     this.webgl_objects_ = {
-        sphere: null
+        circle: null
     };
 
     //Needed due to relative scaling.
@@ -25,7 +25,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function () {
 
     var config = GLVIS.config.collection.recommendation.detail_node;
 
-    var sphereMaterial =
+    var circleMaterial =
             new THREE.MeshBasicMaterial(
                     {
                         color: this.recommendation_.getColor(),
@@ -33,24 +33,24 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function () {
                         side: THREE.DoubleSide
                     });
 
-    var sphere = new THREE.Mesh(
+    var circle = new THREE.Mesh(
             new THREE.CircleGeometry(
                     this.init_radius_,
-                    config.sphere.segments
+                    config.circle.segments
                     ),
-            sphereMaterial);
+            circleMaterial);
 
 
     //Register click-function
-    sphere.interaction = {
+    circle.interaction = {
         "mouseclick": this.recommendation_.handleClick,
         "recommendation": this.recommendation_
     };
 
     var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
-    webgl_handler.getThreeScene().add(sphere);
+    webgl_handler.getThreeScene().add(circle);
 
-    this.webgl_objects_.sphere = sphere;
+    this.webgl_objects_.circle = circle;
 
 
     var eexcess_data = this.recommendation_.getEexcessData();
@@ -71,7 +71,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function () {
 
                 GLVIS.Debugger.debug("RecommendationDetailNode", "Preview loaded. Creating texture", 5);
                 texture.minFilter = THREE.LinearFilter;
-                that.webgl_objects_.sphere.material = new THREE.MeshBasicMaterial({
+                that.webgl_objects_.circle.material = new THREE.MeshBasicMaterial({
                     map: texture,
                     side: THREE.DoubleSide
                 });
@@ -98,7 +98,7 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
     var abs_pos = this.recommendation_.getPosition();
 
     var z_pos = GLVIS.config.collection.recommendation.detail_node.z_value;
-    this.webgl_objects_.sphere.position.set(
+    this.webgl_objects_.circle.position.set(
             abs_pos.x,
             abs_pos.y,
             z_pos
@@ -106,9 +106,9 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
 
     var curr_radius = this.recommendation_.getRadius();
     var scale_factor = curr_radius / this.init_radius_;
-    this.webgl_objects_.sphere.scale.set(scale_factor, scale_factor, scale_factor);
+    this.webgl_objects_.circle.scale.set(scale_factor, scale_factor, scale_factor);
 
-    this.webgl_objects_.sphere.material.opacity = this.recommendation_.getOpacity();
+    this.webgl_objects_.circle.material.opacity = this.recommendation_.getOpacity();
 
 };
 
@@ -126,7 +126,7 @@ GLVIS.RecommendationDetailNode.prototype.getIsDirty = function () {
 GLVIS.RecommendationDetailNode.prototype.delete = function () {
 
     var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
-    three_scene.remove(this.webgl_objects_.sphere);
+    three_scene.remove(this.webgl_objects_.circle);
 
-    delete this.webgl_objects_.sphere;
+    delete this.webgl_objects_.circle;
 };

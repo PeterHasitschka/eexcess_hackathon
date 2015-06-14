@@ -25,10 +25,9 @@ GLVIS.config = {
             transparency: {
                 inactive: 0.5
             },
-            sphere: {
+            circle: {
                 radius: 10.0,
-                segments: 4,
-                rings: 6,
+                segments: 15,
                 z_value: -20,
                 color: 0x1d904e,
                 select_color: 0xFF0000
@@ -45,7 +44,7 @@ GLVIS.config = {
                 active_radius: 10,
                 color_positive: 0x00CC00,
                 color_negative: 0xCC0000,
-                sphere: {
+                circle: {
                     segments: 10
                 }
             },
@@ -55,14 +54,14 @@ GLVIS.config = {
                 active_radius: 10,
                 color_positive: 0x00CC00,
                 color_negative: 0xCC0000,
-                sphere: {
+                circle: {
                     segments: 40
                 }
             },
             animation: {
                 speed: 0.1,
                 pow: 0.001,
-                threshold: 0.01
+                threshold: 0.003
             },
             focus_animation: {
                 move: {
@@ -175,7 +174,7 @@ GLVIS.config = {
             animated: {
                 threshold: 1,
                 pow: 0.2,
-                speed_fct: 0.5
+                speed_fct: 0.4
             }
         }
     },

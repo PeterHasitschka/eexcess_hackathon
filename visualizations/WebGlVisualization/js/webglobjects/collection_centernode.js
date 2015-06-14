@@ -11,12 +11,12 @@ GLVIS.CollectionCenterNode = function (collection) {
     /** @type{GLVIS.Collection} **/
     this.collection_ = collection;
 
-    this.default_color_ = GLVIS.config.collection.center_node.sphere.color;
+    this.default_color_ = GLVIS.config.collection.center_node.circle.color;
 
     this.dirty_ = true;
 
     this.webgl_objects_ = {
-        sphere: null
+        circle: null
     };
 
     this.initAndRegisterGlObj();
@@ -24,33 +24,33 @@ GLVIS.CollectionCenterNode = function (collection) {
 
 GLVIS.CollectionCenterNode.prototype.initAndRegisterGlObj = function () {
 
-    var sphere_config = GLVIS.config.collection.center_node.sphere;
+    var circle_config = GLVIS.config.collection.center_node.circle;
 
-    var sphereMaterial =
+    var circleMaterial =
             new THREE.MeshBasicMaterial(
                     {
-                        color: sphere_config.color,
-                        transparent: true
+                        color: circle_config.color,
+                        transparent: true,
+                        side: THREE.DoubleSide
                     });
 
-    var sphere = new THREE.Mesh(
-            new THREE.SphereGeometry(
-                    sphere_config.radius,
-                    sphere_config.segments,
-                    sphere_config.rings),
-            sphereMaterial);
+    var circle = new THREE.Mesh(
+            new THREE.CircleGeometry(
+                    circle_config.radius,
+                    circle_config.segments),
+            circleMaterial);
 
     //Register click-function
-    sphere.interaction = {
+    circle.interaction = {
         "mouseclick": this.collection_.handleClick,
         "collection": this.collection_
     };
 
 
     var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
-    webgl_handler.getThreeScene().add(sphere);
+    webgl_handler.getThreeScene().add(circle);
 
-    this.webgl_objects_.sphere = sphere;
+    this.webgl_objects_.circle = circle;
 
 
 };
@@ -68,21 +68,21 @@ GLVIS.CollectionCenterNode.prototype.render = function () {
             7);
 
 
-    var sphere_color;
+    var circle_color;
     if (this.collection_.getStatus() === GLVIS.Collection.STATUSFLAGS.SELECTED)
-        sphere_color = GLVIS.config.collection.center_node.sphere.select_color;
+        circle_color = GLVIS.config.collection.center_node.circle.select_color;
     else
-        sphere_color = this.default_color_;
+        circle_color = this.default_color_;
 
-    this.webgl_objects_.sphere.material.color.setHex(sphere_color);
+    this.webgl_objects_.circle.material.color.setHex(circle_color);
 
 
 
 
     var pos = this.collection_.getPosition();
 
-    var z_pos = GLVIS.config.collection.center_node.sphere.z_value;
-    this.webgl_objects_.sphere.position.set(
+    var z_pos = GLVIS.config.collection.center_node.circle.z_value;
+    this.webgl_objects_.circle.position.set(
             pos.x,
             pos.y,
             z_pos
