@@ -106,12 +106,31 @@ html, body {
     background: rgb(152, 187, 187);
     float: left;
     width: 100%;
+    min-height: 29px;
 }
 
 .webgl_toolbar_element {
     float: left;
     width: auto;
-    background: yellow;
+    background:rgb(82, 97, 88);
     padding: 5px;
     margin: 0 5px;
+    height: 19px;
+    border-radius: 5px;
+    border: 1px solid white;
+}
+
+.webgl_toolbar_element_label {
+    max-width: 65px;
+    float: left;
+    font-size: 10px;
+    text-align: right;
+    margin-top: -1px;
+    color: white;
+}
+
+.webgl_toolbar_element_icon {
+    width:20px;
+    height:20px;
+    float:left;
 }

@@ -6,6 +6,7 @@ GLVIS.RecDashboardHandler = function () {
     this.last_clicked_rec = null;
     this.last_clicked_col = null;
 
+    this.toolbar = new GLVIS.ToolbarHandler();
 };
 
 /**
@@ -20,7 +21,7 @@ GLVIS.RecDashboardHandler.prototype.onCollectionClick = function (collection) {
 
     this.last_clicked_col = collection;
 
-    this.hideRecButtons_();
+    this.toolbar.getButton("rec_focusparentcol").hide();
 };
 
 
@@ -35,29 +36,5 @@ GLVIS.RecDashboardHandler.prototype.onRecommendationClick = function (recommenda
     info_content_container.html("");
 
     this.last_clicked_rec = recommendation;
-
-    this.showRecButtons_();
+    this.toolbar.getButton("rec_focusparentcol").show();
 };
-
-
-
-GLVIS.RecDashboardHandler.prototype.hideRecButtons_ = function () {
-    jQuery('#webgl_toolbar_btn_rec_focusparentcol').hide();
-};
-
-GLVIS.RecDashboardHandler.prototype.showRecButtons_ = function () {
-    jQuery('#webgl_toolbar_btn_rec_focusparentcol').show();
-};
-
-
-
-
-jQuery('#webgl_toolbar_btn_rec_focusparentcol').click(function () {
-
-    var rdbh = GLVIS.Scene.getCurrentScene().getRecDashboardHandler();
-
-    var rec = rdbh.last_clicked_rec;
-    rec.defocusAndZoomOut();
-
-    rdbh.hideRecButtons_();
-});

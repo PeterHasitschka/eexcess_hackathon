@@ -179,7 +179,13 @@ GLVIS.config = {
         }
     },
     rec_dashboard: {
-        selector: '#webgl_canvas_container'
+        selector: '#webgl_canvas_container',
+        toolbar: {
+            selector: '#webgl_toolbar',
+            row_id_prefix: 'webgl_toolbar_row_',
+            section_id_prefix: 'webgl_toolbar_section_',
+            button_id_prefix: 'webgl_toolbar_btn_'
+        }
     },
     db: {
         query: {
