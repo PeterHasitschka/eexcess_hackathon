@@ -52,6 +52,8 @@ GLVIS.config = {
                 z_value: -19,
                 min_radius: 0.5,
                 active_radius: 10,
+                gap_inner_circle: 0.2,
+                z_diff_inner_circle: 0.001,
                 color_positive: 0x00CC00,
                 color_negative: 0xCC0000,
                 circle: {
