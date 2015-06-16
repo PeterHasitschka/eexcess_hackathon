@@ -31,6 +31,10 @@ GLVIS.Scene = function (canvas) {
         delta: null
     };
 
+    this.compare_ = {
+        direct: new GLVIS.DirectCompare()
+    };
+
     /**
      * Holding @see{GLVIS.Collection} objects
      */
@@ -117,6 +121,14 @@ GLVIS.Scene.prototype.getRecDashboardHandler = function () {
  */
 GLVIS.Scene.prototype.getCollectionPositionHandler = function () {
     return this.collection_position_handler_;
+};
+
+/**
+ * Returning the scene's compare objects
+ * @returns {}
+ */
+GLVIS.Scene.prototype.getComparer = function () {
+    return this.compare_;
 };
 
 

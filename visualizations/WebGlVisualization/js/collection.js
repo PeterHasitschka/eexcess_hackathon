@@ -256,7 +256,13 @@ GLVIS.Collection.prototype.setMyGlObjectsDirty_ = function () {
     }
 };
 
-
+/**
+ * Return all renderable objects that contain gl-related stuff
+ * @returns {object}
+ */
+GLVIS.Collection.prototype.getGlObjects = function () {
+    return this.vis_data_.gl_objects;
+};
 
 GLVIS.Collection.prototype.getId = function () {
     return this.id_;
@@ -421,7 +427,7 @@ GLVIS.Collection.prototype.getParentId = function () {
  * 
  * @returns {GLVIS.RingRepresentation}
  */
-GLVIS.Collection.prototype.getRingRepresentation = function(){
+GLVIS.Collection.prototype.getRingRepresentation = function () {
     return this.ring_representation_;
 };
 

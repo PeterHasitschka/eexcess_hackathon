@@ -1,5 +1,4 @@
 var GLVIS = GLVIS || {};
-
 /**
  * Toolbar for the visualization.
  * Holds rows, sections and buttons.
@@ -11,7 +10,6 @@ GLVIS.ToolbarHandler = function () {
     this.render();
     GLVIS.Debugger.debug("ToolbarHandler", "Creating toolbar", 3);
 };
-
 /**
  * Creates the HTML of the Toolbar.
  */
@@ -19,51 +17,37 @@ GLVIS.ToolbarHandler.prototype.render = function () {
 
     GLVIS.Debugger.debug("ToolbarHandler", "Rendering toolbar", 5);
     var toolbar_config = GLVIS.config.rec_dashboard.toolbar;
-
     this.buttons_ = [];
-
     for (var row_key in this.buttons) {
 
         var current_row = GLVIS.ToolbarHandler.prototype.buttons[row_key];
-
         var row_html = this.getRowHtml(row_key);
         jQuery(toolbar_config.selector).append(
                 row_html
                 );
-
         GLVIS.Debugger.debug("ToolbarHandler", "Adding row html for " + row_key, 5);
-
         for (var section_key in current_row) {
 
             var current_section = current_row[section_key];
-
             jQuery('#' + toolbar_config.row_id_prefix + row_key).append(
                     this.getSectionHtml(section_key)
                     );
-
             GLVIS.Debugger.debug("ToolbarHandler", "Adding section html for " + section_key, 5);
-
             for (var button_key in current_section) {
                 var button_data = current_section[button_key];
                 var button = new GLVIS.Button(button_key, button_data.label, button_data.icon);
-
                 jQuery('#' + toolbar_config.section_id_prefix + section_key).append(
                         button.toHtml()
                         );
-
                 GLVIS.Debugger.debug("ToolbarHandler", "Adding button html for " + button_key, 5);
-
                 button.onClick(button_data.fct);
-
                 if (button_data.visible === false)
                     button.hide();
-
                 this.buttons_.push(button);
             }
         }
     }
 };
-
 /**
  * Toolbar data
  * Each row holds sections that have the buttons.
@@ -88,12 +72,39 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                 label: "Zoom out to collection",
                 icon: "zoom-out.png",
                 visible: false
+            },
+            scene_directcompare_activate: {
+                fct: function (e) {
+                    var scene = GLVIS.Scene.getCurrentScene();
+                    scene.getComparer().direct.activate();
+                    var button = e.data.btn;
+                    button.hide();
+                    
+                    var rdbh = GLVIS.Scene.getCurrentScene().getRecDashboardHandler();
+                    rdbh.toolbar.getButton("scene_directcompare_deactivate").show();
+                },
+                label: "Turn On Direct-Compare",
+                icon: "xx.png",
+                visible: true
+            },
+            scene_directcompare_deactivate: {
+                fct: function (e) {
+                    var scene = GLVIS.Scene.getCurrentScene();
+                    scene.getComparer().direct.deactivate();
+                    var button = e.data.btn;
+                    button.hide();
+                    
+                    var rdbh = GLVIS.Scene.getCurrentScene().getRecDashboardHandler();
+                    rdbh.toolbar.getButton("scene_directcompare_activate").show();
+                },
+                label: "Turn Off Direct-Compare",
+                icon: "xx.png",
+                visible: false
             }
 
         }
     }
 };
-
 /**
  * Returns the button with the given identifier or null.
  * @param {String} id Identifier of the button to find
@@ -107,7 +118,6 @@ GLVIS.ToolbarHandler.prototype.getButton = function (id) {
     }
     return null;
 };
-
 /**
  * Returns the html string of the given row
  * @param {String} key
@@ -117,7 +127,6 @@ GLVIS.ToolbarHandler.prototype.getRowHtml = function (key) {
     var config = GLVIS.config.rec_dashboard.toolbar;
     return '<div class="webgl_toolbar_row" id="' + config.row_id_prefix + key + '"></div>';
 };
-
 /**
  * Returns the html string of the given section
  * @param {String} key

@@ -43,8 +43,7 @@ GLVIS.Recommendation = function (eexcess_data) {
         color: GLVIS.config.collection.recommendation.color,
         opacity: 1
         ,
-        gl_objects: [],
-        gl_node: null
+        gl_objects: []
     };
 
     /**

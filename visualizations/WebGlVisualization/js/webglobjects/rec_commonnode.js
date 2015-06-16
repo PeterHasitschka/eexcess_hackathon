@@ -84,6 +84,7 @@ GLVIS.RecommendationCommonNode.prototype.render = function () {
     this.webgl_objects_.circle.scale.set(scale_factor, scale_factor, scale_factor);
 
     this.webgl_objects_.circle.material.opacity = this.recommendation_.getOpacity();
+    this.webgl_objects_.circle.material.color.setHex(this.recommendation_.getColor());
 
 };
 

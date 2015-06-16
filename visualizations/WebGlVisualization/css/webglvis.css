@@ -113,7 +113,7 @@ html, body {
     float: left;
     width: auto;
     background:rgb(82, 97, 88);
-    padding: 5px;
+    padding: 4px;
     margin: 0 5px;
     height: 19px;
     border-radius: 5px;
@@ -123,7 +123,7 @@ html, body {
 .webgl_toolbar_element_label {
     max-width: 65px;
     float: left;
-    font-size: 10px;
+    font-size: 9px;
     text-align: right;
     margin-top: -1px;
     color: white;
