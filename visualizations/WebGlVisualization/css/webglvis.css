@@ -118,6 +118,11 @@ html, body {
     height: 19px;
     border-radius: 5px;
     border: 1px solid white;
+    cursor:pointer;
+}
+
+.webgl_toolbar_element:hover {
+    background:rgb(54, 129, 84);
 }
 
 .webgl_toolbar_element_label {

@@ -84,7 +84,7 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                     rdbh.toolbar.getButton("scene_directcompare_deactivate").show();
                 },
                 label: "Turn On Direct-Compare",
-                icon: "xx.png",
+                icon: "compare.png",
                 visible: true
             },
             scene_directcompare_deactivate: {
@@ -98,7 +98,7 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                     rdbh.toolbar.getButton("scene_directcompare_activate").show();
                 },
                 label: "Turn Off Direct-Compare",
-                icon: "xx.png",
+                icon: "compare.png",
                 visible: false
             }
 
