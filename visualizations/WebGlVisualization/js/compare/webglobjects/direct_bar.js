@@ -6,8 +6,10 @@ GLVIS.DirectCompareBar = function (collection, percent) {
     this.dirty_ = true;
     this.collection_ = collection;
     this.percent_ = percent;
-
+    
+    /** @type {GLVIS.Text} **/
     this.label_ = null;
+    
     this.webgl_objects_ = {
         bar_pos: null,
         bar_meg: null
@@ -18,17 +20,27 @@ GLVIS.DirectCompareBar = function (collection, percent) {
 
 GLVIS.DirectCompareBar.prototype.initGlObjects = function () {
 
+    var config = GLVIS.config.collection.compare.directcompare.bar;
+
+    var total_width = config.width;
+    var pos_width = total_width * this.percent_ * 0.01;
+    var neg_width = total_width - pos_width;
+
+    var height = config.height;
 
 
+    /**
+     * POSITIVE (green) Bar
+     */
     var mat_positive =
             new THREE.MeshBasicMaterial(
                     {
-                        color: 0x00FF00,
+                        color: config.color_pos,
                         transparent: true,
                         side: THREE.DoubleSide
                     });
 
-    var geometry_positive = new THREE.PlaneGeometry(20, 10);
+    var geometry_positive = new THREE.PlaneBufferGeometry(pos_width, height);
     var rect_positive = new THREE.Mesh(geometry_positive, mat_positive);
 
     //Register click-function
@@ -38,16 +50,18 @@ GLVIS.DirectCompareBar.prototype.initGlObjects = function () {
     };
 
 
-
+    /**
+     * NEGATIVE (red) Bar
+     */
     var mat_negative =
             new THREE.MeshBasicMaterial(
                     {
-                        color: 0xFF0000,
+                        color: config.color_neg,
                         transparent: true,
                         side: THREE.DoubleSide
                     });
 
-    var geometry_negative = new THREE.PlaneGeometry(10, 10);
+    var geometry_negative = new THREE.PlaneBufferGeometry(neg_width, height);
     var rect_negative = new THREE.Mesh(geometry_negative, mat_negative);
 
     //Register click-function
@@ -57,6 +71,19 @@ GLVIS.DirectCompareBar.prototype.initGlObjects = function () {
     };
 
 
+
+    /**
+     * LABEL
+     */
+    var label_options = {
+      color:config.label_color,
+      pos_x : this.collection_.getPosition().x,
+      pos_y : this.collection_.getPosition().y + config.y_offset + config.label_y_offset
+    };
+    
+    var beauty_percent = Math.round(this.percent_);
+    var label = new GLVIS.Text(beauty_percent+" %",label_options);
+    this.label_ = label;
 
     var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
 
@@ -75,20 +102,32 @@ GLVIS.DirectCompareBar.prototype.render = function () {
 
     console.log("DUMMY RENDER COMPARE BAR");
 
+    var config = GLVIS.config.collection.compare.directcompare.bar;
+
+    var total_width = config.width;
+    var pos_width = total_width * this.percent_ * 0.01;
+    var neg_width = total_width - pos_width;
+
+    /**
+     * Remember that the center of the mesh is used for positioning!
+     */
     var pos = this.collection_.getPosition();
+    var pos_x_positive = pos.x-total_width/2 + (pos_width/2);
+    var pos_x_negative = pos_x_positive + pos_width/2 + neg_width/2;
 
     this.webgl_objects_.bar_pos.position.set(
-            pos.x,
-            pos.y - 200,
-            -10
+            pos_x_positive,
+            pos.y + config.y_offset,
+            config.z_value
             );
 
     this.webgl_objects_.bar_neg.position.set(
-            pos.x + 15,
-            pos.y - 200,
-            -10
+            pos_x_negative,
+            pos.y + config.y_offset,
+            config.z_value
             );
-
+    
+    this.label_.render();
     this.setIsDirty(false);
 };
 
@@ -99,7 +138,10 @@ GLVIS.DirectCompareBar.prototype.delete = function () {
 
     three_scene.remove(this.webgl_objects_.bar_pos);
     three_scene.remove(this.webgl_objects_.bar_neg);
-
+    
+    this.label_.delete();
+    delete this.label_;
+    
     delete this.webgl_objects_.bar_pos;
     delete this.webgl_objects_.bar_neg;
 };

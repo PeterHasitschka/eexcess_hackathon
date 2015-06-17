@@ -137,6 +137,20 @@ GLVIS.config = {
             min_font_size: 15,
             weight_size_pow: 0.5,
             weight_opacity_pow: 0.5
+        },
+        compare: {
+            directcompare: {
+                bar: {
+                    color_pos: 0x5bdc5b,
+                    color_neg: 0xd85353,
+                    width: 140,
+                    height: 20,
+                    y_offset: -180,
+                    z_value: -10,
+                    label_y_offset: 1.3,
+                    label_color: "#FFFFFF"
+                }
+            }
         }
     },
     connection: {

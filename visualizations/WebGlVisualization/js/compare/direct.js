@@ -50,7 +50,7 @@ GLVIS.DirectCompare.prototype.compareCollection_ = function (collection) {
     }
 
     this.removeBarFromCollection_(collection);
-    var compare_bar = new GLVIS.DirectCompareBar(collection, 42);
+    var compare_bar = new GLVIS.DirectCompareBar(collection, 42.0345);
     this.addBarToCollection_(collection, compare_bar);
 };
 
