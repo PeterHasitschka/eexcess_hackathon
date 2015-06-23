@@ -175,7 +175,6 @@ GLVIS.Text.prototype.updateWebGlObj = function () {
 GLVIS.Text.prototype.handleMouseover = function () {
     var that = this.label;
     that.highlight();
-    that.unhighlight_canditate = false;
 
     console.log("HANDLE MOUSE OVER LABEL");
 
@@ -187,16 +186,19 @@ GLVIS.Text.prototype.handleMouseover = function () {
 GLVIS.Text.prototype.highlight = function () {
 
     this.old_bg_color = this.bg_color_;
-    this.setBgColor("#FF0000");
+    this.setBgColor("#AA0000");
 };
 
 GLVIS.Text.prototype.unHighlight = function () {
     /* if (this.old_bg_color)
      this.setBgColor(this.old_bg_color);
      else */
-    this.setBgColor("#0000FF");
+    this.setBgColor(null);
     this.old_bg_color = null;
     console.log("UNHIGHLIGHTING");
+
+    if (GLVIS.Text.current_selected && GLVIS.Text.current_selected === this)
+        GLVIS.Text.current_selected = null;
 };
 
 

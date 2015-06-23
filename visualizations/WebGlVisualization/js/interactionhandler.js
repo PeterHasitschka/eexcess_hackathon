@@ -97,11 +97,6 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
     if (interaction_type === "mouseclick")
         this.deselectAllCollections();
 
-    //Flag current highlighted label as unhighlight-canditate
-    //If highlighted again -> don't unhighlight
-    if (GLVIS.Text.current_selected)
-        GLVIS.Text.current_selected.unhighlight_canditate = true;
-
 
     var intersected = this.getIntersectedObjects_(event);
 
@@ -131,15 +126,11 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
             }
         }
     }
-
-
-    //If unhighlight-canditate flag still set, it was not intersected anymore -> unhighlight
-    if (GLVIS.Text.current_selected) {
-        if (GLVIS.Text.current_selected.unhighlight_canditate) {
-             console.log("current selected still has flag -> unhighlight");
-            GLVIS.Text.current_selected.unHighlight();
-            GLVIS.Text.current_selected = null;
-        }
+    
+    
+    if (GLVIS.Text.current_selected && !intersected.length) {
+        GLVIS.Text.current_selected.unHighlight();
+        GLVIS.Text.current_selected = null;
     }
 
 
