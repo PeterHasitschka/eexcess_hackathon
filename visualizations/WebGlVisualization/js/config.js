@@ -126,6 +126,8 @@ GLVIS.config = {
 
         },
         labels: {
+            columns: 3,
+            column_distance: 100,
             vertical_offset: 200,
             title_color: "#CC0000",
             distance: 25,
@@ -133,8 +135,8 @@ GLVIS.config = {
             max_opacity: 0.9,
             min_opacity: 0.5,
             init_font_size: 20,
-            max_font_size: 30,
-            min_font_size: 15,
+            max_font_size: 22,
+            min_font_size: 13,
             weight_size_pow: 0.5,
             weight_opacity_pow: 0.5
         },

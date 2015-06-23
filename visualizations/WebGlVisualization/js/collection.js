@@ -300,19 +300,42 @@ GLVIS.Collection.prototype.rebuildLabelPositions = function () {
 
     GLVIS.Debugger.debug("Collection", "Rebuilding Text positions", 7);
 
+    if (!this.labels_.length)
+        return;
+
     var config = GLVIS.config.collection.labels;
     var vert_dist = config.distance;
 
     var vert_offset = config.vertical_offset;
 
-    var c_x = this.vis_data_.position.x;
-    var c_y = this.vis_data_.position.y;
-    for (var i = 0; i < this.labels_.length; i++) {
 
-        /** @type {GLVIS.Text} **/
-        var curr_label = this.labels_[i];
-        curr_label.setPosition(c_x, c_y + i * vert_dist + vert_offset);
+    var title_label = this.labels_[0];
+    title_label.setPosition(this.vis_data_.position.x, this.vis_data_.position.y + vert_offset);
+
+    var c_x_start = this.vis_data_.position.x - (((config.columns - 1) / 2) * config.column_distance);
+
+    // -1 due to seperate treating of title label
+    var elements_per_col = Math.round((this.labels_.length - 1) / config.columns);
+    for (var c_count = 0; c_count < config.columns; c_count++) {
+
+        var c_x = c_x_start + c_count * config.column_distance;
+
+        for (var r_count = 0; r_count < elements_per_col; r_count++) {
+
+            var c_y = this.vis_data_.position.y + (r_count + 1) * vert_dist + vert_offset;
+
+            var label_index = c_count * elements_per_col + r_count + 1;
+            if (label_index >= this.labels_.length)
+                break;
+
+            /** @type {GLVIS.Text} **/
+            var curr_label = this.labels_[label_index];
+            curr_label.setPosition(c_x, c_y);
+
+        }
+
     }
+
 };
 
 /**
