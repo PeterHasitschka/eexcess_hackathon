@@ -139,6 +139,8 @@ GLVIS.config = {
             weight_opacity_pow: 0.5
         },
         compare: {
+            color_pos: 0x5bdc5b,
+            color_neg: 0xd85353,
             directcompare: {
                 bar: {
                     color_pos: 0x5bdc5b,
