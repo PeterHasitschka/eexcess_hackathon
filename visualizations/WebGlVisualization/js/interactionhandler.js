@@ -45,6 +45,10 @@ GLVIS.InteractionHandler = function (scene) {
         });
 
         jQuery(canvas).mousemove(function (event) {
+
+            that.handleInteraction_(event, "mouseover");
+
+
             if (!is_mouse_down_in_canvas)
                 return;
             var zoom_factor = 1 / that.scene_.getNavigationHandler().getZoomFactor();
@@ -55,6 +59,7 @@ GLVIS.InteractionHandler = function (scene) {
             that.scene_.getNavigationHandler().moveCamera(curr_mouse_x_diff, curr_mouse_y_diff);
             mouse_x_prev = event.clientX;
             mouse_y_prev = event.clientY;
+
         });
 
 
@@ -88,11 +93,20 @@ GLVIS.InteractionHandler.prototype.deselectAllCollections = function () {
  * @param {string} interaction_type e.g  'mouseclick', 'mouseover' ...
  */
 GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interaction_type) {
-    this.deselectAllCollections();
+
+    if (interaction_type === "mouseclick")
+        this.deselectAllCollections();
+
+    //Flag current highlighted label as unhighlight-canditate
+    //If highlighted again -> don't unhighlight
+    if (GLVIS.Text.current_selected)
+        GLVIS.Text.current_selected.unhighlight_canditate = true;
+
+
     var intersected = this.getIntersectedObjects_(event);
 
     GLVIS.Debugger.debug("InteractionHandler",
-            "HANDLING CLICK ON SCENE", 5);
+            "HANDLING SCENE INTERACTION EVENT '" + interaction_type + "'", 6);
 
     for (var i_count = 0; i_count < intersected.length; i_count++)
     {
@@ -118,17 +132,18 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
         }
     }
 
-    /**
-     * If clicked on no object we can defocus all recommendations
-     */
-    /*
-     if (!intersected.length) {
-     if (GLVIS.Recommendation.current_selected_rec) {
-     GLVIS.Recommendation.current_selected_rec.defocusAndZoomOut();
-     }
-     
-     }
-     */
+
+    //If unhighlight-canditate flag still set, it was not intersected anymore -> unhighlight
+    if (GLVIS.Text.current_selected) {
+        if (GLVIS.Text.current_selected.unhighlight_canditate) {
+             console.log("current selected still has flag -> unhighlight");
+            GLVIS.Text.current_selected.unHighlight();
+            GLVIS.Text.current_selected = null;
+        }
+    }
+
+
+
 };
 
 

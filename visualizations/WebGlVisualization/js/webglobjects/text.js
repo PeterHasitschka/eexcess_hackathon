@@ -156,6 +156,13 @@ GLVIS.Text.prototype.updateWebGlObj = function () {
     var scale = 1.0 / this.render_factor_;
     mesh.scale.set(scale, scale, scale);
 
+    mesh.interaction = {
+        "mouseover": this.handleMouseover,
+        "label": this
+    };
+
+
+
     GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().remove(this.webgl_objects_.mesh);
     this.webgl_objects_.mesh = mesh;
     GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(mesh);
@@ -165,7 +172,32 @@ GLVIS.Text.prototype.updateWebGlObj = function () {
 };
 
 
+GLVIS.Text.prototype.handleMouseover = function () {
+    var that = this.label;
+    that.highlight();
+    that.unhighlight_canditate = false;
 
+    console.log("HANDLE MOUSE OVER LABEL");
+
+    if (GLVIS.Text.current_selected && GLVIS.Text.current_selected !== that)
+        GLVIS.Text.current_selected.unHighlight();
+    GLVIS.Text.current_selected = that;
+};
+
+GLVIS.Text.prototype.highlight = function () {
+
+    this.old_bg_color = this.bg_color_;
+    this.setBgColor("#FF0000");
+};
+
+GLVIS.Text.prototype.unHighlight = function () {
+    /* if (this.old_bg_color)
+     this.setBgColor(this.old_bg_color);
+     else */
+    this.setBgColor("#0000FF");
+    this.old_bg_color = null;
+    console.log("UNHIGHLIGHTING");
+};
 
 
 GLVIS.Text.prototype.render = function () {
@@ -279,3 +311,6 @@ GLVIS.Text.prototype.delete = function () {
     var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
     three_scene.remove(this.webgl_objects_.mesh);
 };
+
+
+GLVIS.Text.current_selected = null;
