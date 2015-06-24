@@ -67,6 +67,12 @@ GLVIS.Collection = function (eexcess_data) {
     this.ring_representation_ = null;
 
     /**
+     * Created when needed
+     * @type {GLVIS.HighlightRecsByLabel}
+     */
+    this.highlight_recs_by_label_ = null;
+
+    /**
      * Handles the positions of the recommendations
      * @type{GLVIS.RecommendationPosDistributed} 
      */
@@ -156,13 +162,40 @@ GLVIS.Collection.prototype.initLabels = function () {
             opacity = Math.max(config.min_opacity, opacity);
 
 
-            var text_element = new GLVIS.Text(text, {
-                font_size: fontsize,
-                opacity: opacity
-            },
-            {
-                color: config.highlight_color
-            });
+            var mouse_over_fct = function (text, data) {
+
+                /** @type{GLVIS.Collection} **/
+                var collection = data.collection;
+                var highlighter = collection.getHighlightRecsByLabel();
+
+                if (highlighter.getCurrentHighlightedLabel() === text)
+                    return;
+
+                highlighter.highlight(text);
+            };
+
+            var mouse_leave_fct = function (text, data) {
+                /** @type{GLVIS.Collection} **/
+                var collection = data.collection;
+                var highlighter = collection.getHighlightRecsByLabel();
+
+                if (highlighter.getCurrentHighlightedLabel() === text)
+                    highlighter.unHighlight();
+                
+            };
+
+            var mouse_data = {
+                collection: this
+            };
+
+            var text_element = new GLVIS.Text(
+                    text,
+                    {font_size: fontsize, opacity: opacity},
+            {color: config.highlight_color},
+            mouse_over_fct,
+                    mouse_leave_fct,
+                    mouse_data
+                    );
 
             this.labels_.push(text_element);
         }
@@ -456,6 +489,19 @@ GLVIS.Collection.prototype.getParentId = function () {
 GLVIS.Collection.prototype.getRingRepresentation = function () {
     return this.ring_representation_;
 };
+
+/**
+ * Returns the Highlighter for recs by label
+ * @returns {GLVIS.HighlightRecsByLabel}
+ */
+GLVIS.Collection.prototype.getHighlightRecsByLabel = function () {
+    if (!this.highlight_recs_by_label_)
+        this.highlight_recs_by_label_ = new GLVIS.HighlightRecsByLabel(this);
+
+    return this.highlight_recs_by_label_;
+};
+
+
 
 
 /******************

@@ -6,8 +6,10 @@ GLVIS = GLVIS || {};
  * @param {string} text Text to be rendered
  * @param {object} options Options. Possible values 'color', 'bg_color' 'font_size', 'font', 'opacity', 'pos_x', pos_y', 'pos_z', 'render_factor'
  * @param {object} highlight_options Options for highlighting. Possible vals: color, bg_color, opacity
+ * @param {function} mouseover_fct Function called at mouse-over. First param: This object. Second param: mouse_fct
+ * @param {function} mouseleave_fct Function called at mouse-over. First param: This object. Second param: mouse_fct
  * */
-GLVIS.Text = function (text, options, highlight_options) {
+GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouseleave_fct, mouse_fct_data) {
 
     var config = GLVIS.config.text;
 
@@ -51,6 +53,10 @@ GLVIS.Text = function (text, options, highlight_options) {
     this.h_color_ = init_highlight_data.color;
     this.h_bg_color_ = init_highlight_data.bg_color;
     this.h_opacity_ = init_highlight_data.opacity;
+
+    this.mouse_over_fct_ = mouseover_fct;
+    this.mouse_leave_fct_ = mouseleave_fct;
+    this.mouse_fct_data_ = mouse_fct_data;
 
     this.pos_ = {
         x: init_data.pos_x,
@@ -221,6 +227,22 @@ GLVIS.Text.prototype.handleMouseover = function () {
     if (GLVIS.Text.current_selected && GLVIS.Text.current_selected !== that)
         GLVIS.Text.current_selected.unHighlight();
     GLVIS.Text.current_selected = that;
+    
+    if (that.mouse_over_fct_)
+        that.mouse_over_fct_(that, that.mouse_fct_data_);
+};
+
+/**
+ * Handling mouse-leave. Called by interaction handler
+ */
+GLVIS.Text.prototype.handleMouseleave = function () {
+    this.unHighlight();
+
+    GLVIS.Text.current_selected = null;
+    
+
+    if (this.mouse_leave_fct_)
+        this.mouse_leave_fct_(this, this.mouse_fct_data_);
 };
 
 /**

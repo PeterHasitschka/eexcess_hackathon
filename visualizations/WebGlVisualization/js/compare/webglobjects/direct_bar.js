@@ -99,9 +99,6 @@ GLVIS.DirectCompareBar.prototype.render = function () {
     if (!this.dirty_)
         return;
 
-
-    console.log("DUMMY RENDER COMPARE BAR");
-
     var config = GLVIS.config.collection.compare.directcompare.bar;
 
     var total_width = config.width;
@@ -132,7 +129,6 @@ GLVIS.DirectCompareBar.prototype.render = function () {
 };
 
 GLVIS.DirectCompareBar.prototype.delete = function () {
-    console.log("DUMMY DELETE COMPARE BAR");
 
     var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
 
