@@ -159,6 +159,9 @@ GLVIS.Collection.prototype.initLabels = function () {
             var text_element = new GLVIS.Text(text, {
                 font_size: fontsize,
                 opacity: opacity
+            },
+            {
+                color: config.highlight_color
             });
 
             this.labels_.push(text_element);

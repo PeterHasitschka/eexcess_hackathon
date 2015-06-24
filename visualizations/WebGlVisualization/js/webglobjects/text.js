@@ -5,8 +5,9 @@ GLVIS = GLVIS || {};
  * 
  * @param {string} text Text to be rendered
  * @param {object} options Options. Possible values 'color', 'bg_color' 'font_size', 'font', 'opacity', 'pos_x', pos_y', 'pos_z', 'render_factor'
- */
-GLVIS.Text = function (text, options) {
+ * @param {object} highlight_options Options for highlighting. Possible vals: color, bg_color, opacity
+ * */
+GLVIS.Text = function (text, options, highlight_options) {
 
     var config = GLVIS.config.text;
 
@@ -27,6 +28,18 @@ GLVIS.Text = function (text, options) {
         init_data[key] = options[key];
     }
 
+    var init_highlight_data = {
+        color: init_data.color,
+        bg_color: init_data.bg_color,
+        opacity: init_data.opacity
+    };
+
+    //Overwrite init hightlight config
+    if (highlight_options)
+        for (var key in highlight_options) {
+            init_highlight_data[key] = highlight_options[key];
+        }
+
     this.dirty_ = true;
     this.render_factor_ = init_data.render_factor;
     this.text_ = text;
@@ -35,6 +48,9 @@ GLVIS.Text = function (text, options) {
     this.color_ = init_data.color;
     this.bg_color_ = init_data.bg_color;
     this.opacity_ = init_data.opacity;
+    this.h_color_ = init_highlight_data.color;
+    this.h_bg_color_ = init_highlight_data.bg_color;
+    this.h_opacity_ = init_highlight_data.opacity;
 
     this.pos_ = {
         x: init_data.pos_x,
@@ -42,10 +58,16 @@ GLVIS.Text = function (text, options) {
         z: init_data.pos_z
     };
 
+    /**
+     * Mesh Focus: Necessary to create second mesh. Updating with e.g. other font-
+     * size or background for highlighting leads to unsetting and recreating mesh.
+     * That causes flickering on mouse-over intersection because the mesh may not exist
+     * at the moment. So it's necessary to prevent recreation on highlight
+     */
     this.webgl_objects_ = {
-        mesh: null
+        mesh: null,
+        mesh_focus: null
     };
-
 
     this.updateWebGlObj();
     //GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(this.webgl_objects_.mesh);
@@ -95,6 +117,36 @@ GLVIS.Text.prototype.updateWebGlObj = function () {
 
     this.size_ = this.calculateSize_();
 
+    var mesh = this.createMesh(this.font_, this.font_size_, this.color_, this.bg_color_, this.opacity_);
+    mesh.interaction = {
+        "mouseover": this.handleMouseover,
+        "label": this
+    };
+    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().remove(this.webgl_objects_.mesh);
+    this.webgl_objects_.mesh = mesh;
+    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(mesh);
+
+
+    var mesh_focus = this.createMesh(this.font_, this.font_size_, this.h_color_, this.h_bg_color_, this.h_opacity_);
+    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().remove(this.webgl_objects_.mesh_focus);
+    this.webgl_objects_.mesh_focus = mesh_focus;
+    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(mesh_focus);
+    mesh_focus.visible = false;
+
+    this.setIsDirty(true);
+};
+
+/**
+ * Create a Plane mesh with text-texture
+ * @param {type} font
+ * @param {type} font_size
+ * @param {type} color
+ * @param {type} bg_color
+ * @param {type} opacity
+ * @returns {THREE.Mesh}
+ */
+GLVIS.Text.prototype.createMesh = function (font, font_size, color, bg_color, opacity) {
+
     var config = GLVIS.config.text;
 
     var canvas = document.createElement('canvas');
@@ -109,18 +161,17 @@ GLVIS.Text.prototype.updateWebGlObj = function () {
     var context = canvas.getContext('2d');
 
     //If background-color set -> make rectangle
-    if (this.bg_color_) {
+    if (bg_color) {
         context.rect(0, 0, w, h);
-        context.fillStyle = this.bg_color_;
+        context.fillStyle = bg_color;
         context.fill();
     }
 
-
-    context.font = this.font_;
-    context.fillStyle = this.color_;
+    context.font = font;
+    context.fillStyle = color;
 
     //Vertical center alignment
-    var diff_size_font = h - this.font_size_ * this.render_factor_;
+    var diff_size_font = h - font_size * this.render_factor_;
     context.fillText(this.text_, 0, h - diff_size_font * 2);
 
 
@@ -128,77 +179,65 @@ GLVIS.Text.prototype.updateWebGlObj = function () {
     texture.needsUpdate = true;
     texture.flipY = false;
 
+    //Get rid of the "not power of 2" warning
+    texture.minFilter = THREE.LinearFilter;
+
     var material = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
     material.transparent = true;
-    material.opacity = this.opacity_;
+    material.opacity = opacity;
 
     /**
      * TRUE if background
      * FALSE if tansparent!!!
      */
-    if (this.bg_color_)
+    if (bg_color)
         material.depthTest = true;
     else
         material.depthTest = false;
-
-    var mesh = new THREE.Mesh(
-            new THREE.PlaneBufferGeometry(canvas.width, canvas.height),
-            material
-            );
 
     var x = this.pos_.x;
     var y = this.pos_.y;
     var z = this.pos_.z;
 
-    mesh.position.set(x, y, z);
-
-
     var scale = 1.0 / this.render_factor_;
+
+    var mesh = new THREE.Mesh(
+            new THREE.PlaneBufferGeometry(canvas.width, canvas.height),
+            material
+            );
+    mesh.position.set(x, y, z);
     mesh.scale.set(scale, scale, scale);
 
-    mesh.interaction = {
-        "mouseover": this.handleMouseover,
-        "label": this
-    };
-
-
-
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().remove(this.webgl_objects_.mesh);
-    this.webgl_objects_.mesh = mesh;
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(mesh);
-
-    this.setIsDirty(true);
-
+    return mesh;
 };
 
-
+/**
+ * Handling a mouseover event. Called by the mesh's mouseover callback
+ */
 GLVIS.Text.prototype.handleMouseover = function () {
     var that = this.label;
     that.highlight();
-
-    console.log("HANDLE MOUSE OVER LABEL");
 
     if (GLVIS.Text.current_selected && GLVIS.Text.current_selected !== that)
         GLVIS.Text.current_selected.unHighlight();
     GLVIS.Text.current_selected = that;
 };
 
+/**
+ * Swapping normal and hightlight mesh
+ */
 GLVIS.Text.prototype.highlight = function () {
 
-    this.old_bg_color = this.bg_color_;
-    this.setBgColor("#AA0000");
+    this.webgl_objects_.mesh_focus.visible = true;
+    this.webgl_objects_.mesh.visible = false;
 };
 
+/**
+ * Swapping normal and hightlight mesh
+ */
 GLVIS.Text.prototype.unHighlight = function () {
-    /* if (this.old_bg_color)
-     this.setBgColor(this.old_bg_color);
-     else */
-    this.setBgColor(null);
-    this.old_bg_color = null;
-    console.log("UNHIGHLIGHTING");
-
-    if (GLVIS.Text.current_selected && GLVIS.Text.current_selected === this)
-        GLVIS.Text.current_selected = null;
+    this.webgl_objects_.mesh.visible = true;
+    this.webgl_objects_.mesh_focus.visible = false;
 };
 
 
@@ -221,6 +260,8 @@ GLVIS.Text.prototype.render = function () {
     this.webgl_objects_.mesh.position.set(pos_x, pos_y, pos_z);
     this.webgl_objects_.mesh.material.opacity = this.opacity_;
 
+    this.webgl_objects_.mesh_focus.position.set(pos_x, pos_y, pos_z);
+    this.webgl_objects_.mesh_focus.material.opacity = this.opacity_;
     this.setIsDirty(false);
 };
 

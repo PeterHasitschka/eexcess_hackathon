@@ -130,6 +130,7 @@ GLVIS.config = {
             column_distance: 100,
             vertical_offset: 200,
             title_color: "#CC0000",
+            highlight_color: "#0000FF",
             distance: 25,
             init_opacity: 0.7,
             max_opacity: 0.9,

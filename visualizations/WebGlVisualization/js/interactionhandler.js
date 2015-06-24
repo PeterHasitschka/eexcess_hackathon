@@ -127,7 +127,9 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
         }
     }
     
-    
+    /**
+     * Unhighlighting last highlighted text if exists.
+     */
     if (GLVIS.Text.current_selected && !intersected.length) {
         GLVIS.Text.current_selected.unHighlight();
         GLVIS.Text.current_selected = null;
