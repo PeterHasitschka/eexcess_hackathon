@@ -161,27 +161,38 @@ GLVIS.Collection.prototype.initLabels = function () {
             opacity = Math.min(config.max_opacity, opacity);
             opacity = Math.max(config.min_opacity, opacity);
 
-
+            /**
+             * Function called in Label when mouse-overed.
+             * For highlighting recs by label
+             * @param {type} text Inserted by label
+             * @param {type} data see mouse_data
+             */
             var mouse_over_fct = function (text, data) {
 
                 /** @type{GLVIS.Collection} **/
                 var collection = data.collection;
                 var highlighter = collection.getHighlightRecsByLabel();
 
-                if (highlighter.getCurrentHighlightedLabel() === text)
+                if (highlighter.getCurrentHighlightedLabel() === text.getText())
                     return;
 
                 highlighter.highlight(text);
             };
 
+            /**
+             * Function called in Label when mouse-leaved.
+             * For unhighlighting recs by label
+             * @param {type} text Inserted by label
+             * @param {type} data see mouse_data
+             */
             var mouse_leave_fct = function (text, data) {
                 /** @type{GLVIS.Collection} **/
                 var collection = data.collection;
                 var highlighter = collection.getHighlightRecsByLabel();
 
-                if (highlighter.getCurrentHighlightedLabel() === text)
+                if (highlighter.getCurrentHighlightedLabel() === text.getText())
                     highlighter.unHighlight();
-                
+
             };
 
             var mouse_data = {

@@ -38,6 +38,7 @@ GLVIS.config = {
             collapse_distance: 15,
             radius: 5.0,
             color: 0x4444FF,
+            highlight_color: 0xFF0000,
             common_node: {
                 z_value: -19,
                 min_radius: 0.5,

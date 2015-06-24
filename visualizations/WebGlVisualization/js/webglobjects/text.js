@@ -227,7 +227,7 @@ GLVIS.Text.prototype.handleMouseover = function () {
     if (GLVIS.Text.current_selected && GLVIS.Text.current_selected !== that)
         GLVIS.Text.current_selected.unHighlight();
     GLVIS.Text.current_selected = that;
-    
+
     if (that.mouse_over_fct_)
         that.mouse_over_fct_(that, that.mouse_fct_data_);
 };
@@ -239,7 +239,7 @@ GLVIS.Text.prototype.handleMouseleave = function () {
     this.unHighlight();
 
     GLVIS.Text.current_selected = null;
-    
+
 
     if (this.mouse_leave_fct_)
         this.mouse_leave_fct_(this, this.mouse_fct_data_);
@@ -262,7 +262,9 @@ GLVIS.Text.prototype.unHighlight = function () {
     this.webgl_objects_.mesh_focus.visible = false;
 };
 
-
+/**
+ * Rendering the Text object and its meshes
+ */
 GLVIS.Text.prototype.render = function () {
 
     if (!this.dirty_) {
@@ -286,7 +288,6 @@ GLVIS.Text.prototype.render = function () {
     this.webgl_objects_.mesh_focus.material.opacity = this.opacity_;
     this.setIsDirty(false);
 };
-
 
 /**
  * Sets color. Leads to recreation of WebGl-Object
@@ -325,6 +326,14 @@ GLVIS.Text.prototype.setText = function (text) {
 };
 
 /**
+ * Return text
+ * @return{String} Setted Text of label
+ */
+GLVIS.Text.prototype.getText = function () {
+    return this.text_;
+};
+
+/**
  * Sets opacity
  * @param {float} opacity Opacity
  */
@@ -332,8 +341,6 @@ GLVIS.Text.prototype.setOpacity = function (opacity) {
     this.opacity_ = opacity;
     this.setIsDirty(true);
 };
-
-
 
 /**
  * 
@@ -358,7 +365,6 @@ GLVIS.Text.prototype.setPosition = function (x, y) {
     this.setIsDirty(true);
 };
 
-
 GLVIS.Text.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 };
@@ -366,7 +372,6 @@ GLVIS.Text.prototype.setIsDirty = function (dirty) {
 GLVIS.Text.prototype.getIsDirty = function () {
     return this.dirty_;
 };
-
 
 /**
  * Delete all webgl-objects
