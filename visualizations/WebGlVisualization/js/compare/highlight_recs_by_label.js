@@ -14,6 +14,8 @@ GLVIS.HighlightRecsByLabel = function (collection) {
     /** @type{GLVIS.Collection} **/
     this.collection_ = collection;
     this.current_highlight_ = null;
+
+    this.previous_rec_colors_ = {};
 };
 
 /**
@@ -46,6 +48,7 @@ GLVIS.HighlightRecsByLabel.prototype.highlight = function (label) {
             GLVIS.Debugger.debug("HighlightRecsByLabel",
                     "Highlighting rec " + curr_rec.getId() + " for label " + lc_label_text, 4);
 
+            this.previous_rec_colors_[curr_rec.getId()] = curr_rec.getColor();
             curr_rec.setColor(GLVIS.config.collection.recommendation.highlight_color);
         }
     }
@@ -63,8 +66,12 @@ GLVIS.HighlightRecsByLabel.prototype.unHighlight = function () {
 
         /** @type{GLVIS.Recommendation} **/
         var curr_rec = recs[i];
-        curr_rec.setColor(GLVIS.config.collection.recommendation.color);
+       
+        if (this.previous_rec_colors_[curr_rec.getId()] !== undefined)
+            curr_rec.setColor(this.previous_rec_colors_[curr_rec.getId()]);
     }
+
+    this.previous_rec_colors_ = {};
 };
 
 /**
