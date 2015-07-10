@@ -100,6 +100,18 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                 label: "Turn Off Direct-Compare",
                 icon: "compare.png",
                 visible: false
+            },
+            rec_spline_demo: {
+                fct: function (e) {
+                    var scene = GLVIS.Scene.getCurrentScene();
+                    scene.getComparer().direct.deactivate();
+                    
+                    
+                    var spline = new GLVIS.ConnectionRecRecSpline();
+                    
+                },
+                label: "Demo spline",
+                visible: true
             }
 
         }

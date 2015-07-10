@@ -32,6 +32,7 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                     require([
                         path + "../../../libs/jquery-1.10.1.min.js",
                         path + "../../../libs/jquery-mousewheel/jquery.mousewheel.min.js",
+                        path + "lib/underscore/underscore.js",
                         path + "lib/three.js/three.min.js"],
                             function () {
                                 require([
@@ -66,6 +67,7 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                     path + "js/position/collection/linear.js",
                                     path + "js/webglobjects/connection/collection_rec_line.js",
                                     path + "js/webglobjects/connection/collection_collection_line.js",
+                                    path + "js/webglobjects/connection/rec_rec_spline.js",
                                     path + "js/scene.js",
                                     path + "../../../common_js/storage.js",
                                     path + "../Vis-Template/js/utils.js", //Important to prevent .scrollTo-Bug
