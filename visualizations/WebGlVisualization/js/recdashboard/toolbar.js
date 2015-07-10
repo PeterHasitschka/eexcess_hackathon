@@ -79,7 +79,7 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                     scene.getComparer().direct.activate();
                     var button = e.data.btn;
                     button.hide();
-                    
+
                     var rdbh = GLVIS.Scene.getCurrentScene().getRecDashboardHandler();
                     rdbh.toolbar.getButton("scene_directcompare_deactivate").show();
                 },
@@ -93,7 +93,7 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                     scene.getComparer().direct.deactivate();
                     var button = e.data.btn;
                     button.hide();
-                    
+
                     var rdbh = GLVIS.Scene.getCurrentScene().getRecDashboardHandler();
                     rdbh.toolbar.getButton("scene_directcompare_activate").show();
                 },
@@ -105,10 +105,14 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                 fct: function (e) {
                     var scene = GLVIS.Scene.getCurrentScene();
                     scene.getComparer().direct.deactivate();
-                    
-                    
+                    var colls = scene.getCollections();
+
                     var spline = new GLVIS.ConnectionRecRecSpline();
+                    spline.addRec(colls[0].getRecommendations()[parseInt(Math.random() * colls[0].getRecommendations().length)]);
+                    spline.addRec(colls[2].getRecommendations()[parseInt(Math.random() * colls[0].getRecommendations().length)]);
+                    spline.addRec(colls[4].getRecommendations()[parseInt(Math.random() * colls[0].getRecommendations().length)]);
                     
+                    spline.calculateSpline();
                 },
                 label: "Demo spline",
                 visible: true
