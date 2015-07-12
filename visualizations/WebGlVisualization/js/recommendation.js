@@ -50,7 +50,8 @@ GLVIS.Recommendation = function (eexcess_data) {
      * Connections to other objects (e.g parent-collection)
      */
     this.connections_ = {
-        to_collection: null
+        to_collection: null,
+        splines: []
     };
 
     this.initGlNode();
@@ -59,6 +60,30 @@ GLVIS.Recommendation = function (eexcess_data) {
             "Recommendation with id " + this.id_ + " created!",
             6);
 };
+
+
+/**
+ * Add a spline to the recommendation
+ * @param {GLVIS.ConnectionRecRecSpline} spline
+ * @returns {undefined}
+ */
+GLVIS.Recommendation.prototype.registerRecSpline = function (spline) {
+    this.connections_.splines.push(spline);
+};
+
+/**
+ * Remove a registered spline from the recommendation
+ * @param {GLVIS.ConnectionRecRecSpline} spline
+ * @returns {undefined}
+ */
+GLVIS.Recommendation.prototype.unregisterRecSpline = function (spline) {
+
+    var index = _.indexOf(this.connections_.splines, spline);
+    if (index >= 0) {
+        this.connections_.splines = this.connections_.splines.splice(index, 1);
+    }
+};
+
 
 /**
  * Creating a common-node for representing the recommendation

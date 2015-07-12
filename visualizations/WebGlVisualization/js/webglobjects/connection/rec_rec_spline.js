@@ -6,6 +6,23 @@ var GLVIS = GLVIS || {};
  */
 GLVIS.ConnectionRecRecSpline = function () {
     this.recs = [];
+
+    this.webgl_objects = {
+        spline: null
+    };
+};
+
+
+/**
+ * Order the recommendations by their collections
+ */
+GLVIS.ConnectionRecRecSpline.prototype.orderRecs = function () {
+
+    console.log(this.recs);
+    this.recs = _.sortBy(this.recs, function (rec) {
+        console.log(rec);
+        return rec.getCollection().getId();
+    });
 };
 
 /**
@@ -20,12 +37,10 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
     var vecs = [];
     var last_coll_id_with_rec = 0;
 
-    //this.orderRecs();
+    this.orderRecs();
 
     var last_rec = null;
     _.each(this.recs, function (rec) {
-
-
 
         /*
          * Checking for missed collections.
@@ -61,8 +76,6 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
                 vecs.push(new THREE.Vector3(last_x + half_length, top_factor * vert_distance, -5));
             }
         }
-
-
         var pos = rec.getPosition();
         vecs.push(new THREE.Vector3(pos.x, pos.y, -5));
 
@@ -87,6 +100,7 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
     });
 
     var line = new THREE.Line(geometry, material);
+    this.webgl_objects.spline = line;
     GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(line);
 };
 
@@ -95,8 +109,10 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
  * @param {GLVIS.Recommendation} rec
  */
 GLVIS.ConnectionRecRecSpline.prototype.addRec = function (rec) {
-    this.recs.push(rec);
+    if (rec)
+        this.recs.push(rec);
 
+    rec.registerRecSpline(this);
 };
 
 /**
@@ -105,4 +121,18 @@ GLVIS.ConnectionRecRecSpline.prototype.addRec = function (rec) {
  */
 GLVIS.ConnectionRecRecSpline.prototype.getRecs = function () {
     return this.recs;
+};
+
+/**
+ * Delete all webgl-objects from scene
+ */
+GLVIS.ConnectionRecRecSpline.prototype.delete = function () {
+
+    var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+    three_scene.remove(this.webgl_objects.spline);
+    delete this.webgl_objects.spline;
+
+    _.each(this.recs, function (rec) {
+        rec.unregisterRecSpline(this);
+    });
 };

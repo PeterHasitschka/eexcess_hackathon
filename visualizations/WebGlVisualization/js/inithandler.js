@@ -68,6 +68,7 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                     path + "js/webglobjects/connection/collection_rec_line.js",
                                     path + "js/webglobjects/connection/collection_collection_line.js",
                                     path + "js/webglobjects/connection/rec_rec_spline.js",
+                                    path + "js/recconnector.js",
                                     path + "js/scene.js",
                                     path + "../../../common_js/storage.js",
                                     path + "../Vis-Template/js/utils.js", //Important to prevent .scrollTo-Bug

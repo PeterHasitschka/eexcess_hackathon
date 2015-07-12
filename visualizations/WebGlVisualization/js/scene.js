@@ -35,6 +35,9 @@ GLVIS.Scene = function (canvas) {
         direct: new GLVIS.DirectCompare()
     };
 
+    /** @type{GLVIS.RecConnector} **/
+    this.recconnector_ = new GLVIS.RecConnector(this);
+
     /**
      * Holding @see{GLVIS.Collection} objects
      */
@@ -131,6 +134,14 @@ GLVIS.Scene.prototype.getComparer = function () {
     return this.compare_;
 };
 
+/**
+ * Returns the Rec-Connector, that is responsible for (spline) connections
+ * between recommendations over several collections
+ * @returns {GLVIS.RecConnector}
+ */
+GLVIS.Scene.prototype.getRecConnector = function () {
+    return this.recconnector_;
+};
 
 /**
  * 

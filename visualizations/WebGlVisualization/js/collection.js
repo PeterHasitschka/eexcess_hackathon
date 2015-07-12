@@ -275,7 +275,23 @@ GLVIS.Collection.prototype.handleClick = function () {
     that.createRingRepresentation();
 
     that.selectAndFocus();
+
+    that.connectSameRecsFromOtherCollections();
 };
+
+/**
+ * Create connections from own recommendations to those which are the same in 
+ * other collections
+ */
+GLVIS.Collection.prototype.connectSameRecsFromOtherCollections = function () {
+
+    var connector = GLVIS.Scene.getCurrentScene().getRecConnector();
+
+    _.each(this.getRecommendations(), function (rec) {
+        connector.connectSameRecs(rec);
+    });
+};
+
 
 /**
  * Calls the @see{GLVIS.NavigationHandler.focusCollection} function
