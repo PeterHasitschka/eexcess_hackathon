@@ -109,9 +109,11 @@ GLVIS.ToolbarHandler.prototype.buttons = {
 
                     var spline = new GLVIS.ConnectionRecRecSpline();
                     spline.addRec(colls[0].getRecommendations()[parseInt(Math.random() * colls[0].getRecommendations().length)]);
-                    spline.addRec(colls[2].getRecommendations()[parseInt(Math.random() * colls[0].getRecommendations().length)]);
-                    spline.addRec(colls[4].getRecommendations()[parseInt(Math.random() * colls[0].getRecommendations().length)]);
-                    
+                    spline.addRec(colls[5].getRecommendations()[parseInt(Math.random() * colls[0].getRecommendations().length)]);
+                    spline.addRec(colls[6].getRecommendations()[parseInt(Math.random() * colls[0].getRecommendations().length)]);
+                    spline.addRec(colls[9].getRecommendations()[parseInt(Math.random() * colls[0].getRecommendations().length)]);
+                    spline.addRec(colls[10].getRecommendations()[parseInt(Math.random() * colls[0].getRecommendations().length)]);
+
                     spline.calculateSpline();
                 },
                 label: "Demo spline",
