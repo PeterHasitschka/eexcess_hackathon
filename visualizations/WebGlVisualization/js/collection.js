@@ -530,6 +530,10 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
         this.ring_representation_.delete();
     this.ring_representation_ = null;
 
+    console.log("TODO: FIX RING-REP-DELETE-POS-PROBLEM!");
+    
+    console.log(GLVIS.Scene.getCurrentScene().getAnimation().animations_);
+
     this.setRecPosHandler(new GLVIS.RecommendationPosDistributed(this));
     this.getRecPosHandler().calculatePositions();
 };

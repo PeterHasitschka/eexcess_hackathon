@@ -47,7 +47,7 @@ GLVIS.Animation.prototype.animate = function () {
 
         //Build parameter array for setter function
         var params_for_setting = [];
-        
+
         if (curr_anim.object)
             params_for_setting.push(curr_anim.object);
 
@@ -70,6 +70,36 @@ GLVIS.Animation.prototype.animate = function () {
         }
     }
 };
+
+/**
+ * Stop all animations by setting the goal and unregistering them
+ */
+GLVIS.Animation.prototype.finishAllAnimations = function () {
+
+    GLVIS.Debugger.debug("Animation", "Canceling all animations", 5);
+    _.each(this.animations_, function (curr_anim) {
+
+        if (!curr_anim)
+            return;
+        GLVIS.Debugger.debug("Animation", ["Canceling animation", curr_anim], 5);
+
+        var params_for_setting = [];
+        if (curr_anim.object)
+            params_for_setting.push(curr_anim.object);
+
+        for (var param_count = 0; param_count < curr_anim.setter_fct_param_num; param_count++)
+            params_for_setting.push(null);
+        params_for_setting.push(curr_anim.goal);
+
+        //Call setter fct
+        curr_anim.setter_fct.apply(null, params_for_setting);
+        this.unregister(curr_anim.identifier);
+    }.bind(this));
+
+
+    GLVIS.Debugger.debug("Animation", "Finished Canceling all animations", 5);
+};
+
 
 /**
  * 
@@ -99,7 +129,7 @@ GLVIS.Animation.prototype.register = function (identifier, goal, object, getter_
     if (setter_fct_param_num === null) {
         setter_fct_param_num = 1;
     }
-    
+
     var anim_obj = {
         identifier: identifier,
         goal: goal,

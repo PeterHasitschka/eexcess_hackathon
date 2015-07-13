@@ -101,11 +101,11 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                 icon: "compare.png",
                 visible: false
             },
-            rec_spline_demo: {
+            test_animstop: {
                 fct: function (e) {
-
+                    GLVIS.Scene.getCurrentScene().getAnimation().finishAllAnimations();
                 },
-                label: "Demo spline",
+                label: "Stop all anims",
                 visible: true
             }
 
