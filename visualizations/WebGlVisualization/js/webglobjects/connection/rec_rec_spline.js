@@ -89,7 +89,7 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
     var spline = new THREE.SplineCurve3(vecs);
 
     var material = new THREE.LineBasicMaterial({
-        color: 0xff0000 - parseInt(Math.random() * 0x1100000)
+        color: 0xff0000 - parseInt(Math.random() * 0x110000)
     });
 
     var geometry = new THREE.Geometry();

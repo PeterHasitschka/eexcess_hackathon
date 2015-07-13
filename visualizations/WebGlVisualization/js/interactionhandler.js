@@ -132,7 +132,21 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
      */
     if (GLVIS.Text.current_selected && !intersected.length) {
         GLVIS.Text.current_selected.handleMouseleave();
-        
+    }
+
+    /**
+     * Removing all ring representations at click on empty space
+     */
+    if (GLVIS.RingRepresentation.activeRepresentations.length && !intersected.length && interaction_type === "mouseclick") {
+        _.each(GLVIS.RingRepresentation.activeRepresentations, function (ring_rep) {
+
+            if (!ring_rep)
+                return;
+
+            /** @type {GLVIS.Collection} */
+            var coll = ring_rep.getCollection();
+            coll.deleteRingRepresentation();
+        });
     }
 
 
