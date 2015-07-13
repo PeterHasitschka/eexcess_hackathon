@@ -254,7 +254,6 @@ GLVIS.Collection.prototype.render = function () {
 
 /**
  * Called by interactionhandler. Function registered in mesh-objects
- * @returns {undefined}
  */
 GLVIS.Collection.prototype.handleClick = function () {
     /** @type {GLVIS.Collection} **/
@@ -275,9 +274,16 @@ GLVIS.Collection.prototype.handleClick = function () {
     that.createRingRepresentation();
 
     that.selectAndFocus();
-
-    that.connectSameRecsFromOtherCollections();
 };
+
+/**
+ * Called by interactionhandler. Function registered in mesh-objects
+ */
+GLVIS.Collection.prototype.handleMouseover = function () {
+
+    this.connectSameRecsFromOtherCollections();
+};
+
 
 /**
  * Create connections from own recommendations to those which are the same in 
@@ -285,13 +291,40 @@ GLVIS.Collection.prototype.handleClick = function () {
  */
 GLVIS.Collection.prototype.connectSameRecsFromOtherCollections = function () {
 
+    /*
+     * If allready existing, skip
+     */
+    if (_.indexOf(GLVIS.RecConnector.activatedAtCollections, this) !== -1) {
+        return;
+    }
+
     var connector = GLVIS.Scene.getCurrentScene().getRecConnector();
 
     _.each(this.getRecommendations(), function (rec) {
         connector.connectSameRecs(rec);
     });
+
+    GLVIS.RecConnector.activatedAtCollections.push(this);
 };
 
+/**
+ * Remove all connections from own recommendation to their twins in other collections
+ */
+GLVIS.Collection.prototype.unconnectSameRecsFromOtherCollections = function () {
+
+    if (_.indexOf(GLVIS.RecConnector.activatedAtCollections, this) === -1) {
+        return;
+    }
+
+
+    _.each(this.getRecommendations(), function (rec) {
+        rec.deleteAllRecSplines();
+    });
+
+    var index_to_delete = _.indexOf(GLVIS.RecConnector.activatedAtCollections, this);
+
+    GLVIS.RecConnector.activatedAtCollections.splice(index_to_delete, 1);
+};
 
 /**
  * Calls the @see{GLVIS.NavigationHandler.focusCollection} function

@@ -84,6 +84,15 @@ GLVIS.Recommendation.prototype.unregisterRecSpline = function (spline) {
     }
 };
 
+GLVIS.Recommendation.prototype.deleteAllRecSplines = function () {
+
+    _.each(this.connections_.splines, function (spline) {
+        if (!spline)
+            return;
+        spline.delete();
+    });
+};
+
 
 /**
  * Creating a common-node for representing the recommendation

@@ -148,6 +148,16 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
             coll.deleteRingRepresentation();
         });
     }
+    
+    if (!intersected.length && interaction_type === "mouseover"){
+        _.each(GLVIS.RecConnector.activatedAtCollections, function(coll){
+           
+            if (!coll)
+                return;
+            
+            coll.unconnectSameRecsFromOtherCollections();            
+        });
+    }
 
 
 

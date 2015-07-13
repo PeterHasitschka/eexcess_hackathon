@@ -10,6 +10,8 @@ GLVIS.ConnectionRecRecSpline = function () {
     this.webgl_objects = {
         spline: null
     };
+
+    GLVIS.Debugger.debug("ConnectionRecRecSpline", "Creating a rec-spline", 5);
 };
 
 
@@ -18,7 +20,8 @@ GLVIS.ConnectionRecRecSpline = function () {
  */
 GLVIS.ConnectionRecRecSpline.prototype.orderRecs = function () {
 
-    console.log(this.recs);
+    GLVIS.Debugger.debug("ConnectionRecRecSpline", "Ordering recommendations", 7);
+
     this.recs = _.sortBy(this.recs, function (rec) {
         console.log(rec);
         return rec.getCollection().getId();
@@ -32,7 +35,11 @@ GLVIS.ConnectionRecRecSpline.prototype.orderRecs = function () {
  * and the vertical line at the position of the collection is positive or negative.
  */
 GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
-    var numPoints = 300;
+
+    GLVIS.Debugger.debug("ConnectionRecRecSpline", "Calculating the splines", 6);
+    var config = GLVIS.config.connection.rec_spline;
+
+    var numPoints = config.num_vertices;
 
     var vecs = [];
     var last_coll_id_with_rec = 0;
@@ -47,8 +54,6 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
          * Only necesary if not the first rec.
          */
         if (last_rec) {
-
-            console.log("DISTANCE: " + (rec.getCollection().getId() - last_rec.getCollection().getId()));
             if ((rec.getCollection().getId() - last_rec.getCollection().getId()) > 1) {
 
                 /*
@@ -64,8 +69,6 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
                 var half_length = (curr_x - last_x) / 2;
                 var calculated_y = half_length * gradient + last_y;
 
-                console.log(curr_x, last_x, half_length);
-
                 var is_top = true;
                 if (calculated_y < 0)
                     is_top = false;
@@ -79,17 +82,16 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
         var pos = rec.getPosition();
         vecs.push(new THREE.Vector3(pos.x, pos.y, -5));
 
-        rec.setColor(0xFF0000);
+        rec.setColor(config.rec_color);
 
         last_rec = rec;
 
     }.bind(this));
 
-
     var spline = new THREE.SplineCurve3(vecs);
 
     var material = new THREE.LineBasicMaterial({
-        color: 0xff0000 - parseInt(Math.random() * 0x110000)
+        color: config.base_color - parseInt(Math.random() * config.color_diff)
     });
 
     var geometry = new THREE.Geometry();
@@ -109,6 +111,7 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
  * @param {GLVIS.Recommendation} rec
  */
 GLVIS.ConnectionRecRecSpline.prototype.addRec = function (rec) {
+    GLVIS.Debugger.debug("ConnectionRecRecSpline", "Adding a recommendation", 6);
     if (rec)
         this.recs.push(rec);
 
@@ -128,11 +131,14 @@ GLVIS.ConnectionRecRecSpline.prototype.getRecs = function () {
  */
 GLVIS.ConnectionRecRecSpline.prototype.delete = function () {
 
+    GLVIS.Debugger.debug("ConnectionRecRecSpline", "Deleting a rec spline", 5);
+    
     var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
     three_scene.remove(this.webgl_objects.spline);
     delete this.webgl_objects.spline;
 
     _.each(this.recs, function (rec) {
         rec.unregisterRecSpline(this);
+        rec.setColor(GLVIS.config.collection.recommendation.color);
     });
 };

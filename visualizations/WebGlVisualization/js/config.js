@@ -171,6 +171,12 @@ GLVIS.config = {
             color: 0xFF3333,
             z: -52,
             opacity: 0.3
+        },
+        rec_spline : {
+            base_color: 0xAA0000,
+            color_diff: 0x110000,
+            rec_color: 0xFF0000,
+            num_vertices : 300
         }
     },
     text: {

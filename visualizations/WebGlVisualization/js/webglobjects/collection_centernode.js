@@ -43,6 +43,7 @@ GLVIS.CollectionCenterNode.prototype.initAndRegisterGlObj = function () {
     //Register click-function
     circle.interaction = {
         "mouseclick": this.collection_.handleClick,
+        "mouseover": this.collection_.handleMouseover.bind(this.collection_),
         "collection": this.collection_
     };
 
