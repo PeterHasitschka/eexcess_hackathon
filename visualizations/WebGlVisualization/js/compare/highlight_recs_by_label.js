@@ -42,11 +42,11 @@ GLVIS.HighlightRecsByLabel.prototype.highlight = function (label) {
         var lc_label_text = label.getText().toLowerCase();
 
         GLVIS.Debugger.debug("HighlightRecsByLabel", [
-            "Searching for label " + lc_label_text + "' in title:", title_words], 6);
+            "Searching for label " + lc_label_text + "' in title:", title_words], 7);
         if (title_words.indexOf(lc_label_text) !== -1) {
 
             GLVIS.Debugger.debug("HighlightRecsByLabel",
-                    "Highlighting rec " + curr_rec.getId() + " for label " + lc_label_text, 4);
+                    "Highlighting rec " + curr_rec.getId() + " for label " + lc_label_text, 7);
 
             this.previous_rec_colors_[curr_rec.getId()] = curr_rec.getColor();
             curr_rec.setColor(GLVIS.config.collection.recommendation.highlight_color);

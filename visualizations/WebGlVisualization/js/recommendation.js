@@ -90,7 +90,10 @@ GLVIS.Recommendation.prototype.deleteAllRecSplines = function () {
         if (!spline)
             return;
         spline.delete();
+        delete spline;
     });
+
+    this.connections_.splines = [];
 };
 
 

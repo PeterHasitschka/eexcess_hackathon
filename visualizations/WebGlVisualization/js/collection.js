@@ -411,7 +411,7 @@ GLVIS.Collection.prototype.rebuildLabelPositions = function () {
     var c_x_start = this.vis_data_.position.x - (((config.columns - 1) / 2) * config.column_distance);
 
     // -1 due to seperate treating of title label
-    var elements_per_col = Math.round((this.labels_.length - 1) / config.columns);
+    var elements_per_col = Math.round((this.labels_.length) / config.columns);
     for (var c_count = 0; c_count < config.columns; c_count++) {
 
         var c_x = c_x_start + c_count * config.column_distance;
