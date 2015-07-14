@@ -125,8 +125,7 @@ GLVIS.Text.prototype.updateWebGlObj = function () {
 
     var mesh = this.createMesh(this.font_, this.font_size_, this.color_, this.bg_color_, this.opacity_);
     mesh.interaction = {
-        "mouseover": this.handleMouseover,
-        "label": this
+        "mouseover": this.handleMouseover.bind(this)
     };
     GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().remove(this.webgl_objects_.mesh);
     this.webgl_objects_.mesh = mesh;
@@ -221,15 +220,14 @@ GLVIS.Text.prototype.createMesh = function (font, font_size, color, bg_color, op
  * Handling a mouseover event. Called by the mesh's mouseover callback
  */
 GLVIS.Text.prototype.handleMouseover = function () {
-    var that = this.label;
-    that.highlight();
+    this.highlight();
 
-    if (GLVIS.Text.current_selected && GLVIS.Text.current_selected !== that)
+    if (GLVIS.Text.current_selected && GLVIS.Text.current_selected !== this)
         GLVIS.Text.current_selected.unHighlight();
-    GLVIS.Text.current_selected = that;
+    GLVIS.Text.current_selected = this;
 
-    if (that.mouse_over_fct_)
-        that.mouse_over_fct_(that, that.mouse_fct_data_);
+    if (this.mouse_over_fct_)
+        this.mouse_over_fct_(this, this.mouse_fct_data_);
 };
 
 /**

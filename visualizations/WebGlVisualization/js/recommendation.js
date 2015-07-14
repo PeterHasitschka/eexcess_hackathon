@@ -144,22 +144,19 @@ GLVIS.Recommendation.prototype.setCollection = function (collection) {
  * @returns {undefined}
  */
 GLVIS.Recommendation.prototype.handleClick = function () {
-    /** @type {GLVIS.Recommendation} **/
-    var that = this.recommendation;
-
-    if (that.getStatus() === GLVIS.Recommendation.STATUSFLAGS.HIDDEN)
+    if (this.getStatus() === GLVIS.Recommendation.STATUSFLAGS.HIDDEN)
         return;
 
     GLVIS.Debugger.debug("Recommendation",
-            ["RECOMMENDATION " + that.getId() + " clicked", that],
+            ["RECOMMENDATION " + this.getId() + " clicked", this],
             3);
 
     //Don't do focus etc. if clicked before
-    if (GLVIS.Recommendation.current_selected_rec && GLVIS.Recommendation.current_selected_rec === that)
+    if (GLVIS.Recommendation.current_selected_rec && GLVIS.Recommendation.current_selected_rec === this)
         return;
 
-    that.focusAndZoom();
-    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(that);
+    this.focusAndZoom();
+    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
 };
 
 /**

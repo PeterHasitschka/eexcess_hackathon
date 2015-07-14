@@ -44,8 +44,7 @@ GLVIS.RecommendationCommonNode.prototype.initAndRegisterGlObj = function () {
 
     //Register click-function
     circle.interaction = {
-        "mouseclick": this.recommendation_.handleClick,
-        "recommendation": this.recommendation_
+        "mouseclick": this.recommendation_.handleClick.bind(this.recommendation_)
     };
 
 

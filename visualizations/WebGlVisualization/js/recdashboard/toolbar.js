@@ -107,6 +107,20 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                 },
                 label: "Stop all anims",
                 visible: true
+            },
+            coll_removeallring_reps: {
+                fct: function (e) {
+                    _.each(GLVIS.RingRepresentation.activeRepresentations, function (ring_rep) {
+
+                        if (!ring_rep)
+                            return;
+                        /** @type {GLVIS.Collection} */
+                        var coll = ring_rep.getCollection();
+                        coll.deleteRingRepresentation();
+                    });
+                },
+                label: "Remove Ring-Representations",
+                visible: true
             }
 
         }

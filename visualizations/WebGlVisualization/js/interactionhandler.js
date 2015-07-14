@@ -9,8 +9,10 @@ GLVIS.InteractionHandler = function (scene) {
     /** @var {GLVIS.Scene} **/
     this.scene_ = scene;
 
+    var config = GLVIS.config.interaction;
+
     this.raycaster_ = new THREE.Raycaster();
-    this.raycaster_.precision = 0.5;
+    this.raycaster_.precision = config.raycaster_precision;
 
     this.mouse_ = new THREE.Vector2();
 
@@ -68,24 +70,20 @@ GLVIS.InteractionHandler = function (scene) {
             that.scene_.getNavigationHandler().resetAnimationZoom();
             that.scene_.getNavigationHandler().zoomDelta(event.deltaY * 5);
         });
-
-
-
-
     });
 };
 
-
+/**
+ * @TODO Check if needed anymore
+ */
 GLVIS.InteractionHandler.prototype.deselectAllCollections = function () {
     //Deselect all collections
-
     for (var i = 0; i < this.scene_.getCollections().length; i++)
     {
         var curr_coll = this.scene_.getCollections()[i];
         curr_coll.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
     }
 };
-
 
 /**
  * Calls interaction function on Three-Object if exists
@@ -97,17 +95,16 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
     if (interaction_type === "mouseclick")
         this.deselectAllCollections();
 
-
     var intersected = this.getIntersectedObjects_(event);
 
     GLVIS.Debugger.debug("InteractionHandler",
             "HANDLING SCENE INTERACTION EVENT '" + interaction_type + "'", 6);
 
-    for (var i_count = 0; i_count < intersected.length; i_count++)
-    {
 
-        var curr_intersect_obj = intersected[i_count].object;
 
+    _.each(intersected, function (curr_intersect) {
+
+        var curr_intersect_obj = curr_intersect.object;
         GLVIS.Debugger.debug("InteractionHandler",
                 ["Going through intersected object:", curr_intersect_obj], 9);
 
@@ -125,45 +122,37 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
                 curr_intersect_obj.interaction[interaction_type](curr_intersect_obj);
             }
         }
-    }
+    });
+
+    if (!intersected.length)
+        this.handleEmptyClick(interaction_type);
+};
+
+/**
+ * Performing several deselections of no object was intersected
+ * @param {String} interaction_type
+ */
+GLVIS.InteractionHandler.prototype.handleEmptyClick = function (interaction_type) {
 
     /**
      * Unhighlighting last highlighted text if exists.
      */
-    if (GLVIS.Text.current_selected && !intersected.length) {
+    if (GLVIS.Text.current_selected) {
         GLVIS.Text.current_selected.handleMouseleave();
     }
 
     /**
-     * Removing all ring representations at click on empty space
+     * Remove rec-rec-splines when leaving objects with mouse
      */
-    if (GLVIS.RingRepresentation.activeRepresentations.length && !intersected.length && interaction_type === "mouseclick") {
-        _.each(GLVIS.RingRepresentation.activeRepresentations, function (ring_rep) {
+    if (interaction_type === "mouseover") {
+        _.each(GLVIS.RecConnector.activatedAtCollections, function (coll) {
 
-            if (!ring_rep)
-                return;
-
-            /** @type {GLVIS.Collection} */
-            var coll = ring_rep.getCollection();
-            coll.deleteRingRepresentation();
-        });
-    }
-    
-    if (!intersected.length && interaction_type === "mouseover"){
-        _.each(GLVIS.RecConnector.activatedAtCollections, function(coll){
-           
             if (!coll)
                 return;
-            
-            coll.unconnectSameRecsFromOtherCollections();            
+            coll.unconnectSameRecsFromOtherCollections();
         });
     }
-
-
-
 };
-
-
 
 /**
  * Get Objects that are intersected

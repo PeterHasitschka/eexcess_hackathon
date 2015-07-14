@@ -214,7 +214,6 @@ GLVIS.Collection.prototype.initLabels = function () {
     this.rebuildLabelPositions();
 };
 
-
 /**
  * Render the collection and its sub-objects
  */
@@ -257,23 +256,22 @@ GLVIS.Collection.prototype.render = function () {
  */
 GLVIS.Collection.prototype.handleClick = function () {
     /** @type {GLVIS.Collection} **/
-    var that = this.collection;
 
-    if (that.getStatus() === GLVIS.Collection.STATUSFLAGS.HIDDEN)
+    if (this.getStatus() === GLVIS.Collection.STATUSFLAGS.HIDDEN)
         return;
 
     GLVIS.Debugger.debug("Collection",
-            "Collection " + that.getId() + " CLICKED!",
+            "Collection " + this.getId() + " CLICKED!",
             3);
 
     GLVIS.Debugger.debug("Collection",
-            that,
+            this,
             5);
 
-    that.deleteRingRepresentation();
-    that.createRingRepresentation();
+    this.deleteRingRepresentation();
+    this.createRingRepresentation();
 
-    that.selectAndFocus();
+    this.selectAndFocus();
 };
 
 /**
@@ -283,7 +281,6 @@ GLVIS.Collection.prototype.handleMouseover = function () {
 
     this.connectSameRecsFromOtherCollections();
 };
-
 
 /**
  * Create connections from own recommendations to those which are the same in 
@@ -315,7 +312,6 @@ GLVIS.Collection.prototype.unconnectSameRecsFromOtherCollections = function () {
     if (_.indexOf(GLVIS.RecConnector.activatedAtCollections, this) === -1) {
         return;
     }
-
 
     _.each(this.getRecommendations(), function (rec) {
         rec.deleteAllRecSplines();
@@ -427,11 +423,8 @@ GLVIS.Collection.prototype.rebuildLabelPositions = function () {
             /** @type {GLVIS.Text} **/
             var curr_label = this.labels_[label_index];
             curr_label.setPosition(c_x, c_y);
-
         }
-
     }
-
 };
 
 /**

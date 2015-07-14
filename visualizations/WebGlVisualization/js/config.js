@@ -19,6 +19,9 @@ GLVIS.config = {
         },
         canvas_color: 0xFBFFFD
     },
+    interaction: {
+        raycaster_precision: 0.5
+    },
     collection: {
         init_distance: 400,
         center_node: {
@@ -172,11 +175,11 @@ GLVIS.config = {
             z: -52,
             opacity: 0.3
         },
-        rec_spline : {
+        rec_spline: {
             base_color: 0xAA0000,
             color_diff: 0x00AA00,
             rec_color: 0xFF0000,
-            num_vertices : 300
+            num_vertices: 300
         }
     },
     text: {

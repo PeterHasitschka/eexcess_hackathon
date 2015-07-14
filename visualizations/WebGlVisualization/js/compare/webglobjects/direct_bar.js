@@ -6,10 +6,10 @@ GLVIS.DirectCompareBar = function (collection, percent) {
     this.dirty_ = true;
     this.collection_ = collection;
     this.percent_ = percent;
-    
+
     /** @type {GLVIS.Text} **/
     this.label_ = null;
-    
+
     this.webgl_objects_ = {
         bar_pos: null,
         bar_meg: null
@@ -45,7 +45,7 @@ GLVIS.DirectCompareBar.prototype.initGlObjects = function () {
 
     //Register click-function
     rect_positive.interaction = {
-        "mouseclick": this.collection_.handleClick,
+        "mouseclick": this.collection_.handleClick.bind(this.collection_),
         "collection": this.collection_
     };
 
@@ -66,7 +66,7 @@ GLVIS.DirectCompareBar.prototype.initGlObjects = function () {
 
     //Register click-function
     rect_negative.interaction = {
-        "mouseclick": this.collection_.handleClick,
+        "mouseclick": this.collection_.handleClick.bind(this.collection_),
         "collection": this.collection_
     };
 
@@ -76,13 +76,13 @@ GLVIS.DirectCompareBar.prototype.initGlObjects = function () {
      * LABEL
      */
     var label_options = {
-      color:config.label_color,
-      pos_x : this.collection_.getPosition().x,
-      pos_y : this.collection_.getPosition().y + config.y_offset + config.label_y_offset
+        color: config.label_color,
+        pos_x: this.collection_.getPosition().x,
+        pos_y: this.collection_.getPosition().y + config.y_offset + config.label_y_offset
     };
-    
+
     var beauty_percent = Math.round(this.percent_);
-    var label = new GLVIS.Text(beauty_percent+" %",label_options);
+    var label = new GLVIS.Text(beauty_percent + " %", label_options);
     this.label_ = label;
 
     var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
@@ -109,8 +109,8 @@ GLVIS.DirectCompareBar.prototype.render = function () {
      * Remember that the center of the mesh is used for positioning!
      */
     var pos = this.collection_.getPosition();
-    var pos_x_positive = pos.x-total_width/2 + (pos_width/2);
-    var pos_x_negative = pos_x_positive + pos_width/2 + neg_width/2;
+    var pos_x_positive = pos.x - total_width / 2 + (pos_width / 2);
+    var pos_x_negative = pos_x_positive + pos_width / 2 + neg_width / 2;
 
     this.webgl_objects_.bar_pos.position.set(
             pos_x_positive,
@@ -123,7 +123,7 @@ GLVIS.DirectCompareBar.prototype.render = function () {
             pos.y + config.y_offset,
             config.z_value
             );
-    
+
     this.label_.render();
     this.setIsDirty(false);
 };
@@ -134,10 +134,10 @@ GLVIS.DirectCompareBar.prototype.delete = function () {
 
     three_scene.remove(this.webgl_objects_.bar_pos);
     three_scene.remove(this.webgl_objects_.bar_neg);
-    
+
     this.label_.delete();
     delete this.label_;
-    
+
     delete this.webgl_objects_.bar_pos;
     delete this.webgl_objects_.bar_neg;
 };

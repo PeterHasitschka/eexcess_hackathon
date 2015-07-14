@@ -101,8 +101,7 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
 
     //Register click-function
     mesh.interaction = {
-        "mouseclick": this.handleClick,
-        "ringseg": this
+        "mouseclick": this.handleClick.bind(this),
     };
 
 
@@ -172,16 +171,12 @@ GLVIS.RingSegment.prototype.render = function () {
 
 
 GLVIS.RingSegment.prototype.handleClick = function () {
-
-    var that = this.ringseg;
-
     GLVIS.Debugger.debug("RingSegment",
-            ["RING SEGMENT CLICKED", that],
+            ["RING SEGMENT CLICKED", this],
             3);
 
-    that.is_selected_ = !that.is_selected_;
-    that.setIsDirty(true);
-
+    this.is_selected_ = !this.is_selected_;
+    this.setIsDirty(true);
 };
 
 GLVIS.RingSegment.prototype.deSelect = function () {

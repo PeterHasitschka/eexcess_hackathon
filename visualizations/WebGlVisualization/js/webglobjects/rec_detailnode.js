@@ -44,8 +44,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function () {
 
     //Register click-function
     circle_outer.interaction = {
-        "mouseclick": this.recommendation_.handleClick,
-        "recommendation": this.recommendation_
+        "mouseclick": this.recommendation_.handleClick.bind(this.recommendation_)
     };
 
     var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
@@ -132,7 +131,7 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
     this.webgl_objects_.circle_outer.scale.set(scale_factor, scale_factor, scale_factor);
     this.webgl_objects_.circle_outer.material.opacity = this.recommendation_.getOpacity();
     this.webgl_objects_.circle_outer.material.color.setHex(this.recommendation_.getColor());
-    
+
     if (this.webgl_objects_.circle_inner) {
         this.webgl_objects_.circle_inner.position.set(
                 abs_pos.x,
