@@ -145,10 +145,8 @@ GLVIS.Collection.prototype.initLabels = function () {
 
     if (this.eexcess_data_) {
 
-        for (var i = 0; i < this.eexcess_data_.query.length; i++) {
 
-            var curr_q_data = this.eexcess_data_.query[i];
-
+        _.each(this.eexcess_data_.query, function (curr_q_data) {
             var text = curr_q_data.text;
             var weight = curr_q_data.weight;
 
@@ -209,7 +207,7 @@ GLVIS.Collection.prototype.initLabels = function () {
                     );
 
             this.labels_.push(text_element);
-        }
+        }.bind(this));
     }
     this.rebuildLabelPositions();
 };
@@ -268,8 +266,9 @@ GLVIS.Collection.prototype.handleClick = function () {
             this,
             5);
 
-    this.deleteRingRepresentation();
-    this.createRingRepresentation();
+    //this.deleteRingRepresentation();
+    if (!this.ring_representation_)
+        this.createRingRepresentation();
 
     this.selectAndFocus();
 };
@@ -522,6 +521,8 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
     if (this.ring_representation_)
         this.ring_representation_.delete();
     this.ring_representation_ = null;
+
+    GLVIS.Scene.getCurrentScene().getAnimation().finishAllAnimations();
 
     this.setRecPosHandler(new GLVIS.RecommendationPosDistributed(this));
     this.getRecPosHandler().calculatePositions();

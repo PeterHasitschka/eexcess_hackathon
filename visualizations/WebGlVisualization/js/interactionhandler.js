@@ -100,12 +100,9 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
     GLVIS.Debugger.debug("InteractionHandler",
             "HANDLING SCENE INTERACTION EVENT '" + interaction_type + "'", 6);
 
-
-
-    _.each(intersected, function (curr_intersect) {
-
-        var curr_intersect_obj = curr_intersect.object;
-        GLVIS.Debugger.debug("InteractionHandler",
+    for (var i=0; i< intersected.length; i++) {
+        var curr_intersect_obj = intersected[i].object;
+                GLVIS.Debugger.debug("InteractionHandler",
                 ["Going through intersected object:", curr_intersect_obj], 9);
 
         if (curr_intersect_obj.interaction instanceof Object)
@@ -122,7 +119,7 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
                 curr_intersect_obj.interaction[interaction_type](curr_intersect_obj);
             }
         }
-    });
+    }
 
     if (!intersected.length)
         this.handleEmptyClick(interaction_type);

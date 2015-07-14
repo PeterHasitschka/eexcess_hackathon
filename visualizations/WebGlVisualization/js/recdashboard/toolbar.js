@@ -117,6 +117,7 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                         /** @type {GLVIS.Collection} */
                         var coll = ring_rep.getCollection();
                         coll.deleteRingRepresentation();
+                        coll.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
                     });
                 },
                 label: "Remove Ring-Representations",

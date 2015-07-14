@@ -46,7 +46,6 @@ GLVIS.DirectCompareBar.prototype.initGlObjects = function () {
     //Register click-function
     rect_positive.interaction = {
         "mouseclick": this.collection_.handleClick.bind(this.collection_),
-        "collection": this.collection_
     };
 
 
@@ -67,7 +66,6 @@ GLVIS.DirectCompareBar.prototype.initGlObjects = function () {
     //Register click-function
     rect_negative.interaction = {
         "mouseclick": this.collection_.handleClick.bind(this.collection_),
-        "collection": this.collection_
     };
 
 
