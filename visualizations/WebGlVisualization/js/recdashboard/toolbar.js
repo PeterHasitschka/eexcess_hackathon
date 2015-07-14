@@ -108,6 +108,17 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                 label: "Stop all anims",
                 visible: true
             },
+            test_rotate_coll: {
+                fct: function (e) {
+
+                    /** @type{GLVIS.Collection} **/
+                    var coll = _.last(GLVIS.Scene.getCurrentScene().getCollections());
+
+                    coll.setRotation(coll.getRotation() + 5.0);
+                },
+                label: "Rotate last coll +5°",
+                visible: true
+            },
             coll_removeallring_reps: {
                 fct: function (e) {
                     _.each(GLVIS.RingRepresentation.activeRepresentations, function (ring_rep) {

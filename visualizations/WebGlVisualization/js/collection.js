@@ -42,6 +42,7 @@ GLVIS.Collection = function (eexcess_data) {
             x: 0,
             y: 0
         },
+        rotation_degree: 0.0,
         gl_objects: []
     };
 
@@ -555,6 +556,32 @@ GLVIS.Collection.prototype.getHighlightRecsByLabel = function () {
     return this.highlight_recs_by_label_;
 };
 
+
+/**
+ * Setting the degree of rotation around the y-axis of the collection
+ * @param {float} degree
+ */
+GLVIS.Collection.prototype.setRotation = function (degree) {
+
+    degree = degree % 360;
+
+    if (degree === this.vis_data_.rotation_degree)
+        return;
+    this.vis_data_.rotation_degree = degree;
+
+
+    console.log("TODO: ROTATE (Current " + degree + "°)");
+
+    this.setIsDirty(true);
+};
+
+/**
+ * Return the current degree of rotation around the y-axis
+ * @returns {float}
+ */
+GLVIS.Collection.prototype.getRotation = function () {
+    return this.vis_data_.rotation_degree;
+};
 
 
 
