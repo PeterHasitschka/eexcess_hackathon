@@ -23,7 +23,6 @@ GLVIS.ConnectionRecRecSpline.prototype.orderRecs = function () {
     GLVIS.Debugger.debug("ConnectionRecRecSpline", "Ordering recommendations", 7);
 
     this.recs = _.sortBy(this.recs, function (rec) {
-        console.log(rec);
         return rec.getCollection().getId();
     });
 };

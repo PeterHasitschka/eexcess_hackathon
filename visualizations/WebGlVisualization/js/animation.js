@@ -77,29 +77,33 @@ GLVIS.Animation.prototype.animate = function () {
 GLVIS.Animation.prototype.finishAllAnimations = function () {
 
     GLVIS.Debugger.debug("Animation", "Canceling all animations", 5);
-    _.each(this.animations_, function (curr_anim) {
+    console.log(this.animations_);
 
-        if (!curr_anim)
-            return;
-        GLVIS.Debugger.debug("Animation", ["Canceling animation", curr_anim], 5);
+    /*
+     * @TODO: Find out why sometimes the animations are undefined and return later.
+     * Dirty-Fix: More iterations and catching undefined anims
+     */
+    while (this.animations_.length)
+        _.each(this.animations_, function (curr_anim) {
 
-        var params_for_setting = [];
-        if (curr_anim.object)
-            params_for_setting.push(curr_anim.object);
+            if (!curr_anim)
+                return;
+            GLVIS.Debugger.debug("Animation", ["Canceling animation", curr_anim], 7);
 
-        for (var param_count = 0; param_count < curr_anim.setter_fct_param_num; param_count++)
-            params_for_setting.push(null);
-        params_for_setting.push(curr_anim.goal);
+            var params_for_setting = [];
+            if (curr_anim.object)
+                params_for_setting.push(curr_anim.object);
 
-        //Call setter fct
-        curr_anim.setter_fct.apply(null, params_for_setting);
-        this.unregister(curr_anim.identifier);
-    }.bind(this));
+            for (var param_count = 0; param_count < curr_anim.setter_fct_param_num; param_count++)
+                params_for_setting.push(null);
+            params_for_setting.push(curr_anim.goal);
 
+            curr_anim.setter_fct.apply(null, params_for_setting);
+            this.unregister(curr_anim.identifier);
+        }.bind(this));
 
     GLVIS.Debugger.debug("Animation", "Finished Canceling all animations", 5);
 };
-
 
 /**
  * 
