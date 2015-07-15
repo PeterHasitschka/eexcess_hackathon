@@ -507,6 +507,9 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
  * the graph.
  */
 GLVIS.Collection.prototype.createRingRepresentation = function () {
+
+    this.setRotation(0);
+
     this.ring_representation_ = new GLVIS.RingRepresentation(this);
 
     this.setRecPosHandler(new GLVIS.RecommendationPosRingRepresentation(this));
@@ -559,19 +562,44 @@ GLVIS.Collection.prototype.getHighlightRecsByLabel = function () {
 
 /**
  * Setting the degree of rotation around the y-axis of the collection
+ * If animate flag is set: Animation gets registered
  * @param {float} degree
  */
-GLVIS.Collection.prototype.setRotation = function (degree) {
+GLVIS.Collection.prototype.setRotation = function (degree, animate) {
 
-    degree = degree % 360;
+    if (this.ring_representation_)
+        return;
+
+    //degree = degree % 360;
 
     if (degree === this.vis_data_.rotation_degree)
         return;
+
+    if (animate) {
+
+        GLVIS.Scene.getCurrentScene().getAnimation().register(
+                "coll_rot_" + this.getId(),
+                degree,
+                null,
+                this.getRotation.bind(this),
+                this.setRotation.bind(this),
+                0,
+                0.1,
+                0.05,
+                0.1,
+                function () {
+                    //console.log("ready rotation");
+                },
+                true
+        );
+        return;
+    }
+
+
+
     this.vis_data_.rotation_degree = degree;
 
-
-    console.log("TODO: ROTATE (Current " + degree + "°)");
-
+    this.getRecPosHandler().calculatePositions();
     this.setIsDirty(true);
 };
 

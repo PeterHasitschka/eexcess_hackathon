@@ -77,7 +77,6 @@ GLVIS.Animation.prototype.animate = function () {
 GLVIS.Animation.prototype.finishAllAnimations = function () {
 
     GLVIS.Debugger.debug("Animation", "Canceling all animations", 5);
-    console.log(this.animations_);
 
     /*
      * @TODO: Find out why sometimes the animations are undefined and return later.

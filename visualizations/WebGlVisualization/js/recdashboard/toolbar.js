@@ -113,10 +113,21 @@ GLVIS.ToolbarHandler.prototype.buttons = {
 
                     /** @type{GLVIS.Collection} **/
                     var coll = _.last(GLVIS.Scene.getCurrentScene().getCollections());
-
+                    
                     coll.setRotation(coll.getRotation() + 5.0);
                 },
                 label: "Rotate last coll +5°",
+                visible: true
+            },
+            test_rotate_coll_anim: {
+                fct: function (e) {
+
+                    /** @type{GLVIS.Collection} **/
+                    var coll = _.last(GLVIS.Scene.getCurrentScene().getCollections());
+                    
+                    coll.setRotation(Math.random() * 360, true);
+                },
+                label: "Rotate last coll animation +90°",
                 visible: true
             },
             coll_removeallring_reps: {

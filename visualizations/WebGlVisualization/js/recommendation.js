@@ -418,8 +418,14 @@ GLVIS.Recommendation.prototype.getRelativePosition = function () {
  */
 GLVIS.Recommendation.prototype.setRelativePosition = function (x, y) {
 
+    var y_rotate = this.getCollection() ? this.getCollection().getRotation() : 0;
+   
+    var cos = Math.cos(y_rotate / 360 * 2 * Math.PI);
+
+    
+
     if (x !== null && x !== undefined)
-        this.vis_data_.relative_position.x = x;
+        this.vis_data_.relative_position.x = x * cos;
 
     if (y !== null && y !== undefined)
         this.vis_data_.relative_position.y = y;
