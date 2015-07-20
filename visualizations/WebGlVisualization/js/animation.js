@@ -72,6 +72,45 @@ GLVIS.Animation.prototype.animate = function () {
 };
 
 /**
+ * Finish a specific animation by its identifier
+ * @param {string} identifier 
+ */
+GLVIS.Animation.prototype.finishAnimation = function (identifier) {
+
+    GLVIS.Debugger.debug("Animation", "Canceling animation '" + identifier + "'", 5);
+
+    var canceled = false;
+    _.each(this.animations_, function (curr_anim) {
+
+        if (canceled)
+            return;
+        if (curr_anim.identifier === identifier) {
+            this._finishAnimation(curr_anim);
+            canceled = true;
+        }
+    }.bind(this));
+};
+
+/**
+ * Finish a specific animation by object
+ * @param {object} animation
+ */
+GLVIS.Animation.prototype._finishAnimation = function (animation) {
+    var params_for_setting = [];
+    if (animation.object)
+        params_for_setting.push(animation.object);
+
+    for (var param_count = 0; param_count < animation.setter_fct_param_num; param_count++)
+        params_for_setting.push(null);
+    params_for_setting.push(animation.goal);
+
+    animation.setter_fct.apply(null, params_for_setting);
+    this.unregister(animation.identifier);
+
+    return;
+};
+
+/**
  * Stop all animations by setting the goal and unregistering them
  */
 GLVIS.Animation.prototype.finishAllAnimations = function () {
@@ -88,17 +127,7 @@ GLVIS.Animation.prototype.finishAllAnimations = function () {
             if (!curr_anim)
                 return;
             GLVIS.Debugger.debug("Animation", ["Canceling animation", curr_anim], 7);
-
-            var params_for_setting = [];
-            if (curr_anim.object)
-                params_for_setting.push(curr_anim.object);
-
-            for (var param_count = 0; param_count < curr_anim.setter_fct_param_num; param_count++)
-                params_for_setting.push(null);
-            params_for_setting.push(curr_anim.goal);
-
-            curr_anim.setter_fct.apply(null, params_for_setting);
-            this.unregister(curr_anim.identifier);
+            this._finishAnimation(curr_anim);
         }.bind(this));
 
     GLVIS.Debugger.debug("Animation", "Finished Canceling all animations", 5);

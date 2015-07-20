@@ -113,7 +113,7 @@ GLVIS.ToolbarHandler.prototype.buttons = {
 
                     /** @type{GLVIS.Collection} **/
                     var coll = _.last(GLVIS.Scene.getCurrentScene().getCollections());
-                    
+                    GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation("coll_rot_" + coll.getId());
                     coll.setRotation(coll.getRotation() + 5.0);
                 },
                 label: "Rotate last coll +5°",

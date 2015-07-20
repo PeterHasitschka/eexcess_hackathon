@@ -598,7 +598,10 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
                 true
                 );
         return;
+    } else {
+        
     }
+
 
 
 
