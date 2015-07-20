@@ -13,7 +13,7 @@ GLVIS.config = {
     },
     three: {
         camera: {
-            NEAR: 0.1,
+            NEAR: -1000,
             FAR: 10000,
             Z_POS: 300
         },
@@ -159,6 +159,12 @@ GLVIS.config = {
                     label_color: "#FFFFFF"
                 }
             }
+        },
+        rotation: {
+            speed: 0.1,
+            pow: 0.01,
+            threshold: 2,
+            prefix : "coll_rot_"
         }
     },
     connection: {

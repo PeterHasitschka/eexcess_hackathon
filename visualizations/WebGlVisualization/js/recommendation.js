@@ -40,6 +40,11 @@ GLVIS.Recommendation = function (eexcess_data) {
             y: 0,
             z: GLVIS.config.collection.recommendation.init_z
         },
+        relative_unrotated_position: {
+            x: 0,
+            y: 0,
+            z: GLVIS.config.collection.recommendation.init_z
+        },
         radius: GLVIS.config.collection.recommendation.radius,
         color: GLVIS.config.collection.recommendation.color,
         opacity: 1
@@ -404,15 +409,15 @@ GLVIS.Recommendation.prototype.getPosition = function () {
  * @returns {GLVIS.Recommendation.prototype.getRelativePosition.pos}
  */
 GLVIS.Recommendation.prototype.getRelativePosition = function () {
-
     var pos = {
         x: this.vis_data_.relative_position.x,
         y: this.vis_data_.relative_position.y,
         z: this.vis_data_.relative_position.z
     };
     return pos;
-
 };
+
+
 
 /**
  * Setting the relative position of the recommendation related to the collection
@@ -422,20 +427,37 @@ GLVIS.Recommendation.prototype.getRelativePosition = function () {
  */
 GLVIS.Recommendation.prototype.setRelativePosition = function (x, y, z) {
 
+    if (x === null || x === undefined)
+        x = this.vis_data_.relative_position.x;
+    if (y === null || y === undefined)
+        y = this.vis_data_.relative_position.y;
+    if (z === null || z === undefined)
+        z = this.vis_data_.relative_position.z;
+
+    //ROTATE NEW VALUES
+
+    var rotated = new THREE.Vector3();
+    rotated.set(x, y, z);
+    
+    
     var y_rotate = this.getCollection() ? this.getCollection().getRotation() : 0;
+    if (parseFloat(y_rotate) !== 0.0) {
+        console.log("ROTATION BEFORE: ", rotated.x, rotated.y, rotated.z);
+        var vec = new THREE.Vector3();
+        vec.set(x, y, z);
+        rotated = GLVIS.Tools.getRotation(2, y_rotate, vec);
+         console.log("ROTATION AFTER: ", rotated.x, rotated.y, rotated.z);
+    }
+   
 
-    var cos = Math.cos(y_rotate / 360 * 2 * Math.PI);
+
+
+    this.vis_data_.relative_position.x = rotated.x;
+    this.vis_data_.relative_position.y = rotated.y;
+    this.vis_data_.relative_position.z = rotated.z;
 
 
 
-    if (x !== null && x !== undefined)
-        this.vis_data_.relative_position.x = x * cos;
-
-    if (y !== null && y !== undefined)
-        this.vis_data_.relative_position.y = y;
-
-    if (z !== null && z !== undefined)
-        this.vis_data_.relative_position.z = z;
 
     //Force redraw of node
     this.setIsDirty(true);

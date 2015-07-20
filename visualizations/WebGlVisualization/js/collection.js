@@ -569,29 +569,29 @@ GLVIS.Collection.prototype.getHighlightRecsByLabel = function () {
  * Setting the degree of rotation around the y-axis of the collection
  * If animate flag is set: Animation gets registered
  * @param {float} degree
+ * @param {boolean} animate Animate Rotation
  */
 GLVIS.Collection.prototype.setRotation = function (degree, animate) {
 
     if (this.ring_representation_)
         return;
 
-    //degree = degree % 360;
-
     if (degree === this.vis_data_.rotation_degree)
         return;
 
+    var rotate_config = GLVIS.config.collection.rotation;
     if (animate) {
 
         GLVIS.Scene.getCurrentScene().getAnimation().register(
-                "coll_rot_" + this.getId(),
+                rotate_config.prefix + this.getId(),
                 degree,
                 null,
                 this.getRotation.bind(this),
                 this.setRotation.bind(this),
                 0,
-                0.1,
-                0.05,
-                0.1,
+                rotate_config.speed,
+                rotate_config.pow,
+                rotate_config.threshold,
                 function () {
                     console.log("ready rotation");
                 },
@@ -599,11 +599,8 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
                 );
         return;
     } else {
-        
+
     }
-
-
-
 
     this.vis_data_.rotation_degree = degree;
 
