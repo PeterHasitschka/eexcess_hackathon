@@ -40,7 +40,8 @@ GLVIS.Collection = function (eexcess_data) {
         //Because several visual repr. should be able to use it
         position: {
             x: 0,
-            y: 0
+            y: 0,
+            z: GLVIS.config.collection.center_node.circle.z_value
         },
         rotation_degree: 0.0,
         gl_objects: []
@@ -370,13 +371,17 @@ GLVIS.Collection.prototype.getPosition = function () {
  * If one parameter is null or undefined it gets ignored
  * @param {float} x
  * @param {float} y
+ * @param {float} z
  */
-GLVIS.Collection.prototype.setPosition = function (x, y) {
+GLVIS.Collection.prototype.setPosition = function (x, y, z) {
     if (x !== undefined && x !== null)
         this.vis_data_.position.x = x;
 
     if (y !== undefined && y !== null)
         this.vis_data_.position.y = y;
+
+    if (z !== undefined && z !== null)
+        this.vis_data_.position.z = z;
 
     this.rebuildLabelPositions();
 
@@ -588,10 +593,10 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
                 0.05,
                 0.1,
                 function () {
-                    //console.log("ready rotation");
+                    console.log("ready rotation");
                 },
                 true
-        );
+                );
         return;
     }
 

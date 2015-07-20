@@ -122,7 +122,7 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
     this.webgl_objects_.circle_outer.position.set(
             abs_pos.x,
             abs_pos.y,
-            z_pos
+            abs_pos.z
             );
 
     var curr_radius = this.recommendation_.getRadius();
@@ -136,7 +136,7 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
         this.webgl_objects_.circle_inner.position.set(
                 abs_pos.x,
                 abs_pos.y,
-                z_pos + GLVIS.config.collection.recommendation.detail_node.z_diff_inner_circle
+                abs_pos.z + GLVIS.config.collection.recommendation.detail_node.z_diff_inner_circle
                 );
 
         this.webgl_objects_.circle_inner.scale.set(scale_factor, scale_factor, scale_factor);

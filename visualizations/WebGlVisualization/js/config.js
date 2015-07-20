@@ -42,8 +42,8 @@ GLVIS.config = {
             radius: 5.0,
             color: 0x4444FF,
             highlight_color: 0xFF00FF,
+            init_z: -19,
             common_node: {
-                z_value: -19,
                 min_radius: 0.5,
                 active_radius: 10,
                 color_positive: 0x00CC00,
@@ -53,7 +53,6 @@ GLVIS.config = {
                 }
             },
             detail_node: {
-                z_value: -19,
                 min_radius: 0.5,
                 active_radius: 10,
                 gap_inner_circle: 0.2,

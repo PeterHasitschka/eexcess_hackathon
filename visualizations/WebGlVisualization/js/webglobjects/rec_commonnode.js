@@ -71,11 +71,10 @@ GLVIS.RecommendationCommonNode.prototype.render = function () {
 
     var abs_pos = this.recommendation_.getPosition();
 
-    var z_pos = GLVIS.config.collection.recommendation.common_node.z_value;
     this.webgl_objects_.circle.position.set(
             abs_pos.x,
             abs_pos.y,
-            z_pos
+            abs_pos.z
             );
 
     var curr_radius = this.recommendation_.getRadius();
