@@ -57,22 +57,14 @@ GLVIS.Tools.getPosFromRad = function (rad, distance) {
  */
 GLVIS.Tools.getRotation = function (axis, degree, point) {
 
-    var sin = Math.sin(degree / 360 * 2 * Math.PI);
-    var cos = Math.cos(degree / 360 * 2 * Math.PI);
-
-    console.log(degree);
-
+    var rad = degree / 360 * 2 * Math.PI;
 
     switch (axis) {
 
         case 2 :
-            var rotation_matrix = new THREE.Matrix3();
-            rotation_matrix.set(
-                    cos, 0, sin,
-                    0, 1, 0,
-                    -sin, 0, cos);
+            var axis = new THREE.Vector3(0, 1, 0);
+            var rotated_point = point.applyAxisAngle(axis, rad);
 
-            var rotated_point = point.applyMatrix3(rotation_matrix);
             return  rotated_point;
 
         default:

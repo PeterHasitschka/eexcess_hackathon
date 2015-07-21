@@ -163,7 +163,7 @@ GLVIS.config = {
         rotation: {
             speed: 0.1,
             pow: 0.01,
-            threshold: 2,
+            threshold: 0.5,
             prefix : "coll_rot_"
         }
     },

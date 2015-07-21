@@ -38,12 +38,7 @@ GLVIS.Recommendation = function (eexcess_data) {
         relative_position: {
             x: 0,
             y: 0,
-            z: GLVIS.config.collection.recommendation.init_z
-        },
-        relative_unrotated_position: {
-            x: 0,
-            y: 0,
-            z: GLVIS.config.collection.recommendation.init_z
+            z: 0
         },
         radius: GLVIS.config.collection.recommendation.radius,
         color: GLVIS.config.collection.recommendation.color,
@@ -421,6 +416,7 @@ GLVIS.Recommendation.prototype.getRelativePosition = function () {
 
 /**
  * Setting the relative position of the recommendation related to the collection
+ * The collection's rotation gets added to this point here
  * @param {float} x
  * @param {float} y
  * @param {float} z
@@ -434,30 +430,17 @@ GLVIS.Recommendation.prototype.setRelativePosition = function (x, y, z) {
     if (z === null || z === undefined)
         z = this.vis_data_.relative_position.z;
 
-    //ROTATE NEW VALUES
+    var rotated = new THREE.Vector3(x, y, z);
 
-    var rotated = new THREE.Vector3();
-    rotated.set(x, y, z);
-    
-    
     var y_rotate = this.getCollection() ? this.getCollection().getRotation() : 0;
     if (parseFloat(y_rotate) !== 0.0) {
-        console.log("ROTATION BEFORE: ", rotated.x, rotated.y, rotated.z);
-        var vec = new THREE.Vector3();
-        vec.set(x, y, z);
+        var vec = new THREE.Vector3(x, y, z);
         rotated = GLVIS.Tools.getRotation(2, y_rotate, vec);
-         console.log("ROTATION AFTER: ", rotated.x, rotated.y, rotated.z);
     }
-   
-
-
 
     this.vis_data_.relative_position.x = rotated.x;
     this.vis_data_.relative_position.y = rotated.y;
     this.vis_data_.relative_position.z = rotated.z;
-
-
-
 
     //Force redraw of node
     this.setIsDirty(true);
@@ -476,7 +459,7 @@ GLVIS.Recommendation.prototype.setRelativePositionByRad = function (that, rad) {
 
     var distance = GLVIS.config.collection.recommendation.init_distance;
     var pos = GLVIS.Tools.getPosFromRad(rad, distance);
-    that.setRelativePosition(pos.x, pos.y);
+    that.setRelativePosition(pos.x, pos.y, 0);
 };
 
 /**

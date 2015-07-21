@@ -114,9 +114,9 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                     /** @type{GLVIS.Collection} **/
                     var coll = _.last(GLVIS.Scene.getCurrentScene().getCollections());
                     GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation("coll_rot_" + coll.getId());
-                    coll.setRotation(coll.getRotation() + 5.0);
+                    coll.setRotation(coll.getRotation() + 45.0);
                 },
-                label: "Rotate last coll +5°",
+                label: "Rotate last coll +45°",
                 visible: true
             },
             test_rotate_coll_anim: {
@@ -124,8 +124,8 @@ GLVIS.ToolbarHandler.prototype.buttons = {
 
                     /** @type{GLVIS.Collection} **/
                     var coll = _.last(GLVIS.Scene.getCurrentScene().getCollections());
-                    
-                    coll.setRotation(Math.random() * 360, true);
+                    GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation("coll_rot_" + coll.getId());
+                    coll.setRotation(coll.getRotation() + 90, true);
                 },
                 label: "Rotate last coll animation +90°",
                 visible: true

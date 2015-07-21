@@ -593,13 +593,12 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
                 rotate_config.pow,
                 rotate_config.threshold,
                 function () {
-                    console.log("ready rotation");
+                    GLVIS.Debugger.debug("Collection", "Finished rotation", 5);
                 },
                 true
                 );
         return;
     } else {
-
     }
 
     this.vis_data_.rotation_degree = degree;
