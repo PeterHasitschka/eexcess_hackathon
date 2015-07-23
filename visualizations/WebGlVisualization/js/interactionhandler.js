@@ -100,9 +100,9 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
     GLVIS.Debugger.debug("InteractionHandler",
             "HANDLING SCENE INTERACTION EVENT '" + interaction_type + "'", 6);
 
-    for (var i=0; i< intersected.length; i++) {
+    for (var i = 0; i < intersected.length; i++) {
         var curr_intersect_obj = intersected[i].object;
-                GLVIS.Debugger.debug("InteractionHandler",
+        GLVIS.Debugger.debug("InteractionHandler",
                 ["Going through intersected object:", curr_intersect_obj], 9);
 
         if (curr_intersect_obj.interaction instanceof Object)
@@ -136,6 +136,7 @@ GLVIS.InteractionHandler.prototype.handleEmptyClick = function (interaction_type
      */
     if (GLVIS.Text.current_selected) {
         GLVIS.Text.current_selected.handleMouseleave();
+        GLVIS.Text.current_selected = null;
     }
 
     /**

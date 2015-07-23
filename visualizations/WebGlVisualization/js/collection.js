@@ -180,7 +180,7 @@ GLVIS.Collection.prototype.initLabels = function () {
             };
 
             /**
-             * Function called in Label when mouse-leaved.
+             * Function called in Label when mouse left.
              * For unhighlighting recs by label
              * @param {type} text Inserted by label
              * @param {type} data see mouse_data
@@ -192,7 +192,6 @@ GLVIS.Collection.prototype.initLabels = function () {
 
                 if (highlighter.getCurrentHighlightedLabel() === text.getText())
                     highlighter.unHighlight();
-
             };
 
             var mouse_data = {
@@ -533,7 +532,7 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
     pos_handler.setIsFlipbook(true);
     pos_handler.calculatePositions(false);
 
-
+    this.unconnectSameRecsFromOtherCollections();
     this.setRotation(0);
 
     this.ring_representation_ = new GLVIS.RingRepresentation(this);
