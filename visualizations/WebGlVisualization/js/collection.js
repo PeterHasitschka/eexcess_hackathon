@@ -386,6 +386,7 @@ GLVIS.Collection.prototype.setPosition = function (x, y, z) {
     this.rebuildLabelPositions();
 
     this.setIsDirty(true);
+    this.setMyGlObjectsDirty_();
 };
 
 /**
@@ -512,6 +513,26 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
  * the graph.
  */
 GLVIS.Collection.prototype.createRingRepresentation = function () {
+
+    /**
+     * Remove all other ringreps
+     * @param {GLVIS.Collection} coll
+     */
+    _.each(GLVIS.Scene.getCurrentScene().getCollections(), function (coll) {
+        if (coll.getId() === this.getId())
+            return;
+
+        coll.deleteRingRepresentation();
+    }.bind(this));
+
+    /**
+     * Create Flipbook
+     */
+    var pos_handler = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler();
+    pos_handler.setCollToFocus(this);
+    pos_handler.setIsFlipbook(true);
+    pos_handler.calculatePositions(false);
+
 
     this.setRotation(0);
 
