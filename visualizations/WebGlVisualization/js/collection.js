@@ -172,7 +172,8 @@ GLVIS.Collection.prototype.initLabels = function () {
                 /** @type{GLVIS.Collection} **/
                 var collection = data.collection;
                 var highlighter = collection.getHighlightRecsByLabel();
-
+                
+                
                 if (highlighter.getCurrentHighlightedLabel() === text.getText())
                     return;
                 else if (highlighter.getCurrentHighlightedLabel())
@@ -557,6 +558,22 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
 
     this.setRecPosHandler(new GLVIS.RecommendationPosDistributed(this));
     this.getRecPosHandler().calculatePositions();
+};
+
+GLVIS.Collection.prototype.hideLabels = function(){
+  
+    for (var i=0; i < this.labels_.length; i++) {
+        this.labels_[i].setIsVisible(false);
+    }
+        
+};
+
+GLVIS.Collection.prototype.showLabels = function(){
+  
+    for (var i=0; i < this.labels_.length; i++) {
+        this.labels_[i].setIsVisible(true);
+    }
+        
 };
 
 /**

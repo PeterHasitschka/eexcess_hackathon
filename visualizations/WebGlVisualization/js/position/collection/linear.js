@@ -86,9 +86,19 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
         var curr_x = last_x + x_step * neighbor_fact;
         last_x = curr_x;
 
+        if (this.is_flipbook_) {
+            if (current_collection.getId() !== coll_to_focus.getId()) {
+                current_collection.setRotation((current_collection.getId() < coll_to_focus.getId() ? -1 : 1) * 80, true);
+                current_collection.hideLabels();
+            }
+            else
+                current_collection.showLabels();
+        }
+        else {
+            current_collection.setRotation(0);
+            current_collection.showLabels();
+        }
 
-        if (this.is_flipbook_ && current_collection.getId() !== coll_to_focus.getId())
-            current_collection.setRotation((current_collection.getId() < coll_to_focus.getId() ? -1 : 1) * 80, true);
 
         current_collection.setPosition(curr_x, null);
 

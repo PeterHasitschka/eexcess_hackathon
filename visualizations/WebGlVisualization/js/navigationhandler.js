@@ -119,6 +119,7 @@ GLVIS.NavigationHandler.prototype.animatedMovement = function (move_goal_x, move
     var threshold = config.threshold;
 
 
+    //GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.move_id_x);
     //X
     GLVIS.Scene.getCurrentScene().getAnimation().register(
             this.animation_.move_id_x,
@@ -133,6 +134,7 @@ GLVIS.NavigationHandler.prototype.animatedMovement = function (move_goal_x, move
             callback_fct
             );
 
+    //GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.move_id_y);
     //Y
     GLVIS.Scene.getCurrentScene().getAnimation().register(
             this.animation_.move_id_y,
@@ -162,6 +164,8 @@ GLVIS.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_f
 
     var getter = this.getZoomFactor;
     var setter = this.zoomDelta;
+
+    //GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.zoom_id);
 
     GLVIS.Scene.getCurrentScene().getAnimation().register(
             this.animation_.zoom_id,

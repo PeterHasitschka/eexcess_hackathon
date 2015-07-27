@@ -144,6 +144,17 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                 },
                 label: "Remove Ring-Representations",
                 visible: true
+            },
+            reset_flipbook: {
+                fct: function (e) {
+
+                    var pos_handler = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler();
+                    pos_handler.setIsFlipbook(false);
+                    pos_handler.calculatePositions();
+
+                },
+                label: "Reset flipbook",
+                visible: true
             }
 
         }

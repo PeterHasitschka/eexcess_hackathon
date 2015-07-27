@@ -64,6 +64,8 @@ GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouselea
         z: init_data.pos_z
     };
 
+    this.visible_ = true;
+
     /**
      * Mesh Focus: Necessary to create second mesh. Updating with e.g. other font-
      * size or background for highlighting leads to unsetting and recreating mesh.
@@ -220,6 +222,10 @@ GLVIS.Text.prototype.createMesh = function (font, font_size, color, bg_color, op
  * Handling a mouseover event. Called by the mesh's mouseover callback
  */
 GLVIS.Text.prototype.handleMouseover = function () {
+
+    if (!this.getIsVisible())
+        return;
+
     this.highlight();
 
     if (GLVIS.Text.current_selected && GLVIS.Text.current_selected !== this)
@@ -234,6 +240,10 @@ GLVIS.Text.prototype.handleMouseover = function () {
  * Handling mouse-leave. Called by interaction handler
  */
 GLVIS.Text.prototype.handleMouseleave = function () {
+
+    if (!this.getIsVisible())
+        return;
+
     this.unHighlight();
 
     GLVIS.Text.current_selected = null;
@@ -281,6 +291,8 @@ GLVIS.Text.prototype.render = function () {
 
     this.webgl_objects_.mesh.position.set(pos_x, pos_y, pos_z);
     this.webgl_objects_.mesh.material.opacity = this.opacity_;
+
+    this.webgl_objects_.mesh.visible = this.getIsVisible();
 
     this.webgl_objects_.mesh_focus.position.set(pos_x, pos_y, pos_z);
     this.webgl_objects_.mesh_focus.material.opacity = this.opacity_;
@@ -369,6 +381,20 @@ GLVIS.Text.prototype.setIsDirty = function (dirty) {
 
 GLVIS.Text.prototype.getIsDirty = function () {
     return this.dirty_;
+};
+
+
+GLVIS.Text.prototype.getIsVisible = function () {
+    return this.visible_;
+};
+
+GLVIS.Text.prototype.setIsVisible = function (visible) {
+
+    if (this.visible_ === visible)
+        return;
+
+    this.visible_ = visible;
+    this.setIsDirty(true);
 };
 
 /**
