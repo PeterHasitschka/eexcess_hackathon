@@ -26,6 +26,10 @@ GLVIS.HighlightRecsByLabel.prototype.highlight = function (label) {
 
     this.current_highlight_ = label.getText();
 
+    if (GLVIS.HighlightRecsByLabel.current_highlighter && GLVIS.HighlightRecsByLabel.current_highlighter !== this)
+        GLVIS.HighlightRecsByLabel.current_highlighter.unHighlight();
+    GLVIS.HighlightRecsByLabel.current_highlighter = this;
+
     var recs = this.collection_.getRecommendations();
     for (var i = 0; i < recs.length; i++) {
 
@@ -59,6 +63,7 @@ GLVIS.HighlightRecsByLabel.prototype.highlight = function (label) {
  */
 GLVIS.HighlightRecsByLabel.prototype.unHighlight = function () {
 
+    GLVIS.HighlightRecsByLabel.current_highlighter = null;
     this.current_highlight_ = null;
 
     var recs = this.collection_.getRecommendations();
@@ -66,7 +71,7 @@ GLVIS.HighlightRecsByLabel.prototype.unHighlight = function () {
 
         /** @type{GLVIS.Recommendation} **/
         var curr_rec = recs[i];
-       
+
         if (this.previous_rec_colors_[curr_rec.getId()] !== undefined)
             curr_rec.setColor(this.previous_rec_colors_[curr_rec.getId()]);
     }
@@ -81,3 +86,8 @@ GLVIS.HighlightRecsByLabel.prototype.unHighlight = function () {
 GLVIS.HighlightRecsByLabel.prototype.getCurrentHighlightedLabel = function () {
     return this.current_highlight_;
 };
+
+/**
+ * @type{GLVIS.HighlightRecsByLabel}
+ */
+GLVIS.HighlightRecsByLabel.current_highlighter = null;

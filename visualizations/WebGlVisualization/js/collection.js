@@ -175,6 +175,8 @@ GLVIS.Collection.prototype.initLabels = function () {
 
                 if (highlighter.getCurrentHighlightedLabel() === text.getText())
                     return;
+                else if (highlighter.getCurrentHighlightedLabel())
+                    highlighter.unHighlight();
 
                 highlighter.highlight(text);
             };

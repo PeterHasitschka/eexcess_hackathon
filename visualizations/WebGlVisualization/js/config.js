@@ -210,7 +210,7 @@ GLVIS.config = {
             animated: {
                 threshold: 1,
                 pow: 0.2,
-                speed_fct: 0.4
+                speed_fct: 0.2
             }
         }
     },
