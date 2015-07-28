@@ -517,8 +517,16 @@ GLVIS.Recommendation.prototype.getColor = function () {
     return this.vis_data_.color;
 };
 
-GLVIS.Recommendation.prototype.getOpacity = function () {
-    return this.vis_data_.opacity;
+GLVIS.Recommendation.prototype.getOpacity = function (include_distance) {
+
+    var depth_opacity_fact = 1;
+
+    var depth_strength = GLVIS.config.collection.recommendation.opacity_depth.strength;
+    var depth_weaken = GLVIS.config.collection.recommendation.opacity_depth.weakness;
+    if (include_distance) {
+        depth_opacity_fact = Math.min(1, (1 - this.getPosition().z * depth_strength)) * depth_weaken + (1 - depth_weaken);
+    }
+    return this.vis_data_.opacity * depth_opacity_fact;
 };
 
 GLVIS.Recommendation.prototype.setIsDirty = function (dirty) {

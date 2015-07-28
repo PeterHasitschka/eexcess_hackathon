@@ -140,7 +140,7 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
                 );
 
         this.webgl_objects_.circle_inner.scale.set(scale_factor, scale_factor, scale_factor);
-        this.webgl_objects_.circle_inner.material.opacity = this.recommendation_.getOpacity();
+        this.webgl_objects_.circle_inner.material.opacity = this.recommendation_.getOpacity(true);
     }
 };
 

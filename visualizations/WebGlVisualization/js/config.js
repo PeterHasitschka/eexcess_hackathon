@@ -43,6 +43,10 @@ GLVIS.config = {
             color: 0x4444FF,
             highlight_color: 0xFF00FF,
             init_z: -19,
+            opacity_depth : {
+              strength: 0.01,
+              weakness: 0.5
+            },
             common_node: {
                 min_radius: 0.5,
                 active_radius: 10,
@@ -125,8 +129,22 @@ GLVIS.config = {
                     color: "#000033",
                     z_value: -14
                 }
+            },
+            replacements: {
+                "unknown": "?",
+                "https://creativecommons.org/licenses/by/3.0/legalcode": "CC 3.0",
+                "http://www.europeana.eu/rights/rr-f/": "E RR-F",
+                "http://creativecommons.org/licenses/by-nc-sa/4.0/": "CC NC-SA 4.0",
+                "http://creativecommons.org/licenses/by-nc-sa/3.0/": "CC NC-SA 3.0",
+                "http://creativecommons.org/licenses/by-sa/3.0/": "CC SA 3.0",
+                "http://creativecommons.org/licenses/by-sa/3.0/nl/": "CC SA 3.0 NL",
+                "http://creativecommons.org/publicdomain/zero/1.0/": "CC0 1.0",
+                "http://creativecommons.org/publicdomain/mark/1.0/" : "CC PD Mark 1.0",
+                "http://www.europeana.eu/rights/rr-r/": "E RR",
+                "http://www.europeana.eu/rights/out-of-copyright-non-commercial/": "E OOC-NC",
+                "http://www.europeana.eu/rights/out-of-copyright-non-commercial/http://www.europeana.eu/rights/out-of-copyright-non-commercial/": "E OOC-NC",
+                
             }
-
         },
         labels: {
             columns: 3,
@@ -164,7 +182,7 @@ GLVIS.config = {
             speed: 0.1,
             pow: 0.01,
             threshold: 0.5,
-            prefix : "coll_rot_"
+            prefix: "coll_rot_"
         }
     },
     connection: {

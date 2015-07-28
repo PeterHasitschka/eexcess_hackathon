@@ -41,7 +41,6 @@ GLVIS.RecommendationCommonNode.prototype.initAndRegisterGlObj = function () {
                     config.circle.segments),
             circleMaterial);
 
-
     //Register click-function
     circle.interaction = {
         "mouseclick": this.recommendation_.handleClick.bind(this.recommendation_)
@@ -59,7 +58,7 @@ GLVIS.RecommendationCommonNode.prototype.render = function () {
 
     if (!this.dirty_)
         return;
-    
+
     //May happen after deleting GL-Nodes but render is called once more before deleting
     if (!this.webgl_objects_.circle)
         return;
@@ -81,7 +80,10 @@ GLVIS.RecommendationCommonNode.prototype.render = function () {
     var scale_factor = curr_radius / this.init_radius_;
     this.webgl_objects_.circle.scale.set(scale_factor, scale_factor, scale_factor);
 
-    this.webgl_objects_.circle.material.opacity = this.recommendation_.getOpacity();
+
+    
+
+    this.webgl_objects_.circle.material.opacity = this.recommendation_.getOpacity(true);
     this.webgl_objects_.circle.material.color.setHex(this.recommendation_.getColor());
 
 };
@@ -97,8 +99,8 @@ GLVIS.RecommendationCommonNode.prototype.getIsDirty = function () {
 /**
  * Delete all GL-Objects and remove them from the scene
  */
-GLVIS.RecommendationCommonNode.prototype.delete = function(){
-    
+GLVIS.RecommendationCommonNode.prototype.delete = function () {
+
     var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
     three_scene.remove(this.webgl_objects_.circle);
 

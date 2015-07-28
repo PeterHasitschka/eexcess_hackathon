@@ -112,6 +112,10 @@ GLVIS.RingTree.prototype.getValue = function (rec, structure) {
 
             var id = structure.id;
             var val = eexcess_data.result.facets[id];
+
+            if (GLVIS.config.collection.ring.replacements[val])
+                val = GLVIS.config.collection.ring.replacements[val];
+
             return val;
 
             break;
