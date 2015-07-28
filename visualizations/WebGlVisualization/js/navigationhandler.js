@@ -205,6 +205,19 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
     var that = this;
     var callback_called = false;
 
+    /*
+     * Move animation currently turned off. If Flipbook gets activated, the length
+     * of the collections decreases, so the position where the movement starts is
+     * somewhere far right of the collections and looks strange.
+     * @TODO: Skip animation only if flipbook just created.
+     * @TODO: Fix click-coll-bug when animation not ready. (Starting far right)
+     */
+    var animated_move = false;
+
+    if (!animated_move)
+        this.setCamera(collection.getPosition().x, collection.getPosition().y);
+
+
     that.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_in, function () {
         GLVIS.Debugger.debug("NavigationHandler",
                 "finished zoom to " + GLVIS.config.navigation.zoom.animated.zoom_in,
@@ -216,16 +229,17 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
         }
     });
 
-    this.animatedMovement(collection.getPosition().x, collection.getPosition().y, function () {
+    if (animated_move) {
+        this.animatedMovement(collection.getPosition().x, collection.getPosition().y, function () {
 
-        GLVIS.Debugger.debug("NavigationHandler",
-                "Finished movement to graph",
-                3);
-        if (callback_fct && !callback_called) {
-            callback_called = true;
-            callback_fct();
-        }
+            GLVIS.Debugger.debug("NavigationHandler",
+                    "Finished movement to graph",
+                    3);
+            if (callback_fct && !callback_called) {
+                callback_called = true;
+                callback_fct();
+            }
 
-    });
-
+        });
+    }
 };

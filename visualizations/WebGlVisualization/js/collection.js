@@ -44,7 +44,8 @@ GLVIS.Collection = function (eexcess_data) {
             z: GLVIS.config.collection.center_node.circle.z_value
         },
         rotation_degree: 0.0,
-        gl_objects: []
+        gl_objects: [],
+        is_currently_animated: false
     };
 
     /**
@@ -172,8 +173,8 @@ GLVIS.Collection.prototype.initLabels = function () {
                 /** @type{GLVIS.Collection} **/
                 var collection = data.collection;
                 var highlighter = collection.getHighlightRecsByLabel();
-                
-                
+
+
                 if (highlighter.getCurrentHighlightedLabel() === text.getText())
                     return;
                 else if (highlighter.getCurrentHighlightedLabel())
@@ -282,7 +283,10 @@ GLVIS.Collection.prototype.handleClick = function () {
  */
 GLVIS.Collection.prototype.handleMouseover = function () {
 
-    this.connectSameRecsFromOtherCollections();
+    if (!this.vis_data_.is_currently_animated)
+        this.connectSameRecsFromOtherCollections();
+    else
+        this.unconnectSameRecsFromOtherCollections();
 };
 
 /**
@@ -523,7 +527,6 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
     _.each(GLVIS.Scene.getCurrentScene().getCollections(), function (coll) {
         if (coll.getId() === this.getId())
             return;
-
         coll.deleteRingRepresentation();
     }.bind(this));
 
@@ -541,7 +544,13 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
     this.ring_representation_ = new GLVIS.RingRepresentation(this);
 
     this.setRecPosHandler(new GLVIS.RecommendationPosRingRepresentation(this));
-    this.getRecPosHandler().calculatePositions();
+
+    this.vis_data_.is_currently_animated = true;
+    this.getRecPosHandler().calculatePositions(
+            function () {
+                this.vis_data_.is_currently_animated = false;
+            }.bind(this)
+            );
 };
 
 /**
@@ -560,20 +569,18 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
     this.getRecPosHandler().calculatePositions();
 };
 
-GLVIS.Collection.prototype.hideLabels = function(){
-  
-    for (var i=0; i < this.labels_.length; i++) {
+GLVIS.Collection.prototype.hideLabels = function () {
+
+    for (var i = 0; i < this.labels_.length; i++) {
         this.labels_[i].setIsVisible(false);
     }
-        
 };
 
-GLVIS.Collection.prototype.showLabels = function(){
-  
-    for (var i=0; i < this.labels_.length; i++) {
+GLVIS.Collection.prototype.showLabels = function () {
+
+    for (var i = 0; i < this.labels_.length; i++) {
         this.labels_[i].setIsVisible(true);
     }
-        
 };
 
 /**
@@ -621,6 +628,7 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
     var rotate_config = GLVIS.config.collection.rotation;
     if (animate) {
 
+        this.vis_data_.is_currently_animated = true;
         GLVIS.Scene.getCurrentScene().getAnimation().register(
                 rotate_config.prefix + this.getId(),
                 degree,
@@ -633,7 +641,8 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
                 rotate_config.threshold,
                 function () {
                     GLVIS.Debugger.debug("Collection", "Finished rotation", 5);
-                },
+                    this.vis_data_.is_currently_animated = false;
+                }.bind(this),
                 true
                 );
         return;

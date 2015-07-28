@@ -11,18 +11,25 @@ GLVIS.RecommendationPosRingRepresentation = function (collection) {
 
     /** @type{GLVIS.Collection} **/
     this.collection_ = collection;
+
+    this.rings_ready_ = 0;
+
+    this.cb_ = null;
 };
 
 /**
  * Distributing the recommendations according to the ring representation.
  * @returns {undefined}
  */
-GLVIS.RecommendationPosRingRepresentation.prototype.calculatePositions = function () {
+GLVIS.RecommendationPosRingRepresentation.prototype.calculatePositions = function (cb) {
 
     var ringrep = this.collection_.getRingRepresentation();
 
     if (!ringrep)
         throw ("No Ring Representation found!");
+
+    if (cb)
+        this.cb_ = cb;
 
     var segments = ringrep.getRingSegments();
 
@@ -38,11 +45,11 @@ GLVIS.RecommendationPosRingRepresentation.prototype.calculatePositions = functio
 
         var seg_pos = curr_seg.getRelativePosition();
         var seg_degree = GLVIS.Tools.getRadFromPos(seg_pos.x, seg_pos.y);
-        
+
         var seg_length_rad = curr_seg.getRadLength();
         var rad_step = seg_length_rad / recommendations.length;
-        
-        var curr_rad = seg_degree - seg_length_rad/2 + rad_step/2;
+
+        var curr_rad = seg_degree - seg_length_rad / 2 + rad_step / 2;
 
         for (var i = 0; i < recommendations.length; i++) {
             /** @type{GLVIS.Recommendation} **/
@@ -71,15 +78,31 @@ GLVIS.RecommendationPosRingRepresentation.prototype.calculatePositions = functio
                     anim_config.threshold, //THRESHOLD  
                     function () {
                         GLVIS.Debugger.debug("RecommendationPosRingRepresentation", "Finished moving rec " + curr_rec.getId(), 8);
-                    },
+                        if (cb)
+                            this.cbRingReady_();
+                    }.bind(this),
                     true
                     );
-
             curr_rad += rad_step;
         }
-    };
+    }
+};
 
+/**
+ * Callback for rec-movement.
+ * Counting up how many recommendation performed their animation to finally
+ * call the given callback
+ */
+GLVIS.RecommendationPosRingRepresentation.prototype.cbRingReady_ = function () {
 
+    if (!this.cb_)
+        return;
 
+    this.rings_ready_++;
+
+    if (this.rings_ready_ === this.collection_.getRecommendations().length) {
+        GLVIS.Debugger.debug("RecommendationPosRingRepresentation", "All recs performed animation -> callback", 5);
+        this.cb_();
+    }
 };
 
