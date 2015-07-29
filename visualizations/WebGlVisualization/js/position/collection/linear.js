@@ -111,7 +111,10 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
         coll_to_focus = last_coll;
 
 
-    //Focus last collection
+    /**
+     * Focus last collection
+     * @type {GLVIS.NavigationHandler} navigation_handler
+     */
     var navigation_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
     if (coll_to_focus) {
         navigation_handler.focusCollection(coll_to_focus, function () {

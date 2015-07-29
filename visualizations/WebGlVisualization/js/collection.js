@@ -274,8 +274,8 @@ GLVIS.Collection.prototype.handleClick = function () {
     //this.deleteRingRepresentation();
     if (!this.ring_representation_)
         this.createRingRepresentation();
-
-    this.selectAndFocus();
+    else
+        this.selectAndFocus();
 };
 
 /**
@@ -333,8 +333,9 @@ GLVIS.Collection.prototype.unconnectSameRecsFromOtherCollections = function () {
  * Calls the @see{GLVIS.NavigationHandler.focusCollection} function
  * to zoom and move to the collection.
  * Additionaly informs the Rec Dashboard Handler about the click
+ * @param {function} cb Callback
  */
-GLVIS.Collection.prototype.selectAndFocus = function () {
+GLVIS.Collection.prototype.selectAndFocus = function (cb) {
 
     this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
 
@@ -342,7 +343,9 @@ GLVIS.Collection.prototype.selectAndFocus = function () {
         GLVIS.Debugger.debug("Collection",
                 "FOCUSGRAPH: Callback finish!",
                 3);
-    });
+        if (cb)
+            cb();
+    }.bind(this));
     GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onCollectionClick(this);
 };
 
@@ -532,10 +535,13 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
 
     /**
      * Create Flipbook
+     * @type {GLVIS.CollectionPosLinear} pos_handler
      */
     var pos_handler = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler();
     pos_handler.setCollToFocus(this);
     pos_handler.setIsFlipbook(true);
+
+    this.selectAndFocus();
     pos_handler.calculatePositions(false);
 
     this.unconnectSameRecsFromOtherCollections();

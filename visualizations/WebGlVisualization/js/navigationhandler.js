@@ -119,8 +119,8 @@ GLVIS.NavigationHandler.prototype.animatedMovement = function (move_goal_x, move
     var threshold = config.threshold;
 
 
-    //GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.move_id_x);
     //X
+    GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.move_id_x);
     GLVIS.Scene.getCurrentScene().getAnimation().register(
             this.animation_.move_id_x,
             move_goal_x,
@@ -134,8 +134,8 @@ GLVIS.NavigationHandler.prototype.animatedMovement = function (move_goal_x, move
             callback_fct
             );
 
-    //GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.move_id_y);
     //Y
+    GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.move_id_y);
     GLVIS.Scene.getCurrentScene().getAnimation().register(
             this.animation_.move_id_y,
             move_goal_y,
@@ -212,7 +212,7 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
      * @TODO: Skip animation only if flipbook just created.
      * @TODO: Fix click-coll-bug when animation not ready. (Starting far right)
      */
-    var animated_move = false;
+    var animated_move = true;
 
     if (!animated_move)
         this.setCamera(collection.getPosition().x, collection.getPosition().y);

@@ -99,10 +99,15 @@ GLVIS.Animation.prototype._finishAnimation = function (animation) {
     var params_for_setting = [];
     if (animation.object)
         params_for_setting.push(animation.object);
-
+    
+    var val = animation.goal;
+    if (!animation.add_to_current) {
+        val -= animation.getter_fct(animation.object);
+    }
     for (var param_count = 0; param_count < animation.setter_fct_param_num; param_count++)
         params_for_setting.push(null);
-    params_for_setting.push(animation.goal);
+    
+    params_for_setting.push(val);
 
     animation.setter_fct.apply(null, params_for_setting);
     this.unregister(animation.identifier);
