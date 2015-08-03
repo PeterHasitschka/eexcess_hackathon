@@ -102,7 +102,11 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
 
         current_collection.setPosition(curr_x, null);
 
-
+        if (current_collection.getRingRepresentation()) {
+            current_collection.deleteRingRepresentation();
+            //current_collection.createRingRepresentation();
+        }
+            
 
         var last_coll = current_collection;
     }
