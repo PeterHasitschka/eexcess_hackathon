@@ -45,6 +45,7 @@ GLVIS.Collection = function (eexcess_data) {
         },
         rotation_degree: 0.0,
         gl_objects: [],
+        mesh_group: null,
         is_currently_animated: false
     };
 
@@ -124,8 +125,23 @@ GLVIS.Collection.prototype.getRecPosHandler = function () {
  */
 GLVIS.Collection.prototype.initGlNode = function () {
 
-    var gl_node = new GLVIS.CollectionCenterNode(this);
+    //Create mesh-container and add it to the scene
+    var container = new THREE.Object3D();
+    this.vis_data_.mesh_container = container;
+    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(container);
+
+    //Create center node
+    var gl_node = new GLVIS.CollectionCenterNode(this, container);
+
     this.vis_data_.gl_objects.push(gl_node);
+};
+
+/**
+ * Returns the mesh-container holding all webgl-objects
+ * @returns {THREE.Object3D}
+ */
+GLVIS.Collection.prototype.getMeshContainerNode = function () {
+    return this.vis_data_.mesh_container;
 };
 
 /**

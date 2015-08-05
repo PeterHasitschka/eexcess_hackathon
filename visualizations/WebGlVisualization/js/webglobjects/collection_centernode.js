@@ -5,8 +5,9 @@ GLVIS = GLVIS || {};
 /**
  * Representing the node of a Collection in WebGl
  * @param {GLVIS.Collection} collection collection that node represents
+ * @param {THREE.Object3D | null} mesh_parent Object to use as webgl-parent
  */
-GLVIS.CollectionCenterNode = function (collection) {
+GLVIS.CollectionCenterNode = function (collection, mesh_parent) {
 
     /** @type{GLVIS.Collection} **/
     this.collection_ = collection;
@@ -19,10 +20,10 @@ GLVIS.CollectionCenterNode = function (collection) {
         circle: null
     };
 
-    this.initAndRegisterGlObj();
+    this.initAndRegisterGlObj(mesh_parent);
 };
 
-GLVIS.CollectionCenterNode.prototype.initAndRegisterGlObj = function () {
+GLVIS.CollectionCenterNode.prototype.initAndRegisterGlObj = function (mesh_parent) {
 
     var circle_config = GLVIS.config.collection.center_node.circle;
 
@@ -46,9 +47,12 @@ GLVIS.CollectionCenterNode.prototype.initAndRegisterGlObj = function () {
         "mouseover": this.collection_.handleMouseover.bind(this.collection_),
     };
 
-
-    var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
-    webgl_handler.getThreeScene().add(circle);
+    if (!mesh_parent) {
+        var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
+        webgl_handler.getThreeScene().add(circle);
+    }
+    else
+        mesh_parent.add(circle);
 
     this.webgl_objects_.circle = circle;
 

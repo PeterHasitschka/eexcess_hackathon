@@ -5,9 +5,10 @@ var GLVIS = GLVIS || {};
 /**
  * Holding information and GL-Representations of one search Result / One Recommendation
  * @param {object} eexcess_data Data from the database
+ * @param {GLVIS.Collection} collection optional collection
  * @returns {undefined}
  */
-GLVIS.Recommendation = function (eexcess_data) {
+GLVIS.Recommendation = function (eexcess_data, collection) {
 
     /**
      * Internal increment id
@@ -18,7 +19,7 @@ GLVIS.Recommendation = function (eexcess_data) {
      * Collection that has this recommendation
      * @type{GLVIS.Collection} 
      */
-    this.collection_ = null;
+    this.collection_ = collection ? collection : null;
 
     /**
      * Data like urls, timestamp etc.
@@ -104,10 +105,10 @@ GLVIS.Recommendation.prototype.deleteAllRecSplines = function () {
  */
 GLVIS.Recommendation.prototype.initGlNode = function () {
 
-    var gl_node = new GLVIS.RecommendationCommonNode(this);
+    var gl_node = new GLVIS.RecommendationCommonNode(this, this.getCollection().getMeshContainerNode());
     this.vis_data_.gl_objects.push(gl_node);
 
-    var gl_connection = new GLVIS.ConnectionCollectionRecommendation(this);
+    var gl_connection = new GLVIS.ConnectionCollectionRecommendation(this, this.getCollection().getMeshContainerNode());
     this.vis_data_.gl_objects.push(gl_connection);
     this.setRelativePositionByRad(0);
 };
@@ -321,7 +322,7 @@ GLVIS.Recommendation.prototype.setNodeType = function (type) {
         }
     }
     //Create new node type
-    var gl_node = new type(this);
+    var gl_node = new type(this, this.getCollection().getMeshContainerNode());
     this.vis_data_.gl_objects.push(gl_node);
     this.setIsDirty(true);
 };

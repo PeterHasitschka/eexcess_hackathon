@@ -5,8 +5,9 @@ GLVIS = GLVIS || {};
 /**
  * Representing a common recommendation of a Collection in WebGl
  * @param {GLVIS.Recommendation} recommendation recommendation that node represents
+ * @param {THREE.Object3D} mesh-parent
  */
-GLVIS.RecommendationCommonNode = function (recommendation) {
+GLVIS.RecommendationCommonNode = function (recommendation, mesh_parent) {
 
     this.dirty_ = true;
     this.recommendation_ = recommendation;
@@ -18,12 +19,14 @@ GLVIS.RecommendationCommonNode = function (recommendation) {
     //Needed due to relative scaling.
     this.init_radius_ = this.recommendation_.getRadius();
 
-    this.initAndRegisterGlObj();
+    this.mesh_parent_ = mesh_parent;
+
+    this.initAndRegisterGlObj(mesh_parent);
 };
 
 
 
-GLVIS.RecommendationCommonNode.prototype.initAndRegisterGlObj = function () {
+GLVIS.RecommendationCommonNode.prototype.initAndRegisterGlObj = function (mesh_parent) {
 
     var config = GLVIS.config.collection.recommendation.common_node;
 
@@ -47,8 +50,7 @@ GLVIS.RecommendationCommonNode.prototype.initAndRegisterGlObj = function () {
     };
 
 
-    var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
-    webgl_handler.getThreeScene().add(circle);
+    mesh_parent.add(circle);
 
     this.webgl_objects_.circle = circle;
 
@@ -81,7 +83,7 @@ GLVIS.RecommendationCommonNode.prototype.render = function () {
     this.webgl_objects_.circle.scale.set(scale_factor, scale_factor, scale_factor);
 
 
-    
+
 
     this.webgl_objects_.circle.material.opacity = this.recommendation_.getOpacity(true);
     this.webgl_objects_.circle.material.color.setHex(this.recommendation_.getColor());
@@ -101,8 +103,8 @@ GLVIS.RecommendationCommonNode.prototype.getIsDirty = function () {
  */
 GLVIS.RecommendationCommonNode.prototype.delete = function () {
 
-    var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
-    three_scene.remove(this.webgl_objects_.circle);
+    //var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+    this.mesh_parent_.remove(this.webgl_objects_.circle);
 
     delete this.webgl_objects_.circle;
 };

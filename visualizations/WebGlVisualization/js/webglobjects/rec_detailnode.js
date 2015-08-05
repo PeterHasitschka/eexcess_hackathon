@@ -5,8 +5,9 @@ GLVIS = GLVIS || {};
 /**
  * Representing a detailed recommendation of a Collection in WebGl
  * @param {GLVIS.Recommendation} recommendation recommendation that node represents
+ * @param {THREE.Object3D} mesh-parent
  */
-GLVIS.RecommendationDetailNode = function (recommendation) {
+GLVIS.RecommendationDetailNode = function (recommendation, mesh_parent) {
 
     this.dirty_ = true;
     this.recommendation_ = recommendation;
@@ -16,13 +17,15 @@ GLVIS.RecommendationDetailNode = function (recommendation) {
         circle_inner: null
     };
 
+    this.mesh_parent_ = mesh_parent;
+
     //Needed due to relative scaling.
     this.init_radius_ = this.recommendation_.getRadius();
 
-    this.initAndRegisterGlObj();
+    this.initAndRegisterGlObj(mesh_parent);
 };
 
-GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function () {
+GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_parent) {
 
     var config = GLVIS.config.collection.recommendation.detail_node;
 
@@ -47,8 +50,8 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function () {
         "mouseclick": this.recommendation_.handleClick.bind(this.recommendation_)
     };
 
-    var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
-    webgl_handler.getThreeScene().add(circle_outer);
+
+    mesh_parent.add(circle_outer);
 
     this.webgl_objects_.circle_outer = circle_outer;
 
@@ -81,7 +84,8 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function () {
                             ),
                     circle_inner_material);
 
-            webgl_handler.getThreeScene().add(circle_inner);
+
+            mesh_parent.add(circle_inner);
             this.webgl_objects_.circle_inner = circle_inner;
 
 
@@ -157,11 +161,11 @@ GLVIS.RecommendationDetailNode.prototype.getIsDirty = function () {
  */
 GLVIS.RecommendationDetailNode.prototype.delete = function () {
 
-    var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+    //var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
 
-    three_scene.remove(this.webgl_objects_.circle_outer);
+    this.mesh_parent_.remove(this.webgl_objects_.circle_outer);
     if (this.webgl_objects_.circle_inner)
-        three_scene.remove(this.webgl_objects_.circle_inner);
+        this.mesh_parent_.remove(this.webgl_objects_.circle_inner);
 
     delete this.webgl_objects_.circle_outer;
     if (this.webgl_objects_.circle_inner)

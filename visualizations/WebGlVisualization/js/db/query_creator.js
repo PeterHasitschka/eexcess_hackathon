@@ -76,7 +76,7 @@ GLVIS.DbQueryCreator.prototype.createCollection = function (query_data_obj) {
 
     for (var r_count = 0; r_count < rec_data_array.length; r_count++) {
         var curr_rec_data = rec_data_array[r_count];
-        var curr_rec = new GLVIS.Recommendation(curr_rec_data);
+        var curr_rec = new GLVIS.Recommendation(curr_rec_data, collection);
 
         collection.addRecommendation(curr_rec);
     }

@@ -4,8 +4,9 @@ var GLVIS = GLVIS || {};
 /**
  * 
  * @param {GLVIS.Recommendation} recommendation
+ * @param {THREE.Object3D} mesh_parent 
  */
-GLVIS.ConnectionCollectionRecommendation = function (recommendation) {
+GLVIS.ConnectionCollectionRecommendation = function (recommendation, mesh_parent) {
 
     /** @type{GLVIS.Recommendation} **/
     this.recommendation_ = recommendation;
@@ -15,10 +16,10 @@ GLVIS.ConnectionCollectionRecommendation = function (recommendation) {
         line: null
     };
 
-    this.initAndRegisterGlObj();
+    this.initAndRegisterGlObj(mesh_parent);
 };
 
-GLVIS.ConnectionCollectionRecommendation.prototype.initAndRegisterGlObj = function () {
+GLVIS.ConnectionCollectionRecommendation.prototype.initAndRegisterGlObj = function (mesh_parent) {
 
     var config = GLVIS.config.connection.recommendation_collection;
 
@@ -48,10 +49,7 @@ GLVIS.ConnectionCollectionRecommendation.prototype.initAndRegisterGlObj = functi
 
 
     this.webgl_objects_.line = new THREE.Line(line_geometry, line_material);
-
-
-    var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
-    webgl_handler.getThreeScene().add(this.webgl_objects_.line);
+    mesh_parent.add(this.webgl_objects_.line);
 };
 
 
