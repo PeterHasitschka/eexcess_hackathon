@@ -153,7 +153,7 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                     pos_handler.calculatePositions();
 
                 },
-                label: "Reset flipbook (BUGGY)",
+                label: "Reset flipbook",
                 visible: true
             }
 
