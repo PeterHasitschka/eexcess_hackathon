@@ -45,7 +45,7 @@ GLVIS.Collection = function (eexcess_data) {
         },
         rotation_degree: 0.0,
         gl_objects: [],
-        mesh_group: null,
+        mesh_container: null,
         is_currently_animated: false
     };
 

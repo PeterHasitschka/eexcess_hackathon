@@ -155,6 +155,19 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                 },
                 label: "Reset flipbook",
                 visible: true
+            },
+            rotate_one_mesh_container: {
+                fct: function (e) {
+
+                    /** @type {GLVIS.Collection} **/
+                    var coll = GLVIS.Scene.getCurrentScene().getCollections()[0];
+
+                    var meshcontainer = coll.getMeshContainerNode();
+                    meshcontainer.rotateOnAxis(new THREE.Vector3(0, 1, 0), 0.2);
+
+                },
+                label: "Rotate first mesh container",
+                visible: true
             }
 
         }
