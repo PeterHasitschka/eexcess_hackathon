@@ -31,7 +31,7 @@ GLVIS.config = {
             circle: {
                 radius: 10.0,
                 segments: 15,
-                z_value: -20,
+                z_value: 0, //-20,
                 color: 0x1d904e,
                 select_color: 0xFF0000
             }
@@ -42,7 +42,7 @@ GLVIS.config = {
             radius: 5.0,
             color: 0x4444FF,
             highlight_color: 0xFF00FF,
-            init_z: -19,
+            init_z: 0, //-19,
             opacity_depth : {
               strength: 0.01,
               weakness: 0.5
@@ -190,12 +190,12 @@ GLVIS.config = {
             width: 1,
             bold_width: 3,
             color: 0x668866,
-            z: -50
+            z: 0 //-50
         },
         collection_collection: {
             width: 1,
             color: 0xFF3333,
-            z: -52,
+            z: 0, //-52,
             opacity: 0.3
         },
         rec_spline: {

@@ -162,8 +162,17 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                     /** @type {GLVIS.Collection} **/
                     var coll = GLVIS.Scene.getCurrentScene().getCollections()[0];
 
+
                     var meshcontainer = coll.getMeshContainerNode();
-                    meshcontainer.rotateOnAxis(new THREE.Vector3(0, 1, 0), 0.2);
+                    
+                    //For calculating positions and center
+                    var box = new THREE.Box3().setFromObject(meshcontainer);
+                    var x_center = box.min.x + (box.max.x - box.min.x) / 2.0;
+                    
+                    
+                    meshcontainer.applyMatrix(new THREE.Matrix4().makeTranslation(-x_center, 0, 0));
+                    meshcontainer.applyMatrix(new THREE.Matrix4().makeRotationY(0.2));
+                    meshcontainer.applyMatrix(new THREE.Matrix4().makeTranslation(x_center, 0, 0));
 
                 },
                 label: "Rotate first mesh container",
