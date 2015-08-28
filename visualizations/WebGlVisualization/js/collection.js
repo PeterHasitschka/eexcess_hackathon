@@ -685,7 +685,7 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
     meshcontainer.applyMatrix(new THREE.Matrix4().makeRotationY(rad));
     meshcontainer.applyMatrix(new THREE.Matrix4().makeTranslation(x_center, 0, 0));
 
-
+    
     this.vis_data_.rotation_degree = degree;
     this.setIsDirty(true);
 };

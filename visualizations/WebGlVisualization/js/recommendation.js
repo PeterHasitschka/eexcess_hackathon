@@ -172,7 +172,7 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
     this.setNodeType(GLVIS.Recommendation.NODETYPES.DETAILED);
 
 
-    var abs_pos = this.getPosition();
+    var abs_pos = this.getPosition(true);
     var nav_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
     var move_config = GLVIS.config.collection.recommendation.focus_animation.move;
     var move_setter = nav_handler.moveCamera;

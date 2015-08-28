@@ -35,11 +35,18 @@ GLVIS.CollectionCenterNode.prototype.initAndRegisterGlObj = function (mesh_paren
                         side: THREE.DoubleSide
                     });
 
+    /*
+     * For rotation a sphere is better
+     var mesh = new THREE.CircleGeometry(
+     circle_config.radius,
+     circle_config.segments);
+     */
+    mesh = new THREE.SphereGeometry(circle_config.radius, circle_config.segments, circle_config.segments);
+
     var circle = new THREE.Mesh(
-            new THREE.CircleGeometry(
-                    circle_config.radius,
-                    circle_config.segments),
+            mesh,
             circleMaterial);
+
 
     //Register click-function
     circle.interaction = {
