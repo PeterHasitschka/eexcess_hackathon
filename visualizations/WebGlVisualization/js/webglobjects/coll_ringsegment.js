@@ -87,21 +87,23 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
      * Segment
      */
     var seg_length = ring_end - ring_start;
-    var seg_num_fact = seg_length / (Math.PI * 2); 
+    var seg_num_fact = seg_length / (Math.PI * 2);
     var seg_num = Math.round(ring_config.segments * seg_num_fact);
-    
+
     var phi_seg_num = ring_config.phi_seg_num;
-    
-    var ring_geometry = new THREE.RingGeometry(rad_inner, rad_outer, seg_num , phi_seg_num, ring_start, seg_length);
+
+    var ring_geometry = new THREE.RingGeometry(rad_inner, rad_outer, seg_num, phi_seg_num, ring_start, seg_length);
     var mesh = new THREE.Mesh(ring_geometry, material);
 
-    var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
-    webgl_handler.getThreeScene().add(mesh);
+    /** @type {GLVIS.Collection} **/
+    var collection = this.ring_representation_.getCollection();
+    collection.getMeshContainerNode().add(mesh);
+
     this.webgl_objects_.ring_seg = mesh;
 
     //Register click-function
     mesh.interaction = {
-        "mouseclick": this.handleClick.bind(this),
+        "mouseclick": this.handleClick.bind(this)
     };
 
 
@@ -121,7 +123,7 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
 
     var text = this.data_.val;
     text = text.replace(" ", "\n");
-    var label = new GLVIS.Text(text, label_options);
+    var label = new GLVIS.Text(text, label_options, null, null, null, null, collection);
     this.webgl_objects_.label = label;
 };
 
@@ -247,8 +249,8 @@ GLVIS.RingSegment.prototype.getRadLength = function () {
  */
 GLVIS.RingSegment.prototype.delete = function () {
 
-    var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
-
-    three_scene.remove(this.webgl_objects_.ring_seg);
+    /** @type {GLVIS.Collection} **/
+    var collection = this.ring_representation_.getCollection();
+    collection.getMeshContainerNode().remove(this.webgl_objects_.ring_seg);
     this.webgl_objects_.label.delete();
 };

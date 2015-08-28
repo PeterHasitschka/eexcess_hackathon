@@ -157,6 +157,15 @@ GLVIS.RecommendationDetailNode.prototype.getIsDirty = function () {
 };
 
 /**
+ * Returns the mesh of the inner circle
+ * @returns {THREE.Mesh}
+ */
+GLVIS.RecommendationDetailNode.prototype.getCircle = function(){
+    return this.webgl_objects_.circle_outer;
+},
+        
+
+/**
  * Delete all GL-Objects and remove them from the scene
  */
 GLVIS.RecommendationDetailNode.prototype.delete = function () {

@@ -8,8 +8,10 @@ GLVIS = GLVIS || {};
  * @param {object} highlight_options Options for highlighting. Possible vals: color, bg_color, opacity
  * @param {function} mouseover_fct Function called at mouse-over. First param: This object. Second param: mouse_fct
  * @param {function} mouseleave_fct Function called at mouse-over. First param: This object. Second param: mouse_fct
+ * @param {function} mouse_fct_data Mouse-Fct-Data: Additional parameters for call
+ * @param {GLVIS.Collection} collection Optional: Collection to add the label-mesh to a mesh-container
  * */
-GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouseleave_fct, mouse_fct_data) {
+GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouseleave_fct, mouse_fct_data, collection) {
 
     var config = GLVIS.config.text;
 
@@ -77,8 +79,22 @@ GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouselea
         mesh_focus: null
     };
 
+
+
+    /**
+     * If collection given, we add the label-mesh to the collection's container.
+     * Else to the scene.
+     */
+    this.mesh_container_ = null;
+    if (collection) {
+        this.mesh_container_ = collection.getMeshContainerNode();
+    }
+    else {
+        var scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+        this.mesh_container_ = scene;
+    }
+
     this.updateWebGlObj();
-    //GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(this.webgl_objects_.mesh);
 };
 
 
@@ -129,15 +145,15 @@ GLVIS.Text.prototype.updateWebGlObj = function () {
     mesh.interaction = {
         "mouseover": this.handleMouseover.bind(this)
     };
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().remove(this.webgl_objects_.mesh);
+    this.mesh_container_.remove(this.webgl_objects_.mesh);
     this.webgl_objects_.mesh = mesh;
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(mesh);
+    this.mesh_container_.add(mesh);
 
 
     var mesh_focus = this.createMesh(this.font_, this.font_size_, this.h_color_, this.h_bg_color_, this.h_opacity_);
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().remove(this.webgl_objects_.mesh_focus);
+    this.mesh_container_.remove(this.webgl_objects_.mesh_focus);
     this.webgl_objects_.mesh_focus = mesh_focus;
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(mesh_focus);
+    this.mesh_container_.add(mesh_focus);
     mesh_focus.visible = false;
 
     this.setIsDirty(true);
@@ -401,9 +417,7 @@ GLVIS.Text.prototype.setIsVisible = function (visible) {
  * Delete all webgl-objects
  */
 GLVIS.Text.prototype.delete = function () {
-
-    var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
-    three_scene.remove(this.webgl_objects_.mesh);
+    this.mesh_container_.remove(this.webgl_objects_.mesh);
 };
 
 

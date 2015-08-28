@@ -671,9 +671,22 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
     } else {
     }
 
-    this.vis_data_.rotation_degree = degree;
 
-    this.getRecPosHandler().calculatePositions();
+    /**
+     * Rotate mesh container
+     */
+    var meshcontainer = this.getMeshContainerNode();
+    var box = new THREE.Box3().setFromObject(meshcontainer);
+    var x_center = box.min.x + (box.max.x - box.min.x) / 2.0;
+
+    var degree_diff = degree - this.vis_data_.rotation_degree;
+    var rad = degree_diff * Math.PI / 180;
+    meshcontainer.applyMatrix(new THREE.Matrix4().makeTranslation(-x_center, 0, 0));
+    meshcontainer.applyMatrix(new THREE.Matrix4().makeRotationY(rad));
+    meshcontainer.applyMatrix(new THREE.Matrix4().makeTranslation(x_center, 0, 0));
+
+
+    this.vis_data_.rotation_degree = degree;
     this.setIsDirty(true);
 };
 

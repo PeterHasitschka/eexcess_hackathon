@@ -165,6 +165,11 @@ GLVIS.ToolbarHandler.prototype.buttons = {
 
                     var meshcontainer = coll.getMeshContainerNode();
                     
+                    /**
+                     * 
+                     * THIS is the way to rotate :-)
+                     */
+                    
                     //For calculating positions and center
                     var box = new THREE.Box3().setFromObject(meshcontainer);
                     var x_center = box.min.x + (box.max.x - box.min.x) / 2.0;

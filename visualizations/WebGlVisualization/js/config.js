@@ -120,14 +120,14 @@ GLVIS.config = {
                 thickness: 23,
                 gap: 3,
                 color: 0xFF00FF,
-                z_value: -15,
+                z_value: 0,
                 segments: 100,
                 phi_seg_num: 8,
                 opacity: 0.8,
                 label: {
                     font_size: 8,
                     color: "#000033",
-                    z_value: -14
+                    z_value: 0.1
                 }
             },
             replacements: {
@@ -190,7 +190,7 @@ GLVIS.config = {
             width: 1,
             bold_width: 3,
             color: 0x668866,
-            z: 0 //-50
+            z: -0.1 //-50
         },
         collection_collection: {
             width: 1,

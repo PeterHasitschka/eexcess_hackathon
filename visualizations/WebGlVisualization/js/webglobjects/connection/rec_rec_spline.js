@@ -58,16 +58,18 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
                 /*
                  * Calculating the line between the current rec and the last rec
                  */
-                var last_x = last_rec.getPosition().x;
-                var last_y = last_rec.getPosition().y;
-                var curr_x = rec.getPosition().x;
-                var curr_y = rec.getPosition().y;
+                var last_x = last_rec.getPosition(true).x;
+                var last_y = last_rec.getPosition(true).y;
+                var last_z = last_rec.getPosition(true).z;
+                var curr_x = rec.getPosition(true).x;
+                var curr_y = rec.getPosition(true).y;
+                var curr_z = rec.getPosition(true).z;
                 var gradient = (curr_y - last_y) / (curr_x - last_x);
 
 
                 var half_length = (curr_x - last_x) / 2;
                 var calculated_y = half_length * gradient + last_y;
-
+                
                 var is_top = true;
                 if (calculated_y < 0)
                     is_top = false;
@@ -75,11 +77,11 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
                 var top_factor = is_top ? 1 : -1;
 
                 var vert_distance = 270 + Math.random() * 30;
-                vecs.push(new THREE.Vector3(last_x + half_length, top_factor * vert_distance, -5));
+                vecs.push(new THREE.Vector3(last_x + half_length, top_factor * vert_distance, last_z));
             }
         }
-        var pos = rec.getPosition();
-        vecs.push(new THREE.Vector3(pos.x, pos.y, -5));
+        var pos = rec.getPosition(true);
+        vecs.push(new THREE.Vector3(pos.x, pos.y, pos.z));
 
         rec.setColor(config.rec_color);
 

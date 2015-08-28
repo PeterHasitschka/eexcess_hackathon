@@ -386,16 +386,50 @@ GLVIS.Recommendation.prototype.getRelativePosition = function () {
 
 /**
  * Get Absolute position
+ * @param {bool} physical Get Position of the mesh nodes (Necessary at rotation)
  * @returns {GLVIS.Recommendation.prototype.getPosition.pos}
  */
-GLVIS.Recommendation.prototype.getPosition = function () {
+GLVIS.Recommendation.prototype.getPosition = function (physical) {
     var coll_pos = this.getCollection().getPosition();
 
-    var pos = {
-        x: this.vis_data_.relative_position.x + coll_pos.x,
-        y: this.vis_data_.relative_position.y + coll_pos.y,
-        z: this.vis_data_.relative_position.z + coll_pos.z
-    };
+    var pos;
+    if (!physical) {
+        pos = {
+            x: this.vis_data_.relative_position.x + coll_pos.x,
+            y: this.vis_data_.relative_position.y + coll_pos.y,
+            z: this.vis_data_.relative_position.z + coll_pos.z
+        };
+    }
+    else {
+        var gl_node = null;
+
+        for (var i = 0; i < this.vis_data_.gl_objects.length; i++) {
+            if (this.vis_data_.gl_objects[i] instanceof GLIVS.RecommendationCommonNode ||
+                    this.vis_data_.gl_objects[i] instanceof GLIVS.RecommendationDetailNode) {
+                gl_node = this.vis_data_.gl_objects[i];
+                break;
+            }
+        }
+
+        if (!gl_node)
+            throw Exception("Could not find gl-node of recommendation");
+
+        var circle_mesh = gl_node.getCircle();
+        
+        
+        //Not enough to get circle_mesh.position vector
+        //Needs to be calculated by bounding box
+        circle_mesh.geometry.computeBoundingBox();
+        var boundingBox = circle_mesh.geometry.boundingBox;
+
+        pos = new THREE.Vector3();
+        pos.subVectors(boundingBox.max, boundingBox.min);
+        pos.multiplyScalar(0.5);
+        pos.add(boundingBox.min);
+        pos.applyMatrix4(circle_mesh.matrixWorld);
+       
+    }
+
 
     return pos;
 };
@@ -431,17 +465,25 @@ GLVIS.Recommendation.prototype.setRelativePosition = function (x, y, z) {
     if (z === null || z === undefined)
         z = this.vis_data_.relative_position.z;
 
-    var rotated = new THREE.Vector3(x, y, z);
-
-    var y_rotate = this.getCollection() ? this.getCollection().getRotation() : 0;
-    if (parseFloat(y_rotate) !== 0.0) {
-        var vec = new THREE.Vector3(x, y, z);
-        rotated = GLVIS.Tools.getRotation(2, y_rotate, vec);
-    }
-
-    this.vis_data_.relative_position.x = rotated.x;
-    this.vis_data_.relative_position.y = rotated.y;
-    this.vis_data_.relative_position.z = rotated.z;
+    /*
+     * 
+     * Not necessary anymore. Rotation made out of the box by mesh
+     * 
+     var rotated = new THREE.Vector3(x, y, z);
+     
+     var y_rotate = this.getCollection() ? this.getCollection().getRotation() : 0;
+     if (parseFloat(y_rotate) !== 0.0) {
+     var vec = new THREE.Vector3(x, y, z);
+     rotated = GLVIS.Tools.getRotation(2, y_rotate, vec);
+     }
+     
+     this.vis_data_.relative_position.x = rotated.x;
+     this.vis_data_.relative_position.y = rotated.y;
+     this.vis_data_.relative_position.z = rotated.z;
+     */
+    this.vis_data_.relative_position.x = x;
+    this.vis_data_.relative_position.y = y;
+    this.vis_data_.relative_position.z = z;
 
     //Force redraw of node
     this.setIsDirty(true);

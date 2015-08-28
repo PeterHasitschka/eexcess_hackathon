@@ -204,13 +204,16 @@ GLVIS.Scene.getCurrentScene = function () {
     return this.current_scene;
 };
 
+
+var stop_flag = false;
+
 /**
  * Main entry-point for the animation
  */
 GLVIS.Scene.animate = function () {
     var curr_scene = GLVIS.Scene.getCurrentScene();
 
-    if (!curr_scene)
+    if (!curr_scene || stop_flag)
         return;
 
     requestAnimationFrame(GLVIS.Scene.animate);
