@@ -89,16 +89,22 @@ GLVIS.CollectionCenterNode.prototype.render = function () {
 
 
 
-
-    var pos = this.collection_.getPosition();
-
     var z_pos = GLVIS.config.collection.center_node.circle.z_value;
-    this.webgl_objects_.circle.position.set(
-            pos.x,
-            pos.y,
+    this.webgl_objects_.circle.position.setZ(
             z_pos
             );
 
+    /*
+     
+     var pos = this.collection_.getPosition();
+     
+     var z_pos = GLVIS.config.collection.center_node.circle.z_value;
+     this.webgl_objects_.circle.position.set(
+     pos.x,
+     pos.y,
+     z_pos
+     );
+     */
     this.dirty_ = false;
 };
 

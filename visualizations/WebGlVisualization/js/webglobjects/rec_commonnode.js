@@ -70,12 +70,11 @@ GLVIS.RecommendationCommonNode.prototype.render = function () {
             "Rendering RECOMMENDATION COMMON-NODE  for recommendation " + this.recommendation_.getId(),
             7);
 
-    var abs_pos = this.recommendation_.getPosition();
-
+    var pos = this.recommendation_.getRelativePosition();
     this.webgl_objects_.circle.position.set(
-            abs_pos.x,
-            abs_pos.y,
-            abs_pos.z
+            pos.x,
+            pos.y,
+            pos.z
             );
 
     var curr_radius = this.recommendation_.getRadius();

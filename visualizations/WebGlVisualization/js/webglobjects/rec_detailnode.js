@@ -120,13 +120,14 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
             "Rendering RECOMMENDATION DETAIL-NODE  for recommendation " + this.recommendation_.getId(),
             5);
 
-    var abs_pos = this.recommendation_.getPosition();
+    var pos = this.recommendation_.getRelativePosition();
+
 
     var z_pos = GLVIS.config.collection.recommendation.detail_node.z_value;
     this.webgl_objects_.circle_outer.position.set(
-            abs_pos.x,
-            abs_pos.y,
-            abs_pos.z
+            pos.x,
+            pos.y,
+            pos.z
             );
 
     var curr_radius = this.recommendation_.getRadius();
@@ -138,9 +139,9 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
 
     if (this.webgl_objects_.circle_inner) {
         this.webgl_objects_.circle_inner.position.set(
-                abs_pos.x,
-                abs_pos.y,
-                abs_pos.z + GLVIS.config.collection.recommendation.detail_node.z_diff_inner_circle
+                pos.x,
+                pos.y,
+                pos.z + GLVIS.config.collection.recommendation.detail_node.z_diff_inner_circle
                 );
 
         this.webgl_objects_.circle_inner.scale.set(scale_factor, scale_factor, scale_factor);

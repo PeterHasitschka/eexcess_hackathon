@@ -249,6 +249,20 @@ GLVIS.Collection.prototype.render = function () {
     for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
         this.vis_data_.gl_objects[key].render();
     }
+    
+    
+    //SET MESH POSITION GLOBALLY
+    
+    console.warn("POSITION SETTING NOT CONVERTED TO GLOBAL TOTALLY. RECS etc. NOT POSITIONED RIGHT!")
+    
+    var pos = this.getPosition();
+    var z_pos = GLVIS.config.collection.center_node.circle.z_value;
+    this.vis_data_.mesh_container.position.set(
+            pos.x,
+            pos.y,
+            pos.z
+            );
+    
 
     //Render all recommendations
     for (var i = 0; i < this.recommendations_.length; i++) {
@@ -685,7 +699,7 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
     meshcontainer.applyMatrix(new THREE.Matrix4().makeRotationY(rad));
     meshcontainer.applyMatrix(new THREE.Matrix4().makeTranslation(x_center, 0, 0));
 
-    
+
     this.vis_data_.rotation_degree = degree;
     this.setIsDirty(true);
 };
