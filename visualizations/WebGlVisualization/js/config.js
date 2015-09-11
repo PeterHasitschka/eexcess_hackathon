@@ -28,13 +28,19 @@ GLVIS.config = {
             transparency: {
                 inactive: 0.5
             },
-            circle: {
+            sphere: {
                 radius: 10.0,
                 segments: 15,
                 z_value: 0, //-20,
                 color: 0x1d904e,
                 select_color: 0xFF0000
             }
+        },
+        plane: {
+            color: 0x4488FF,
+            opacity: 0.1,
+            z_value: 0.001,
+            segments: 50
         },
         recommendation: {
             init_distance: 150,
@@ -43,9 +49,9 @@ GLVIS.config = {
             color: 0x4444FF,
             highlight_color: 0xFF00FF,
             init_z: 0, //-19,
-            opacity_depth : {
-              strength: 0.01,
-              weakness: 0.5
+            opacity_depth: {
+                strength: 0.01,
+                weakness: 0.5
             },
             common_node: {
                 min_radius: 0.5,
@@ -139,11 +145,10 @@ GLVIS.config = {
                 "http://creativecommons.org/licenses/by-sa/3.0/": "CC SA 3.0",
                 "http://creativecommons.org/licenses/by-sa/3.0/nl/": "CC SA 3.0 NL",
                 "http://creativecommons.org/publicdomain/zero/1.0/": "CC0 1.0",
-                "http://creativecommons.org/publicdomain/mark/1.0/" : "CC PD Mark 1.0",
+                "http://creativecommons.org/publicdomain/mark/1.0/": "CC PD Mark 1.0",
                 "http://www.europeana.eu/rights/rr-r/": "E RR",
                 "http://www.europeana.eu/rights/out-of-copyright-non-commercial/": "E OOC-NC",
                 "http://www.europeana.eu/rights/out-of-copyright-non-commercial/http://www.europeana.eu/rights/out-of-copyright-non-commercial/": "E OOC-NC",
-                
             }
         },
         labels: {

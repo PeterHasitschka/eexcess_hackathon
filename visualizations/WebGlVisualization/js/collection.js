@@ -41,14 +41,14 @@ GLVIS.Collection = function (eexcess_data) {
         position: {
             x: 0,
             y: 0,
-            z: GLVIS.config.collection.center_node.circle.z_value
+            z: GLVIS.config.collection.center_node.sphere.z_value
         },
         rotation_degree: 0.0,
         gl_objects: {
             center_node: null,
             parent_connection: null,
             plane: null,
-            compare_bar : null
+            compare_bar: null
         },
         mesh_container: null,
         is_currently_animated: false
@@ -137,8 +137,12 @@ GLVIS.Collection.prototype.initGlNode = function () {
 
     //Create center node
     var gl_node = new GLVIS.CollectionCenterNode(this, container);
-
     this.vis_data_.gl_objects.center_node = gl_node;
+
+    //Create plane
+    var plane = new GLVIS.CollectionPlane(this, container);
+    this.vis_data_.gl_objects.plane = plane;
+
 };
 
 /**
@@ -259,7 +263,7 @@ GLVIS.Collection.prototype.render = function () {
     }
 
     var pos = this.getPosition();
-    var z_pos = GLVIS.config.collection.center_node.circle.z_value;
+    var z_pos = GLVIS.config.collection.center_node.sphere.z_value;
     this.vis_data_.mesh_container.position.set(
             pos.x,
             pos.y,
@@ -398,7 +402,7 @@ GLVIS.Collection.prototype.setMyGlObjectsDirty_ = function () {
  * @returns {object}
  */
 GLVIS.Collection.prototype.getGlObjects = function () {
-    
+
     return this.vis_data_.gl_objects;
 };
 
