@@ -44,7 +44,12 @@ GLVIS.Collection = function (eexcess_data) {
             z: GLVIS.config.collection.center_node.circle.z_value
         },
         rotation_degree: 0.0,
-        gl_objects: [],
+        gl_objects: {
+            center_node: null,
+            parent_connection: null,
+            plane: null,
+            compare_bar : null
+        },
         mesh_container: null,
         is_currently_animated: false
     };
@@ -133,7 +138,7 @@ GLVIS.Collection.prototype.initGlNode = function () {
     //Create center node
     var gl_node = new GLVIS.CollectionCenterNode(this, container);
 
-    this.vis_data_.gl_objects.push(gl_node);
+    this.vis_data_.gl_objects.center_node = gl_node;
 };
 
 /**
@@ -245,9 +250,12 @@ GLVIS.Collection.prototype.render = function () {
             "Collection with id " + this.id_ + " rendered!",
             6);
 
-    //Render all Gl-Objectss
-    for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
-        this.vis_data_.gl_objects[key].render();
+    //Render all Gl-Objects
+    for (var key in this.vis_data_.gl_objects) {
+        if (this.vis_data_.gl_objects.hasOwnProperty(key)) {
+            if (this.vis_data_.gl_objects[key])
+                this.vis_data_.gl_objects[key].render();
+        }
     }
 
     var pos = this.getPosition();
@@ -257,7 +265,7 @@ GLVIS.Collection.prototype.render = function () {
             pos.y,
             pos.z
             );
-    
+
     //Render all recommendations
     for (var i = 0; i < this.recommendations_.length; i++) {
         /** @type {GLVIS.Recommendation} **/
@@ -377,8 +385,11 @@ GLVIS.Collection.prototype.selectAndFocus = function (cb) {
  * Setting all Objects holding GL Objects dirty
  */
 GLVIS.Collection.prototype.setMyGlObjectsDirty_ = function () {
-    for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
-        this.vis_data_.gl_objects[key].setIsDirty(true);
+    for (var key in this.vis_data_.gl_objects) {
+        if (this.vis_data_.gl_objects.hasOwnProperty(key)) {
+            if (this.vis_data_.gl_objects[key])
+                this.vis_data_.gl_objects[key].setIsDirty(true);
+        }
     }
 };
 
@@ -387,6 +398,7 @@ GLVIS.Collection.prototype.setMyGlObjectsDirty_ = function () {
  * @returns {object}
  */
 GLVIS.Collection.prototype.getGlObjects = function () {
+    
     return this.vis_data_.gl_objects;
 };
 
@@ -532,7 +544,7 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
                     8);
 
             var parent_connection = new GLVIS.ConnectionCollectionCollection(parent_collection, this);
-            this.vis_data_.gl_objects.push(parent_connection);
+            this.vis_data_.gl_objects.parent_connection = parent_connection;
             this.dirty_ = true;
         }
         else

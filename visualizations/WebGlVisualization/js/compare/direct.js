@@ -123,15 +123,10 @@ GLVIS.DirectCompare.prototype.removeBarFromCollection_ = function (collection) {
 
     var gl_objs = collection.getGlObjects();
 
-    for (var key = 0; key < gl_objs.length; key++) {
-        var curr_gl_obj = gl_objs[key];
-
-        if (curr_gl_obj instanceof GLVIS.DirectCompareBar) {
-            curr_gl_obj.delete();
-            gl_objs.splice(key, 1);
-            collection.setIsDirty(true);
-            return;
-        }
+    if (gl_objs.compare_bar) {
+        gl_objs.compare_bar.delete();
+        gl_objs.compare_bar = null;
+        collection.setIsDirty(true);
     }
 };
 
@@ -142,6 +137,6 @@ GLVIS.DirectCompare.prototype.removeBarFromCollection_ = function (collection) {
 GLVIS.DirectCompare.prototype.addBarToCollection_ = function (collection, bar) {
 
     var gl_objs = collection.getGlObjects();
-    gl_objs.push(bar);
+    gl_objs.compare_bar = bar;
     collection.setIsDirty(true);
 };
