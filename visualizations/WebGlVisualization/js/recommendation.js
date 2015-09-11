@@ -172,7 +172,8 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
     this.setNodeType(GLVIS.Recommendation.NODETYPES.DETAILED);
 
 
-    var abs_pos = this.getPosition(true);
+    var abs_pos = this.getPosition();
+
     var nav_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
     var move_config = GLVIS.config.collection.recommendation.focus_animation.move;
     var move_setter = nav_handler.moveCamera;
@@ -386,51 +387,18 @@ GLVIS.Recommendation.prototype.getRelativePosition = function () {
 
 /**
  * Get Absolute position
- * @param {bool} physical Get Position of the mesh nodes (Necessary at rotation)
  * @returns {GLVIS.Recommendation.prototype.getPosition.pos}
  */
-GLVIS.Recommendation.prototype.getPosition = function (physical) {
+GLVIS.Recommendation.prototype.getPosition = function () {
     var coll_pos = this.getCollection().getPosition();
 
     var pos;
-    if (!physical) {
+
         pos = {
             x: this.vis_data_.relative_position.x + coll_pos.x,
             y: this.vis_data_.relative_position.y + coll_pos.y,
             z: this.vis_data_.relative_position.z + coll_pos.z
         };
-    }
-    else {
-        var gl_node = null;
-
-        for (var i = 0; i < this.vis_data_.gl_objects.length; i++) {
-            if (this.vis_data_.gl_objects[i] instanceof GLIVS.RecommendationCommonNode ||
-                    this.vis_data_.gl_objects[i] instanceof GLIVS.RecommendationDetailNode) {
-                gl_node = this.vis_data_.gl_objects[i];
-                break;
-            }
-        }
-
-        if (!gl_node)
-            throw Exception("Could not find gl-node of recommendation");
-
-        var circle_mesh = gl_node.getCircle();
-        
-        
-        //Not enough to get circle_mesh.position vector
-        //Needs to be calculated by bounding box
-        circle_mesh.geometry.computeBoundingBox();
-        var boundingBox = circle_mesh.geometry.boundingBox;
-
-        pos = new THREE.Vector3();
-        pos.subVectors(boundingBox.max, boundingBox.min);
-        pos.multiplyScalar(0.5);
-        pos.add(boundingBox.min);
-        pos.applyMatrix4(circle_mesh.matrixWorld);
-       
-    }
-
-
     return pos;
 };
 
