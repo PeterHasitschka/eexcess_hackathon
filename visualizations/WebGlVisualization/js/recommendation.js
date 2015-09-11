@@ -45,7 +45,10 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
         color: GLVIS.config.collection.recommendation.color,
         opacity: 1
         ,
-        gl_objects: []
+        gl_objects: {
+            center_node: null,
+            connection_col: null
+        }
     };
 
     /**
@@ -106,10 +109,10 @@ GLVIS.Recommendation.prototype.deleteAllRecSplines = function () {
 GLVIS.Recommendation.prototype.initGlNode = function () {
 
     var gl_node = new GLVIS.RecommendationCommonNode(this, this.getCollection().getMeshContainerNode());
-    this.vis_data_.gl_objects.push(gl_node);
+    this.vis_data_.gl_objects.center_node = gl_node;
 
     var gl_connection = new GLVIS.ConnectionCollectionRecommendation(this, this.getCollection().getMeshContainerNode());
-    this.vis_data_.gl_objects.push(gl_connection);
+    this.vis_data_.gl_objects.connection_col = gl_connection;
     this.setRelativePositionByRad(0);
 };
 
@@ -126,8 +129,11 @@ GLVIS.Recommendation.prototype.render = function () {
             6);
 
     //Render all Gl-Objectss
-    for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
-        this.vis_data_.gl_objects[key].render();
+    for (var key in this.vis_data_.gl_objects) {
+        if (this.vis_data_.gl_objects.hasOwnProperty(key)) {
+            if (this.vis_data_.gl_objects[key])
+                this.vis_data_.gl_objects[key].render();
+        }
     }
 
     this.dirty_ = false;
@@ -299,10 +305,12 @@ GLVIS.Recommendation.prototype.setNodeType = function (type) {
     GLVIS.Debugger.debug("Recommendation", "Creating new node type.", 5);
 
     //Check if that kind of node already exists
-    for (var i = 0; i < this.vis_data_.gl_objects.length; i++) {
-        if (this.vis_data_.gl_objects[i] instanceof type) {
-            rec_common_node_exists = true;
-            GLVIS.Debugger.debug("Recommendation", "Node of type " + type + " exists... skip creating it.", 6);
+    for (var key in this.vis_data_.gl_objects) {
+        if (this.vis_data_.gl_objects.hasOwnProperty(key)) {
+            if (this.vis_data_.gl_objects[key] instanceof type) {
+                rec_common_node_exists = true;
+                GLVIS.Debugger.debug("Recommendation", "Node of type " + type + " exists... skip creating it.", 6);
+            }
         }
     }
 
@@ -314,17 +322,19 @@ GLVIS.Recommendation.prototype.setNodeType = function (type) {
     for (var key in GLVIS.Recommendation.NODETYPES) {
         var curr_node_type = GLVIS.Recommendation.NODETYPES[key];
 
-        //Delete this kind of node from the gl list
-        for (var i = 0; i < this.vis_data_.gl_objects.length; i++) {
-            if (this.vis_data_.gl_objects[i] instanceof curr_node_type) {
-                this.vis_data_.gl_objects[i].delete();
-                this.vis_data_.gl_objects.splice(i, 1);
+        //Delete this kind of node from the gl list     
+        for (var key in this.vis_data_.gl_objects) {
+            if (this.vis_data_.gl_objects.hasOwnProperty(key)) {
+                if (this.vis_data_.gl_objects[key] instanceof curr_node_type) {
+                    this.vis_data_.gl_objects[key].delete();
+                    this.vis_data_.gl_objects[key] = null;
+                }
             }
         }
     }
     //Create new node type
     var gl_node = new type(this, this.getCollection().getMeshContainerNode());
-    this.vis_data_.gl_objects.push(gl_node);
+    this.vis_data_.gl_objects.center_node = gl_node;
     this.setIsDirty(true);
 };
 
@@ -366,9 +376,11 @@ GLVIS.Recommendation.prototype.setStatus = function (status) {
  * Setting all sub-objects that hold GL Objects dirty
  */
 GLVIS.Recommendation.prototype.setMyGlObjectsDirty_ = function () {
-    for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
 
-        this.vis_data_.gl_objects[key].setIsDirty(true);
+    for (var key in this.vis_data_.gl_objects) {
+        if (this.vis_data_.gl_objects.hasOwnProperty(key) && this.vis_data_.gl_objects[key]) {
+            this.vis_data_.gl_objects[key].setIsDirty(true);
+        }
     }
 
     //Collection needs rendering too to reach recommendation
@@ -406,15 +418,7 @@ GLVIS.Recommendation.prototype.getPosition = function (physical) {
          * Calculates the physical position of the rec.
          * E.g. if rotated around collection center, the relative position is not enough
          */
-        var gl_node = null;
-
-        for (var i = 0; i < this.vis_data_.gl_objects.length; i++) {
-            if (this.vis_data_.gl_objects[i] instanceof GLIVS.RecommendationCommonNode ||
-                    this.vis_data_.gl_objects[i] instanceof GLIVS.RecommendationDetailNode) {
-                gl_node = this.vis_data_.gl_objects[i];
-                break;
-            }
-        }
+        var gl_node = this.vis_data_.gl_objects.center_node;
 
         if (!gl_node)
             throw Exception("Could not find gl-node of recommendation");
