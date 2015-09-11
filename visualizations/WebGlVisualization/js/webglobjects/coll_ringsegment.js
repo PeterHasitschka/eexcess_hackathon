@@ -139,7 +139,7 @@ GLVIS.RingSegment.prototype.render = function () {
             "Rendering RING SEGMENT",
             7);
 
-    var pos = this.ring_representation_.getPosition();
+    var pos = {x: 0, y: 0, z: 0};
 
     var z_pos = GLVIS.config.collection.ring.ring_segment.z_value;
 

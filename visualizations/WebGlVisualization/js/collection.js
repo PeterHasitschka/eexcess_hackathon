@@ -249,12 +249,7 @@ GLVIS.Collection.prototype.render = function () {
     for (var key = 0; key < this.vis_data_.gl_objects.length; key++) {
         this.vis_data_.gl_objects[key].render();
     }
-    
-    
-    //SET MESH POSITION GLOBALLY
-    
-    console.warn("POSITION SETTING NOT CONVERTED TO GLOBAL TOTALLY. RECS etc. NOT POSITIONED RIGHT!")
-    
+
     var pos = this.getPosition();
     var z_pos = GLVIS.config.collection.center_node.circle.z_value;
     this.vis_data_.mesh_container.position.set(
@@ -263,7 +258,6 @@ GLVIS.Collection.prototype.render = function () {
             pos.z
             );
     
-
     //Render all recommendations
     for (var i = 0; i < this.recommendations_.length; i++) {
         /** @type {GLVIS.Recommendation} **/

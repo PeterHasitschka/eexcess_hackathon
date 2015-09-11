@@ -101,14 +101,6 @@ GLVIS.RingRepresentation.prototype.setIsDirty = function (dirty) {
 };
 
 /**
- * Returning the position object (holding x and y) of the corresponding collection
- * @returns {GLVIS.Collection.position_}
- */
-GLVIS.RingRepresentation.prototype.getPosition = function () {
-    return this.collection_.getPosition();
-};
-
-/**
  * Delete all webgl-objects
  */
 GLVIS.RingRepresentation.prototype.delete = function () {

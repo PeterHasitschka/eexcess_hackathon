@@ -78,14 +78,11 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
             if ((current_collection.getId() - 1) === coll_to_focus.getId() ||
                     current_collection.getId() === coll_to_focus.getId())
                 neighbor_fact = 2;
-
-            console.log(neighbor_fact);
         }
 
 
         var curr_x = last_x + x_step * neighbor_fact;
         last_x = curr_x;
-        console.log(curr_x, x_step * neighbor_fact);
 
         if (this.is_flipbook_) {
             if (current_collection.getId() !== coll_to_focus.getId()) {
@@ -105,7 +102,6 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
 
         if (current_collection.getRingRepresentation()) {
             current_collection.deleteRingRepresentation();
-            //current_collection.createRingRepresentation();
         }
 
 

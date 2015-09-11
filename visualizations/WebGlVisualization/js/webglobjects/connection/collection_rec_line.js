@@ -59,17 +59,19 @@ GLVIS.ConnectionCollectionRecommendation.prototype.render = function () {
         return;
 
     var config = GLVIS.config.connection.recommendation_collection;
-    var rec_pos = this.recommendation_.getPosition();
+    /** @type{GLVIS.Recommendation} **/
+    var rec = this.recommendation_;
+    var rec_pos = rec.getRelativePosition();
 
-    var coll_pos = this.recommendation_.getCollection().getPosition();
+    var coll_pos = rec.getCollection().getPosition();
 
     GLVIS.Debugger.debug("ConnectionCollectionRecommendation",
-            "Rendering CONNECTION for recommendation " + this.recommendation_.getId(),
+            "Rendering CONNECTION for recommendation " + rec.getId(),
             7);
 
 
     this.webgl_objects_.line.geometry.vertices[0].set(rec_pos.x, rec_pos.y, config.z);
-    this.webgl_objects_.line.geometry.vertices[1].set(coll_pos.x, coll_pos.y, config.z);
+    this.webgl_objects_.line.geometry.vertices[1].set(0, 0, config.z);
     this.webgl_objects_.line.geometry.verticesNeedUpdate = true;
 
     //Necessary for camera movement
