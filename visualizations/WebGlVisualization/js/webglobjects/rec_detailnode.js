@@ -20,7 +20,7 @@ GLVIS.RecommendationDetailNode = function (recommendation, mesh_parent) {
     this.mesh_parent_ = mesh_parent;
 
     //Needed due to relative scaling.
-    this.init_radius_ = this.recommendation_.getRadius();
+    this.init_radius_ = this.recommendation_.getRadius() * this.recommendation_.getSizeFactor();
 
     this.initAndRegisterGlObj(mesh_parent);
 };
@@ -130,7 +130,7 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
             pos.z
             );
 
-    var curr_radius = this.recommendation_.getRadius();
+    var curr_radius = this.recommendation_.getRadius() * this.recommendation_.getSizeFactor();
     var scale_factor = curr_radius / this.init_radius_;
 
     this.webgl_objects_.circle_outer.scale.set(scale_factor, scale_factor, scale_factor);

@@ -155,7 +155,13 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                 },
                 label: "Reset flipbook",
                 visible: true
-            },
+            }
+        }
+
+
+    },
+    row2: {
+        rec_vis_manip: {
             random_recdistances_last_coll: {
                 fct: function (e) {
                     /** @type{GLVIS.Collection} **/
@@ -166,11 +172,37 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                         r.setDistanceFactor((Math.random() + 0.5), true);
                     });
                 },
-                label: "Rand Rec-Dist last Coll",
+                label: "Rand DIST last Coll",
+                visible: true
+            },
+            random_recopacity_last_coll: {
+                fct: function (e) {
+                    /** @type{GLVIS.Collection} **/
+                    var coll = _.last(GLVIS.Scene.getCurrentScene().getCollections());
+
+                    /** @type{GLVIS.Recommendation} r **/
+                    _.each(coll.getRecommendations(), function (r) {
+                        r.setOpacity((Math.random()), true);
+                    });
+                },
+                label: "Rand OPACITY last Coll",
+                visible: true
+            },
+            random_recsize_last_coll: {
+                fct: function (e) {
+                    /** @type{GLVIS.Collection} **/
+                    var coll = _.last(GLVIS.Scene.getCurrentScene().getCollections());
+
+                    /** @type{GLVIS.Recommendation} r **/
+                    _.each(coll.getRecommendations(), function (r) {
+                        r.setSizeFactor((Math.random() * 2), true);
+                    });
+                },
+                label: "Rand SIZE last Coll",
                 visible: true
             }
-
-        }
+        },
+        
     }
 };
 /**

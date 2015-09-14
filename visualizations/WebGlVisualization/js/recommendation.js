@@ -45,6 +45,7 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
         color: GLVIS.config.collection.recommendation.color,
         opacity: 1,
         distance_factor: 1,
+        size_factor: 1,
         gl_objects: {
             center_node: null,
             connection_col: null
@@ -531,12 +532,59 @@ GLVIS.Recommendation.prototype.getRelativePositionRad = function (that) {
     return GLVIS.Tools.getRadFromPos(pos.x, pos.y);
 
 };
+
+/**
+ * @param {float} factor Factor to be multiplied with radius
+ */
+GLVIS.Recommendation.prototype.setSizeFactor = function (factor, animate) {
+
+
+
+    if (!animate) {
+        this.vis_data_.size_factor = factor;
+        this.setIsDirty(true);
+    }
+    else {
+
+        var config = GLVIS.config.collection.recommendation.size_animation;
+        GLVIS.Scene.getCurrentScene().getAnimation().register(
+                config.id_prefix + this.getId(),
+                factor,
+                null,
+                this.getSizeFactor.bind(this),
+                this.setSizeFactor.bind(this),
+                0,
+                config.speed,
+                config.pow,
+                config.threshold,
+                function () {
+                    //Ready animation
+                },
+                true
+                );
+    }
+};
+
+/**
+ * @return {float} Factor to be multiplied with radius
+ */
+GLVIS.Recommendation.prototype.getSizeFactor = function () {
+    return this.vis_data_.size_factor;
+};
+
+
+
 GLVIS.Recommendation.prototype.setRadius = function (radius) {
     if (this.vis_data_.radius === radius)
         return;
     this.vis_data_.radius = radius;
     this.setIsDirty(true);
 };
+
+GLVIS.Recommendation.prototype.getRadius = function () {
+    return this.vis_data_.radius;
+};
+
 
 /**
  * Setting a factor for moving the rec more far or near relative to the collection center
@@ -591,20 +639,35 @@ GLVIS.Recommendation.prototype.setDistanceFactor = function (factor, animate) {
 
 /**
  * @param {float} opacity 0 - Transparent, 1 - Full visible
+ * @param {bool} animate TRUE if animation, FALSE if not
  */
-GLVIS.Recommendation.prototype.setOpacity = function (opacity) {
+GLVIS.Recommendation.prototype.setOpacity = function (opacity, animate) {
     if (this.vis_data_.opacity === opacity)
         return;
-    this.vis_data_.opacity = opacity;
-    this.setIsDirty(true);
-};
 
-GLVIS.Recommendation.prototype.getRadius = function () {
-    return this.vis_data_.radius;
-};
+    if (!animate) {
+        this.vis_data_.opacity = opacity;
+        this.setIsDirty(true);
+    }
+    else {
 
-GLVIS.Recommendation.prototype.getColor = function () {
-    return this.vis_data_.color;
+        var config = GLVIS.config.collection.recommendation.opacity_animation;
+        GLVIS.Scene.getCurrentScene().getAnimation().register(
+                config.id_prefix + this.getId(),
+                opacity,
+                null,
+                this.getOpacity.bind(this),
+                this.setOpacity.bind(this),
+                0,
+                config.speed,
+                config.pow,
+                config.threshold,
+                function () {
+                    //Ready animation
+                },
+                true
+                );
+    }
 };
 
 GLVIS.Recommendation.prototype.getOpacity = function (include_distance) {
@@ -617,6 +680,11 @@ GLVIS.Recommendation.prototype.getOpacity = function (include_distance) {
         depth_opacity_fact = Math.min(1, (1 - this.getPosition().z * depth_strength)) * depth_weaken + (1 - depth_weaken);
     }
     return this.vis_data_.opacity * depth_opacity_fact;
+};
+
+
+GLVIS.Recommendation.prototype.getColor = function () {
+    return this.vis_data_.color;
 };
 
 GLVIS.Recommendation.prototype.setIsDirty = function (dirty) {

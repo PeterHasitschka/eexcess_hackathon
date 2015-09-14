@@ -17,7 +17,7 @@ GLVIS.RecommendationCommonNode = function (recommendation, mesh_parent) {
     };
 
     //Needed due to relative scaling.
-    this.init_radius_ = this.recommendation_.getRadius();
+    this.init_radius_ = this.recommendation_.getRadius() * this.recommendation_.getSizeFactor();
 
     this.mesh_parent_ = mesh_parent;
 
@@ -77,7 +77,7 @@ GLVIS.RecommendationCommonNode.prototype.render = function () {
             pos.z
             );
 
-    var curr_radius = this.recommendation_.getRadius();
+    var curr_radius = this.recommendation_.getRadius() * this.recommendation_.getSizeFactor();
     var scale_factor = curr_radius / this.init_radius_;
     this.webgl_objects_.circle.scale.set(scale_factor, scale_factor, scale_factor);
 
@@ -101,17 +101,16 @@ GLVIS.RecommendationCommonNode.prototype.getIsDirty = function () {
  * Returns the mesh of the inner circle
  * @returns {THREE.Mesh}
  */
-GLVIS.RecommendationCommonNode.prototype.getCircle = function(){
+GLVIS.RecommendationCommonNode.prototype.getCircle = function () {
     return this.webgl_objects_.circle;
 },
+        /**
+         * Delete all GL-Objects and remove them from the scene
+         */
+        GLVIS.RecommendationCommonNode.prototype.delete = function () {
 
-/**
- * Delete all GL-Objects and remove them from the scene
- */
-GLVIS.RecommendationCommonNode.prototype.delete = function () {
+            //var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+            this.mesh_parent_.remove(this.webgl_objects_.circle);
 
-    //var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
-    this.mesh_parent_.remove(this.webgl_objects_.circle);
-
-    delete this.webgl_objects_.circle;
-};
+            delete this.webgl_objects_.circle;
+        };
