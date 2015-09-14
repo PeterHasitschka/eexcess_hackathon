@@ -95,6 +95,12 @@ GLVIS.config = {
                 threshold: 0.001,
                 pow: 0.0001,
                 speed: 20
+            },
+            distfact_animation : {
+                id_prefix : "rec_distfact_anim_",
+                speed : 0.1,
+                pow : 0.01,
+                threshold: 0.003
             }
         },
         ring: {

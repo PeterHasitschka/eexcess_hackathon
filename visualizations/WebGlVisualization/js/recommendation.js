@@ -43,8 +43,8 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
         },
         radius: GLVIS.config.collection.recommendation.radius,
         color: GLVIS.config.collection.recommendation.color,
-        opacity: 1
-        ,
+        opacity: 1,
+        distance_factor: 1,
         gl_objects: {
             center_node: null,
             connection_col: null
@@ -506,7 +506,8 @@ GLVIS.Recommendation.prototype.setRelativePositionByRad = function (that, rad) {
     if (!that)
         that = this;
 
-    var distance = GLVIS.config.collection.recommendation.init_distance;
+    var init_distance = GLVIS.config.collection.recommendation.init_distance;
+    var distance = that.vis_data_.distance_factor * init_distance;
     var pos = GLVIS.Tools.getPosFromRad(rad, distance);
     that.setRelativePosition(pos.x, pos.y, 0);
 };
@@ -538,15 +539,55 @@ GLVIS.Recommendation.prototype.setRadius = function (radius) {
 };
 
 /**
- * 
- * @param {integer} color e.g. 0xFF0000
+ * Setting a factor for moving the rec more far or near relative to the collection center
+ * @param {float} factor
+ * @param {bool} animate TRUE if animation should be started, FALSE if not
  */
-GLVIS.Recommendation.prototype.setColor = function (color) {
-    if (this.vis_data_.color === color)
-        return;
-    this.vis_data_.color = color;
-    this.setIsDirty(true);
-};
+GLVIS.Recommendation.prototype.setDistanceFactor = function (factor, animate) {
+
+    if (!animate) {
+        this.vis_data_.distance_factor = factor;
+        this.setRelativePositionByRad(this, this.getRelativePositionRad());
+
+    }
+    else {
+
+        var config = GLVIS.config.collection.recommendation.distfact_animation;
+
+        GLVIS.Scene.getCurrentScene().getAnimation().register(
+                config.id_prefix + this.getId(),
+                factor,
+                null,
+                this.getDistanceFactor.bind(this),
+                this.setDistanceFactor.bind(this),
+                0,
+                config.speed,
+                config.pow,
+                config.threshold,
+                function () {
+                    //Ready animation
+                },
+                true
+                );
+    }
+},
+        /**
+         * Getting a factor for moving the rec more far or near relative to the collection center
+         * return {float}
+         */
+        GLVIS.Recommendation.prototype.getDistanceFactor = function () {
+            return this.vis_data_.distance_factor;
+        },
+        /**
+         * 
+         * @param {integer} color e.g. 0xFF0000
+         */
+        GLVIS.Recommendation.prototype.setColor = function (color) {
+            if (this.vis_data_.color === color)
+                return;
+            this.vis_data_.color = color;
+            this.setIsDirty(true);
+        };
 
 /**
  * @param {float} opacity 0 - Transparent, 1 - Full visible

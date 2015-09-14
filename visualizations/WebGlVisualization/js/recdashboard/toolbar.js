@@ -156,31 +156,17 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                 label: "Reset flipbook",
                 visible: true
             },
-            rotate_one_mesh_container: {
+            random_recdistances_last_coll: {
                 fct: function (e) {
+                    /** @type{GLVIS.Collection} **/
+                    var coll = _.last(GLVIS.Scene.getCurrentScene().getCollections());
 
-                    /** @type {GLVIS.Collection} **/
-                    var coll = GLVIS.Scene.getCurrentScene().getCollections()[0];
-
-
-                    var meshcontainer = coll.getMeshContainerNode();
-                    
-                    /**
-                     * 
-                     * THIS is the way to rotate :-)
-                     */
-                    
-                    //For calculating positions and center
-                    var box = new THREE.Box3().setFromObject(meshcontainer);
-                    var x_center = box.min.x + (box.max.x - box.min.x) / 2.0;
-                    
-                    
-                    meshcontainer.applyMatrix(new THREE.Matrix4().makeTranslation(-x_center, 0, 0));
-                    meshcontainer.applyMatrix(new THREE.Matrix4().makeRotationY(0.2));
-                    meshcontainer.applyMatrix(new THREE.Matrix4().makeTranslation(x_center, 0, 0));
-
+                    /** @type{GLVIS.Recommendation} r **/
+                    _.each(coll.getRecommendations(), function (r) {
+                        r.setDistanceFactor((Math.random() + 0.5), true);
+                    });
                 },
-                label: "Rotate first mesh container",
+                label: "Rand Rec-Dist last Coll",
                 visible: true
             }
 
