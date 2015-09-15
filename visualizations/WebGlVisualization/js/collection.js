@@ -317,12 +317,20 @@ GLVIS.Collection.prototype.handleClick = function () {
 /**
  * Called by interactionhandler. Function registered in mesh-objects
  */
-GLVIS.Collection.prototype.handleMouseover = function () {
+GLVIS.Collection.prototype.handleCenterMouseover = function () {
 
     if (!this.vis_data_.is_currently_animated)
         this.connectSameRecsFromOtherCollections();
     else
         this.unconnectSameRecsFromOtherCollections();
+};
+
+/**
+ * May be called by interactionhandler. Function registered in mesh-objects
+ */
+GLVIS.Collection.prototype.handleMouseover = function () {
+
+    //Do nothing at the moment...
 };
 
 /**

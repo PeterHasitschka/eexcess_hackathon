@@ -46,7 +46,7 @@ GLVIS.CollectionCenterNode.prototype.initAndRegisterGlObj = function (mesh_paren
     //Register click-function
     sphere.interaction = {
         "mouseclick": this.collection_.handleClick.bind(this.collection_),
-        "mouseover": this.collection_.handleMouseover.bind(this.collection_)
+        "mouseover": this.collection_.handleCenterMouseover.bind(this.collection_)
     };
 
     if (!mesh_parent) {
