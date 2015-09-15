@@ -59,7 +59,7 @@ GLVIS.config = {
                 color_positive: 0x00CC00,
                 color_negative: 0xCC0000,
                 circle: {
-                    segments: 10
+                    segments: 15
                 }
             },
             detail_node: {
@@ -113,6 +113,11 @@ GLVIS.config = {
                 speed: 0.3,
                 pow: 0.01,
                 threshold: 0.01
+            },
+            relevance : {
+                sizefactor : 2,
+                sizeoffset : 0.5,
+                distfactor : 0.2
             }
         },
         ring: {

@@ -544,9 +544,11 @@ GLVIS.Recommendation.prototype.toggleVisualizeRelevance = function (visualize) {
     GLVIS.Debugger.debug("Recommendation", "Toggle rel vis of rec " + this.getId() + " called ", 7);
     if (visualize) {
         var relevance = this.getRelevance();
-
-        this.setSizeFactor(relevance + 0.5, true);
-        this.setDistanceFactor(1 + relevance / 5.0, true);
+        
+        var config = GLVIS.config.collection.recommendation.relevance;
+        
+        this.setSizeFactor(relevance * config.sizefactor + config.sizeoffset, true);
+        this.setDistanceFactor(1 + relevance * config.distfactor, true);
     }
     else {
         this.setSizeFactor(1, false);
