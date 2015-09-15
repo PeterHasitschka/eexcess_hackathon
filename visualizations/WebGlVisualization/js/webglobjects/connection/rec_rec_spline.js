@@ -76,7 +76,8 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
 
                 var top_factor = is_top ? 1 : -1;
 
-                var vert_distance = 270 + Math.random() * 30;
+                //var vert_distance = 270 + Math.random() * 30;
+                var vert_distance = 200;
                 vecs.push(new THREE.Vector3(last_x + half_length, top_factor * vert_distance, last_z));
             }
         }
