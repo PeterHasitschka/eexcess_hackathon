@@ -46,6 +46,7 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
         opacity: 1,
         distance_factor: 1,
         size_factor: 1,
+        relevance: 1,
         gl_objects: {
             center_node: null,
             connection_col: null
@@ -534,12 +535,32 @@ GLVIS.Recommendation.prototype.getRelativePositionRad = function (that) {
 };
 
 /**
+ * Visualizing the stored relevance e.g. by size or distance or resetting it
+ * @param {bool} visualize If TRUE relevance gets visualized else not.
+ * @returns {undefined}
+ */
+GLVIS.Recommendation.prototype.toggleVisualizeRelevance = function (visualize) {
+
+    GLVIS.Debugger.debug("Recommendation", "Toggle rel vis of rec " + this.getId() + " called ", 7);
+    if (visualize) {
+        var relevance = this.getRelevance();
+
+        this.setSizeFactor(relevance + 0.5, true);
+        this.setDistanceFactor(1 + relevance / 5.0, true);
+    }
+    else {
+        this.setSizeFactor(1, false);
+        this.setDistanceFactor(1, false);
+    }
+};
+
+/**
  * @param {float} factor Factor to be multiplied with radius
+ * @param {bool} animate TRUE if animation should be performed
  */
 GLVIS.Recommendation.prototype.setSizeFactor = function (factor, animate) {
-
-
-
+    
+    GLVIS.Debugger.debug("Recommendation", "Setting size factor of rec " + this.getId() + " to " + factor, 7);
     if (!animate) {
         this.vis_data_.size_factor = factor;
         this.setIsDirty(true);
@@ -563,6 +584,26 @@ GLVIS.Recommendation.prototype.setSizeFactor = function (factor, animate) {
                 true
                 );
     }
+};
+
+/**
+ * A value that represents a 'relevance' of the current rec in the collection 
+ * @param {float} relevance A Value between 0 and 1
+ */
+GLVIS.Recommendation.prototype.setRelevance = function (relevance) {
+
+    if (relevance < 0 || relevance > 1)
+        throw Exception("Relevance must be between 0 and 1");
+
+    this.vis_data_.relevance = relevance;
+};
+
+/**
+ * A value that represents a 'relevance' of the current rec in the collection 
+ * @returns {float} The 'relevance' value of the rec
+ */
+GLVIS.Recommendation.prototype.getRelevance = function () {
+    return this.vis_data_.relevance;
 };
 
 /**
@@ -593,6 +634,7 @@ GLVIS.Recommendation.prototype.getRadius = function () {
  */
 GLVIS.Recommendation.prototype.setDistanceFactor = function (factor, animate) {
 
+    GLVIS.Debugger.debug("Recommendation", "Setting distance factor of rec " + this.getId() + " to " + factor, 7);
     if (!animate) {
         this.vis_data_.distance_factor = factor;
         this.setRelativePositionByRad(this, this.getRelativePositionRad());

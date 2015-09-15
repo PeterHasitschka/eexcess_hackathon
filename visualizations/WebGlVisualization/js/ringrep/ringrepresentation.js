@@ -86,7 +86,7 @@ GLVIS.RingRepresentation.prototype.render = function () {
     GLVIS.Debugger.debug("RingRepresentation",
             "Rendering RINGREPRESENTATION " + this.collection_.getId(),
             5);
-
+        
     for (var i = 0; i < this.ring_segments_.length; i++) {
         this.ring_segments_[i].render();
     }

@@ -51,7 +51,8 @@ GLVIS.Collection = function (eexcess_data) {
             compare_bar: null
         },
         mesh_container: null,
-        is_currently_animated: false
+        is_currently_animated: false,
+        rec_relevances_vis: false
     };
 
     /**
@@ -596,15 +597,16 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
     this.setRotation(0);
 
     this.ring_representation_ = new GLVIS.RingRepresentation(this);
-
     this.setRecPosHandler(new GLVIS.RecommendationPosRingRepresentation(this));
 
     this.vis_data_.is_currently_animated = true;
     this.getRecPosHandler().calculatePositions(
             function () {
                 this.vis_data_.is_currently_animated = false;
+                this.toggleRecRelevanceVisualization(true);
             }.bind(this)
             );
+
 };
 
 /**
@@ -621,6 +623,27 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
 
     this.setRecPosHandler(new GLVIS.RecommendationPosDistributed(this));
     this.getRecPosHandler().calculatePositions();
+    this.toggleRecRelevanceVisualization(false);
+};
+
+/**
+ * Showing the recommendations relevances or resetting it
+ * @param {float} visualize TRUE if relevance should be visualized else FALSE
+ */
+GLVIS.Collection.prototype.toggleRecRelevanceVisualization = function (visualize) {
+    
+    if (this.vis_data_.rec_relevances_vis === visualize)
+        return;
+    
+    this.vis_data_.rec_relevances_vis = visualize;
+
+    GLVIS.Debugger.debug("GLVIS.Collection", "Toggling rec-relevance-visualization to " + visualize);
+    var recs = this.getRecommendations();
+    for (var i = 0; i < recs.length; i++) {
+        /** @type {GLVIS.Recommendation} **/
+        var curr_rec = recs[i];
+        curr_rec.toggleVisualizeRelevance(visualize);
+    }
 };
 
 GLVIS.Collection.prototype.hideLabels = function () {

@@ -80,8 +80,8 @@ GLVIS.config = {
             },
             focus_animation: {
                 move: {
-                    speed: 0.2,
-                    pow: 0.2,
+                    speed: 0.3,
+                    pow: 0.001,
                     threshold: 0.01
                 },
                 zoom: {
@@ -98,19 +98,19 @@ GLVIS.config = {
             },
             distfact_animation: {
                 id_prefix: "rec_distfact_anim_",
-                speed: 0.1,
+                speed: 0.3,
                 pow: 0.01,
-                threshold: 0.003
+                threshold: 0.001
             },
             opacity_animation: {
                 id_prefix: "rec_opacity_anim_",
-                speed: 0.1,
+                speed: 0.3,
                 pow: 0.01,
                 threshold: 0.01
             },
             size_animation: {
                 id_prefix: "rec_size_anim_",
-                speed: 0.1,
+                speed: 0.3,
                 pow: 0.01,
                 threshold: 0.01
             }

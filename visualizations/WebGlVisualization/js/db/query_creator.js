@@ -78,6 +78,8 @@ GLVIS.DbQueryCreator.prototype.createCollection = function (query_data_obj) {
         var curr_rec_data = rec_data_array[r_count];
         var curr_rec = new GLVIS.Recommendation(curr_rec_data, collection);
 
+        //Add relevance. The first has the highest
+        curr_rec.setRelevance(1 - (r_count / rec_data_array.length));
         collection.addRecommendation(curr_rec);
     }
 

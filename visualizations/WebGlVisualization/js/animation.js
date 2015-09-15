@@ -120,7 +120,7 @@ GLVIS.Animation.prototype._finishAnimation = function (animation) {
  */
 GLVIS.Animation.prototype.finishAllAnimations = function () {
 
-    GLVIS.Debugger.debug("Animation", "Canceling all animations", 5);
+    GLVIS.Debugger.debug("Animation", "Canceling all animations", 6);
 
     /*
      * @TODO: Find out why sometimes the animations are undefined and return later.
@@ -135,7 +135,7 @@ GLVIS.Animation.prototype.finishAllAnimations = function () {
             this._finishAnimation(curr_anim);
         }.bind(this));
 
-    GLVIS.Debugger.debug("Animation", "Finished Canceling all animations", 5);
+    GLVIS.Debugger.debug("Animation", "Finished Canceling all animations", 6);
 };
 
 /**
