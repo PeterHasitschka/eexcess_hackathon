@@ -620,15 +620,24 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
  * for re-distributing the recommendation nodes around the collection
  */
 GLVIS.Collection.prototype.deleteRingRepresentation = function () {
+
+    GLVIS.Debugger.debug("Collection", "Deleting Ring Rep of Coll " + this.getId(), 5);
+
     if (this.ring_representation_)
         this.ring_representation_.delete();
     this.ring_representation_ = null;
 
-    GLVIS.Scene.getCurrentScene().getAnimation().finishAllAnimations();
+    //GLVIS.Scene.getCurrentScene().getAnimation().finishAllAnimations();
+    
+    
+    this.toggleRecRelevanceVisualization(false);
+    
+    if (this.getRecPosHandler() instanceof GLVIS.RecommendationPosRingRepresentation)
+        this.getRecPosHandler().deleteCallback();
 
     this.setRecPosHandler(new GLVIS.RecommendationPosDistributed(this));
     this.getRecPosHandler().calculatePositions();
-    this.toggleRecRelevanceVisualization(false);
+
 };
 
 /**
@@ -642,7 +651,7 @@ GLVIS.Collection.prototype.toggleRecRelevanceVisualization = function (visualize
 
     this.vis_data_.rec_relevances_vis = visualize;
 
-    GLVIS.Debugger.debug("GLVIS.Collection", "Toggling rec-relevance-visualization to " + visualize);
+    GLVIS.Debugger.debug("GLVIS.Collection", "Toggling rec-relevance-visualization of ("+this.getId()+") to " + visualize, 5);
     var recs = this.getRecommendations();
     for (var i = 0; i < recs.length; i++) {
         /** @type {GLVIS.Recommendation} **/

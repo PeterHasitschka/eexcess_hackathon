@@ -18,6 +18,13 @@ GLVIS.RecommendationPosRingRepresentation = function (collection) {
 };
 
 /**
+ * Necessary if other ringrep was started before animation of this collection ready.
+ */
+GLVIS.RecommendationPosRingRepresentation.prototype.deleteCallback = function () {
+    this.cb_ = null;
+};
+
+/**
  * Distributing the recommendations according to the ring representation.
  * @returns {undefined}
  */
