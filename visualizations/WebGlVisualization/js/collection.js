@@ -599,7 +599,9 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
     pos_handler.calculatePositions(false);
 
     this.unconnectSameRecsFromOtherCollections();
-    this.setRotation(0);
+    
+    console.warn("Collection createRingRepresentation: Rotation animation to 0 not working... Endless loop at -76 degree! SO CURRENTLY DEACTIVATED AGAIN");
+    this.setRotation(0, false);
 
     this.ring_representation_ = new GLVIS.RingRepresentation(this);
     this.setRecPosHandler(new GLVIS.RecommendationPosRingRepresentation(this));
@@ -627,11 +629,9 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
         this.ring_representation_.delete();
     this.ring_representation_ = null;
 
-    //GLVIS.Scene.getCurrentScene().getAnimation().finishAllAnimations();
-    
-    
     this.toggleRecRelevanceVisualization(false);
     
+    //Prevent registered callback of ring-rep-pos-handler to be performed
     if (this.getRecPosHandler() instanceof GLVIS.RecommendationPosRingRepresentation)
         this.getRecPosHandler().deleteCallback();
 
@@ -709,7 +709,9 @@ GLVIS.Collection.prototype.getHighlightRecsByLabel = function () {
  * @param {boolean} animate Animate Rotation
  */
 GLVIS.Collection.prototype.setRotation = function (degree, animate) {
-
+    
+    console.log("COLL ROT", degree, animate, this.getId());
+    
     if (this.ring_representation_)
         return;
 
