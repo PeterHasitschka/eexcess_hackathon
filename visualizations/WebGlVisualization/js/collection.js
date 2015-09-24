@@ -294,7 +294,14 @@ GLVIS.Collection.prototype.render = function () {
 /**
  * Called by interactionhandler. Function registered in mesh-objects
  */
-GLVIS.Collection.prototype.handleCenterClick = function(){
+GLVIS.Collection.prototype.handleCenterClick = function () {
+
+};
+
+/**
+ * Called by interactionhandler. Function registered in mesh-objects
+ */
+GLVIS.Collection.prototype.handleClick = function () {
     if (this.getStatus() === GLVIS.Collection.STATUSFLAGS.HIDDEN)
         return;
 
@@ -311,13 +318,6 @@ GLVIS.Collection.prototype.handleCenterClick = function(){
         this.createRingRepresentation();
     else
         this.selectAndFocus();
-},
-
-/**
- * Called by interactionhandler. Function registered in mesh-objects
- */
-GLVIS.Collection.prototype.handleClick = function () {
-    
 };
 
 /**
@@ -636,10 +636,10 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
  * @param {float} visualize TRUE if relevance should be visualized else FALSE
  */
 GLVIS.Collection.prototype.toggleRecRelevanceVisualization = function (visualize) {
-    
+
     if (this.vis_data_.rec_relevances_vis === visualize)
         return;
-    
+
     this.vis_data_.rec_relevances_vis = visualize;
 
     GLVIS.Debugger.debug("GLVIS.Collection", "Toggling rec-relevance-visualization to " + visualize);
@@ -728,7 +728,7 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
                 true
                 );
         return;
-    } 
+    }
 
 
     /**
@@ -744,7 +744,7 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
     meshcontainer.applyMatrix(new THREE.Matrix4().makeRotationY(rad));
     meshcontainer.applyMatrix(new THREE.Matrix4().makeTranslation(x_center, 0, 0));
 
-    
+
     this.vis_data_.rotation_degree = degree;
     this.setIsDirty(true);
 };
