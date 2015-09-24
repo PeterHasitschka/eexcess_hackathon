@@ -544,9 +544,9 @@ GLVIS.Recommendation.prototype.toggleVisualizeRelevance = function (visualize) {
     GLVIS.Debugger.debug("Recommendation", "Toggle rel vis of rec " + this.getId() + " called ", 7);
     if (visualize) {
         var relevance = this.getRelevance();
-        
+
         var config = GLVIS.config.collection.recommendation.relevance;
-        
+
         this.setSizeFactor(relevance * config.sizefactor + config.sizeoffset, true);
         this.setDistanceFactor(1 + relevance * config.distfactor, true);
     }
@@ -561,7 +561,7 @@ GLVIS.Recommendation.prototype.toggleVisualizeRelevance = function (visualize) {
  * @param {bool} animate TRUE if animation should be performed
  */
 GLVIS.Recommendation.prototype.setSizeFactor = function (factor, animate) {
-    
+
     GLVIS.Debugger.debug("Recommendation", "Setting size factor of rec " + this.getId() + " to " + factor, 7);
     if (!animate) {
         this.vis_data_.size_factor = factor;

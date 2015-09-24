@@ -294,9 +294,7 @@ GLVIS.Collection.prototype.render = function () {
 /**
  * Called by interactionhandler. Function registered in mesh-objects
  */
-GLVIS.Collection.prototype.handleClick = function () {
-    /** @type {GLVIS.Collection} **/
-
+GLVIS.Collection.prototype.handleCenterClick = function(){
     if (this.getStatus() === GLVIS.Collection.STATUSFLAGS.HIDDEN)
         return;
 
@@ -313,6 +311,13 @@ GLVIS.Collection.prototype.handleClick = function () {
         this.createRingRepresentation();
     else
         this.selectAndFocus();
+},
+
+/**
+ * Called by interactionhandler. Function registered in mesh-objects
+ */
+GLVIS.Collection.prototype.handleClick = function () {
+    
 };
 
 /**
@@ -723,8 +728,7 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
                 true
                 );
         return;
-    } else {
-    }
+    } 
 
 
     /**
@@ -740,7 +744,7 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
     meshcontainer.applyMatrix(new THREE.Matrix4().makeRotationY(rad));
     meshcontainer.applyMatrix(new THREE.Matrix4().makeTranslation(x_center, 0, 0));
 
-
+    
     this.vis_data_.rotation_degree = degree;
     this.setIsDirty(true);
 };
