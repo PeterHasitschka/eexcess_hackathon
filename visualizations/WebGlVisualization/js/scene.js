@@ -207,6 +207,8 @@ GLVIS.Scene.getCurrentScene = function () {
 
 var stop_flag = false;
 
+var animation_debugger = new GLVIS.AnimationDebugger();
+
 /**
  * Main entry-point for the animation
  */
@@ -215,7 +217,11 @@ GLVIS.Scene.animate = function () {
 
     if (!curr_scene || stop_flag)
         return;
+    
 
     requestAnimationFrame(GLVIS.Scene.animate);
     curr_scene.render();
+    
+    if (animation_debugger)
+        animation_debugger.update();
 };

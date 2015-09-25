@@ -140,3 +140,48 @@ html, body {
     height:20px;
     float:left;
 }
+
+
+#animationdebugcontainer {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    min-height: 20px;
+    width: 410px;
+    background-color: rgb(255, 183, 131);
+    border: 1px solid;
+}
+
+#animationdebughead {
+    margin-left: 20px;
+}
+
+#animationdebugcontent {
+    font-size: 8px;
+    padding:5px;
+}
+
+.animationdebugrow {
+    border-bottom: 1px solid gray;
+    float: left;  
+}
+
+.animationdebugrow_id {
+    width:80px;
+    float:left;
+}
+
+.animationdebugrow_goal {
+    width:100px;
+    float:left;
+}
+
+.animationdebugrow_curr {
+    width:120px;
+    float:left;
+}
+
+.animationdebugrow_th {
+    width:100px;
+    float:left;
+}

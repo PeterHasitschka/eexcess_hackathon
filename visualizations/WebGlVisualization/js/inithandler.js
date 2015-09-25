@@ -39,6 +39,7 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                     path + "js/config.js",
                                     path + "js/tools/debugger.js",
                                     path + "js/tools/tools.js",
+                                    path + "js/tools/animationdebug.js",
                                     path + "js/db/db_handler.js",
                                     path + "js/db/query.js",
                                     path + "js/db/rec.js",
