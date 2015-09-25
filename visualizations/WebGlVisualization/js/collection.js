@@ -600,8 +600,7 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
 
     this.unconnectSameRecsFromOtherCollections();
     
-    console.warn("Collection createRingRepresentation: Rotation animation to 0 not working... Endless loop at -76 degree! SO CURRENTLY DEACTIVATED AGAIN");
-    this.setRotation(0, false);
+    this.setRotation(0, true);
 
     this.ring_representation_ = new GLVIS.RingRepresentation(this);
     this.setRecPosHandler(new GLVIS.RecommendationPosRingRepresentation(this));
@@ -710,11 +709,6 @@ GLVIS.Collection.prototype.getHighlightRecsByLabel = function () {
  */
 GLVIS.Collection.prototype.setRotation = function (degree, animate) {
     
-    console.log("COLL ROT", degree, animate, this.getId());
-    
-    if (this.ring_representation_)
-        return;
-
     if (degree === this.vis_data_.rotation_degree)
         return;
 
@@ -754,7 +748,6 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
     meshcontainer.applyMatrix(new THREE.Matrix4().makeTranslation(-x_center, 0, 0));
     meshcontainer.applyMatrix(new THREE.Matrix4().makeRotationY(rad));
     meshcontainer.applyMatrix(new THREE.Matrix4().makeTranslation(x_center, 0, 0));
-
 
     this.vis_data_.rotation_degree = degree;
     this.setIsDirty(true);

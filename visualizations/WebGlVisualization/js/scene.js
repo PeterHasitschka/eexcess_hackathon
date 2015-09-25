@@ -207,7 +207,8 @@ GLVIS.Scene.getCurrentScene = function () {
 
 var stop_flag = false;
 
-var animation_debugger = new GLVIS.AnimationDebugger();
+var animation_debugger = null;
+animation_debugger = new GLVIS.AnimationDebugger();
 
 /**
  * Main entry-point for the animation

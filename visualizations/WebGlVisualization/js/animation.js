@@ -30,7 +30,7 @@ GLVIS.Animation.prototype.animate = function () {
                 curr_anim.pow,
                 curr_anim.threshold
                 );
-
+        
         if (delta !== 0.0) {
             var val_to_set = delta;
             if (curr_anim.add_to_current)
@@ -58,7 +58,7 @@ GLVIS.Animation.prototype.animate = function () {
         //Call setter fct
         curr_anim.setter_fct.apply(null, params_for_setting);
 
-
+            
         //Animation ready
         if (delta === 0.0) {
             GLVIS.Debugger.debug("Animation", "Animation '" +
@@ -68,6 +68,8 @@ GLVIS.Animation.prototype.animate = function () {
             curr_anim.callback_fct();
             return;
         }
+        
+        curr_anim.iterations++;
     }
 };
 
@@ -179,7 +181,8 @@ GLVIS.Animation.prototype.register = function (identifier, goal, object, getter_
         pow: pow,
         threshold: threshold,
         callback_fct: callback_fct,
-        add_to_current: add_to_current
+        add_to_current: add_to_current,
+        iterations: 0   //For testing
     };
 
     this.animations_.push(anim_obj);

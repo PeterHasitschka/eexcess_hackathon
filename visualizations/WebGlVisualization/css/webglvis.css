@@ -152,13 +152,26 @@ html, body {
     border: 1px solid;
 }
 
+#animationdebugcontainer.inactive {
+      opacity: 0.7;
+}
+
 #animationdebughead {
-    margin-left: 20px;
+    margin: 0 20px;
+}
+
+#animationdebughead h3{
+    float:left;
+}
+
+#animationdebughead p{
+    float:right;
 }
 
 #animationdebugcontent {
     font-size: 8px;
     padding:5px;
+    margin-bottom: 11px;
 }
 
 .animationdebugrow {
@@ -182,6 +195,11 @@ html, body {
 }
 
 .animationdebugrow_th {
-    width:100px;
+    width:80px;
+    float:left;
+}
+
+.animationdebugrow_iterations {
+    width:20px;
     float:left;
 }
