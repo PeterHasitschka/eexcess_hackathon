@@ -20,17 +20,45 @@ GLVIS.WebGlHandler = function (canvas) {
     this.three_.scene = new THREE.Scene();
 
     //Creating and adding the camera
-    this.createCamera_();
+
+    if (false)
+        this.createOrthoCamera_();
+    else
+        this.createPerspectiveCamera_();
+
+
     this.three_.scene.add(this.three_.camera);
 
     this.createRenderer();
 };
 
 /**
- * Creating an orthographic camera
- * @returns {THREE.OrthographicCamera}
+ * Creating a perspective camera
  */
-GLVIS.WebGlHandler.prototype.createCamera_ = function () {
+GLVIS.WebGlHandler.prototype.createPerspectiveCamera_ = function () {
+
+    var scene_width = this.canvas_.width();
+    var scene_height = this.canvas_.height();
+    var camera = new THREE.PerspectiveCamera(
+            45,
+            scene_width / scene_height,
+            -300,
+            1000
+            );
+    camera.position.z = -500;
+    camera.lookAt(new THREE.Vector3(8000,0,0));
+
+    camera.updateProjectionMatrix();
+    
+    this.three_.camera = camera;
+};
+
+
+
+/**
+ * Creating an orthographic camera
+ */
+GLVIS.WebGlHandler.prototype.createOrthoCamera_ = function () {
 
     var scene_width = this.canvas_.width();
     var scene_height = this.canvas_.height();
