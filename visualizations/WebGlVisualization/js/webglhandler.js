@@ -16,7 +16,7 @@ GLVIS.WebGlHandler = function (canvas) {
         camera: null
     };
 
-    this.cameraconfig_ = GLVIS.config.three.camera;
+    this.cameraconfig_ = GLVIS.config.three.camera_perspective;
     this.three_.scene = new THREE.Scene();
 
     //Creating and adding the camera
@@ -40,16 +40,16 @@ GLVIS.WebGlHandler.prototype.createPerspectiveCamera_ = function () {
     var scene_width = this.canvas_.width();
     var scene_height = this.canvas_.height();
     var camera = new THREE.PerspectiveCamera(
-            45,
+            this.cameraconfig_.FOV,
             scene_width / scene_height,
-            -300,
-            1000
+            this.cameraconfig_.NEAR,
+            this.cameraconfig_.FAR
             );
-    camera.position.z = -500;
-    camera.lookAt(new THREE.Vector3(8000,0,0));
+    camera.position.z = this.cameraconfig_.Z_POS;
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     camera.updateProjectionMatrix();
-    
+
     this.three_.camera = camera;
 };
 

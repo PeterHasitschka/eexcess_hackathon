@@ -200,7 +200,7 @@ GLVIS.Text.prototype.createMesh = function (font, font_size, color, bg_color, op
 
     var texture = new THREE.Texture(canvas);
     texture.needsUpdate = true;
-    texture.flipY = false;
+    texture.flipY = true;
 
     //Get rid of the "not power of 2" warning
     texture.minFilter = THREE.LinearFilter;
