@@ -93,7 +93,9 @@ GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouselea
         var scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
         this.mesh_container_ = scene;
     }
-
+    
+    console.log(this.mesh_container_);
+    
     this.updateWebGlObj();
 };
 
@@ -372,21 +374,30 @@ GLVIS.Text.prototype.setOpacity = function (opacity) {
  * 
  * @param {float | null} x X-Position
  * @param {float | null} y Y-Position
+ * @param {float | null} z Z-Position
  * @returns {undefined}
  */
-GLVIS.Text.prototype.setPosition = function (x, y) {
+GLVIS.Text.prototype.setPosition = function (x, y, z) {
+    if (x === undefined)
+        x = null;
+
     if (y === undefined)
         y = null;
 
-    if (x === this.pos_.x && y === this.pos_.y)
+    if (z === undefined)
+        z = null;
+
+    if (x === this.pos_.x && y === this.pos_.y && z === this.pos_.z)
         return;
 
-    GLVIS.Debugger.debug("Text", "Setting pos: " + x + " " + y, 8);
+    GLVIS.Debugger.debug("Text", "Setting pos: " + x + " " + y +" " + z, 8);
 
     if (x !== null)
         this.pos_.x = x;
     if (y !== null)
         this.pos_.y = y;
+    if (z !== null)
+        this.pos_.z = z;
 
     this.setIsDirty(true);
 };

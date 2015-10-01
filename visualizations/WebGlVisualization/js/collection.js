@@ -168,7 +168,8 @@ GLVIS.Collection.prototype.initLabels = function () {
         font_size: init_font_size,
         color: config.title_color,
         opacity: config.init_opacity
-    });
+    },
+    null, null, null,null, this);
 
     this.labels_.push(text_element);
 
@@ -234,7 +235,8 @@ GLVIS.Collection.prototype.initLabels = function () {
             {color: config.highlight_color},
             mouse_over_fct,
                     mouse_leave_fct,
-                    mouse_data
+                    mouse_data,
+                    this
                     );
 
             this.labels_.push(text_element);
@@ -458,8 +460,9 @@ GLVIS.Collection.prototype.setPosition = function (x, y, z) {
  * @returns {undefined}
  */
 GLVIS.Collection.prototype.rebuildLabelPositions = function () {
-
-    GLVIS.Debugger.debug("Collection", "Rebuilding Text positions", 7);
+    
+    
+    GLVIS.Debugger.debug("Collection", "Rebuilding Text positions", 4);
 
     if (!this.labels_.length)
         return;
@@ -471,9 +474,9 @@ GLVIS.Collection.prototype.rebuildLabelPositions = function () {
 
 
     var title_label = this.labels_[0];
-    title_label.setPosition(this.vis_data_.position.x, this.vis_data_.position.y + vert_offset);
+    title_label.setPosition(0,  vert_offset, 0);
 
-    var c_x_start = this.vis_data_.position.x - (((config.columns - 1) / 2) * config.column_distance);
+    var c_x_start = 0 - (((config.columns - 1) / 2) * config.column_distance);
 
     // -1 due to seperate treating of title label
     var elements_per_col = Math.round((this.labels_.length) / config.columns);
@@ -483,7 +486,7 @@ GLVIS.Collection.prototype.rebuildLabelPositions = function () {
 
         for (var r_count = 0; r_count < elements_per_col; r_count++) {
 
-            var c_y = this.vis_data_.position.y + (r_count + 1) * vert_dist + vert_offset;
+            var c_y = (r_count + 1) * vert_dist + vert_offset;
 
             var label_index = c_count * elements_per_col + r_count + 1;
             if (label_index >= this.labels_.length)
@@ -491,7 +494,7 @@ GLVIS.Collection.prototype.rebuildLabelPositions = function () {
 
             /** @type {GLVIS.Text} **/
             var curr_label = this.labels_[label_index];
-            curr_label.setPosition(c_x, c_y);
+            curr_label.setPosition(c_x, c_y, 0);
         }
     }
 };
@@ -599,7 +602,7 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
     pos_handler.calculatePositions();
 
     this.unconnectSameRecsFromOtherCollections();
-    
+
     this.setRotation(0, true);
 
     this.ring_representation_ = new GLVIS.RingRepresentation(this);
@@ -629,7 +632,7 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
     this.ring_representation_ = null;
 
     this.toggleRecRelevanceVisualization(false);
-    
+
     //Prevent registered callback of ring-rep-pos-handler to be performed
     if (this.getRecPosHandler() instanceof GLVIS.RecommendationPosRingRepresentation)
         this.getRecPosHandler().deleteCallback();
@@ -650,7 +653,7 @@ GLVIS.Collection.prototype.toggleRecRelevanceVisualization = function (visualize
 
     this.vis_data_.rec_relevances_vis = visualize;
 
-    GLVIS.Debugger.debug("GLVIS.Collection", "Toggling rec-relevance-visualization of ("+this.getId()+") to " + visualize, 5);
+    GLVIS.Debugger.debug("GLVIS.Collection", "Toggling rec-relevance-visualization of (" + this.getId() + ") to " + visualize, 5);
     var recs = this.getRecommendations();
     for (var i = 0; i < recs.length; i++) {
         /** @type {GLVIS.Recommendation} **/
@@ -708,7 +711,7 @@ GLVIS.Collection.prototype.getHighlightRecsByLabel = function () {
  * @param {boolean} animate Animate Rotation
  */
 GLVIS.Collection.prototype.setRotation = function (degree, animate) {
-    
+
     if (degree === this.vis_data_.rotation_degree)
         return;
 
