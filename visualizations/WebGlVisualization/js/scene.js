@@ -21,7 +21,7 @@ GLVIS.Scene = function (canvas) {
     this.interaction_handler_ = new GLVIS.InteractionHandler(this);
 
     /** @type{GLVIS.CollectionPosLinear} **/
-    this.collection_position_handler_ = new GLVIS.CollectionPosLinear();
+    this.collection_position_handler_ = new GLVIS.CollectionPosHyperbolic();
 
     /** @type{GLVIS.Animation} **/
     this.animation_ = new GLVIS.Animation();
@@ -173,7 +173,7 @@ GLVIS.Scene.prototype.getCollection = function (collection_id) {
  * @returns {undefined}
  */
 GLVIS.Scene.prototype.initCollectionNetwork = function () {
-    this.getCollectionPositionHandler().calculatePositions(true);
+    this.getCollectionPositionHandler().calculatePositions();
 
     //Creating parent connections
     for (var key = 0; key < this.collections_.length; key++) {

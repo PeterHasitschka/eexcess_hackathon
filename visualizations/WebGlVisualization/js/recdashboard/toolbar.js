@@ -161,48 +161,17 @@ GLVIS.ToolbarHandler.prototype.buttons = {
 
     },
     row2: {
-        rec_vis_manip: {
-            random_recdistances_last_coll: {
+        cameracontrol: {
+            viewfromtop: {
                 fct: function (e) {
-                    /** @type{GLVIS.Collection} **/
-                    var coll = _.last(GLVIS.Scene.getCurrentScene().getCollections());
-
-                    /** @type{GLVIS.Recommendation} r **/
-                    _.each(coll.getRecommendations(), function (r) {
-                        r.setDistanceFactor((Math.random() + 0.5), true);
-                    });
+                    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+                    camera.position.set(0,1500,50);
+                    camera.lookAt(new THREE.Vector3(0, 0, 0));
                 },
-                label: "Rand DIST last Coll",
-                visible: true
-            },
-            random_recopacity_last_coll: {
-                fct: function (e) {
-                    /** @type{GLVIS.Collection} **/
-                    var coll = _.last(GLVIS.Scene.getCurrentScene().getCollections());
-
-                    /** @type{GLVIS.Recommendation} r **/
-                    _.each(coll.getRecommendations(), function (r) {
-                        r.setOpacity((Math.random()), true);
-                    });
-                },
-                label: "Rand OPACITY last Coll",
-                visible: true
-            },
-            random_recsize_last_coll: {
-                fct: function (e) {
-                    /** @type{GLVIS.Collection} **/
-                    var coll = _.last(GLVIS.Scene.getCurrentScene().getCollections());
-
-                    /** @type{GLVIS.Recommendation} r **/
-                    _.each(coll.getRecommendations(), function (r) {
-                        r.setSizeFactor((Math.random() * 2), true);
-                    });
-                },
-                label: "Rand SIZE last Coll",
+                label: "View from top",
                 visible: true
             }
-        },
-        
+        }
     }
 };
 /**

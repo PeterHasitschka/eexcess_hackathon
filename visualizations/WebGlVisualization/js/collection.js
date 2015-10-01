@@ -596,7 +596,7 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
     pos_handler.setIsOneFocused(true);
 
     this.selectAndFocus();
-    pos_handler.calculatePositions(false);
+    pos_handler.calculatePositions();
 
     this.unconnectSameRecsFromOtherCollections();
     

@@ -5,7 +5,7 @@ var GLVIS = GLVIS || {};
  * This means that only one child per collections is supported.
  * @returns {undefined}
  */
-GLVIS.CollectionPosHyperbolic = function () {
+GLVIS.CollectionPosParabolic = function () {
 
     /** @type {GLVIS.Scene} **/
     this.scene_ = GLVIS.Scene.getCurrentScene();
@@ -17,11 +17,10 @@ GLVIS.CollectionPosHyperbolic = function () {
 
 /**
  * Sets the positions of each collections
- * @param {boolean} focus_last If true, the last collection gets focused in the end
  */
-GLVIS.CollectionPosHyperbolic.prototype.calculatePositions = function (focus_last) {
+GLVIS.CollectionPosParabolic.prototype.calculatePositions = function () {
 
-    GLVIS.Debugger.debug("CollectionPosHyperbolic",
+    GLVIS.Debugger.debug("CollectionPosParabolic",
             "COLLECTION POS HANDLER: Recalculating positions",
             5);
 
@@ -100,10 +99,6 @@ GLVIS.CollectionPosHyperbolic.prototype.calculatePositions = function (focus_las
 
         current_collection.setPosition(curr_x, null);
 
-        if (current_collection.getRingRepresentation()) {
-            current_collection.deleteRingRepresentation();
-        }
-
 
         var last_coll = current_collection;
     }
@@ -119,7 +114,7 @@ GLVIS.CollectionPosHyperbolic.prototype.calculatePositions = function (focus_las
     var navigation_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
     if (coll_to_focus) {
         navigation_handler.focusCollection(coll_to_focus, function () {
-            GLVIS.Debugger.debug("CollectionPosHyperbolic",
+            GLVIS.Debugger.debug("CollectionPosParabolic",
                     "COLLECTION LINEAR POS: Ready positioning and focusing",
                     6);
         });
@@ -135,14 +130,14 @@ GLVIS.CollectionPosHyperbolic.prototype.calculatePositions = function (focus_las
  * @param {boolean} value True if a focus representation should be performed
  * @returns {undefined}
  */
-GLVIS.CollectionPosHyperbolic.prototype.setIsOneFocused = function (value) {
+GLVIS.CollectionPosParabolic.prototype.setIsOneFocused = function (value) {
     this.is_onefocused_ = value;
 };
 
 /**
  * @returns {Boolean} True if onefocus flag is set
  */
-GLVIS.CollectionPosHyperbolic.prototype.getIsOneFocused = function () {
+GLVIS.CollectionPosParabolic.prototype.getIsOneFocused = function () {
     return this.is_onefocused_;
 };
 
@@ -150,7 +145,7 @@ GLVIS.CollectionPosHyperbolic.prototype.getIsOneFocused = function () {
  * Set Collection that gets focused after rendering the collections
  * @param {GLVIS.Collection} coll
  */
-GLVIS.CollectionPosHyperbolic.prototype.setCollToFocus = function (coll) {
+GLVIS.CollectionPosParabolic.prototype.setCollToFocus = function (coll) {
     this.coll_to_focus_ = coll;
 };
 
@@ -158,6 +153,6 @@ GLVIS.CollectionPosHyperbolic.prototype.setCollToFocus = function (coll) {
  * Get Collection that is set to be focused after rendering the collections
  * @returns {GLVIS.Collection}
  */
-GLVIS.CollectionPosHyperbolic.prototype.getCollToFocus = function () {
+GLVIS.CollectionPosParabolic.prototype.getCollToFocus = function () {
     return this.coll_to_focus_;
 };
