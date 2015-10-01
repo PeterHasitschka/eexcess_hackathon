@@ -16,20 +16,56 @@ GLVIS.NavigationHandler = function (scene) {
     };
 };
 
+
+GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z) {
+
+    if (x === undefined)
+        x = null;
+    if (y === undefined)
+        y = null;
+    if (z === undefined)
+        z = null;
+
+    if (x === null | y === null | z === null) {
+        throw Exception("All cordinate values needed!");
+    }
+
+    var collection_circle_center = new THREE.Vector3(0, 0, 0 - GLVIS.config.scene.circle_radius);
+    var focus_point = new THREE.Vector3(x, y, z);
+
+    var view_dir = collection_circle_center.clone().sub(focus_point);
+    view_dir.normalize();
+
+    var distance = GLVIS.config.three.camera_perspective.Z_POS;
+    var camera_pos = focus_point.clone().sub(view_dir.setLength(distance));
+
+    var camera = this.scene_.getWebGlHandler().getCamera();
+    camera.position.set(camera_pos.x, camera_pos.y, camera_pos.z);
+    camera.updateProjectionMatrix();
+    camera.lookAt(focus_point);
+};
+
 /**
  * Set the scene's camera position
  * @param {float | null} x
  * @param {type | null} y
  */
-GLVIS.NavigationHandler.prototype.setCamera = function (x, y) {
+GLVIS.NavigationHandler.prototype.setCamera = function (x, y, z) {
 
-    if (x === null || x === undefined)
-        x = 0;
-    if (y === null || y === undefined)
-        y = 0;
 
-    this.scene_.getWebGlHandler().getCamera().position.x = x;
-    this.scene_.getWebGlHandler().getCamera().position.y = y;
+    if (x === undefined)
+        x = null;
+    if (y === undefined)
+        y = null;
+    if (z === undefined)
+        z = null;
+
+    if (x !== null)
+        this.scene_.getWebGlHandler().getCamera().position.x = x;
+    if (y !== null)
+        this.scene_.getWebGlHandler().getCamera().position.y = y;
+    if (z !== null)
+        this.scene_.getWebGlHandler().getCamera().position.y = z;
 };
 
 /**
@@ -53,15 +89,19 @@ GLVIS.NavigationHandler.prototype.getPosY = function () {
  * @param {float | null} x
  * @param {type | null} y
  */
-GLVIS.NavigationHandler.prototype.moveCamera = function (x, y) {
+GLVIS.NavigationHandler.prototype.moveCamera = function (x, y, z) {
 
     if (x === null || x === undefined)
         x = 0;
     if (y === null || y === undefined)
         y = 0;
+    if (z === null || z === undefined)
+        z = 0;
+
 
     GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.x += x;
     GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.y += y;
+    GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.z += z;
 };
 
 /**
@@ -212,10 +252,11 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
      * @TODO: Skip animation only if flipbook just created.
      * @TODO: Fix click-coll-bug when animation not ready. (Starting far right)
      */
-    var animated_move = true;
+    var animated_move = false;
 
     if (!animated_move)
-        this.setCamera(collection.getPosition().x, collection.getPosition().y);
+        //this.setCamera(collection.getPosition().x, collection.getPosition().y, collection.getPosition().z);
+        this.setCameraToCircle(collection.getPosition().x, collection.getPosition().y, collection.getPosition().z);
 
 
     that.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_in, function () {

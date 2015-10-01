@@ -4,7 +4,8 @@ var GLVIS = GLVIS || {};
 GLVIS.config = {
     scene: {
         queries_to_fetch: 21,
-        skip_empty_queries: true
+        skip_empty_queries: true,
+        circle_radius : 2000
     },
     debug: {
         active: true,
@@ -44,7 +45,7 @@ GLVIS.config = {
         },
         plane: {
             color: 0x4488FF,
-            opacity: 0.1,
+            opacity: 0.3,
             z_value: 0.001,
             segments: 50
         },

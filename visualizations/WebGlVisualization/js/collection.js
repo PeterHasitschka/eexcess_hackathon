@@ -318,8 +318,6 @@ GLVIS.Collection.prototype.handleClick = function () {
     //this.deleteRingRepresentation();
     if (!this.ring_representation_)
         this.createRingRepresentation();
-    else
-        this.selectAndFocus();
 };
 
 /**
@@ -388,7 +386,7 @@ GLVIS.Collection.prototype.unconnectSameRecsFromOtherCollections = function () {
  * @param {function} cb Callback
  */
 GLVIS.Collection.prototype.selectAndFocus = function (cb) {
-
+     
     this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
 
     GLVIS.Scene.getCurrentScene().getNavigationHandler().focusCollection(this, function () {
@@ -599,11 +597,10 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
     pos_handler.setIsOneFocused(true);
 
     this.selectAndFocus();
-    pos_handler.calculatePositions();
 
     this.unconnectSameRecsFromOtherCollections();
 
-    this.setRotation(0, true);
+    //this.setRotation(0, true);
 
     this.ring_representation_ = new GLVIS.RingRepresentation(this);
     this.setRecPosHandler(new GLVIS.RecommendationPosRingRepresentation(this));

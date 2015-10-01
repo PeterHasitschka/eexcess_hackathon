@@ -68,14 +68,6 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
     var center_id = parseInt((num_cols / 2)) - 1;
 
 
-
-/*
-    var line_material = new THREE.LineBasicMaterial({color: 0xFF0000, linewidth: 3, transparent: false});
-    var line_geometry = new THREE.Geometry();
-*/
-
-
-
     for (var coll_count = 0; coll_count < parent_mapping.length; coll_count++) {
         var collection_key = parent_mapping[coll_count][0];
 
@@ -87,37 +79,7 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
 
         current_collection.setPosition(pos.x, null, pos.z);
         current_collection.setRotation(pos.degree);
-
-
-        //For testing paint a circular curve
-        //line_geometry.vertices.push(new THREE.Vector3(pos.x, 0, pos.z));
-
-       
     }
-
-
-/*
-    line_geometry.computeBoundingSphere();
-    var line = new THREE.Line(line_geometry, line_material);
-    this.scene_.getWebGlHandler().getThreeScene().add(line);
-*/
-
-
-
-
-    /**
-     * Focus last collection
-     * @type {GLVIS.NavigationHandler} navigation_handler
-     */
-    var navigation_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
-    if (coll_to_focus) {
-        navigation_handler.focusCollection(coll_to_focus, function () {
-            GLVIS.Debugger.debug("CollectionPosCircular",
-                    "COLLECTION LINEAR POS: Ready positioning and focusing",
-                    6);
-        });
-    }
-
 };
 
 /**
@@ -137,11 +99,11 @@ GLVIS.CollectionPosCircular.prototype.getPosAndRot = function (index, numindizie
 
     var curr_rad = index * rad_step + Math.PI / 2;
 
-
-    var pos = GLVIS.Tools.getPosFromRad(curr_rad, 2000);
+    var radius = GLVIS.config.scene.circle_radius;
+    var pos = GLVIS.Tools.getPosFromRad(curr_rad, radius);
 
     var degree = (curr_rad - Math.PI / 2) * 180 / Math.PI * -1;
-    return {x: pos.x, z: pos.y - 2000, degree:degree};
+    return {x: pos.x, z: pos.y - radius, degree: degree};
 };
 
 /**
