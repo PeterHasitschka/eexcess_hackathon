@@ -69,10 +69,10 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
 
 
 
-
+/*
     var line_material = new THREE.LineBasicMaterial({color: 0xFF0000, linewidth: 3, transparent: false});
     var line_geometry = new THREE.Geometry();
-
+*/
 
 
 
@@ -90,17 +90,17 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
 
 
         //For testing paint a circular curve
-        line_geometry.vertices.push(new THREE.Vector3(pos.x, 0, pos.z));
+        //line_geometry.vertices.push(new THREE.Vector3(pos.x, 0, pos.z));
 
        
     }
 
 
-
+/*
     line_geometry.computeBoundingSphere();
     var line = new THREE.Line(line_geometry, line_material);
     this.scene_.getWebGlHandler().getThreeScene().add(line);
-
+*/
 
 
 
@@ -141,7 +141,6 @@ GLVIS.CollectionPosCircular.prototype.getPosAndRot = function (index, numindizie
     var pos = GLVIS.Tools.getPosFromRad(curr_rad, 2000);
 
     var degree = (curr_rad - Math.PI / 2) * 180 / Math.PI * -1;
-    console.log(index, degree);
     return {x: pos.x, z: pos.y - 2000, degree:degree};
 };
 

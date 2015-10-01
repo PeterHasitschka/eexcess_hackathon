@@ -462,7 +462,7 @@ GLVIS.Collection.prototype.setPosition = function (x, y, z) {
 GLVIS.Collection.prototype.rebuildLabelPositions = function () {
     
     
-    GLVIS.Debugger.debug("Collection", "Rebuilding Text positions", 4);
+    GLVIS.Debugger.debug("Collection", "Rebuilding Text positions", 7);
 
     if (!this.labels_.length)
         return;

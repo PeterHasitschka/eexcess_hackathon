@@ -94,8 +94,6 @@ GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouselea
         this.mesh_container_ = scene;
     }
     
-    console.log(this.mesh_container_);
-    
     this.updateWebGlObj();
 };
 

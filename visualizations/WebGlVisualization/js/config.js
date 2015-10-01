@@ -227,9 +227,9 @@ GLVIS.config = {
             z: -0.1 //-50
         },
         collection_collection: {
-            width: 1,
+            width: 4,
             color: 0xFF3333,
-            z: 0, //-52,
+            //z: 0, //-52,
             opacity: 0.3
         },
         rec_spline: {
