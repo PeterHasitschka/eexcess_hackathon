@@ -1,11 +1,11 @@
 var GLVIS = GLVIS || {};
 
 /**
- * This position handler sets all collections on a hyperbolic path next to their parents.
+ * This position handler sets all collections on a circular path next to their parents.
  * This means that only one child per collections is supported.
  * @returns {undefined}
  */
-GLVIS.CollectionPosParabolic = function () {
+GLVIS.CollectionPosCircular = function () {
 
     /** @type {GLVIS.Scene} **/
     this.scene_ = GLVIS.Scene.getCurrentScene();
@@ -20,7 +20,7 @@ GLVIS.CollectionPosParabolic = function () {
  * @param {array[GLVIS.Collection]} collections
  * @returns {array}
  */
-GLVIS.CollectionPosParabolic.prototype.getParentMapping_ = function (collections) {
+GLVIS.CollectionPosCircular.prototype.getParentMapping_ = function (collections) {
     //Store parent-id and key in an array to sort it
     var parent_mapping = [];
     for (var coll_key = 0; coll_key < collections.length; coll_key++) {
@@ -48,9 +48,9 @@ GLVIS.CollectionPosParabolic.prototype.getParentMapping_ = function (collections
 /**
  * Sets the positions of each collections
  */
-GLVIS.CollectionPosParabolic.prototype.calculatePositions = function () {
+GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
 
-    GLVIS.Debugger.debug("CollectionPosParabolic",
+    GLVIS.Debugger.debug("CollectionPosCircular",
             "COLLECTION POS HANDLER: Recalculating positions",
             5);
 
@@ -64,27 +64,38 @@ GLVIS.CollectionPosParabolic.prototype.calculatePositions = function () {
     var parent_mapping = this.getParentMapping_(collections);
 
 
-
-
     var num_cols = collections.length;
-
     var center_id = parseInt((num_cols / 2)) - 1;
 
-    console.log(num_cols, center_id);
-
-    //For testing paint a parabolic curve
 
 
 
-    var line_material = new THREE.LineBasicMaterial({color: 0xFF0000, linewidth: 5, transparent: false});
+    var line_material = new THREE.LineBasicMaterial({color: 0xFF0000, linewidth: 3, transparent: false});
     var line_geometry = new THREE.Geometry();
 
-    for (var i = 0; i < collections.length; i++) {
 
-        var index = i - center_id;
-        var pos = this.getXZPos(index);
+
+
+    for (var coll_count = 0; coll_count < parent_mapping.length; coll_count++) {
+        var collection_key = parent_mapping[coll_count][0];
+
+        /** @type{GLVIS.Collection} **/
+        var current_collection = collections[collection_key];
+
+        var index = coll_count - center_id;
+        var pos = this.getPosAndRot(index, collections.length);
+
+        current_collection.setPosition(pos.x, null, pos.z);
+        current_collection.setRotation(pos.degree);
+
+
+        //For testing paint a circular curve
         line_geometry.vertices.push(new THREE.Vector3(pos.x, 0, pos.z));
+
+       
     }
+
+
 
     line_geometry.computeBoundingSphere();
     var line = new THREE.Line(line_geometry, line_material);
@@ -101,7 +112,7 @@ GLVIS.CollectionPosParabolic.prototype.calculatePositions = function () {
     var navigation_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
     if (coll_to_focus) {
         navigation_handler.focusCollection(coll_to_focus, function () {
-            GLVIS.Debugger.debug("CollectionPosParabolic",
+            GLVIS.Debugger.debug("CollectionPosCircular",
                     "COLLECTION LINEAR POS: Ready positioning and focusing",
                     6);
         });
@@ -112,13 +123,26 @@ GLVIS.CollectionPosParabolic.prototype.calculatePositions = function () {
 /**
  * 
  * @param {integer} index Signed Int. 0 is center -1 is next left 1 is next right etc...
+ * @param {integer} numindizies Maximum number of collections to set pos
  * @returns {array}
  */
-GLVIS.CollectionPosParabolic.prototype.getXZPos = function (index) {
+GLVIS.CollectionPosCircular.prototype.getPosAndRot = function (index, numindizies) {
 
-    var x = index * 500;
-    var z = Math.pow(index, 2) * -100;
-    return {x: x, z: z};
+    //Let one free to see where it ends
+    numindizies += 1;
+
+
+
+    var rad_step = (Math.PI * 2) / (numindizies);
+
+    var curr_rad = index * rad_step + Math.PI / 2;
+
+
+    var pos = GLVIS.Tools.getPosFromRad(curr_rad, 2000);
+
+    var degree = (curr_rad - Math.PI / 2) * 180 / Math.PI * -1;
+    console.log(index, degree);
+    return {x: pos.x, z: pos.y - 2000, degree:degree};
 };
 
 /**
@@ -126,14 +150,14 @@ GLVIS.CollectionPosParabolic.prototype.getXZPos = function (index) {
  * @param {boolean} value True if a focus representation should be performed
  * @returns {undefined}
  */
-GLVIS.CollectionPosParabolic.prototype.setIsOneFocused = function (value) {
+GLVIS.CollectionPosCircular.prototype.setIsOneFocused = function (value) {
     this.is_onefocused_ = value;
 };
 
 /**
  * @returns {Boolean} True if onefocus flag is set
  */
-GLVIS.CollectionPosParabolic.prototype.getIsOneFocused = function () {
+GLVIS.CollectionPosCircular.prototype.getIsOneFocused = function () {
     return this.is_onefocused_;
 };
 
@@ -141,7 +165,7 @@ GLVIS.CollectionPosParabolic.prototype.getIsOneFocused = function () {
  * Set Collection that gets focused after rendering the collections
  * @param {GLVIS.Collection} coll
  */
-GLVIS.CollectionPosParabolic.prototype.setCollToFocus = function (coll) {
+GLVIS.CollectionPosCircular.prototype.setCollToFocus = function (coll) {
     this.coll_to_focus_ = coll;
 };
 
@@ -149,6 +173,6 @@ GLVIS.CollectionPosParabolic.prototype.setCollToFocus = function (coll) {
  * Get Collection that is set to be focused after rendering the collections
  * @returns {GLVIS.Collection}
  */
-GLVIS.CollectionPosParabolic.prototype.getCollToFocus = function () {
+GLVIS.CollectionPosCircular.prototype.getCollToFocus = function () {
     return this.coll_to_focus_;
 };

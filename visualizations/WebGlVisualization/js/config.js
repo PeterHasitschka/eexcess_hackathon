@@ -3,7 +3,7 @@
 var GLVIS = GLVIS || {};
 GLVIS.config = {
     scene: {
-        queries_to_fetch: 20,
+        queries_to_fetch: 21,
         skip_empty_queries: true
     },
     debug: {

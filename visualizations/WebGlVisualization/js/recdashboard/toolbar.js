@@ -165,8 +165,8 @@ GLVIS.ToolbarHandler.prototype.buttons = {
             viewfromtop: {
                 fct: function (e) {
                     var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
-                    camera.position.set(0,1500,50);
-                    camera.lookAt(new THREE.Vector3(0, 0, 0));
+                    camera.position.set(0,1500,-800);
+                    camera.lookAt(new THREE.Vector3(0, 0, -801));
                 },
                 label: "View from top",
                 visible: true
