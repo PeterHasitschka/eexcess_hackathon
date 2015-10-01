@@ -20,7 +20,7 @@ GLVIS.config = {
         camera_perspective : {
             FOV: 60,
             NEAR: 0.1,
-            FAR: 2000,
+            FAR: 6000,
             Z_POS: 1000
         },
         canvas_color: 0xFBFFFD

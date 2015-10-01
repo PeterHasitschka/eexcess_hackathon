@@ -21,7 +21,7 @@ GLVIS.Scene = function (canvas) {
     this.interaction_handler_ = new GLVIS.InteractionHandler(this);
 
     /** @type{GLVIS.CollectionPosLinear} **/
-    this.collection_position_handler_ = new GLVIS.CollectionPosHyperbolic();
+    this.collection_position_handler_ = new GLVIS.CollectionPosParabolic();
 
     /** @type{GLVIS.Animation} **/
     this.animation_ = new GLVIS.Animation();

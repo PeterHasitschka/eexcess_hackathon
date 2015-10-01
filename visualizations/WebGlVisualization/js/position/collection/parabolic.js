@@ -16,21 +16,11 @@ GLVIS.CollectionPosParabolic = function () {
 };
 
 /**
- * Sets the positions of each collections
+ * Calculate sorted parent-mapping
+ * @param {array[GLVIS.Collection]} collections
+ * @returns {array}
  */
-GLVIS.CollectionPosParabolic.prototype.calculatePositions = function () {
-
-    GLVIS.Debugger.debug("CollectionPosParabolic",
-            "COLLECTION POS HANDLER: Recalculating positions",
-            5);
-
-
-    var coll_to_focus = this.getCollToFocus();
-    var collections = this.scene_.getCollections();
-
-    if (!collections.length)
-        return;
-
+GLVIS.CollectionPosParabolic.prototype.getParentMapping_ = function (collections) {
     //Store parent-id and key in an array to sort it
     var parent_mapping = [];
     for (var coll_key = 0; coll_key < collections.length; coll_key++) {
@@ -52,59 +42,56 @@ GLVIS.CollectionPosParabolic.prototype.calculatePositions = function () {
         return a[1] - b[1];
     });
 
+    return parent_mapping;
+};
+
+/**
+ * Sets the positions of each collections
+ */
+GLVIS.CollectionPosParabolic.prototype.calculatePositions = function () {
+
+    GLVIS.Debugger.debug("CollectionPosParabolic",
+            "COLLECTION POS HANDLER: Recalculating positions",
+            5);
 
 
-    var x_step = GLVIS.config.collection.init_distance;
+    var coll_to_focus = this.getCollToFocus();
+    var collections = this.scene_.getCollections();
 
-    if (this.is_onefocused_) {
-        x_step /= 4;
+    if (!collections.length)
+        return;
+
+    var parent_mapping = this.getParentMapping_(collections);
+
+
+
+
+    var num_cols = collections.length;
+
+    var center_id = parseInt((num_cols / 2)) - 1;
+
+    console.log(num_cols, center_id);
+
+    //For testing paint a parabolic curve
+
+
+
+    var line_material = new THREE.LineBasicMaterial({color: 0xFF0000, linewidth: 5, transparent: false});
+    var line_geometry = new THREE.Geometry();
+
+    for (var i = 0; i < collections.length; i++) {
+
+        var index = i - center_id;
+        var pos = this.getXZPos(index);
+        line_geometry.vertices.push(new THREE.Vector3(pos.x, 0, pos.z));
     }
 
-
-    var last_x = 0;
-
-    var last_coll = null;
-    for (var coll_count = 0; coll_count < parent_mapping.length; coll_count++) {
-        var collection_key = parent_mapping[coll_count][0];
-
-        /** @type{GLVIS.Collection} **/
-        var current_collection = collections[collection_key];
+    line_geometry.computeBoundingSphere();
+    var line = new THREE.Line(line_geometry, line_material);
+    this.scene_.getWebGlHandler().getThreeScene().add(line);
 
 
-        var neighbor_fact = 1;
-        if (this.is_onefocused_ && coll_to_focus && !focus_last) {
 
-            if ((current_collection.getId() - 1) === coll_to_focus.getId() ||
-                    current_collection.getId() === coll_to_focus.getId())
-                neighbor_fact = 2;
-        }
-
-
-        var curr_x = last_x + x_step * neighbor_fact;
-        last_x = curr_x;
-
-        if (this.is_onefocused_) {
-            if (current_collection.getId() !== coll_to_focus.getId()) {
-                current_collection.setRotation((current_collection.getId() < coll_to_focus.getId() ? -1 : 1) * 80, true);
-                current_collection.hideLabels();
-            }
-            else
-                current_collection.showLabels();
-        }
-        else {
-            current_collection.setRotation(0);
-            current_collection.showLabels();
-        }
-
-
-        current_collection.setPosition(curr_x, null);
-
-
-        var last_coll = current_collection;
-    }
-
-    if (focus_last)
-        coll_to_focus = last_coll;
 
 
     /**
@@ -122,8 +109,17 @@ GLVIS.CollectionPosParabolic.prototype.calculatePositions = function () {
 
 };
 
+/**
+ * 
+ * @param {integer} index Signed Int. 0 is center -1 is next left 1 is next right etc...
+ * @returns {array}
+ */
+GLVIS.CollectionPosParabolic.prototype.getXZPos = function (index) {
 
-
+    var x = index * 500;
+    var z = Math.pow(index, 2) * -100;
+    return {x: x, z: z};
+};
 
 /**
  * 
