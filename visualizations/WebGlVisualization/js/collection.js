@@ -593,7 +593,7 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
      */
     var pos_handler = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler();
     pos_handler.setCollToFocus(this);
-    pos_handler.setIsFlipbook(true);
+    pos_handler.setIsOneFocused(true);
 
     this.selectAndFocus();
     pos_handler.calculatePositions(false);

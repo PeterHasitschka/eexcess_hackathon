@@ -149,11 +149,11 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                 fct: function (e) {
 
                     var pos_handler = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler();
-                    pos_handler.setIsFlipbook(false);
+                    pos_handler.setIsOneFocused(false);
                     pos_handler.calculatePositions();
 
                 },
-                label: "Reset flipbook",
+                label: "Reset Focus",
                 visible: true
             }
         }
