@@ -47,7 +47,7 @@ GLVIS.config = {
         plane: {
             color: 0x4488FF,
             opacity: 0.3,
-            z_value: 0.001,
+            z_value: 0.1,
             segments: 50
         },
         recommendation: {

@@ -103,6 +103,8 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
     GLVIS.Debugger.debug("InteractionHandler",
             "HANDLING SCENE INTERACTION EVENT '" + interaction_type + "'", 6);
 
+    var single_ids_already_clicked = [];
+
     for (var i = 0; i < intersected.length; i++) {
         var curr_intersect_obj = intersected[i].object;
         GLVIS.Debugger.debug("InteractionHandler",
@@ -117,6 +119,19 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
                     curr_intersect_obj.interaction[interaction_type] !== null
                     )
             {
+                //Check if only-single-click allowed
+                var i_id = curr_intersect_obj.interaction.interaction_id;
+                var i_sc = curr_intersect_obj.interaction.interaction_singleclick;
+                if (i_id) {
+                    if (i_sc && i_sc === true) {
+                        //If already in array, it was already clicked
+                        if (single_ids_already_clicked.indexOf(i_id) > -1) {
+                            continue;
+                        }
+                        single_ids_already_clicked.push(i_id);
+                    }
+                }
+
                 GLVIS.Debugger.debug("InteractionHandler",
                         "Intersected Object has following interaction-type: '" + interaction_type + "'", 8);
                 curr_intersect_obj.interaction[interaction_type](curr_intersect_obj);
@@ -127,6 +142,8 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
     if (!intersected.length)
         this.handleEmptyClick(interaction_type);
 };
+
+
 
 /**
  * Performing several deselections of no object was intersected

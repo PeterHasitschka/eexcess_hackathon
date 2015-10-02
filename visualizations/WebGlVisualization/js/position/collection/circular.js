@@ -36,10 +36,10 @@ GLVIS.CollectionPosCircular.prototype.getParentMapping_ = function (collections)
 
     //Sort array
     parent_mapping.sort(function (a, b) {
-        if (b[1] === null)
-            return a;
+        if (a[1] === null)
+            return b;
 
-        return a[1] - b[1];
+        return b[1] - a[1];
     });
 
     return parent_mapping;
@@ -65,7 +65,7 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
 
 
     var num_cols = collections.length;
-    var center_id = parseInt((num_cols / 2)) - 1;
+    var center_id = num_cols - 1;
 
 
     for (var coll_count = 0; coll_count < parent_mapping.length; coll_count++) {
@@ -91,7 +91,7 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
 GLVIS.CollectionPosCircular.prototype.getPosAndRot = function (index, numindizies) {
 
     //Let one free to see where it ends
-    numindizies += 1;
+    //numindizies += 1;
 
 
 

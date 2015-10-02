@@ -47,7 +47,9 @@ GLVIS.CollectionPlane.prototype.initAndRegisterGlObj = function (mesh_parent) {
     //Register click-function
     circle.interaction = {
         "mouseclick": this.collection_.handleClick.bind(this.collection_),
-        "mouseover": this.collection_.handleMouseover.bind(this.collection_)
+        "mouseover": this.collection_.handleMouseover.bind(this.collection_),
+        "interaction_id": "collection_center",
+        "interaction_singleclick": true
     };
 
     if (!mesh_parent) {
