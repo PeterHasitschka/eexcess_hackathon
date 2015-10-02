@@ -65,7 +65,7 @@ GLVIS.DirectCompareBar.prototype.initGlObjects = function () {
 
     //Register click-function
     rect_negative.interaction = {
-        "mouseclick": this.collection_.handleClick.bind(this.collection_),
+        "mouseclick": this.collection_.handleClick.bind(this.collection_)
     };
 
 
@@ -75,18 +75,19 @@ GLVIS.DirectCompareBar.prototype.initGlObjects = function () {
      */
     var label_options = {
         color: config.label_color,
-        pos_x: this.collection_.getPosition().x,
-        pos_y: this.collection_.getPosition().y + config.y_offset + config.label_y_offset
+        pos_x: 0,
+        pos_y: 0 + config.y_offset + config.label_y_offset
+
     };
 
     var beauty_percent = Math.round(this.percent_);
-    var label = new GLVIS.Text(beauty_percent + " %", label_options);
+    var label = new GLVIS.Text(beauty_percent + " %", label_options, null, null, null, null, this.collection_);
     this.label_ = label;
 
-    var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
+    var meshcontainer = this.collection_.getMeshContainerNode();
+    meshcontainer.add(rect_positive);
+    meshcontainer.add(rect_negative);
 
-    webgl_handler.getThreeScene().add(rect_positive);
-    webgl_handler.getThreeScene().add(rect_negative);
     this.webgl_objects_.bar_pos = rect_positive;
     this.webgl_objects_.bar_neg = rect_negative;
 
@@ -106,7 +107,7 @@ GLVIS.DirectCompareBar.prototype.render = function () {
     /**
      * Remember that the center of the mesh is used for positioning!
      */
-    var pos = this.collection_.getPosition();
+    var pos = {x: 0, y: 0};
     var pos_x_positive = pos.x - total_width / 2 + (pos_width / 2);
     var pos_x_negative = pos_x_positive + pos_width / 2 + neg_width / 2;
 
@@ -130,8 +131,8 @@ GLVIS.DirectCompareBar.prototype.delete = function () {
 
     var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
 
-    three_scene.remove(this.webgl_objects_.bar_pos);
-    three_scene.remove(this.webgl_objects_.bar_neg);
+    this.collection_.getMeshContainerNode().remove(this.webgl_objects_.bar_pos);
+    this.collection_.getMeshContainerNode().remove(this.webgl_objects_.bar_neg);
 
     this.label_.delete();
     delete this.label_;
