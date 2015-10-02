@@ -11,21 +11,47 @@ GLVIS.InteractionHandler = function (scene) {
 
     var config = GLVIS.config.interaction;
 
+
+    this.keyinteractions_ = {
+        keydown: {
+            37: function () {   // LEFT
+                this.scene_.getNavigationHandler().moveCameraAroundCircle(-5);
+            }.bind(this),
+            39: function () {   // RIGHT
+                this.scene_.getNavigationHandler().moveCameraAroundCircle(5);
+            }.bind(this),
+            38: function () {   // UP
+                this.scene_.getNavigationHandler().moveCameraAroundCircle(0, 5);
+            }.bind(this),
+            40: function () {   // DOWN
+                this.scene_.getNavigationHandler().moveCameraAroundCircle(0, -5);
+            }.bind(this)
+        }
+    };
+
+
+
     this.raycaster_ = new THREE.Raycaster();
     this.raycaster_.precision = config.raycaster_precision;
 
     this.mouse_ = new THREE.Vector2();
 
-    var that = this;
-
-    var canvas = that.scene_.getWebGlHandler().getCanvas();
+    var canvas = this.scene_.getWebGlHandler().getCanvas();
 
     jQuery(document).ready(function () {
 
+        //KEYDOWN
+        jQuery(window).keydown(function (e) {
+
+            this.handleKeyClick(e);
+
+        }.bind(this));
+
+
         //MOUSE-CLICK ON SCENE  
         jQuery(canvas).click(function (event) {
-            that.handleInteraction_(event, "mouseclick");
-        });
+            this.handleInteraction_(event, "mouseclick");
+        }.bind(this));
 
 
         //MOUSE-MOVE (DRAGGEDd)
@@ -48,32 +74,32 @@ GLVIS.InteractionHandler = function (scene) {
 
         jQuery(canvas).mousemove(function (event) {
 
-            that.handleInteraction_(event, "mouseover");
+            this.handleInteraction_(event, "mouseover");
 
 
             if (!is_mouse_down_in_canvas)
                 return;
-            var zoom_factor = 1 / that.scene_.getNavigationHandler().getZoomFactor();
+            var zoom_factor = 1 / this.scene_.getNavigationHandler().getZoomFactor();
             var curr_mouse_x_diff = 0 - (event.clientX - mouse_x_prev) * zoom_factor;
             var curr_mouse_y_diff = (event.clientY - mouse_y_prev) * zoom_factor;
 
-            that.scene_.getNavigationHandler().resetAnimationMovement();
-            that.scene_.getNavigationHandler().moveCameraAroundCircle(
+            this.scene_.getNavigationHandler().resetAnimationMovement();
+            this.scene_.getNavigationHandler().moveCameraAroundCircle(
                     curr_mouse_x_diff / config.mousesensitivy,
                     curr_mouse_y_diff / config.mousesensitivy
                     );
             mouse_x_prev = event.clientX;
             mouse_y_prev = event.clientY;
 
-        });
+        }.bind(this));
 
 
         //MOUSE-WHEEL (ZOOM)
         jQuery(canvas).mousewheel(function (event) {
-            that.scene_.getNavigationHandler().resetAnimationZoom();
-            that.scene_.getNavigationHandler().zoomDelta(event.deltaY * 5);
+            this.scene_.getNavigationHandler().resetAnimationZoom();
+            this.scene_.getNavigationHandler().zoomDelta(event.deltaY * 5);
         });
-    });
+    }.bind(this));
 };
 
 /**
@@ -143,7 +169,24 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
         this.handleEmptyClick(interaction_type);
 };
 
+/**
+ * Handling clicks defined in constructor
+ * @param {Event} e
+ */
+GLVIS.InteractionHandler.prototype.handleKeyClick = function (e) {
+    var is = this.keyinteractions_;
 
+    GLVIS.Debugger.debug("InteractionHandler", ["Key-Click", e.type, e.which], 4);
+
+    var type_is = is[e.type];
+    if (type_is === undefined)
+        return;
+
+    var key = e.which;
+    if (type_is[key] === undefined)
+        return;
+    type_is[key]();
+};
 
 /**
  * Performing several deselections of no object was intersected
@@ -173,7 +216,7 @@ GLVIS.InteractionHandler.prototype.handleEmptyClick = function (interaction_type
 };
 
 /**
- * Get Objects that are intersected
+ * Get Objects this are intersected
  * @param event Mouse over / down etc. event
  * @returns {GLVIS.InteractionHandler.getIntersectedObjects_@pro;raycaster_@call;intersectObjects}
  */
