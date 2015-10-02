@@ -36,36 +36,12 @@ GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z) {
     var view_dir = collection_circle_center.clone().sub(focus_point);
     view_dir.normalize();
 
-    var distance = GLVIS.config.three.camera_perspective.Z_POS;
+    var distance = GLVIS.config.three.camera_perspective.DISTANCE;
     var camera_pos = focus_point.clone().sub(view_dir.setLength(distance));
 
     var camera = this.scene_.getWebGlHandler().getCamera();
     camera.position.set(camera_pos.x, camera_pos.y, camera_pos.z);
-    camera.updateProjectionMatrix();
     camera.lookAt(focus_point);
-};
-
-/**
- * Set the scene's camera position
- * @param {float | null} x
- * @param {type | null} y
- */
-GLVIS.NavigationHandler.prototype.setCamera = function (x, y, z) {
-
-
-    if (x === undefined)
-        x = null;
-    if (y === undefined)
-        y = null;
-    if (z === undefined)
-        z = null;
-
-    if (x !== null)
-        this.scene_.getWebGlHandler().getCamera().position.x = x;
-    if (y !== null)
-        this.scene_.getWebGlHandler().getCamera().position.y = y;
-    if (z !== null)
-        this.scene_.getWebGlHandler().getCamera().position.y = z;
 };
 
 /**
@@ -85,9 +61,69 @@ GLVIS.NavigationHandler.prototype.getPosY = function () {
 };
 
 /**
+ * 
+ * @param {float} degree_h_delta Movement around the circle
+ * @param {float} degree_b_delta Vertical tilt
+ */
+GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_delta, degree_v_delta) {
+
+    if (degree_h_delta === null || degree_h_delta === undefined)
+        degree_h_delta = 0;
+
+    if (degree_v_delta === null || degree_v_delta === undefined)
+        degree_v_delta = 0;
+
+    var coll_circle_radius = GLVIS.config.scene.circle_radius;
+    var camera_distance_to_colls = GLVIS.config.three.camera_perspective.DISTANCE;
+
+    var total_distance_to_center = coll_circle_radius + camera_distance_to_colls;
+
+    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+
+    /** @type {THREE.Vector3} **/
+    var current_camera_pos = camera.position.clone();
+
+
+    //Move Circle to center
+    current_camera_pos.add(new THREE.Vector3(0, 0, coll_circle_radius));
+
+    //Normalize Circle to calculate
+    current_camera_pos.divideScalar(total_distance_to_center);
+
+
+    //HORIZONTAL
+
+    //Get the degree
+    var current_degree_h = Math.atan2(current_camera_pos.x, current_camera_pos.z) * 180 / Math.PI;
+
+    //Add new delta
+    current_degree_h += degree_h_delta;
+    var rad_h_to_set = current_degree_h / (180 / Math.PI);
+
+    //Get positions / Calculate back to world
+    var pos_h = new THREE.Vector3(Math.sin(rad_h_to_set), current_camera_pos.y, Math.cos(rad_h_to_set));
+    pos_h.multiplyScalar(total_distance_to_center);
+    pos_h.sub(new THREE.Vector3(0, 0, coll_circle_radius));
+
+
+    //VERTICAL
+
+    //Current degree
+    var curr_v_degree = Math.acos(current_camera_pos.y) * 180 / Math.PI;
+
+    var rad_v_to_set = (curr_v_degree - degree_v_delta) / (180 / Math.PI);
+    var pos_y = Math.cos(rad_v_to_set) * total_distance_to_center;
+
+    camera.position.set(pos_h.x, pos_y, pos_h.z);
+    camera.lookAt(new THREE.Vector3(0, 0, -coll_circle_radius));
+};
+
+
+/**
  * Move the scene's camera
  * @param {float | null} x
  * @param {type | null} y
+ * @param {type | null} z
  */
 GLVIS.NavigationHandler.prototype.moveCamera = function (x, y, z) {
 

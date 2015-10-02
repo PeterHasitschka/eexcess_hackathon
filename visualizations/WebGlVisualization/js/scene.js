@@ -52,7 +52,7 @@ GLVIS.Scene = function (canvas) {
  * Rendering the whole scene and all its sub-objects
  */
 GLVIS.Scene.prototype.render = function () {
-
+     
     //Set Time Delta for performance-independent animation speed
     this.time_.current = this.time_.current || Date.now();
     var now = Date.now();

@@ -48,7 +48,7 @@ GLVIS.WebGlHandler.prototype.createPerspectiveCamera_ = function () {
             this.cameraconfig_.NEAR,
             this.cameraconfig_.FAR
             );
-    camera.position.z = this.cameraconfig_.Z_POS;
+    camera.position.z = 0 + this.cameraconfig_.DISTANCE;
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     camera.updateProjectionMatrix();

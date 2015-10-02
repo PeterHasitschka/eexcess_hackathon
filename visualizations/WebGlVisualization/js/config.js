@@ -22,12 +22,13 @@ GLVIS.config = {
             FOV: 60,
             NEAR: 0.1,
             FAR: 6000,
-            Z_POS: 1000
+            DISTANCE: 1300
         },
         canvas_color: 0xFBFFFD
     },
     interaction: {
-        raycaster_precision: 0.5
+        raycaster_precision: 0.5,
+        mousesensitivy : 25
     },
     collection: {
         init_distance: 400,
