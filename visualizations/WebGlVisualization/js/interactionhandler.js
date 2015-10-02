@@ -98,7 +98,7 @@ GLVIS.InteractionHandler = function (scene) {
         jQuery(canvas).mousewheel(function (event) {
             this.scene_.getNavigationHandler().resetAnimationZoom();
             this.scene_.getNavigationHandler().zoomDelta(event.deltaY * 5);
-        });
+        }.bind(this));
     }.bind(this));
 };
 
@@ -176,7 +176,7 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
 GLVIS.InteractionHandler.prototype.handleKeyClick = function (e) {
     var is = this.keyinteractions_;
 
-    GLVIS.Debugger.debug("InteractionHandler", ["Key-Click", e.type, e.which], 4);
+    GLVIS.Debugger.debug("InteractionHandler", ["Key-Click", e.type, e.which], 7);
 
     var type_is = is[e.type];
     if (type_is === undefined)
