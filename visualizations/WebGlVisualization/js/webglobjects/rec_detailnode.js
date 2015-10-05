@@ -47,7 +47,8 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
 
     //Register click-function
     circle_outer.interaction = {
-        "mouseclick": this.recommendation_.handleClick.bind(this.recommendation_)
+        "mouseclick": this.recommendation_.handleClick.bind(this.recommendation_),
+        "interaction_singleclick_exclusive": true
     };
 
 
@@ -161,23 +162,21 @@ GLVIS.RecommendationDetailNode.prototype.getIsDirty = function () {
  * Returns the mesh of the inner circle
  * @returns {THREE.Mesh}
  */
-GLVIS.RecommendationDetailNode.prototype.getCircle = function(){
+GLVIS.RecommendationDetailNode.prototype.getCircle = function () {
     return this.webgl_objects_.circle_outer;
 },
-        
+        /**
+         * Delete all GL-Objects and remove them from the scene
+         */
+        GLVIS.RecommendationDetailNode.prototype.delete = function () {
 
-/**
- * Delete all GL-Objects and remove them from the scene
- */
-GLVIS.RecommendationDetailNode.prototype.delete = function () {
+            //var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
 
-    //var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+            this.mesh_parent_.remove(this.webgl_objects_.circle_outer);
+            if (this.webgl_objects_.circle_inner)
+                this.mesh_parent_.remove(this.webgl_objects_.circle_inner);
 
-    this.mesh_parent_.remove(this.webgl_objects_.circle_outer);
-    if (this.webgl_objects_.circle_inner)
-        this.mesh_parent_.remove(this.webgl_objects_.circle_inner);
-
-    delete this.webgl_objects_.circle_outer;
-    if (this.webgl_objects_.circle_inner)
-        delete this.webgl_objects_.circle_inner;
-};
+            delete this.webgl_objects_.circle_outer;
+            if (this.webgl_objects_.circle_inner)
+                delete this.webgl_objects_.circle_inner;
+        };

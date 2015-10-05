@@ -147,7 +147,7 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
             {
                 //Check if only-single-click allowed
                 var i_id = curr_intersect_obj.interaction.interaction_id;
-                var i_sc = curr_intersect_obj.interaction.interaction_singleclick;
+                var i_sc = curr_intersect_obj.interaction.interaction_singleclick_per_type;
                 if (i_id) {
                     if (i_sc && i_sc === true) {
                         //If already in array, it was already clicked
@@ -158,9 +158,15 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
                     }
                 }
 
+
+
                 GLVIS.Debugger.debug("InteractionHandler",
                         "Intersected Object has following interaction-type: '" + interaction_type + "'", 8);
                 curr_intersect_obj.interaction[interaction_type](curr_intersect_obj);
+                
+                //This flag prevents from executing any other interaction from this click
+                if (curr_intersect_obj.interaction.interaction_singleclick_exclusive)
+                    break;
             }
         }
     }
