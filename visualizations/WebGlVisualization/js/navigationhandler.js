@@ -177,7 +177,7 @@ GLVIS.NavigationHandler.prototype.unlockLookAt = function () {
  * @param {float} zoom_factor
  */
 GLVIS.NavigationHandler.prototype.zoom = function (zoom_factor) {
-
+      
     if (zoom_factor < 0)
         zoom_factor = 0;
 

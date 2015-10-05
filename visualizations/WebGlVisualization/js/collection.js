@@ -169,7 +169,7 @@ GLVIS.Collection.prototype.initLabels = function () {
         color: config.title_color,
         opacity: config.init_opacity
     },
-    null, null, null,null, this);
+    null, null, null, null, this);
 
     this.labels_.push(text_element);
 
@@ -386,7 +386,7 @@ GLVIS.Collection.prototype.unconnectSameRecsFromOtherCollections = function () {
  * @param {function} cb Callback
  */
 GLVIS.Collection.prototype.selectAndFocus = function (cb) {
-     
+
     this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
 
     GLVIS.Scene.getCurrentScene().getNavigationHandler().focusCollection(this, function () {
@@ -458,8 +458,8 @@ GLVIS.Collection.prototype.setPosition = function (x, y, z) {
  * @returns {undefined}
  */
 GLVIS.Collection.prototype.rebuildLabelPositions = function () {
-    
-    
+
+
     GLVIS.Debugger.debug("Collection", "Rebuilding Text positions", 7);
 
     if (!this.labels_.length)
@@ -472,7 +472,7 @@ GLVIS.Collection.prototype.rebuildLabelPositions = function () {
 
 
     var title_label = this.labels_[0];
-    title_label.setPosition(0,  vert_offset, 0);
+    title_label.setPosition(0, vert_offset, 0);
 
     var c_x_start = 0 - (((config.columns - 1) / 2) * config.column_distance);
 
@@ -609,10 +609,10 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
     this.getRecPosHandler().calculatePositions(
             function () {
                 this.vis_data_.is_currently_animated = false;
-                this.toggleRecRelevanceVisualization(true);
+
             }.bind(this)
             );
-
+    this.toggleRecRelevanceVisualization(true);
 };
 
 /**
