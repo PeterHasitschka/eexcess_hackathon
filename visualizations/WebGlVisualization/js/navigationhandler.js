@@ -131,6 +131,98 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
 };
 
 
+
+
+/**
+ * Change distance from collection-circle center to a value that the camera
+ * is on the sphere described by the coll-circle.
+ * @param {bool} animation TRUE for animation
+ */
+GLVIS.NavigationHandler.prototype.moveCameraToCircleSphere = function (animation) {
+
+
+
+    var coll_circle_radius = GLVIS.config.scene.circle_radius;
+
+
+
+    var factor = this.getDistanceFactor();
+
+
+
+
+    if (!animation) {
+        this.setDistanceFactor(factor);
+    }
+    else {
+
+        GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.move_id_x);
+        GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.move_id_y);
+        GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.move_id_z);
+
+        GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation("camera_distance");
+
+        GLVIS.Scene.getCurrentScene().getAnimation().register(
+                "camera_distance",
+                1.0,
+                null,
+                this.getDistanceFactor.bind(this),
+                this.setDistanceFactor.bind(this),
+                0,
+                0.00001,
+                0.0001,
+                0.0001,
+                function () {
+                    console.log("DISTANCE READY");
+                },
+                true);
+    }
+
+
+
+};
+GLVIS.NavigationHandler.prototype.getDistanceFactor = function () {
+
+
+    var coll_circle_radius = GLVIS.config.scene.circle_radius;
+    var camera_distance_to_colls = GLVIS.config.three.camera_perspective.DISTANCE;
+
+    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+    var current_camera_pos = camera.position.clone();
+
+    var circle_center = new THREE.Vector3(0, 0, coll_circle_radius);
+
+    var camera_center_vec = circle_center.clone().add(current_camera_pos);
+    var current_length = camera_center_vec.length();
+
+    var total_distance_to_center = coll_circle_radius + camera_distance_to_colls;
+    var factor = total_distance_to_center / current_length;
+
+    console.log("GET DISTANCE FACT: ", factor);
+    return factor;
+};
+
+
+GLVIS.NavigationHandler.prototype.setDistanceFactor = function (factor) {
+
+    console.log("SET DISTANCE FACT: ", factor);
+    var coll_circle_radius = GLVIS.config.scene.circle_radius;
+
+    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+
+    /** @type {THREE.Vector3} **/
+    var current_camera_pos = camera.position.clone();
+
+    var circle_center = new THREE.Vector3(0, 0, coll_circle_radius);
+    var camera_center_vec = circle_center.clone().add(current_camera_pos);
+
+    camera_center_vec.multiplyScalar(factor);
+
+    var new_camera_pos = camera_center_vec.clone().sub(circle_center);
+    camera.position.set(new_camera_pos.x, new_camera_pos.y, new_camera_pos.z);
+};
+
+
 /**
  * Move the scene's camera
  * @param {float | null} x
@@ -177,7 +269,7 @@ GLVIS.NavigationHandler.prototype.unlockLookAt = function () {
  * @param {float} zoom_factor
  */
 GLVIS.NavigationHandler.prototype.zoom = function (zoom_factor) {
-      
+
     if (zoom_factor < 0)
         zoom_factor = 0;
 
@@ -206,57 +298,73 @@ GLVIS.NavigationHandler.prototype.zoomDelta = function (delta_zoom_factor) {
     GLVIS.Scene.getCurrentScene().getNavigationHandler().zoom(zoom);
 };
 
+
+/**
+ * At first move camera to the circle Sphere
+ * Then move it horizontal and vertical to the correct position on the circle
+ * @param {GLVIS.Collection} collection
+ */
+GLVIS.NavigationHandler.prototype.animatedCollectionFocus = function (collection) {
+
+
+    //move 
+
+};
+
 /**
  * 
  * @param {type} move_goal_x position x to reach
  * @param {type} move_goal_y position y to reach
  * @param {type} callback_fct
  */
-GLVIS.NavigationHandler.prototype.animatedMovement = function (move_goal_x, move_goal_y, callback_fct) {
+/*
+ GLVIS.NavigationHandler.prototype.animatedMovement = function (move_goal_x, move_goal_y, callback_fct) {
+ 
+ var config = GLVIS.config.navigation.move.animated;
+ var setter = this.moveCamera;
+ 
+ var getter_x = this.getPosX;
+ var setter_param_x = 0;
+ var getter_y = this.getPosY;
+ var setter_param_y = 1;
+ 
+ var factor = config.speed_fct;
+ var pow = config.pow;
+ var threshold = config.threshold;
+ 
+ 
+ //X
+ GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.move_id_x);
+ GLVIS.Scene.getCurrentScene().getAnimation().register(
+ this.animation_.move_id_x,
+ move_goal_x,
+ null,
+ getter_x,
+ setter,
+ setter_param_x,
+ factor,
+ pow,
+ threshold,
+ callback_fct
+ );
+ 
+ //Y
+ GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.move_id_y);
+ GLVIS.Scene.getCurrentScene().getAnimation().register(
+ this.animation_.move_id_y,
+ move_goal_y,
+ null,
+ getter_y,
+ setter,
+ setter_param_y,
+ factor,
+ pow,
+ threshold,
+ callback_fct
+ );
+ };
+ */
 
-    var config = GLVIS.config.navigation.move.animated;
-    var setter = this.moveCamera;
-
-    var getter_x = this.getPosX;
-    var setter_param_x = 0;
-    var getter_y = this.getPosY;
-    var setter_param_y = 1;
-
-    var factor = config.speed_fct;
-    var pow = config.pow;
-    var threshold = config.threshold;
-
-
-    //X
-    GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.move_id_x);
-    GLVIS.Scene.getCurrentScene().getAnimation().register(
-            this.animation_.move_id_x,
-            move_goal_x,
-            null,
-            getter_x,
-            setter,
-            setter_param_x,
-            factor,
-            pow,
-            threshold,
-            callback_fct
-            );
-
-    //Y
-    GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.move_id_y);
-    GLVIS.Scene.getCurrentScene().getAnimation().register(
-            this.animation_.move_id_y,
-            move_goal_y,
-            null,
-            getter_y,
-            setter,
-            setter_param_y,
-            factor,
-            pow,
-            threshold,
-            callback_fct
-            );
-};
 
 /**
  * 
