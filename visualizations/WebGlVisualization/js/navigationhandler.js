@@ -121,6 +121,7 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
     //VERTICAL
 
     //Current degree
+    console.warn("WRONG CENTER CALCULATED IN VERTICAL MOVEMENT!");
     var curr_v_degree = Math.acos(current_camera_pos.y) * 180 / Math.PI;
 
     var rad_v_to_set = (curr_v_degree - degree_v_delta) / (180 / Math.PI);
