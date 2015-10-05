@@ -179,16 +179,42 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
     GLVIS.Debugger.debug("Recommendation", "Setting node type to DETAILED and zoom in afterwards", 5);
     this.setNodeType(GLVIS.Recommendation.NODETYPES.DETAILED);
 
+    console.log("REC FOCUS ZOOM");
+    var abs_pos = this.getPosition(true);
+    var abs_pos_vec = new THREE.Vector3(abs_pos.x, abs_pos.y, abs_pos.z);
+    // @TODO: Calculate accurate offset
 
-    var abs_pos = this.getPosition();
+    var camera_distance = 100;
+
+
+
+    /*
+     * The camera distance vector has the same direction as the connection between 
+     * the circle-center and the collection
+     */
+
+    var coll_pos = this.getCollection().getPosition();
+    var coll_pos_vec = new THREE.Vector3(coll_pos.x, coll_pos.y, coll_pos.z);
+    var circle_center_vec = new THREE.Vector3(0, 0, -GLVIS.config.scene.circle_radius);
+
+    var dir_vec = coll_pos_vec.clone().sub(circle_center_vec).normalize();
+    var final_pos = abs_pos_vec.clone().add(dir_vec.multiplyScalar(camera_distance));
+
 
     var nav_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
+    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+    nav_handler.lockLookAt(abs_pos_vec);
+
+
+
     var move_config = GLVIS.config.collection.recommendation.focus_animation.move;
     var move_setter = nav_handler.moveCamera;
     var move_getter_x = nav_handler.getPosX;
     var move_setter_param_x = 0;
     var move_getter_y = nav_handler.getPosY;
     var move_setter_param_y = 1;
+    var move_getter_z = nav_handler.getPosZ;
+    var move_setter_param_z = 2;
     var move_speed = move_config.speed;
     var move_pow = move_config.pow;
     var move_threshold = move_config.threshold;
@@ -196,7 +222,7 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
     //X
     GLVIS.Scene.getCurrentScene().getAnimation().register(
             nav_handler.animation_.move_id_x,
-            abs_pos.x,
+            final_pos.x,
             null,
             move_getter_x,
             move_setter,
@@ -211,7 +237,7 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
     //Y
     GLVIS.Scene.getCurrentScene().getAnimation().register(
             nav_handler.animation_.move_id_y,
-            abs_pos.y,
+            final_pos.y,
             null,
             move_getter_y,
             move_setter,
@@ -223,29 +249,21 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
             }
     );
 
-
-    var zoom_config = GLVIS.config.collection.recommendation.focus_animation.zoom;
-    var zoom_threshold = zoom_config.threshold;
-    var zoom_pow = zoom_config.pow;
-    var zoom_speed = zoom_config.speed;
-    var zoom_goal = zoom_config.zoom_val;
-    var zoom_getter = nav_handler.getZoomFactor;
-    var zoom_setter = nav_handler.zoomDelta;
-
+    //Z
     GLVIS.Scene.getCurrentScene().getAnimation().register(
-            nav_handler.animation_.zoom_id,
-            zoom_goal,
+            nav_handler.animation_.move_id_z,
+            final_pos.z,
             null,
-            zoom_getter,
-            zoom_setter,
-            0,
-            zoom_speed,
-            zoom_pow,
-            zoom_threshold,
+            move_getter_z,
+            move_setter,
+            move_setter_param_z,
+            move_speed,
+            move_pow,
+            move_threshold,
             function () {
-                console.log("READY ZOOM TO REC");
             }
     );
+
 
     if (GLVIS.Recommendation.current_selected_rec) {
         GLVIS.Debugger.debug("Recommendation", "Setting node type to COMMON of FORMER FOCUSED", 5);
@@ -425,20 +443,18 @@ GLVIS.Recommendation.prototype.getPosition = function (physical) {
         if (!gl_node)
             throw Exception("Could not find gl-node of recommendation");
 
+        //Necessary to update position of mesh
+        gl_node.render();
+
         var circle_mesh = gl_node.getCircle();
 
-
-        //Not enough to get circle_mesh.position vector
-        //Needs to be calculated by bounding box
-        circle_mesh.geometry.computeBoundingBox();
-        var boundingBox = circle_mesh.geometry.boundingBox;
+        this.getCollection().getMeshContainerNode().updateMatrixWorld();
 
         pos = new THREE.Vector3();
-        pos.subVectors(boundingBox.max, boundingBox.min);
-        pos.multiplyScalar(0.5);
-        pos.add(boundingBox.min);
-        pos.applyMatrix4(circle_mesh.matrixWorld);
+        circle_mesh.localToWorld(pos);
     }
+
+
     return pos;
 };
 

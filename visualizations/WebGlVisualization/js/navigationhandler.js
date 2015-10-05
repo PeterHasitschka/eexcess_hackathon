@@ -9,10 +9,14 @@ GLVIS.NavigationHandler = function (scene) {
     /** @type {GLVIS.Scene} **/
     this.scene_ = scene;
 
+    /** @type {THREE.Vector3} **/
+    this.lookat_lock_ = null;
+
     this.animation_ = {
         zoom_id: 'nh_anim_zoom',
         move_id_x: 'nh_anim_move_x',
-        move_id_y: 'nh_anim_move_y'
+        move_id_y: 'nh_anim_move_y',
+        move_id_z: 'nh_anim_move_z'
     };
 };
 
@@ -58,6 +62,14 @@ GLVIS.NavigationHandler.prototype.getPosX = function () {
  */
 GLVIS.NavigationHandler.prototype.getPosY = function () {
     return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.y;
+};
+
+/**
+ * Single getter for animation
+ * @returns {float}
+ */
+GLVIS.NavigationHandler.prototype.getPosZ = function () {
+    return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.z;
 };
 
 /**
@@ -134,10 +146,30 @@ GLVIS.NavigationHandler.prototype.moveCamera = function (x, y, z) {
     if (z === null || z === undefined)
         z = 0;
 
+    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+    camera.position.x += x;
+    camera.position.y += y;
+    camera.position.z += z;
 
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.x += x;
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.y += y;
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.z += z;
+
+    if (this.lookat_lock_)
+        camera.lookAt(this.lookat_lock_);
+};
+
+
+/**
+ * Lock the lookat vector for using the moveCamera method
+ * @param {THREE.Vector3} vector
+ */
+GLVIS.NavigationHandler.prototype.lockLookAt = function (vector) {
+    this.lookat_lock_ = vector;
+};
+
+/**
+ * Unlock the lookat vector for using the moveCamera method
+ */
+GLVIS.NavigationHandler.prototype.unlockLookAt = function () {
+    this.lookat_lock_ = null;
 };
 
 /**

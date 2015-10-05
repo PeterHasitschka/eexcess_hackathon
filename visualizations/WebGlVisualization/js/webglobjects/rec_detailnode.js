@@ -100,7 +100,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                     map: texture,
                     side: THREE.DoubleSide
                 });
-                texture.flipY = false;
+                texture.flipY = true;
                 texture.needsUpdate = true;
 
                 that.setIsDirty(true);

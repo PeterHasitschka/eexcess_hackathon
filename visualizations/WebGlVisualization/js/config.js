@@ -73,8 +73,8 @@ GLVIS.config = {
             detail_node: {
                 min_radius: 0.5,
                 active_radius: 10,
-                gap_inner_circle: 0.2,
-                z_diff_inner_circle: 0.001,
+                gap_inner_circle: 0.5,
+                z_diff_inner_circle: 1,
                 color_positive: 0x00CC00,
                 color_negative: 0xCC0000,
                 circle: {
