@@ -52,7 +52,9 @@ GLVIS.Scene = function (canvas) {
  * Rendering the whole scene and all its sub-objects
  */
 GLVIS.Scene.prototype.render = function () {
-     
+
+    //this.getNavigationHandler().moveCameraAroundCircle(0.1, 0);
+
     //Set Time Delta for performance-independent animation speed
     this.time_.current = this.time_.current || Date.now();
     var now = Date.now();
@@ -218,11 +220,11 @@ GLVIS.Scene.animate = function () {
 
     if (!curr_scene || stop_flag)
         return;
-    
+
 
     requestAnimationFrame(GLVIS.Scene.animate);
     curr_scene.render();
-    
+
     if (animation_debugger)
         animation_debugger.update();
 };
