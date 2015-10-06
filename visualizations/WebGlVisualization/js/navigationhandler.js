@@ -73,6 +73,7 @@ GLVIS.NavigationHandler.prototype.getPosZ = function () {
 };
 
 /**
+ * Rotate the camera on a virtual sphere outside the circular-view circle by 2 delta values
  * 
  * @param {float} degree_h_delta Movement around the circle
  * @param {float} degree_b_delta Vertical tilt
@@ -113,44 +114,61 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
     var rad_h_to_set = current_degree_h / (180 / Math.PI);
 
     //Get positions / Calculate back to world
-    var pos_h = new THREE.Vector3(Math.sin(rad_h_to_set), current_camera_pos.y, Math.cos(rad_h_to_set));
-    pos_h.multiplyScalar(total_distance_to_center);
-    pos_h.sub(new THREE.Vector3(0, 0, coll_circle_radius));
+    var new_pos = new THREE.Vector3(Math.sin(rad_h_to_set), current_camera_pos.y, Math.cos(rad_h_to_set));
 
 
     //VERTICAL
 
-    //Current degree
-    console.warn("WRONG CENTER CALCULATED IN VERTICAL MOVEMENT!");
-    var curr_v_degree = Math.acos(current_camera_pos.y) * 180 / Math.PI;
+    //Rotate new pos vector around y first
+    new_pos.applyAxisAngle(new THREE.Vector3(0, 1, 0), 0 - rad_h_to_set);
 
-    var rad_v_to_set = (curr_v_degree - degree_v_delta) / (180 / Math.PI);
-    var pos_y = Math.cos(rad_v_to_set) * total_distance_to_center;
+    //Avoid floating point problems (1.00000001)
+    var z_val = new_pos.z > 1.0 ? 1.0 : new_pos.z;
+    var z_val = z_val < -1.0 ? -1.0 : z_val;
 
-    camera.position.set(pos_h.x, pos_y, pos_h.z);
+
+    var curr_v_degree = Math.acos(z_val) * 180 / Math.PI;
+    curr_v_degree += degree_v_delta;
+
+    var rad_v_to_set = curr_v_degree / (180 / Math.PI);
+    //Apply new angle for vertical movement over the x-axis of the rotated vector
+    new_pos.applyAxisAngle(new THREE.Vector3(1, 0, 0), 0 - rad_v_to_set);
+
+
+    //Rotate the vector back to position before vertical calculations
+    new_pos.applyAxisAngle(new THREE.Vector3(0, 1, 0), rad_h_to_set);
+
+    //Denormalize
+    new_pos.multiplyScalar(total_distance_to_center);
+    new_pos.sub(new THREE.Vector3(0, 0, coll_circle_radius));
+
+
+    //Set new camera
+
+    camera.position.set(new_pos.x, new_pos.y, new_pos.z);
     camera.lookAt(new THREE.Vector3(0, 0, -coll_circle_radius));
 };
 
 
-GLVIS.NavigationHandler.prototype.getMissingCameraDegree = function(goal_x,goal_y,goal_z){
-    
-    
-    
+GLVIS.NavigationHandler.prototype.getMissingCameraDegree = function (goal_x, goal_y, goal_z) {
+
+
+
     /**
      * @TODO Dienstag!
      */
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
 };
 
 /**
@@ -331,7 +349,7 @@ GLVIS.NavigationHandler.prototype.animatedCollectionFocus = function (collection
          * @TODO DIENSTAG
          * Do h-v movenent here after hitting the circle-sphere 
          **/
-        
+
     });
 
 };
