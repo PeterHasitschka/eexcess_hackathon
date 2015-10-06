@@ -20,8 +20,19 @@ GLVIS.NavigationHandler = function (scene) {
     };
 };
 
-
-GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z) {
+/**
+ * 
+ * Move the camera on a position on a virtual circle outside the circular-collection circle
+ * facing the focused point.
+ * The focused point and the center of the collection-circle is on on one line with the camera
+ * 
+ * @param {float} x
+ * @param {float} y
+ * @param {float} z
+ * @param {bool} animate
+ * @param {function} cb
+ */
+GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z, animate, cb) {
 
     if (x === undefined)
         x = null;
@@ -34,42 +45,81 @@ GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z) {
         throw Exception("All cordinate values needed!");
     }
 
-    var collection_circle_center = new THREE.Vector3(0, 0, 0 - GLVIS.config.scene.circle_radius);
-    var focus_point = new THREE.Vector3(x, y, z);
+    if (animate)
+        console.warn("Set Camera To Circle ANIMATION not supported yet! (6.10.15 / 11:15");
 
-    var view_dir = collection_circle_center.clone().sub(focus_point);
-    view_dir.normalize();
 
-    var distance = GLVIS.config.three.camera_perspective.DISTANCE;
-    var camera_pos = focus_point.clone().sub(view_dir.setLength(distance));
+    if (true)
+    {
+        var missing_degrees = this.getMissingCameraDegrees(x, y, z);
 
-    var camera = this.scene_.getWebGlHandler().getCamera();
-    camera.position.set(camera_pos.x, camera_pos.y, camera_pos.z);
-    camera.lookAt(focus_point);
+        this.moveCameraAroundCircle(missing_degrees.h, missing_degrees.v);
+
+    }
+    else
+    {
+        var collection_circle_center = new THREE.Vector3(0, 0, 0 - GLVIS.config.scene.circle_radius);
+        var focus_point = new THREE.Vector3(x, y, z);
+
+        var view_dir = collection_circle_center.clone().sub(focus_point);
+        view_dir.normalize();
+
+        var distance = GLVIS.config.three.camera_perspective.DISTANCE;
+        var camera_pos = focus_point.clone().sub(view_dir.setLength(distance));
+
+        var camera = this.scene_.getWebGlHandler().getCamera();
+        camera.position.set(camera_pos.x, camera_pos.y, camera_pos.z);
+        camera.lookAt(focus_point);
+    }
+
+
 };
 
-/**
- * Single getter for animation
- * @returns {float}
- */
-GLVIS.NavigationHandler.prototype.getPosX = function () {
-    return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.x;
+
+GLVIS.NavigationHandler.prototype.getMissingCameraDegrees = function (goal_x, goal_y, goal_z) {
+
+    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+    var camera_degree = this.getDegreeOnCameraSphere_(camera.position.x, camera.position.y, camera.position.z);
+
+    var goal_degree = this.getDegreeOnCameraSphere_(goal_x, goal_y, goal_z);
+
+
+
+    console.warn("getMissingCameraDegrees NOT WORKING YET");
+
+
+    return {h: 0, v: 1};
+
 };
 
-/**
- * Single getter for animation
- * @returns {float}
- */
-GLVIS.NavigationHandler.prototype.getPosY = function () {
-    return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.y;
-};
 
-/**
- * Single getter for animation
- * @returns {float}
- */
-GLVIS.NavigationHandler.prototype.getPosZ = function () {
-    return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.z;
+GLVIS.NavigationHandler.prototype.getDegreeOnCameraSphere_ = function (x, y, z) {
+
+    var coll_circle_d = GLVIS.config.scene.circle_radius;
+    var coll_circle_center_v = new THREE.Vector3(0, 0, 0 - coll_circle_d);
+
+
+    var pos_v = new THREE.Vector3(x, y, z);
+    pos_v.sub(coll_circle_center_v);
+    var pos_center_d = pos_v.clone().length();
+    pos_v.divideScalar(pos_center_d);
+
+    //pos-v is normalized in zero point now
+
+    var rad_h = Math.atan2(pos_v.x, pos_v.z);
+
+    //Rotate around y to determine vertical rotation
+    pos_v.applyAxisAngle(new THREE.Vector3(0, 1, 0), 0 - rad_h);
+    //Avoid floating point problems (1.00000001)
+    var z_val = pos_v.z > 1.0 ? 1.0 : pos_v.z;
+    var z_val = z_val < -1.0 ? -1.0 : z_val;
+
+    var rad_v = Math.acos(z_val);
+
+    var h = rad_h * 180 / Math.PI;
+    var v = rad_v * 180 / Math.PI;
+    return {h: h, v: v};
+
 };
 
 /**
@@ -97,43 +147,33 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
     var current_camera_pos = camera.position.clone();
 
 
-    //Move Circle to center
-    current_camera_pos.add(new THREE.Vector3(0, 0, coll_circle_radius));
+    var current_degrees_of_camera = this.getDegreeOnCameraSphere_(
+            current_camera_pos.x,
+            current_camera_pos.y,
+            current_camera_pos.z);
 
-    //Normalize Circle to calculate
-    current_camera_pos.divideScalar(total_distance_to_center);
-
+    var curr_degree_h = current_degrees_of_camera.h;
+    var curr_degree_v = current_degrees_of_camera.v;
 
     //HORIZONTAL
 
-    //Get the degree
-    var current_degree_h = Math.atan2(current_camera_pos.x, current_camera_pos.z) * 180 / Math.PI;
-
     //Add new delta
-    current_degree_h += degree_h_delta;
-    var rad_h_to_set = current_degree_h / (180 / Math.PI);
+    curr_degree_h += degree_h_delta;
+    var rad_h_to_set = curr_degree_h / (180 / Math.PI);
 
     //Get positions / Calculate back to world
-    var new_pos = new THREE.Vector3(Math.sin(rad_h_to_set), current_camera_pos.y, Math.cos(rad_h_to_set));
+    var new_pos = new THREE.Vector3(Math.sin(rad_h_to_set), current_camera_pos.y / total_distance_to_center, Math.cos(rad_h_to_set));
 
 
     //VERTICAL
 
-    //Rotate new pos vector around y first
-    new_pos.applyAxisAngle(new THREE.Vector3(0, 1, 0), 0 - rad_h_to_set);
 
-    //Avoid floating point problems (1.00000001)
-    var z_val = new_pos.z > 1.0 ? 1.0 : new_pos.z;
-    var z_val = z_val < -1.0 ? -1.0 : z_val;
+    var rad_v_to_set = degree_v_delta / (180 / Math.PI);
 
+    new_pos.applyAxisAngle(new THREE.Vector3(0, 1, 0), -rad_h_to_set);
 
-    var curr_v_degree = Math.acos(z_val) * 180 / Math.PI;
-    curr_v_degree += degree_v_delta;
-
-    var rad_v_to_set = curr_v_degree / (180 / Math.PI);
     //Apply new angle for vertical movement over the x-axis of the rotated vector
     new_pos.applyAxisAngle(new THREE.Vector3(1, 0, 0), 0 - rad_v_to_set);
-
 
     //Rotate the vector back to position before vertical calculations
     new_pos.applyAxisAngle(new THREE.Vector3(0, 1, 0), rad_h_to_set);
@@ -149,27 +189,6 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
     camera.lookAt(new THREE.Vector3(0, 0, -coll_circle_radius));
 };
 
-
-GLVIS.NavigationHandler.prototype.getMissingCameraDegree = function (goal_x, goal_y, goal_z) {
-
-
-
-    /**
-     * @TODO Dienstag!
-     */
-
-
-
-
-
-
-
-
-
-
-
-
-};
 
 /**
  * Change distance from collection-circle center to a value that the camera
@@ -407,45 +426,35 @@ GLVIS.NavigationHandler.prototype.resetAnimationZoom = function () {
  * @param {function} callback_fct callback when ready
  */
 GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callback_fct) {
-    var that = this;
-    var callback_called = false;
+    var animated_move = true;
 
-    /*
-     * Move animation currently turned off. If Flipbook gets activated, the length
-     * of the collections decreases, so the position where the movement starts is
-     * somewhere far right of the collections and looks strange.
-     * @TODO: Skip animation only if flipbook just created.
-     * @TODO: Fix click-coll-bug when animation not ready. (Starting far right)
-     */
-    var animated_move = false;
-
-    if (!animated_move)
-        //this.setCamera(collection.getPosition().x, collection.getPosition().y, collection.getPosition().z);
-        this.setCameraToCircle(collection.getPosition().x, collection.getPosition().y, collection.getPosition().z);
-
-
-    that.animatedZoom(GLVIS.config.navigation.zoom.animated.zoom_in, function () {
-        GLVIS.Debugger.debug("NavigationHandler",
-                "finished zoom to " + GLVIS.config.navigation.zoom.animated.zoom_in,
-                3);
-
-        if (callback_fct && !callback_called) {
-            callback_called = true;
-            callback_fct();
-        }
-    });
-
-    if (animated_move) {
-        this.animatedMovement(collection.getPosition().x, collection.getPosition().y, function () {
-
-            GLVIS.Debugger.debug("NavigationHandler",
-                    "Finished movement to graph",
-                    3);
-            if (callback_fct && !callback_called) {
-                callback_called = true;
-                callback_fct();
-            }
-
-        });
-    }
+    this.setCameraToCircle(collection.getPosition().x, collection.getPosition().y, collection.getPosition().z,
+            animated_move,
+            callback_fct
+            );
 };
+
+/**
+ * Single getter for animation
+ * @returns {float}
+ */
+GLVIS.NavigationHandler.prototype.getPosX = function () {
+    return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.x;
+};
+
+/**
+ * Single getter for animation
+ * @returns {float}
+ */
+GLVIS.NavigationHandler.prototype.getPosY = function () {
+    return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.y;
+};
+
+/**
+ * Single getter for animation
+ * @returns {float}
+ */
+GLVIS.NavigationHandler.prototype.getPosZ = function () {
+    return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.z;
+};
+
