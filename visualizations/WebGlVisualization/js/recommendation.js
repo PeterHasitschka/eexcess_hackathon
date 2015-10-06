@@ -516,7 +516,7 @@ GLVIS.Recommendation.prototype.setRelativePosition = function (x, y, z) {
 /**
  * Set the position by a radians value.
  * Necessary for animation. The "that" parameter is necessary as it is used as
- * ŕegistered function in the animation without any knowlege about the object.
+ * registered function in the animation without any knowlege about the object.
  * @param{GLVIS.Recommendation | null} that Reference to THIS object. (Animation doesn't know me...)
  * @param {float} rad Radians
  */
@@ -548,6 +548,16 @@ GLVIS.Recommendation.prototype.getRelativePositionRad = function (that) {
 
     return GLVIS.Tools.getRadFromPos(pos.x, pos.y);
 
+};
+
+GLVIS.Recommendation.prototype.stopAnimations = function(){
+  
+    var config = GLVIS.config.collection.recommendation;
+    
+    
+    //console.error("GOOD MORNIGN HERE!!!!!!!!");
+    
+    
 };
 
 /**
