@@ -68,6 +68,25 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
     var center_id = num_cols - 1;
 
 
+    var sphereMaterial =
+            new THREE.MeshBasicMaterial(
+                    {
+                        color: 0x00FF00,
+                        transparent: false,
+                        side: THREE.DoubleSide
+                    });
+
+    var mesh = new THREE.SphereGeometry(30, 20, 20);
+    var sphere = new THREE.Mesh(
+            mesh,
+            sphereMaterial);
+
+    sphere.position.set(0,0,-GLVIS.config.scene.circle_radius);
+    
+    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(sphere);
+
+
+
     for (var coll_count = 0; coll_count < parent_mapping.length; coll_count++) {
         var collection_key = parent_mapping[coll_count][0];
 

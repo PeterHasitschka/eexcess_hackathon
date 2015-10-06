@@ -52,8 +52,9 @@ GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z, animate
     if (true)
     {
         var missing_degrees = this.getMissingCameraDegrees(x, y, z);
-
+        console.log(missing_degrees);
         this.moveCameraAroundCircle(missing_degrees.h, missing_degrees.v);
+
 
     }
     else
@@ -83,13 +84,9 @@ GLVIS.NavigationHandler.prototype.getMissingCameraDegrees = function (goal_x, go
 
     var goal_degree = this.getDegreeOnCameraSphere_(goal_x, goal_y, goal_z);
 
+    console.log("Curr V: " + camera_degree.v + " GOAL V " + goal_degree.v);
 
-
-    console.warn("getMissingCameraDegrees NOT WORKING YET");
-
-
-    return {h: 0, v: 1};
-
+    return {h: goal_degree.h - camera_degree.h, v: goal_degree.v - camera_degree.v};
 };
 
 
@@ -118,6 +115,12 @@ GLVIS.NavigationHandler.prototype.getDegreeOnCameraSphere_ = function (x, y, z) 
 
     var h = rad_h * 180 / Math.PI;
     var v = rad_v * 180 / Math.PI;
+
+    if (v > 0 && y < 0)
+        v *= -1;
+
+    console.error("V does not distinguish between negative and positive!");
+
     return {h: h, v: v};
 
 };
@@ -167,8 +170,9 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
 
     //VERTICAL
 
-
-    var rad_v_to_set = degree_v_delta / (180 / Math.PI);
+    console.log("current degree to move V: " + curr_degree_v + " ð: " + degree_v_delta);
+    curr_degree_v = degree_v_delta;
+    var rad_v_to_set = curr_degree_v / (180 / Math.PI);
 
     new_pos.applyAxisAngle(new THREE.Vector3(0, 1, 0), -rad_h_to_set);
 
@@ -179,7 +183,8 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
     new_pos.applyAxisAngle(new THREE.Vector3(0, 1, 0), rad_h_to_set);
 
     //Denormalize
-    new_pos.multiplyScalar(total_distance_to_center);
+    new_pos.multiplyScalar(total_distance_to_center / new_pos.length());
+    
     new_pos.sub(new THREE.Vector3(0, 0, coll_circle_radius));
 
 
