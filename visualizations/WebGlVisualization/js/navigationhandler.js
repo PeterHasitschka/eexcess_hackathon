@@ -14,9 +14,8 @@ GLVIS.NavigationHandler = function (scene) {
 
     this.animation_ = {
         zoom_id: 'nh_anim_zoom',
-        move_id_x: 'nh_anim_move_x',
-        move_id_y: 'nh_anim_move_y',
-        move_id_z: 'nh_anim_move_z'
+        move: 'nh_anim_move'
+
     };
 };
 
@@ -30,7 +29,7 @@ GLVIS.NavigationHandler = function (scene) {
  * @param {float} y
  * @param {float} z
  * @param {bool} animate
- * @param {function} cb
+ * @param {function} cb Only called if animated
  */
 GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z, animate, cb) {
 
@@ -51,10 +50,33 @@ GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z, animate
 
     if (true)
     {
-        var missing_degrees = this.getMissingCameraDegrees(x, y, z);
-        console.log(missing_degrees);
-        this.moveCameraAroundCircle(missing_degrees.h, missing_degrees.v);
+        if (!animate) {
+            var missing_degrees = this.getMissingCameraDegrees(x, y, z);
+            this.moveCameraAroundCircle(missing_degrees.h, missing_degrees.v);
+        } else {
 
+
+            var anim = GLVIS.Scene.getCurrentScene().getAnimation();
+            anim.finishAnimation(this.animation_.move);
+
+            console.log("registering anim nh_move_h");
+            anim.register(
+                    "nh_move_h",
+                    0,
+                    null,
+                    this.getMissingCameraDegreesH.bind(this),
+                    this.moveCameraAroundCircle.bind(this),
+                    0,
+                    0.01,
+                    1,
+                    10,
+                    function () {
+                        if (cb)
+                            cb();
+                    },
+                    false);
+
+        }
 
     }
     else
@@ -89,6 +111,14 @@ GLVIS.NavigationHandler.prototype.getMissingCameraDegrees = function (goal_x, go
     return {h: goal_degree.h - camera_degree.h, v: goal_degree.v - camera_degree.v};
 };
 
+GLVIS.NavigationHandler.prototype.getMissingCameraDegreesH = function (goal_x, goal_y, goal_z) {
+    return GLVIS.NavigationHandler.prototype.getMissingCameraDegrees(goal_x, goal_y, goal_z).h;
+};
+
+GLVIS.NavigationHandler.prototype.getMissingCameraDegreesV = function (goal_x, goal_y, goal_z) {
+    return GLVIS.NavigationHandler.prototype.getMissingCameraDegrees(goal_x, goal_y, goal_z).v;
+};
+
 
 GLVIS.NavigationHandler.prototype.getDegreeOnCameraSphere_ = function (x, y, z) {
 
@@ -118,8 +148,6 @@ GLVIS.NavigationHandler.prototype.getDegreeOnCameraSphere_ = function (x, y, z) 
 
     if (v > 0 && y < 0)
         v *= -1;
-
-    console.error("V does not distinguish between negative and positive!");
 
     return {h: h, v: v};
 
@@ -170,9 +198,7 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
 
     //VERTICAL
 
-    console.log("current degree to move V: " + curr_degree_v + " ð: " + degree_v_delta);
-    curr_degree_v = degree_v_delta;
-    var rad_v_to_set = curr_degree_v / (180 / Math.PI);
+    var rad_v_to_set = degree_v_delta / (180 / Math.PI);
 
     new_pos.applyAxisAngle(new THREE.Vector3(0, 1, 0), -rad_h_to_set);
 
@@ -184,7 +210,7 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
 
     //Denormalize
     new_pos.multiplyScalar(total_distance_to_center / new_pos.length());
-    
+
     new_pos.sub(new THREE.Vector3(0, 0, coll_circle_radius));
 
 
@@ -215,14 +241,10 @@ GLVIS.NavigationHandler.prototype.moveCameraToCircleSphere = function (animation
     }
     else {
         var anim = GLVIS.Scene.getCurrentScene().getAnimation();
-        anim.finishAnimation(this.animation_.move_id_x);
-        anim.finishAnimation(this.animation_.move_id_y);
-        anim.finishAnimation(this.animation_.move_id_z);
-
-        anim.finishAnimation("camera_distance");
+        anim.finishAnimation(this.animation_.move);
 
         anim.register(
-                "camera_distance",
+                this.animation_.move,
                 1.0,
                 null,
                 this.getDistanceFactor.bind(this),
@@ -414,8 +436,7 @@ GLVIS.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_f
  * Resetting both movement-animations
  */
 GLVIS.NavigationHandler.prototype.resetAnimationMovement = function () {
-    GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animation_.move_id_x);
-    GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animation_.move_id_y);
+    GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animation_.move);
 };
 
 /**
@@ -431,7 +452,7 @@ GLVIS.NavigationHandler.prototype.resetAnimationZoom = function () {
  * @param {function} callback_fct callback when ready
  */
 GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callback_fct) {
-    var animated_move = true;
+    var animated_move = false;
 
     this.setCameraToCircle(collection.getPosition().x, collection.getPosition().y, collection.getPosition().z,
             animated_move,
