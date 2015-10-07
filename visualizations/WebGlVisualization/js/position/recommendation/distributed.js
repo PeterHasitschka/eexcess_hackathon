@@ -40,7 +40,7 @@ GLVIS.RecommendationPosDistributed.prototype.calculatePositions = function () {
 
         var curr_rec = recommendations[i];
         
-        curr_rec.stopAnimations();
+        
         
         curr_rec.setRelativePositionByRad(null, curr_rad);
     }

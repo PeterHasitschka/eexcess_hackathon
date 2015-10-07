@@ -197,12 +197,11 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
     var rad_h_to_set = curr_degree_h / (180 / Math.PI);
 
     //Get positions / Calculate back to world
-    var new_pos = new THREE.Vector3(Math.sin(rad_h_to_set), current_camera_pos.y / total_distance_to_center, Math.cos(rad_h_to_set));
+    var new_pos = new THREE.Vector3(Math.sin(rad_h_to_set), 0, Math.cos(rad_h_to_set));
 
 
     //VERTICAL
-
-    var rad_v_to_set = degree_v_delta / (180 / Math.PI);
+    var rad_v_to_set = (curr_degree_v + degree_v_delta) / (180 / Math.PI);
 
     new_pos.applyAxisAngle(new THREE.Vector3(0, 1, 0), -rad_h_to_set);
 

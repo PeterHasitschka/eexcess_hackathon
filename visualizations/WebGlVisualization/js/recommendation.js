@@ -550,16 +550,6 @@ GLVIS.Recommendation.prototype.getRelativePositionRad = function (that) {
 
 };
 
-GLVIS.Recommendation.prototype.stopAnimations = function(){
-  
-    var config = GLVIS.config.collection.recommendation;
-    
-    
-    //console.error("GOOD MORNIGN HERE!!!!!!!!");
-    
-    
-};
-
 /**
  * Visualizing the stored relevance e.g. by size or distance or resetting it
  * @param {bool} visualize If TRUE relevance gets visualized else not.
