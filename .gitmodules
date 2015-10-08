@@ -1,0 +1,4 @@
+[submodule "visualizations/WebGlVisualization"]
+	path = visualizations/WebGlVisualization
+	url = https://github.com/PeterHasitschka/eexcess_webgl_vis.git
+	branch = master
